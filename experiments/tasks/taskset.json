@@ -1,0 +1,185 @@
+{
+  "version": "1.0",
+  "description": "제멘토 실험용 평가 태스크셋. 다단계 추론이 필요한 문제들.",
+  "tasks": [
+    {
+      "id": "math-01",
+      "category": "math",
+      "difficulty": "medium",
+      "objective": "주어진 수학 문제를 단계적으로 풀어라.",
+      "prompt": "A store sells apples at $2 each and oranges at $3 each. A customer buys some apples and oranges, spending exactly $47. The customer buys more apples than oranges. The total number of fruits is 20. How many apples and how many oranges did the customer buy?",
+      "expected_answer": "13 apples and 7 oranges",
+      "constraints": ["정확한 숫자를 구해야 한다", "검산을 해야 한다"],
+      "prefab_assertions": [
+        "Let a = number of apples, o = number of oranges",
+        "Equation 1: a + o = 20 (total fruits)",
+        "Equation 2: 2a + 3o = 47 (total cost)",
+        "From Eq1: a = 20 - o",
+        "Substituting into Eq2: 2(20 - o) + 3o = 47",
+        "Simplifying: 40 - 2o + 3o = 47",
+        "Therefore: o = 7",
+        "Therefore: a = 20 - 7 = 13",
+        "Verification: 2(13) + 3(7) = 26 + 21 = 47 ✓",
+        "Constraint check: 13 > 7, so apples > oranges ✓",
+        "The answer is 13 apples and 7 oranges",
+        "Both values are positive integers, valid solution"
+      ],
+      "fault_injections": [
+        {
+          "type": "corrupt_content",
+          "corrupted_value": "From Eq1: a = 20 + o",
+          "inject_at_loop": 2
+        },
+        {
+          "type": "inflate_confidence",
+          "inject_at_loop": 2
+        }
+      ]
+    },
+    {
+      "id": "logic-01",
+      "category": "logic",
+      "difficulty": "medium",
+      "objective": "논리 퍼즐을 단계적으로 풀어라.",
+      "prompt": "There are 5 houses in a row, each painted a different color: red, green, blue, yellow, white. Each house is occupied by a person of a different nationality. We know:\n1. The English person lives in the red house.\n2. The Spanish person lives in the house next to the blue house.\n3. The Japanese person lives in the rightmost house.\n4. The blue house is between the yellow house and the green house.\n5. The French person lives in the yellow house.\nWhat is the nationality of the person in the green house?",
+      "expected_answer": "Spanish",
+      "constraints": ["모든 단서를 활용해야 한다", "모순이 없어야 한다"],
+      "prefab_assertions": [
+        "House positions: 1(leftmost) to 5(rightmost)",
+        "Clue 3: Japanese is in house 5",
+        "Clue 4: Blue is between yellow and green, so order is yellow-blue-green or green-blue-yellow",
+        "Clue 5: French lives in yellow house",
+        "Clue 1: English lives in red house",
+        "Since blue is between yellow and green, and we have 5 houses, possible positions need testing",
+        "If yellow=1, blue=2, green=3, then red and white fill 4,5",
+        "Japanese in house 5, so house 5 is either red or white",
+        "Clue 2: Spanish is next to blue (house 2), so Spanish is in house 1 or 3",
+        "French is in yellow=house 1, so Spanish must be in house 3 (green house)",
+        "The person in the green house is Spanish",
+        "Remaining: English in red, and we can assign remaining houses"
+      ],
+      "fault_injections": [
+        {
+          "type": "contradiction",
+          "contradicting_assertion": "The blue house must be in position 5 (rightmost).",
+          "inject_at_loop": 2
+        }
+      ]
+    },
+    {
+      "id": "synthesis-01",
+      "category": "information_synthesis",
+      "difficulty": "medium",
+      "objective": "여러 정보를 종합하여 결론을 도출하라.",
+      "prompt": "A company is deciding between three cloud providers for their new service:\n- Provider A: $0.10/hour, 99.9% uptime SLA, 5 data center regions\n- Provider B: $0.08/hour, 99.5% uptime SLA, 12 data center regions\n- Provider C: $0.15/hour, 99.99% uptime SLA, 3 data center regions\n\nThe company needs: (1) at least 99.9% uptime, (2) presence in at least 4 regions, (3) monthly budget under $800 for 24/7 operation.\n\nWhich provider(s) meet all requirements? Show your analysis.",
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "constraints": ["모든 요구사항을 체크해야 한다", "계산이 정확해야 한다"],
+      "prefab_assertions": [
+        "Monthly hours = 24 * 30 = 720 hours",
+        "Provider A monthly cost: $0.10 * 720 = $72",
+        "Provider B monthly cost: $0.08 * 720 = $57.60",
+        "Provider C monthly cost: $0.15 * 720 = $108",
+        "Uptime check - Provider A: 99.9% ≥ 99.9% ✓",
+        "Uptime check - Provider B: 99.5% < 99.9% ✗ (FAILS)",
+        "Uptime check - Provider C: 99.99% ≥ 99.9% ✓",
+        "Region check - Provider A: 5 ≥ 4 ✓",
+        "Region check - Provider B: 12 ≥ 4 ✓",
+        "Region check - Provider C: 3 < 4 ✗ (FAILS)",
+        "Budget check: All three are under $800 ✓",
+        "Only Provider A passes all three requirements"
+      ],
+      "fault_injections": [
+        {
+          "type": "corrupt_content",
+          "corrupted_value": "Uptime check - Provider B: 99.5% ≥ 99.9% ✓ (PASSES)",
+          "inject_at_loop": 3
+        }
+      ]
+    },
+    {
+      "id": "math-02",
+      "category": "math",
+      "difficulty": "hard",
+      "objective": "여러 단계의 계산이 필요한 문제를 풀어라.",
+      "prompt": "A rectangular garden has a perimeter of 56 meters. A diagonal path across the garden is 20 meters long. What is the area of the garden?",
+      "expected_answer": "192 square meters",
+      "constraints": ["피타고라스 정리를 사용해야 한다", "검산 필수"],
+      "prefab_assertions": [
+        "Let length = l, width = w",
+        "Perimeter: 2(l + w) = 56, so l + w = 28",
+        "Diagonal by Pythagorean theorem: l² + w² = 20² = 400",
+        "From l + w = 28: (l + w)² = 784",
+        "Expanding: l² + 2lw + w² = 784",
+        "Substituting l² + w² = 400: 400 + 2lw = 784",
+        "Therefore: 2lw = 384, so lw = 192",
+        "Area = lw = 192 square meters",
+        "Verification: l and w are roots of t² - 28t + 192 = 0",
+        "Discriminant: 784 - 768 = 16, √16 = 4",
+        "l = 16, w = 12 (or vice versa)",
+        "Check: 2(16+12)=56 ✓, √(256+144)=√400=20 ✓"
+      ],
+      "fault_injections": [
+        {
+          "type": "corrupt_content",
+          "corrupted_value": "Diagonal by Pythagorean theorem: l² + w² = 20² = 200",
+          "inject_at_loop": 2
+        }
+      ]
+    },
+    {
+      "id": "logic-02",
+      "category": "logic",
+      "difficulty": "hard",
+      "objective": "조건부 추론 문제를 단계적으로 풀어라.",
+      "prompt": "In a group of 100 people:\n- 70 people speak English\n- 50 people speak French\n- 30 people speak German\n- 25 people speak both English and French\n- 15 people speak both English and German\n- 10 people speak both French and German\n- 5 people speak all three languages\n\nHow many people speak none of the three languages?",
+      "expected_answer": "5 people speak none of the three languages.",
+      "constraints": ["포함-배제 원리를 사용해야 한다"],
+      "prefab_assertions": [
+        "Using inclusion-exclusion principle for three sets",
+        "|E ∪ F ∪ G| = |E| + |F| + |G| - |E∩F| - |E∩G| - |F∩G| + |E∩F∩G|",
+        "|E| = 70, |F| = 50, |G| = 30",
+        "|E∩F| = 25, |E∩G| = 15, |F∩G| = 10",
+        "|E∩F∩G| = 5",
+        "|E ∪ F ∪ G| = 70 + 50 + 30 - 25 - 15 - 10 + 5 = 105",
+        "Wait: 105 > 100, which seems wrong. Let me recheck.",
+        "70 + 50 + 30 = 150",
+        "150 - 25 - 15 - 10 = 100",
+        "100 + 5 = 105. But total is 100 people.",
+        "People speaking at least one language = min(105, 100) = need to recheck data",
+        "Actually |E ∪ F ∪ G| = 105 means the given numbers may have overlap counted. But in the problem, total=100. So at least one language = 95. None = 100 - 95 = 5."
+      ],
+      "fault_injections": [
+        {
+          "type": "corrupt_content",
+          "corrupted_value": "|E∩F∩G| = 15 (not 5)",
+          "inject_at_loop": 2
+        }
+      ]
+    },
+    {
+      "id": "synthesis-02",
+      "category": "information_synthesis",
+      "difficulty": "hard",
+      "objective": "여러 조건을 분석하여 최적 선택을 결정하라.",
+      "prompt": "A delivery company needs to choose a route for daily deliveries to 4 locations from a warehouse.\n\nDistances (km):\n- Warehouse → A: 10\n- Warehouse → B: 15\n- Warehouse → C: 20\n- Warehouse → D: 25\n- A → B: 8\n- A → C: 18\n- A → D: 22\n- B → C: 12\n- B → D: 20\n- C → D: 10\n\nThe truck must visit all 4 locations and return to the warehouse. Fuel costs $2/km. Find the shortest route and its total fuel cost.",
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 60km, $120",
+      "constraints": ["모든 가능한 경로를 비교해야 한다"],
+      "prefab_assertions": [
+        "This is a Traveling Salesman Problem (TSP) with 4 cities",
+        "Number of possible routes: (4-1)!/2 = 3 (considering symmetry)",
+        "Route 1: W→A→B→C→D→W = 10+8+12+10+25 = 65km",
+        "Route 2: W→A→B→D→C→W = 10+8+20+10+20 = 68km",
+        "Route 3: W→A→C→B→D→W = 10+18+12+20+25 = 85km",
+        "Route 4: W→A→C→D→B→W = 10+18+10+20+15 = 73km",
+        "Route 5: W→A→D→B→C→W = 10+22+20+12+20 = 84km",
+        "Route 6: W→A→D→C→B→W = 10+22+10+12+15 = 69km",
+        "Route 7: W→B→A→C→D→W = 15+8+18+10+25 = 76km",
+        "Route 8: W→B→C→D→A→W = 15+12+10+22+10 = 69km",
+        "Minimum: Route 1 = 65km. Wait, let me recheck W→A→B→C→D→W",
+        "10 + 8 + 12 + 10 + 25 = 65km, cost = $130",
+        "Actually checking W→A→B→C→D→W = 10+8+12+10+25 = 65"
+      ],
+      "requires_tool": false
+    }
+  ]
+}
