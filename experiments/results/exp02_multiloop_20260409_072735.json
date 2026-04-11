@@ -1,0 +1,2659 @@
+{
+  "experiment": "multiloop",
+  "model": "gemma4:e4b",
+  "results": [
+    {
+      "task_id": "math-01",
+      "max_loops": 1,
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 39169,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 5,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 35691,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.95,
+          "total_assertions": 4,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 32195,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-01",
+      "max_loops": 2,
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 1.0,
+          "total_assertions": 5,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 34031,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 42829,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 33828,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 43174,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 33966,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 45720,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-01",
+      "max_loops": 4,
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 3,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 33445,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 52255,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 36516,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 32306,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 42188,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 49681,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 28859,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 3,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 26656,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 53885,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 32116,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-01",
+      "max_loops": 8,
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 3,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The customer bought 13 apples and 7 oranges. \n\n**Verification:**\n1. **Total Fruits:** $13 + 7 = 20$ (Correct).\n2. **Total Cost:** $(2 \\times 13) + (3 \\times 7) = 26 + 21 = 47$ (Correct).\n3. **Constraint:** $13 > 7$ (Apples > Oranges, Correct).\n\nTherefore, the solution is consistent with all given conditions.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 31097,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 43511,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 28464,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 3,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 5,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 44011,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 41040,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "CONVERGED",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 32702,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 3,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 32223,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 45039,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 30118,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "max_loops": 1,
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 34959,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 26018,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 1.0,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 33826,
+              "error": "JSON parse failed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "max_loops": 2,
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 3,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 32760,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 30621,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.7,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 25221,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.7,
+              "duration_ms": 118525,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 36812,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 134009,
+              "error": "JSON parse failed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "max_loops": 4,
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "Spanish",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 31677,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 128285,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 0.7,
+              "duration_ms": 113558,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 78965,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 3,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 34474,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 132147,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 129290,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 123593,
+              "error": "JSON parse failed"
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.7,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 31769,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 110199,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 123525,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.7,
+              "duration_ms": 119939,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "max_loops": 8,
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 3,
+          "final_answer": "Spanish",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 32371,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 147799,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 130624,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 110878,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 134317,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 6,
+              "phase": "SYNTHESIZE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 122909,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 7,
+              "phase": "SYNTHESIZE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 135439,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 8,
+              "phase": "CONVERGED",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 100405,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 3,
+          "final_answer": "The nationality of the person in the green house is Spanish.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 36199,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 130059,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 105651,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 20841,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 6,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 5,
+          "final_answer": "Spanish",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 38179,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 136188,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 128860,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 126273,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.7,
+              "duration_ms": 108499,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "CONVERGED",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 79428,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "max_loops": 1,
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 1.0,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 33782,
+              "error": "JSON parse failed"
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 31970,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 33529,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "max_loops": 2,
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "Provider A meets all requirements.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 33185,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 66837,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "Provider A meets all requirements.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 34625,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 81320,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 41458,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 75542,
+              "error": "JSON parse failed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "max_loops": 4,
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 3,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "Provider A meets all the company's requirements. Provider B fails due to insufficient uptime SLA (99.5% < 99.9%), and Provider C fails due to insufficient regional presence (3 < 4).",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 31296,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 70540,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "CONVERGED",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 44025,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 3,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 38194,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 43664,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 72306,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 92660,
+              "error": "JSON parse failed"
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "Provider A meets all the company's requirements. Provider B fails the uptime requirement, and Provider C fails the minimum region requirement.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 56134,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 77884,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 80187,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 65586,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "max_loops": 8,
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 6,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "Provider A",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 32428,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 68841,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "SYNTHESIZE",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 38246,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "SYNTHESIZE",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 40416,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 5,
+              "phase": "VERIFY",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 58915,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 6,
+              "phase": "VERIFY",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 54780,
+              "error": "JSON parse failed"
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "Provider A is the only provider that meets all the company's requirements. Provider A meets the minimum 99.9% uptime SLA, has 5 data center regions (meeting the requirement of at least 4), and its calculated monthly cost of $72.00 is under the $800 budget limit. Provider B fails due to having only 99.5% uptime, and Provider C fails due to having only 3 data center regions.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 34212,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 89142,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 85027,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 47405,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 3,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "Provider A meets all the required criteria. \n\n**Analysis Summary:**\n\n1. **Uptime SLA (Required $\\ge 99.9\\%$)**:\n    *   Provider A: 99.9% (Pass)\n    *   Provider B: 99.5% (Fail)\n    *   Provider C: 99.99% (Pass)\n\n2. **Data Center Regions (Required $\\ge 4$)**:\n    *   Provider A: 5 (Pass)\n    *   Provider B: 12 (Pass)\n    *   Provider C: 3 (Fail)\n\n3. **Monthly Budget (Required $< $800)**:\n    *   Provider A: $72.00 (Pass)\n    *   Provider B: $57.60 (Pass)\n    *   Provider C: $108.00 (Pass)\n\n**Conclusion:**\nProvider A is the only provider that satisfies all three constraints (Uptime $\\ge 99.9\\%$, Regions $\\ge 4$, and Cost $< $800). ",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 34364,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 78677,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "CONVERGED",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 60963,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "max_loops": 1,
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 33828,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 1.0,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 35959,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 1.0,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 38957,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "max_loops": 2,
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 3,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 36519,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 33856,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": {
+            "area": "192 square meters"
+          },
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 34995,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 57827,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 3,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 34453,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 61035,
+              "error": "JSON parse failed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "max_loops": 4,
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 36067,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 66880,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 65455,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 34172,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 3,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 30230,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 54435,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 24297,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 40701,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 37373,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 70965,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "SYNTHESIZE",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 34395,
+              "error": "JSON parse failed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "max_loops": 8,
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 44011,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 52730,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "SYNTHESIZE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 39513,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 33680,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 34629,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 55819,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 49561,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 38363,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 39380,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 64569,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "SYNTHESIZE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 39852,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 31192,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "max_loops": 1,
+      "expected_answer": "0 people speak none of the three languages (data is inconsistent: inclusion-exclusion gives 105 > 100).",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 32135,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 36404,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 38882,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "max_loops": 2,
+      "expected_answer": "0 people speak none of the three languages (data is inconsistent: inclusion-exclusion gives 105 > 100).",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 34479,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 66853,
+              "error": "JSON parse failed"
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 34309,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 36833,
+              "error": "JSON parse failed"
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.95,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 34893,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 65565,
+              "error": "JSON parse failed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "max_loops": 4,
+      "expected_answer": "0 people speak none of the three languages (data is inconsistent: inclusion-exclusion gives 105 > 100).",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": "The problem statement contains contradictory data. Based on the Inclusion-Exclusion Principle, the calculated number of people speaking at least one language is 105, which exceeds the total population of 100. Therefore, it is impossible to determine a valid number of people who speak none of the languages because the premise is flawed.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 38611,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.9,
+              "duration_ms": 60314,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.9,
+              "duration_ms": 53279,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 63278,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 34226,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 32130,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 68007,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 61207,
+              "error": "JSON parse failed"
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.7,
+          "total_assertions": 5,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 36502,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 34594,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 74633,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 0.7,
+              "duration_ms": 79897,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "max_loops": 8,
+      "expected_answer": "0 people speak none of the three languages (data is inconsistent: inclusion-exclusion gives 105 > 100).",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 7,
+          "final_phase": "CONVERGED",
+          "final_confidence": 0.9,
+          "total_assertions": 3,
+          "final_answer": "0",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 37339,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 77808,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 81587,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 79081,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 82880,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 6,
+              "phase": "SYNTHESIZE",
+              "assertions": 2,
+              "confidence": 0.5,
+              "duration_ms": 63691,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "CONVERGED",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 64540,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "VERIFY",
+          "final_confidence": 1.0,
+          "total_assertions": 5,
+          "final_answer": "Based on the provided numbers, the calculation results in -5 people speaking none of the three languages. This indicates an inconsistency in the initial data, as the number speaking at least one language (105) exceeds the total population (100).",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 32940,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 31703,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 85076,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.8,
+              "duration_ms": 74272,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 0.9,
+              "duration_ms": 49656,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "SYNTHESIZE",
+              "assertions": 5,
+              "confidence": 0.9,
+              "duration_ms": 45343,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 7,
+              "phase": "SYNTHESIZE",
+              "assertions": 5,
+              "confidence": 0.95,
+              "duration_ms": 59944,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "VERIFY",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 47065,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 7,
+          "final_phase": "CONVERGED",
+          "final_confidence": 0.95,
+          "total_assertions": 4,
+          "final_answer": "Based on the confirmed facts, the input data provided in the problem statement is mathematically inconsistent because the calculated union of the three sets (105) exceeds the total population (100). Therefore, a definitive numerical answer to 'How many people speak none of the three languages?' cannot be determined without correcting the input parameters.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 31037,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 83003,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 71094,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 56262,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 69711,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 6,
+              "phase": "SYNTHESIZE",
+              "assertions": 4,
+              "confidence": 0.9,
+              "duration_ms": 50867,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 45169,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "max_loops": 1,
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 38646,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.95,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 39223,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.95,
+          "total_assertions": 3,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.95,
+              "duration_ms": 40610,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "max_loops": 2,
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The shortest route requires a total distance of 65 km, resulting in a total fuel cost of $130.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.95,
+              "duration_ms": 50125,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 91559,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 1.0,
+          "total_assertions": 5,
+          "final_answer": "The shortest route has a total distance of 65 km, and the minimum total fuel cost is $130.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 29932,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 86647,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 31993,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 61257,
+              "error": "JSON parse failed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "max_loops": 4,
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 0.95,
+          "total_assertions": 6,
+          "final_answer": {
+            "shortest_route_distance": "65 km",
+            "minimum_fuel_cost": "$130"
+          },
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 35891,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 83015,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 111451,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 0.95,
+              "duration_ms": 85041,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 35255,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 86105,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 84057,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 94383,
+              "error": "JSON parse failed"
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 3,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": {
+            "shortest_distance": "65 km",
+            "total_fuel_cost": "$130",
+            "conclusion": "The shortest route requires a total distance of 65 km, resulting in a minimum fuel cost of $130."
+          },
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 34649,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 89828,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 33843,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "max_loops": 8,
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 3,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": {
+            "shortest_route": "Warehouse -> A -> B -> C -> D -> Warehouse",
+            "minimum_distance": "65 km",
+            "total_fuel_cost": "$130"
+          },
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 32985,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 93152,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 28971,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 6,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 8,
+          "final_answer": "The shortest route that visits all 4 locations (A, B, C, D) and returns to the Warehouse (W) has a total distance of 65 km. Given a fuel cost of $2/km, the minimum total fuel cost for the delivery route is $130.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 41011,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 101003,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 77467,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 75318,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 0.95,
+              "duration_ms": 82263,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "CONVERGED",
+              "assertions": 8,
+              "confidence": 1.0,
+              "duration_ms": 36759,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 6,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The shortest route for the delivery company is W -> A -> B -> C -> D -> W (or its reverse). The minimum total distance is 65 km. With fuel costs at $2/km, the total minimum fuel cost is $130.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 39873,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 110141,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 80304,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 66744,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 77118,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 34147,
+              "error": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

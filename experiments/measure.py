@@ -225,6 +225,28 @@ def print_report(analysis: dict):
             print(f"  {f['fault_type']:<20} {hl:>14} {f['detection_rate']:>8.2%} "
                   f"{f['avg_final_confidence']:>10.3f}")
 
+    elif exp == "cross_validation":
+        print(f"\n  전체 감지율: {analysis['overall_detection_rate']:.1%}")
+        print(f"  게이트 판정: {analysis['gate_result']}")
+        print(f"\n  {'결함유형':<20} {'감지':>6} {'/ 전체':>8} {'감지율':>8}")
+        print(f"  {'-' * 44}")
+        for f in analysis["fault_analysis"]:
+            print(f"  {f['fault_type']:<20} {f['detected']:>6} {'/ ' + str(f['total']):>8} "
+                  f"{f['detection_rate']:>8.1%}")
+
+    elif exp == "abc_pipeline":
+        o = analysis["overall"]
+        print(f"\n  수렴률: {o['convergence_rate']:.1%}")
+        print(f"  평균 점수: {o['avg_score']:.3f}")
+        print(f"  평균 사이클: {o['avg_cycles']:.1f}")
+        print(f"  C 평균 전이 횟수: {o['c_transition_rate']:.1f}")
+        print(f"\n  {'태스크':<15} {'Trial':>6} {'수렴':>6} {'점수':>6} {'사이클':>8} {'C전이':>6}")
+        print(f"  {'-' * 50}")
+        for t in analysis["tasks"]:
+            conv = "✓" if t["converged"] else "✗"
+            print(f"  {t['task_id']:<15} {t['trial']:>6} {conv:>6} {t['score']:>6.2f} "
+                  f"{t['total_cycles']:>8} {t['c_transitions']:>6}")
+
     print()
 
 
@@ -270,6 +292,87 @@ def generate_markdown_report(analysis: dict) -> str:
     return "\n".join(lines)
 
 
+def analyze_cross_validation(data: dict) -> dict:
+    """실험 3.5 분석: 교차 검증 감지율."""
+    summary = {"experiment": "cross_validation", "by_fault_type": defaultdict(list)}
+
+    for entry in data["results"]:
+        fault_type = entry["fault"]["type"]
+        for trial in entry["trials"]:
+            summary["by_fault_type"][fault_type].append({
+                "task_id": entry["task_id"],
+                "detected": trial["detected"],
+                "error": trial.get("error"),
+            })
+
+    fault_summary = []
+    for fault_type, entries in summary["by_fault_type"].items():
+        valid = [e for e in entries if not e.get("error")]
+        detected = sum(1 for e in valid if e["detected"])
+        fault_summary.append({
+            "fault_type": fault_type,
+            "detection_rate": detected / len(valid) if valid else 0,
+            "detected": detected,
+            "total": len(valid),
+            "errors": len(entries) - len(valid),
+        })
+
+    total_valid = sum(f["total"] for f in fault_summary)
+    total_detected = sum(f["detected"] for f in fault_summary)
+    return {
+        "experiment": "cross_validation",
+        "fault_analysis": fault_summary,
+        "overall_detection_rate": total_detected / total_valid if total_valid else 0,
+        "gate_result": "PASS" if total_valid and total_detected / total_valid > 0.5 else "FAIL",
+    }
+
+
+def analyze_abc_pipeline(data: dict) -> dict:
+    """실험 4 분석: A-B-C 파이프라인 품질."""
+    import re
+
+    summary = {"experiment": "abc_pipeline", "tasks": []}
+
+    for entry in data["results"]:
+        task_id = entry["task_id"]
+        expected = entry.get("expected_answer", "")
+
+        for trial in entry["trials"]:
+            fa = trial.get("final_answer", "")
+            # 간이 채점
+            score = score_answer(str(fa), expected) if fa else 0.0
+
+            # C의 phase 전이 횟수
+            c_transitions = [t for t in trial.get("phase_transitions", []) if t]
+            c_decided = sum(1 for d in trial.get("c_decisions", []) if d is True)
+
+            summary["tasks"].append({
+                "task_id": task_id,
+                "trial": trial["trial"],
+                "score": score,
+                "converged": trial["final_phase"] == "CONVERGED",
+                "total_cycles": trial["total_cycles"],
+                "total_assertions": trial["total_assertions"],
+                "c_transitions": len(c_transitions),
+                "c_decided_converge": c_decided,
+                "phase_transitions": c_transitions,
+            })
+
+    tasks = summary["tasks"]
+    converged = [t for t in tasks if t["converged"]]
+    scores = [t["score"] for t in tasks]
+
+    summary["overall"] = {
+        "total_trials": len(tasks),
+        "convergence_rate": len(converged) / len(tasks) if tasks else 0,
+        "avg_score": sum(scores) / len(scores) if scores else 0,
+        "avg_cycles": sum(t["total_cycles"] for t in tasks) / len(tasks) if tasks else 0,
+        "c_transition_rate": sum(t["c_transitions"] for t in tasks) / len(tasks) if tasks else 0,
+    }
+
+    return summary
+
+
 # ── CLI ──
 
 ANALYZERS = {
@@ -277,17 +380,32 @@ ANALYZERS = {
     "assertion_cap": analyze_assertion_cap,
     "multiloop": analyze_multiloop,
     "error_propagation": analyze_error_propagation,
+    "cross_validation": analyze_cross_validation,
+    "abc_pipeline": analyze_abc_pipeline,
 }
+
+
+def resolve_path(pattern: str) -> str:
+    """글롭 패턴을 실제 파일 경로로 해석한다. 윈도우 호환."""
+    import glob
+    matches = sorted(glob.glob(pattern))
+    if not matches:
+        print(f"No files matching: {pattern}")
+        sys.exit(1)
+    # 가장 최신 파일 (알파벳순 마지막 = 타임스탬프 최신)
+    return matches[-1]
 
 
 def main():
     parser = argparse.ArgumentParser(description="제멘토 실험 결과 분석")
-    parser.add_argument("result_file", help="결과 JSON 파일 경로")
+    parser.add_argument("result_file", help="결과 JSON 파일 경로 (글롭 패턴 가능, 예: results/exp01_*.json)")
     parser.add_argument("--markdown", action="store_true", help="마크다운 보고서 출력")
     parser.add_argument("--save-md", help="마크다운 파일로 저장할 경로")
     args = parser.parse_args()
 
-    data = load_result(args.result_file)
+    path = resolve_path(args.result_file)
+    print(f"  → Loading: {path}")
+    data = load_result(path)
     exp_type = data["experiment"]
 
     if exp_type not in ANALYZERS:

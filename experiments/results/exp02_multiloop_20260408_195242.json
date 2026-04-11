@@ -1,0 +1,3126 @@
+{
+  "experiment": "multiloop",
+  "model": "gemma4:e4b",
+  "results": [
+    {
+      "task_id": "math-01",
+      "max_loops": 1,
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "VERIFY",
+          "final_confidence": 0.2,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "VERIFY",
+              "assertions": 0,
+              "confidence": 0.2,
+              "duration_ms": 39584,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.5,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 40060,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 36227,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-01",
+      "max_loops": 2,
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.5,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 42537,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 27954,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.95,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 41559,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 25757,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.95,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 44093,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.95,
+              "duration_ms": 29356,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-01",
+      "max_loops": 4,
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.5,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 37903,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 25356,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 29102,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 23406,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 1.0,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 37179,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 25208,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 18358,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 27140,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 1.0,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 37199,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 28058,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 27340,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 25491,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-01",
+      "max_loops": 8,
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.9,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 34016,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 26355,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 23532,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 23495,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 31084,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.5,
+              "duration_ms": 27675,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.8,
+              "duration_ms": 28690,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 27002,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.8,
+              "duration_ms": 49650,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 30934,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 27575,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 30084,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 33888,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 24522,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 30177,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 25468,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 1.0,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 45586,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 24532,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 23705,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 24435,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 24515,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 24396,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 23295,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 23999,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "max_loops": 1,
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.5,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 48480,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.5,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 46832,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.6,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.6,
+              "duration_ms": 40374,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "max_loops": 2,
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.8,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.8,
+              "duration_ms": 51617,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.8,
+              "duration_ms": 23601,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.9,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 47320,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 23938,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.9,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 45468,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 33437,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "max_loops": 4,
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "VERIFY",
+          "final_confidence": 0.1,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "VERIFY",
+              "assertions": 0,
+              "confidence": 0.1,
+              "duration_ms": 41288,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "VERIFY",
+              "assertions": 0,
+              "confidence": 0.1,
+              "duration_ms": 24256,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "VERIFY",
+              "assertions": 0,
+              "confidence": 0.1,
+              "duration_ms": 29497,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "VERIFY",
+              "assertions": 0,
+              "confidence": 0.1,
+              "duration_ms": 30166,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.5,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 46763,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 24679,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 25325,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 27007,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.8,
+              "duration_ms": 38126,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 24290,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 26237,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 26858,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "max_loops": 8,
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.5,
+          "total_assertions": 4,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 36099,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.5,
+              "duration_ms": 34152,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.5,
+              "duration_ms": 32218,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.5,
+              "duration_ms": 22862,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.5,
+              "duration_ms": 29975,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.5,
+              "duration_ms": 30551,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.5,
+              "duration_ms": 27269,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.5,
+              "duration_ms": 29418,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 1.0,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 46025,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 31334,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 27780,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 29256,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 22279,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 29298,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 30690,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 26231,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.6,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 41960,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.4,
+              "duration_ms": 29280,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.4,
+              "duration_ms": 28208,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.4,
+              "duration_ms": 29399,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.4,
+              "duration_ms": 30500,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.4,
+              "duration_ms": 24046,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.4,
+              "duration_ms": 29783,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.6,
+              "duration_ms": 23969,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "max_loops": 1,
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 39944,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 34014,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.8,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.8,
+              "duration_ms": 44772,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "max_loops": 2,
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.7,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 36686,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.7,
+              "duration_ms": 38551,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 41321,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 28136,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 38811,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 42725,
+              "error": "JSON parse failed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "max_loops": 4,
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 33047,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.8,
+              "duration_ms": 37107,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.8,
+              "duration_ms": 25856,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 26335,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.8,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 37438,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.8,
+              "duration_ms": 26846,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.8,
+              "duration_ms": 28216,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.8,
+              "duration_ms": 32941,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.5,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 38092,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 41827,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 26954,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 25316,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "max_loops": 8,
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.7,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.6,
+              "duration_ms": 41168,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 33405,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.7,
+              "duration_ms": 28141,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.7,
+              "duration_ms": 30316,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.7,
+              "duration_ms": 23833,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.7,
+              "duration_ms": 30762,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.7,
+              "duration_ms": 28569,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.7,
+              "duration_ms": 27732,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 3,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 30095,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 29142,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 30598,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 33127,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 30578,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 31021,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 29377,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 28943,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.5,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 36657,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 34655,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 29855,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 28595,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 26376,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 28769,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 28685,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 29724,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "max_loops": 1,
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 46516,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 3,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 49158,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 44322,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "max_loops": 2,
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.5,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.8,
+              "duration_ms": 38410,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 36776,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.5,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 39974,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 38513,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.9,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.8,
+              "duration_ms": 36489,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 21907,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "max_loops": 4,
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "SYNTHESIZE",
+          "final_confidence": 0.8,
+          "total_assertions": 4,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 41643,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "SYNTHESIZE",
+              "assertions": 4,
+              "confidence": 0.8,
+              "duration_ms": 51327,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "SYNTHESIZE",
+              "assertions": 4,
+              "confidence": 0.8,
+              "duration_ms": 43374,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "SYNTHESIZE",
+              "assertions": 4,
+              "confidence": 0.8,
+              "duration_ms": 51590,
+              "error": "JSON parse failed"
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.5,
+          "total_assertions": 3,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 35556,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.5,
+              "duration_ms": 37012,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.5,
+              "duration_ms": 25430,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.5,
+              "duration_ms": 24363,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.9,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 44748,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 32940,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.3,
+              "duration_ms": 29550,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 26317,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "max_loops": 8,
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.8,
+              "duration_ms": 37825,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 31327,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 27189,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 29565,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 29214,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 32146,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 29410,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 26685,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 32758,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 39582,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 28433,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 23979,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 24449,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 26527,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 26658,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 33803,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.5,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 34883,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 32913,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 29004,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 29396,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 27501,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 24324,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 29065,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 27897,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "max_loops": 1,
+      "expected_answer": "0 people speak none of the three languages (data is inconsistent: inclusion-exclusion gives 105 > 100).",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.5,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 48203,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 49374,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.7,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.7,
+              "duration_ms": 39826,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "max_loops": 2,
+      "expected_answer": "0 people speak none of the three languages (data is inconsistent: inclusion-exclusion gives 105 > 100).",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 42732,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 30489,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "VERIFY",
+          "final_confidence": 0.2,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.8,
+              "duration_ms": 54383,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "VERIFY",
+              "assertions": 0,
+              "confidence": 0.2,
+              "duration_ms": 32611,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.95,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 43638,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.95,
+              "duration_ms": 33072,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "max_loops": 4,
+      "expected_answer": "0 people speak none of the three languages (data is inconsistent: inclusion-exclusion gives 105 > 100).",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 0.6,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 32920,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.6,
+              "duration_ms": 28196,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.6,
+              "duration_ms": 30358,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.6,
+              "duration_ms": 30502,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 1.0,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 44199,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 29394,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 29929,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 25163,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 38077,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.8,
+              "duration_ms": 30343,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 23955,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 26769,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "max_loops": 8,
+      "expected_answer": "0 people speak none of the three languages (data is inconsistent: inclusion-exclusion gives 105 > 100).",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 46837,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 35099,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 27647,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 30498,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 29927,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 32712,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 25820,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 26068,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 1.0,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 33071,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 26104,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 30551,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 23052,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 27568,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 23554,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 27729,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 25537,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 44972,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 35786,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 27176,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 25288,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 22509,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.7,
+              "duration_ms": 30945,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.7,
+              "duration_ms": 28447,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 26163,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "max_loops": 1,
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.95,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 36296,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 35946,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 1,
+          "actual_loops": 1,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 34445,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "max_loops": 2,
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.5,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 37516,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 36769,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.5,
+          "total_assertions": 1,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 34721,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.5,
+              "duration_ms": 35338,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 2,
+          "actual_loops": 2,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.8,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 1,
+              "confidence": 0.8,
+              "duration_ms": 40221,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.8,
+              "duration_ms": 35285,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "max_loops": 4,
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 40489,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 42011,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.9,
+              "duration_ms": 28240,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 28981,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 49275,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 30862,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 35185,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 33999,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 4,
+          "actual_loops": 4,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 2,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 54920,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 28465,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 27596,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 32645,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "max_loops": 8,
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.9,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 36119,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.6,
+              "duration_ms": 38016,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.7,
+              "duration_ms": 34508,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 31695,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 33271,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 32947,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 27310,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 28011,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "DECOMPOSE",
+          "final_confidence": 1.0,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 36638,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 35471,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 29374,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 30021,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 29176,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 28422,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 0.9,
+              "duration_ms": 24846,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "DECOMPOSE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 26715,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 8,
+          "actual_loops": 8,
+          "final_phase": "INVESTIGATE",
+          "final_confidence": 0.5,
+          "total_assertions": 0,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 1.0,
+              "duration_ms": 39956,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 35823,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 26482,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 27726,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 28053,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 25849,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 26176,
+              "error": null
+            },
+            {
+              "loop": 8,
+              "phase": "INVESTIGATE",
+              "assertions": 0,
+              "confidence": 0.5,
+              "duration_ms": 27820,
+              "error": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

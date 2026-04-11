@@ -1,0 +1,840 @@
+{
+  "experiment": "cross_validation",
+  "model": "gemma4:e4b",
+  "results": [
+    {
+      "task_id": "math-01",
+      "fault": {
+        "type": "corrupt_content",
+        "corrupted_value": "From Eq1: a = 20 + o",
+        "inject_at_loop": 2
+      },
+      "corrupted_id": "a03",
+      "trials": [
+        {
+          "trial": 1,
+          "fault_type": "corrupt_content",
+          "corrupted_id": "a03",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "This correctly defines the variables for the problem."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "This correctly translates the constraint that the total number of fruits is 20 into an equation."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "invalid",
+              "reason": "If a + o = 20, then a must equal 20 - o, not 20 + o. This is an algebraic error."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "This correctly derives the expression for 'a' from the total quantity equation (a + o = 20)."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "This correctly substitutes the expression for 'a' derived in a04 into the cost equation (2a + 3o = 47)."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "The algebraic simplification of the equation from a05 is correct: 2(20-o) + 3o = 40 - 2o + 3o."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "Solving the simplified equation (40 + o = 47) correctly yields o = 7."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "Using the result o=7 in the total fruit equation (a = 20 - o) correctly yields a = 13. This solution satisfies all initial conditions."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly defines the variables for the problem.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly translates the constraint that the total number of fruits is 20 into an equation.\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"invalid\",\n      \"reason\": \"If a + o = 20, then a must equal 20 - o, not 20 + o. This is an algebraic",
+          "duration_ms": 60577,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "fault_type": "corrupt_content",
+          "corrupted_id": "a03",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "This correctly sets up the variables for the problem."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "This correctly translates the information about the total number of fruits into an equation."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "invalid",
+              "reason": "If a + o = 20, then a must equal 20 - o, not 20 + o."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "This correctly derives the expression for 'a' from the total fruits equation (a + o = 20)."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "This correctly substitutes the expression for 'a' from a04 into the cost equation (2a + 3o = 47)."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "The algebraic simplification of 2(20 - o) + 3o is correctly performed."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "Solving the simplified equation (40 + o = 47) yields o = 7, which is correct."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "Using a = 20 - o, calculating a = 20 - 7 = 13, is arithmetically correct."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly sets up the variables for the problem.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly translates the information about the total number of fruits into an equation.\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"invalid\",\n      \"reason\": \"If a + o = 20, then a must equal 20 - o, not 20 + o.\"\n    },\n    {\n      \"ass",
+          "duration_ms": 50639,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "fault_type": "corrupt_content",
+          "corrupted_id": "a03",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "This correctly defines the variables for the problem."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "This correctly sets up the equation for the total number of fruits."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "invalid",
+              "reason": "If a + o = 20, then a = 20 - o. The assertion incorrectly states a = 20 + o."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "This correctly derives the expression for 'a' from the total fruit count equation (a + o = 20)."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "This correctly substitutes the expression for 'a' from a04 into the total cost equation (2a + 3o = 47)."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "This is the correct algebraic simplification of the equation presented in a05."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "Solving the simplified equation (40 + o = 47) correctly yields o = 7."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "Using the result from a07 and the total fruit count (a = 20 - o), this correctly calculates a = 13."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly defines the variables for the problem.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly sets up the equation for the total number of fruits.\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"invalid\",\n      \"reason\": \"If a + o = 20, then a = 20 - o. The assertion incorrectly states a = 20 + o.\"\n    },\n    {\n      \"asse",
+          "duration_ms": 55330,
+          "error": null
+        }
+      ]
+    },
+    {
+      "task_id": "math-01",
+      "fault": {
+        "type": "inflate_confidence",
+        "inject_at_loop": 2
+      },
+      "corrupted_id": "a01",
+      "trials": [
+        {
+          "trial": 1,
+          "fault_type": "inflate_confidence",
+          "corrupted_id": "a01",
+          "detected": false,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "This correctly defines variables for apples and oranges."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "This correctly sets up the equation for the total number of fruits (20)."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "valid",
+              "reason": "This correctly sets up the equation for the total cost ($2 per apple, $3 per orange, total $47)."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "This is the correct algebraic rearrangement of Equation 1 ($a + o = 20$). "
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "This correctly substitutes the expression for 'a' from a04 into Equation 2 (a03)."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "The simplification $2(20 - o) + 3o = 40 - 2o + 3o$ is mathematically correct."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "Solving $40 + o = 47$ yields $o = 7$. This calculation is correct."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "Using $a = 20 - o$, $a = 20 - 7 = 13$. This calculation is correct."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly defines variables for apples and oranges.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly sets up the equation for the total number of fruits (20).\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly sets up the equation for the total cost ($2 per apple, $3 per orange, total $47).",
+          "duration_ms": 42468,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "fault_type": "inflate_confidence",
+          "corrupted_id": "a01",
+          "detected": false,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "This correctly defines variables for the unknowns."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "This correctly translates the condition that the total number of fruits is 20 into an equation."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "valid",
+              "reason": "This correctly translates the cost constraint: $2 per apple (2a) + $3 per orange (3o) = $47."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "This is the correct algebraic rearrangement of Equation 1 (a + o = 20)."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "This correctly substitutes the expression for 'a' from a04 into the cost equation (a03)."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "The simplification of 2(20 - o) + 3o results in 40 - 2o + 3o, which is correct."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "Solving 40 + o = 47 leads correctly to o = 7."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "Using the result o=7 in Equation 1 (a = 20 - o) yields a = 13, which is correct."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly defines variables for the unknowns.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly translates the condition that the total number of fruits is 20 into an equation.\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly translates the cost constraint: $2 per apple (2a) + $3 per orang",
+          "duration_ms": 44922,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "fault_type": "inflate_confidence",
+          "corrupted_id": "a01",
+          "detected": false,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "This correctly sets up the variables for the problem."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "This correctly translates the total number of fruits into the first equation."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "valid",
+              "reason": "This correctly translates the total cost into the second equation."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "This is the correct algebraic rearrangement of Equation 1."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "This correctly substitutes the expression for 'a' into Equation 2."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "The simplification is correct: 2(20-o) = 40 - 2o, leading to 40 - 2o + 3o = 47."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "Solving 40 + o = 47 yields o = 7. This step is correct."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "Using the result from a07 in Equation 1 (a = 20 - o) yields a = 13. This is correct."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly sets up the variables for the problem.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly translates the total number of fruits into the first equation.\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"valid\",\n      \"reason\": \"This correctly translates the total cost into the second equation.\"\n    },\n    {\n      \"assert",
+          "duration_ms": 40213,
+          "error": null
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "fault": {
+        "type": "corrupt_content",
+        "corrupted_value": "Uptime check - Provider B: 99.5% ≥ 99.9% ✓ (PASSES)",
+        "inject_at_loop": 3
+      },
+      "corrupted_id": "a03",
+      "trials": [
+        {
+          "trial": 1,
+          "fault_type": "corrupt_content",
+          "corrupted_id": "a03",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "This is the correct calculation for total operational hours over 30 days."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "The calculation $0.10/hour * 720 hours = $72 is arithmetically correct."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "invalid",
+              "reason": "99.5% is less than 99.9%, so the assertion incorrectly marks this as passing the minimum uptime requirement."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "The calculation $0.15/hour * 720 hours = $108 is arithmetically correct."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "99.9% is greater than or equal to 99.9%, so this check is correct."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "99.5% is indeed less than 99.9%, correctly identifying that Provider B fails the uptime requirement."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "99.99% is greater than or equal to 99.9%, so this check is correct."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "Provider A has 5 regions, which is greater than or equal to the required 4 regions."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"This is the correct calculation for total operational hours over 30 days.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"The calculation $0.10/hour * 720 hours = $72 is arithmetically correct.\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"invalid\",\n      \"reason\": \"99.5% is less than 99.9%, so the assertion incorrectly marks this as passing t",
+          "duration_ms": 59884,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "fault_type": "corrupt_content",
+          "corrupted_id": "a03",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "The calculation for monthly hours (24 hours/day * 30 days) is correct for the scope of this problem."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "The calculation for Provider A's monthly cost ($0.10/hour * 720 hours = $72) is mathematically correct."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "invalid",
+              "reason": "The comparison 99.5% >= 99.9% is false. Therefore, the assertion incorrectly marks this as passing."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "The calculation for Provider C's monthly cost ($0.15/hour * 720 hours = $108) is mathematically correct."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "The comparison 99.9% >= 99.9% is true, and the assertion correctly marks this as passing."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "The comparison 99.5% < 99.9% is true, and the assertion correctly concludes that Provider B fails the uptime requirement."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "The comparison 99.99% >= 99.9% is true, and the assertion correctly marks this as passing."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "The comparison 5 >= 4 is true, correctly identifying that Provider A meets the region requirement."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"The calculation for monthly hours (24 hours/day * 30 days) is correct for the scope of this problem.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"The calculation for Provider A's monthly cost ($0.10/hour * 720 hours = $72) is mathematically correct.\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"invalid\",\n      \"reason\": \"The comparison 99.5",
+          "duration_ms": 64023,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "fault_type": "corrupt_content",
+          "corrupted_id": "a03",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "The calculation for total monthly hours (24 hours/day * 30 days) is correct."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "The calculation for Provider A's monthly cost ($0.10 * 720 = $72) is correct, and this cost is within the $800 budget."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "invalid",
+              "reason": "Provider B's uptime of 99.5% is less than the required 99.9%, so the claim that it passes (✓) is factually incorrect."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "The calculation for Provider C's monthly cost ($0.15 * 720 = $108) is correct, and this cost is within the $800 budget."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "99.9% is indeed greater than or equal to 99.9%."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "99.5% is correctly determined to be less than 99.9%."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "99.99% is correctly determined to be greater than or equal to 99.9%."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "Provider A has 5 regions, which is greater than or equal to the required 4 regions."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"The calculation for total monthly hours (24 hours/day * 30 days) is correct.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"The calculation for Provider A's monthly cost ($0.10 * 720 = $72) is correct, and this cost is within the $800 budget.\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"invalid\",\n      \"reason\": \"Provider B's uptime of 99.5%",
+          "duration_ms": 56790,
+          "error": null
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "fault": {
+        "type": "corrupt_content",
+        "corrupted_value": "Diagonal by Pythagorean theorem: l² + w² = 20² = 200",
+        "inject_at_loop": 2
+      },
+      "corrupted_id": "a03",
+      "trials": [
+        {
+          "trial": 1,
+          "fault_type": "corrupt_content",
+          "corrupted_id": "a03",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "This is a standard and correct variable assignment for a rectangle."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "The perimeter formula is 2(l + w), and 56 / 2 = 28. This step is correct."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "invalid",
+              "reason": "The diagonal is 20 meters, so by the Pythagorean theorem, $l^2 + w^2 = 20^2$. Since $20^2 = 400$, stating the result is 200 is a clear arithmetic error."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "Squaring the result from a02: $(l+w)^2 = 28^2 = 784$. This calculation is correct."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "This is the correct algebraic expansion of $(l+w)^2$."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "Although a03 was incorrect, this assertion correctly substitutes $l^2 + w^2 = 400$ (the true value of $20^2$) into the equation derived in a05. The algebra is sound."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "Rearranging the equation from a06: $400 + 2lw = 784$. Subtracting 400 gives $2lw = 384$, and dividing by 2 yields $lw = 192$. This calculation is correct."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "The area of a rectangle is $l \times w$, which correctly uses the value derived in a07."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"This is a standard and correct variable assignment for a rectangle.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"The perimeter formula is 2(l + w), and 56 / 2 = 28. This step is correct.\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"invalid\",\n      \"reason\": \"The diagonal is 20 meters, so by the Pythagorean theorem, $l^2 + w^2 = 20^2$. Sinc",
+          "duration_ms": 58598,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "fault_type": "corrupt_content",
+          "corrupted_id": "a03",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "This is a standard and correct variable setup for the problem."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "The perimeter formula $2(l+w)=56$ correctly simplifies to $l+w=28$."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "invalid",
+              "reason": "The diagonal is 20 meters, so by the Pythagorean theorem, $l^2 + w^2 = 20^2$. $20^2$ equals 400, not 200."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "Squaring the result from a02: $(l+w)^2 = 28^2 = 784$. This calculation is correct."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "This is the correct algebraic expansion of $(l+w)^2$."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "This step correctly substitutes $l^2 + w^2 = 400$ (the correct value from the diagonal) into the expanded equation from a05. The algebra ($400 + 2lw = 784$) is correct."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "Solving $400 + 2lw = 784$ yields $2lw = 384$, and thus $lw = 192$. The arithmetic is correct."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "The area of the garden is $lw$, and based on the preceding correct steps, $lw = 192$ square meters."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"This is a standard and correct variable setup for the problem.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"The perimeter formula $2(l+w)=56$ correctly simplifies to $l+w=28$.\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"invalid\",\n      \"reason\": \"The diagonal is 20 meters, so by the Pythagorean theorem, $l^2 + w^2 = 20^2$. $20^2$ equals 4",
+          "duration_ms": 123527,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "fault_type": "corrupt_content",
+          "corrupted_id": "a03",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "This is a correct and standard setup for defining the variables."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "The perimeter formula $2(l+w)=56$ correctly leads to $l+w=28$."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "invalid",
+              "reason": "The diagonal squared is $20^2$, which equals 400, not 200."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "Squaring the sum $(l+w)^2 = 28^2 = 784$ is correct."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "The expansion $(l+w)^2 = l^2 + 2lw + w^2$ is mathematically correct."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "Although a03 incorrectly calculated $20^2$, this assertion correctly uses the value $l^2+w^2 = 400$ (since $20^2=400$) in the Pythagorean relationship, leading to $400 + 2lw = 784$. The algebraic step itself is sound."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "Subtracting 400 from 784 yields 384, and dividing by 2 correctly gives $lw = 192$."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "The area of the garden is $lw$, and based on the previous steps, $lw=192$ square meters is the correct conclusion."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"This is a correct and standard setup for defining the variables.\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"The perimeter formula $2(l+w)=56$ correctly leads to $l+w=28$.\"\n    },\n    {\n      \"assertion_id\": \"a03\",\n      \"status\": \"invalid\",\n      \"reason\": \"The diagonal squared is $20^2$, which equals 400, not 200.\"\n    },\n    {\n      \"assertion_id\": \"",
+          "duration_ms": 75075,
+          "error": null
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "fault": {
+        "type": "contradiction",
+        "contradicting_assertion": "Route 1: W→A→B→C→D→W = 10+8+12+10+25 = 95km (not 65km)",
+        "inject_at_loop": 2
+      },
+      "corrupted_id": "a_injected",
+      "trials": [
+        {
+          "trial": 1,
+          "fault_type": "contradiction",
+          "corrupted_id": "a_injected",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "The problem requires finding the shortest cycle visiting all 4 distinct locations (A, B, C, D) starting and ending at the Warehouse (W), which defines a Traveling Salesman Problem (TSP)."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "For N locations (N=4), the number of distinct Hamiltonian cycles in a complete graph is (N-1)! / 2, which is (4-1)! / 2 = 3! / 2 = 6 / 2 = 3. This formula correctly accounts for the starting point and path reversal symmetry."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "valid",
+              "reason": "The calculation is correct: W→A (10) + A→B (8) + B→C (12) + C→D (10) + D→W (25) = 65km."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "The calculation is correct: W→A (10) + A→B (8) + B→D (20) + D→C (10) + C→W (20) = 68km. (Assuming symmetry for return legs: D->C = C->D = 10; C->W = W->C = 20)."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "The calculation is correct: W→A (10) + A→C (18) + C→B (12) + B→D (20) + D→W (25) = 85km. (Assuming symmetry for return legs: C->B = B->C = 12; D->W = W->D = 25)."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "The calculation is correct: W→A (10) + A→C (18) + C→D (10) + D→B (20) + B→W (15) = 73km. (Assuming symmetry for return legs: D->B = B->D = 20; B->W = W->B = 15)."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "The calculation is correct: W→A (10) + A→D (22) + D→B (20) + B→C (12) + C→W (20) = 84km. (Assuming symmetry for return legs: D->B = B->D = 20; C->W = W->C = 20)."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "The calculation is correct: W→A (10) + A→D (22) + D→C (10) + C→B (12) + B→W (15) = 69km. (Assuming symmetry for return legs: D->C = C->D = 10; B->W = W->B = 15)."
+            },
+            {
+              "assertion_id": "a_injected",
+              "status": "invalid",
+              "reason": "The components sum correctly to 65km (10+8+12+10+25 = 65km), not 95km. The assertion incorrectly states the total distance."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"The problem requires finding the shortest cycle visiting all 4 distinct locations (A, B, C, D) starting and ending at the Warehouse (W), which defines a Traveling Salesman Problem (TSP).\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"For N locations (N=4), the number of distinct Hamiltonian cycles in a complete graph is (N-1)! / 2, which is (4-1)! / 2 = 3!",
+          "duration_ms": 100879,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "fault_type": "contradiction",
+          "corrupted_id": "a_injected",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "The problem requires finding the shortest closed loop visiting all specified nodes, which is the definition of the Traveling Salesman Problem (TSP)."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "For N locations (A, B, C, D) starting and ending at W, the number of unique undirected cycles is (N-1)! / 2. Here, N=4, so (4-1)!/2 = 3!/2 = 6/2 = 3."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "valid",
+              "reason": "The sum is calculated correctly: 10 + 8 + 12 + 10 + 25 = 65km."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "The sum is calculated correctly: 10 + 8 + 20 + 10 + 20 = 68km."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "The sum is calculated correctly: 10 + 18 + 12 + 20 + 25 = 85km."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "The sum is calculated correctly: 10 + 18 + 10 + 20 + 15 = 73km."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "The sum is calculated correctly: 10 + 22 + 20 + 12 + 20 = 84km."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "The sum is calculated correctly: 10 + 22 + 10 + 12 + 15 = 69km."
+            },
+            {
+              "assertion_id": "a_injected",
+              "status": "invalid",
+              "reason": "The sum shown in the assertion (10+8+12+10+25) equals 65km. The assertion incorrectly claims the result is 95km."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"The problem requires finding the shortest closed loop visiting all specified nodes, which is the definition of the Traveling Salesman Problem (TSP).\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"For N locations (A, B, C, D) starting and ending at W, the number of unique undirected cycles is (N-1)! / 2. Here, N=4, so (4-1)!/2 = 3!/2 = 6/2 = 3.\"\n    },\n    ",
+          "duration_ms": 94262,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "fault_type": "contradiction",
+          "corrupted_id": "a_injected",
+          "detected": true,
+          "judgments": [
+            {
+              "assertion_id": "a01",
+              "status": "valid",
+              "reason": "The problem requires finding the shortest closed loop visiting all specified points, which is the definition of a Traveling Salesman Problem (TSP)."
+            },
+            {
+              "assertion_id": "a02",
+              "status": "valid",
+              "reason": "For 4 locations (A, B, C, D) forming a cycle starting and ending at W, the number of unique undirected tours is calculated by (n-1)! / 2, where n=4."
+            },
+            {
+              "assertion_id": "a03",
+              "status": "valid",
+              "reason": "The sum calculation is correct: 10 + 8 + 12 + 10 + 25 = 65 km. This assumes symmetry for the return leg (D->W = 25)."
+            },
+            {
+              "assertion_id": "a04",
+              "status": "valid",
+              "reason": "The sum calculation is correct: 10 + 8 + 20 + 10 + 20 = 68 km. This assumes symmetry for the return leg (C->W = 20)."
+            },
+            {
+              "assertion_id": "a05",
+              "status": "valid",
+              "reason": "The sum calculation is correct: 10 + 18 + 12 + 20 + 25 = 85 km. This assumes symmetry for the return leg (D->W = 25)."
+            },
+            {
+              "assertion_id": "a06",
+              "status": "valid",
+              "reason": "The sum calculation is correct: 10 + 18 + 10 + 20 + 15 = 73 km. This assumes symmetry for the return leg (B->W = 15)."
+            },
+            {
+              "assertion_id": "a07",
+              "status": "valid",
+              "reason": "The sum calculation is correct: 10 + 22 + 20 + 12 + 20 = 84 km. This assumes symmetry for the return leg (C->W = 20)."
+            },
+            {
+              "assertion_id": "a08",
+              "status": "valid",
+              "reason": "The sum calculation is correct: 10 + 22 + 10 + 12 + 15 = 69 km. This assumes symmetry for the return leg (B->W = 15)."
+            },
+            {
+              "assertion_id": "a_injected",
+              "status": "invalid",
+              "reason": "The arithmetic calculation shown (10+8+12+10+25) results in 65km, not 95km. Therefore, the assertion contains a mathematical error."
+            }
+          ],
+          "raw_response": "```json\n{\n  \"judgments\": [\n    {\n      \"assertion_id\": \"a01\",\n      \"status\": \"valid\",\n      \"reason\": \"The problem requires finding the shortest closed loop visiting all specified points, which is the definition of a Traveling Salesman Problem (TSP).\"\n    },\n    {\n      \"assertion_id\": \"a02\",\n      \"status\": \"valid\",\n      \"reason\": \"For 4 locations (A, B, C, D) forming a cycle starting and ending at W, the number of unique undirected tours is calculated by (n-1)! / 2, where n=4.\"\n    },\n    {\n",
+          "duration_ms": 101228,
+          "error": null
+        }
+      ]
+    }
+  ]
+}

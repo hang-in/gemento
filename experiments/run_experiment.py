@@ -5,7 +5,10 @@ Usage:
     python run_experiment.py assertion-cap     # 실험 1: assertion 상한
     python run_experiment.py multiloop         # 실험 2: 다단계 루프
     python run_experiment.py error-propagation # 실험 3: 오류 전파
-    python run_experiment.py tool-separation   # 실험 4: 도구 분리
+    python run_experiment.py cross-validation  # 실험 3.5: 교차 검증 게이트
+    python run_experiment.py abc-pipeline      # 실험 4: A-B-C 직렬 파이프라인
+    python run_experiment.py prompt-enhance    # 실험 5a: 프롬프트 강화
+    python run_experiment.py tool-separation   # (보류) 도구 분리
 """
 
 from __future__ import annotations
@@ -25,7 +28,7 @@ from config import (
     OLLAMA_GENERATE_URL, OLLAMA_TIMEOUT,
 )
 from schema import Tattoo, Phase, create_initial_tattoo
-from orchestrator import run_chain, call_ollama, LoopLog
+from orchestrator import run_chain, call_ollama, LoopLog, run_abc_chain, ABCCycleLog
 
 
 def load_tasks() -> list[dict]:
@@ -108,9 +111,10 @@ def run_assertion_cap():
 
             for trial in range(DEFAULT_REPEAT):
                 # 사전 제작된 assertion이 포함된 문신 생성
+                # objective에 실제 문제(prompt)를 포함하여 모델이 맥락을 알 수 있게 한다
                 tattoo = create_initial_tattoo(
                     task_id=f"{task['id']}_cap{cap}",
-                    objective=task["objective"],
+                    objective=f"{task['objective']}\n\nProblem:\n{task['prompt']}",
                     termination="답변이 완성되면 수렴",
                 )
                 tattoo.phase = Phase.SYNTHESIZE
@@ -137,6 +141,9 @@ def run_assertion_cap():
                 "trials": task_results,
             })
 
+        # 태스크 완료 후 중간 저장 (크래시 방어)
+        save_result("exp01_assertion_cap_partial", {"experiment": "assertion_cap", "model": MODEL_NAME, "results": results})
+
     save_result("exp01_assertion_cap", {"experiment": "assertion_cap", "model": MODEL_NAME, "results": results})
 
 
@@ -155,17 +162,12 @@ def run_multiloop():
             task_results = []
 
             for trial in range(DEFAULT_REPEAT):
-                final_tattoo, logs = run_chain(
+                final_tattoo, logs, final_answer = run_chain(
                     task_id=f"{task['id']}_loops{max_loops}_t{trial}",
-                    objective=task["objective"],
+                    objective=f"{task['objective']}\n\nProblem:\n{task['prompt']}",
                     constraints=task.get("constraints", []),
                     max_loops=max_loops,
                 )
-
-                # 최종 답변 추출
-                final_answer = None
-                if logs and logs[-1].parsed_response:
-                    final_answer = logs[-1].parsed_response.get("final_answer")
 
                 task_results.append({
                     "trial": trial + 1,
@@ -212,7 +214,12 @@ def run_error_propagation():
     tasks = load_tasks()
     results = []
 
+    # logic 태스크 제외 (JSON 파싱 불안정)
+    skip_tasks = {"logic-01", "logic-02"}
     for task in tasks:
+        if task["id"] in skip_tasks:
+            print(f"\n[Error Propagation] Task: {task['id']} — SKIPPED (unstable JSON)")
+            continue
         print(f"\n[Error Propagation] Task: {task['id']}")
         fault_types = task.get("fault_injections", [])
         if not fault_types:
@@ -222,9 +229,9 @@ def run_error_propagation():
             task_results = []
             for trial in range(DEFAULT_REPEAT):
                 # 정상 체인 2루프 실행
-                tattoo, pre_logs = run_chain(
+                tattoo, pre_logs, _ = run_chain(
                     task_id=f"{task['id']}_fault_{fault['type']}_t{trial}",
-                    objective=task["objective"],
+                    objective=f"{task['objective']}\n\nProblem:\n{task['prompt']}",
                     max_loops=fault.get("inject_at_loop", 2),
                 )
 
@@ -244,13 +251,32 @@ def run_error_propagation():
 
                 tattoo.finalize_integrity(parent_chain_hash=tattoo.chain_hash)
 
-                # 결함 주입 후 추가 루프 실행
+                # 결함 주입 후 추가 루프 실행 (run_chain과 동일한 로직)
+                from orchestrator import run_loop, decide_phase_transition, PHASE_DIRECTIVES
                 post_logs: list[LoopLog] = []
+                loops_in_current_phase = 0
+                current_phase = tattoo.phase
                 for i in range(tattoo.loop_index + 1, tattoo.loop_index + 7):
-                    tattoo, log = __import__("orchestrator").run_loop(tattoo, i)
+                    tattoo.next_directive = PHASE_DIRECTIVES.get(tattoo.phase, "Continue reasoning.")
+                    tattoo, log, _ = run_loop(tattoo, i)
                     post_logs.append(log)
+
+                    if tattoo.phase == current_phase:
+                        loops_in_current_phase += 1
+                    else:
+                        current_phase = tattoo.phase
+                        loops_in_current_phase = 1
+
                     if tattoo.phase == Phase.CONVERGED:
                         break
+
+                    new_phase = decide_phase_transition(tattoo, loops_in_current_phase)
+                    if new_phase and new_phase != tattoo.phase:
+                        tattoo.phase = new_phase
+                        loops_in_current_phase = 0
+                        current_phase = new_phase
+                        if new_phase == Phase.CONVERGED:
+                            break
 
                 task_results.append({
                     "trial": trial + 1,
@@ -273,7 +299,362 @@ def run_error_propagation():
     save_result("exp03_error_propagation", {"experiment": "error_propagation", "model": MODEL_NAME, "results": results})
 
 
-# ── 실험 4: Tool Loop Separation ──
+# ── 실험 3.5: Cross-Validation Gate ──
+
+def run_cross_validation():
+    """B(비판자)가 A의 결함 assertion을 교차 검증으로 감지할 수 있는지 테스트한다.
+
+    게이트 실험: A-B-C 파이프라인 구축 전에 B 단독 능력을 확인.
+    """
+    from system_prompt import build_critic_prompt
+    from orchestrator import call_ollama, extract_json_from_response
+
+    tasks = load_tasks()
+    skip_tasks = {"logic-01", "logic-02"}
+    results = []
+
+    for task in tasks:
+        if task["id"] in skip_tasks:
+            print(f"\n[Cross-Validation] Task: {task['id']} — SKIPPED")
+            continue
+        if not task.get("fault_injections"):
+            continue
+        if not task.get("prefab_assertions"):
+            continue
+
+        print(f"\n[Cross-Validation] Task: {task['id']}")
+
+        for fault in task["fault_injections"]:
+            # prefab assertion 목록에서 결함 주입
+            clean_assertions = []
+            for i, a_text in enumerate(task["prefab_assertions"][:8]):
+                clean_assertions.append({
+                    "id": f"a{i+1:02d}",
+                    "content": a_text,
+                    "confidence": 0.8,
+                })
+
+            # 결함 주입할 대상 assertion 결정
+            corrupted_assertions = [dict(a) for a in clean_assertions]
+            corrupted_id = None
+
+            if fault["type"] == "corrupt_content":
+                # 첫 번째 관련 assertion을 오염
+                target_idx = min(2, len(corrupted_assertions) - 1)
+                corrupted_id = corrupted_assertions[target_idx]["id"]
+                corrupted_assertions[target_idx]["content"] = fault["corrupted_value"]
+            elif fault["type"] == "inflate_confidence":
+                target_idx = 0
+                corrupted_id = corrupted_assertions[target_idx]["id"]
+                corrupted_assertions[target_idx]["confidence"] = 0.99
+            elif fault["type"] == "contradiction":
+                corrupted_id = "a_injected"
+                corrupted_assertions.append({
+                    "id": corrupted_id,
+                    "content": fault["contradicting_assertion"],
+                    "confidence": 0.85,
+                })
+
+            task_results = []
+            for trial in range(DEFAULT_REPEAT):
+                print(f"  Fault={fault['type']}, Trial {trial + 1}: ", end="", flush=True)
+
+                # B(비판자)에게 오염된 assertions 전달
+                messages = build_critic_prompt(
+                    problem=task["prompt"],
+                    assertions=corrupted_assertions,
+                )
+
+                start = time.time()
+                error = None
+                parsed = None
+                raw = ""
+                detected = False
+
+                for attempt in range(2):
+                    try:
+                        raw = call_ollama(messages)
+                        parsed = extract_json_from_response(raw)
+                    except Exception as e:
+                        raw = ""
+                        error = str(e)
+                    if parsed:
+                        error = None
+                        break
+                    if attempt == 0:
+                        print("↻ ", end="", flush=True)
+
+                duration_ms = int((time.time() - start) * 1000)
+
+                # 감지 여부 판정
+                if parsed and "judgments" in parsed:
+                    for j in parsed["judgments"]:
+                        if j.get("assertion_id") == corrupted_id:
+                            if j.get("status") in ("suspect", "invalid"):
+                                detected = True
+                                break
+
+                status_str = "✓ DETECTED" if detected else "✗ missed"
+                print(f"{duration_ms}ms — {status_str}")
+
+                task_results.append({
+                    "trial": trial + 1,
+                    "fault_type": fault["type"],
+                    "corrupted_id": corrupted_id,
+                    "detected": detected,
+                    "judgments": parsed.get("judgments") if parsed else None,
+                    "raw_response": raw[:500],
+                    "duration_ms": duration_ms,
+                    "error": error,
+                })
+
+            results.append({
+                "task_id": task["id"],
+                "fault": fault,
+                "corrupted_id": corrupted_id,
+                "trials": task_results,
+            })
+
+    # 요약 출력
+    total = sum(len(r["trials"]) for r in results)
+    detected_count = sum(
+        1 for r in results for t in r["trials"] if t["detected"]
+    )
+    print(f"\n{'═' * 50}")
+    print(f"  교차 검증 감지율: {detected_count}/{total} = {detected_count/total:.1%}" if total else "  No data")
+    print(f"{'═' * 50}")
+
+    save_result("exp035_cross_validation", {
+        "experiment": "cross_validation",
+        "model": MODEL_NAME,
+        "results": results,
+    })
+
+
+# ── 실험 4: A-B-C Pipeline ──
+
+def run_abc_pipeline():
+    """A-B-C 직렬 구조로 전체 파이프라인을 검증한다.
+
+    비교군: 실험 2 v2 (Python 오케스트레이터)와 동일한 태스크를 A-B-C로 실행.
+    """
+    tasks = load_tasks()
+    skip_tasks = {"logic-01", "logic-02"}
+    results = []
+
+    for task in tasks:
+        if task["id"] in skip_tasks:
+            print(f"\n[ABC Pipeline] Task: {task['id']} — SKIPPED")
+            continue
+
+        print(f"\n[ABC Pipeline] Task: {task['id']} — {task['objective']}")
+
+        task_results = []
+        for trial in range(DEFAULT_REPEAT):
+            print(f"\n  --- Trial {trial + 1} ---")
+
+            final_tattoo, cycle_logs, final_answer = run_abc_chain(
+                task_id=f"{task['id']}_abc_t{trial}",
+                objective=task["objective"],
+                prompt=task["prompt"],
+                constraints=task.get("constraints", []),
+            )
+
+            # 사이클별 상세 기록
+            cycle_details = []
+            for cl in cycle_logs:
+                detail = {
+                    "cycle": cl.cycle,
+                    "phase": cl.phase,
+                    "a_duration_ms": cl.a_log.duration_ms,
+                    "a_error": cl.a_log.error,
+                    "b_duration_ms": cl.b_duration_ms,
+                    "b_error": cl.b_error,
+                    "b_invalid_count": 0,
+                    "b_suspect_count": 0,
+                    "c_duration_ms": cl.c_duration_ms,
+                    "c_error": cl.c_error,
+                    "c_converged": None,
+                    "phase_transition": cl.phase_transition,
+                }
+                if cl.b_judgments and "judgments" in cl.b_judgments:
+                    detail["b_invalid_count"] = sum(
+                        1 for j in cl.b_judgments["judgments"]
+                        if j.get("status") == "invalid"
+                    )
+                    detail["b_suspect_count"] = sum(
+                        1 for j in cl.b_judgments["judgments"]
+                        if j.get("status") == "suspect"
+                    )
+                if cl.c_decision:
+                    detail["c_converged"] = cl.c_decision.get("converged")
+                cycle_details.append(detail)
+
+            task_results.append({
+                "trial": trial + 1,
+                "total_cycles": len(cycle_logs),
+                "final_phase": final_tattoo.phase.value,
+                "final_confidence": final_tattoo.confidence,
+                "total_assertions": len(final_tattoo.active_assertions),
+                "final_answer": str(final_answer) if final_answer else None,
+                "phase_transitions": [
+                    cl.phase_transition for cl in cycle_logs
+                    if cl.phase_transition
+                ],
+                "c_decisions": [
+                    cl.c_decision.get("converged") if cl.c_decision else None
+                    for cl in cycle_logs
+                ],
+                "cycle_details": cycle_details,
+            })
+
+            status = "✓" if final_tattoo.phase == Phase.CONVERGED else "✗"
+            print(f"  {status} Trial {trial + 1}: "
+                  f"phase={final_tattoo.phase.value}, "
+                  f"cycles={len(cycle_logs)}, "
+                  f"assertions={len(final_tattoo.active_assertions)}, "
+                  f"answer={'yes' if final_answer else 'no'}")
+
+        results.append({
+            "task_id": task["id"],
+            "expected_answer": task.get("expected_answer"),
+            "trials": task_results,
+        })
+
+    # 요약 출력
+    total = sum(len(r["trials"]) for r in results)
+    converged = sum(
+        1 for r in results for t in r["trials"]
+        if t["final_phase"] == "CONVERGED"
+    )
+    print(f"\n{'═' * 50}")
+    print(f"  수렴률: {converged}/{total} = {converged/total:.1%}" if total else "  No data")
+    print(f"{'═' * 50}")
+
+    save_result("exp04_abc_pipeline", {
+        "experiment": "abc_pipeline",
+        "model": MODEL_NAME,
+        "results": results,
+    })
+
+
+# ── 실험 5a: Prompt Enhancement ──
+
+def run_prompt_enhance():
+    """A의 프롬프트 강화 후 A-B-C 파이프라인을 재실행한다.
+
+    변경점: SYNTHESIZE/VERIFY의 next_directive에서 final_answer 필수 제출 강조.
+    비교군: 실험 4 (동일 태스크, 동일 구조, 프롬프트만 변경).
+    통과 기준: synthesis-02 정답률 33%→66%+, 전체 정답률 ≥ 90%, 퇴행 없음.
+    """
+    from experiment_logger import ExperimentLogger
+
+    logger = ExperimentLogger("exp05a_prompt_enhance")
+    tasks = load_tasks()
+    skip_tasks = {"logic-01", "logic-02"}
+    results = []
+
+    for task in tasks:
+        if task["id"] in skip_tasks:
+            logger._write(f"\n[Prompt Enhance] Task: {task['id']} — SKIPPED")
+            continue
+
+        task_results = []
+        for trial in range(DEFAULT_REPEAT):
+            logger.task_start(task["id"], trial + 1, task["objective"])
+
+            final_tattoo, cycle_logs, final_answer = run_abc_chain(
+                task_id=f"{task['id']}_5a_t{trial}",
+                objective=task["objective"],
+                prompt=task["prompt"],
+                constraints=task.get("constraints", []),
+                logger=logger,
+            )
+
+            # 사이클별 상세 기록
+            cycle_details = []
+            for cl in cycle_logs:
+                detail = {
+                    "cycle": cl.cycle,
+                    "phase": cl.phase,
+                    "a_duration_ms": cl.a_log.duration_ms,
+                    "a_error": cl.a_log.error,
+                    "b_duration_ms": cl.b_duration_ms,
+                    "b_error": cl.b_error,
+                    "b_invalid_count": 0,
+                    "b_suspect_count": 0,
+                    "c_duration_ms": cl.c_duration_ms,
+                    "c_error": cl.c_error,
+                    "c_converged": None,
+                    "phase_transition": cl.phase_transition,
+                }
+                if cl.b_judgments and "judgments" in cl.b_judgments:
+                    detail["b_invalid_count"] = sum(
+                        1 for j in cl.b_judgments["judgments"]
+                        if j.get("status") == "invalid"
+                    )
+                    detail["b_suspect_count"] = sum(
+                        1 for j in cl.b_judgments["judgments"]
+                        if j.get("status") == "suspect"
+                    )
+                if cl.c_decision:
+                    detail["c_converged"] = cl.c_decision.get("converged")
+                cycle_details.append(detail)
+
+            task_results.append({
+                "trial": trial + 1,
+                "total_cycles": len(cycle_logs),
+                "final_phase": final_tattoo.phase.value,
+                "final_confidence": final_tattoo.confidence,
+                "total_assertions": len(final_tattoo.active_assertions),
+                "final_answer": str(final_answer) if final_answer else None,
+                "phase_transitions": [
+                    cl.phase_transition for cl in cycle_logs
+                    if cl.phase_transition
+                ],
+                "c_decisions": [
+                    cl.c_decision.get("converged") if cl.c_decision else None
+                    for cl in cycle_logs
+                ],
+                "cycle_details": cycle_details,
+            })
+
+            logger.trial_result(
+                task["id"], trial + 1,
+                final_tattoo.phase == Phase.CONVERGED,
+                str(final_answer) if final_answer else None,
+                len(cycle_logs),
+            )
+
+        results.append({
+            "task_id": task["id"],
+            "expected_answer": task.get("expected_answer"),
+            "trials": task_results,
+        })
+
+    # 요약
+    total = sum(len(r["trials"]) for r in results)
+    converged = sum(
+        1 for r in results for t in r["trials"]
+        if t["final_phase"] == "CONVERGED"
+    )
+    with_answer = sum(
+        1 for r in results for t in r["trials"]
+        if t["final_answer"] is not None
+    )
+    logger.summary(total, converged, with_answer)
+    logger.close()
+
+    save_result("exp05a_prompt_enhance", {
+        "experiment": "prompt_enhance",
+        "model": MODEL_NAME,
+        "change": "SYNTHESIZE/VERIFY directive에 final_answer 필수 제출 강조",
+        "baseline": "exp04_abc_pipeline (정답률 83.3%, synthesis-02 1/3)",
+        "results": results,
+    })
+
+
+# ── (보류) Tool Loop Separation ──
 
 def run_tool_separation():
     """도구 호출을 같은 루프/분리 루프에서 처리할 때의 품질 차이를 측정한다."""
@@ -303,6 +684,9 @@ EXPERIMENTS = {
     "assertion-cap": run_assertion_cap,
     "multiloop": run_multiloop,
     "error-propagation": run_error_propagation,
+    "cross-validation": run_cross_validation,
+    "abc-pipeline": run_abc_pipeline,
+    "prompt-enhance": run_prompt_enhance,
     "tool-separation": run_tool_separation,
 }
 

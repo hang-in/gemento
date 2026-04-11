@@ -1,0 +1,156 @@
+{
+  "experiment": "baseline",
+  "model": "gemma4:e4b",
+  "results": [
+    {
+      "task_id": "math-01",
+      "objective": "주어진 수학 문제를 단계적으로 풀어라.",
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "This is a system of equations problem combined with an inequality constraint. We will solve it step-by-step.\n\n### 1. Define Variables and Set Up Equations\n\nLet:\n*   $A$ be the number of apples.\n*   $O$ be the number of oranges.\n\nFrom the problem description, we get three conditions:\n\n**Equation 1: Total Cost**\nApples cost \\$2, oranges cost \\$3, and the total spent is \\$47.\n$$2A + 3O = 47$$\n\n**Equation 2: Total Number of Fruits**\nThe total number of fruits is 20.\n$$A + O = 20$$\n\n**Inequality Constraint:**\nThe customer buys more apples than oranges.\n$$A > O$$\n\n### 2. Solve the System of Equations\n\nWe can use Equation 2 to express $A$ in terms of $O$:\n$$A = 20 - O$$\n\nNow, substitute this expression for $A$ into Equation 1:\n$$2(20 - O) + 3O = 47$$\n\nSolve for $O$:\n$$40 - 2O + 3O = 47$$\n$$40 + O = 47$$\n$$O = 47 - 40$$\n$$\\mathbf{O = 7}$$\n\nNow that we have the value for $O$, substitute it back into the equation for $A$:\n$$A = 20 - O$$\n$$A = 20 - 7$$\n$$\\mathbf{A = 13}$$\n\n### 3. Verify the Solution\n\nWe must check if this solution satisfies all initial conditions:\n\n1.  **Total Fruits:** $13 + 7 = 20$. (Correct)\n2.  **Total Cost:** $2(13) + 3(7) = 26 + 21 = 47$. (Correct)\n3.  **Apples vs. Oranges:** $13 > 7$. (Correct)\n\nThe solution satisfies all conditions.\n\n***\n\nThe customer bought **13 apples** and **7 oranges**.",
+          "duration_ms": 79937,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "response": "This problem can be solved using a system of linear equations based on the given constraints.\n\nLet:\n* $A$ be the number of apples.\n* $O$ be the number of oranges.\n\nWe are given the following information:\n\n1. **Total number of fruits:**\n   $$A + O = 20 \\quad (Equation 1)$$\n\n2. **Total cost:** (Apples cost \\$2 each, Oranges cost \\$3 each, total spent is \\$47)\n   $$2A + 3O = 47 \\quad (Equation 2)$$\n\n3. **Constraint:** The customer buys more apples than oranges:\n   $$A > O$$\n\nWe can solve the system of equations (Equation 1 and Equation 2).\n\n**Step 1: Solve for one variable using substitution.**\nFrom Equation 1, isolate $A$:\n$$A = 20 - O$$\n\n**Step 2: Substitute this expression for $A$ into Equation 2.**\n$$2(20 - O) + 3O = 47$$\n\n**Step 3: Solve for $O$.**\n$$40 - 2O + 3O = 47$$\n$$40 + O = 47$$\n$$O = 47 - 40$$\n$$O = 7$$\n\n**Step 4: Solve for $A$.**\nSubstitute the value of $O$ back into the rearranged Equation 1:\n$$A = 20 - O$$\n$$A = 20 - 7$$\n$$A = 13$$\n\n**Step 5: Verify the constraints.**\n1. **Total fruits:** $13 + 7 = 20$. (Correct)\n2. **Total cost:** $2(13) + 3(7) = 26 + 21 = 47$. (Correct)\n3. **More apples than oranges:** $13 > 7$. (Correct)\n\nThe customer bought 13 apples and 7 oranges.\n\n**Answer:**\nThe customer bought **13 apples** and **7 oranges**.",
+          "duration_ms": 71892,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "response": "This is a problem that can be solved using a system of linear equations combined with checking constraints.\n\nLet:\n*   $A$ be the number of apples.\n*   $O$ be the number of oranges.\n\nWe are given three pieces of information, which we can translate into equations and inequalities:\n\n**1. Total Cost Equation (Value):**\nApples cost \\$2, oranges cost \\$3, and the total spent is \\$47.\n$$2A + 3O = 47$$\n\n**2. Total Quantity Equation (Count):**\nThe total number of fruits is 20.\n$$A + O = 20$$\n\n**3. Constraint:**\nThe customer buys more apples than oranges.\n$$A > O$$\n\n### Step 1: Solve the system of two equations\n\nWe will use the substitution method with the two equations:\n1. $2A + 3O = 47$\n2. $A + O = 20$\n\nFrom Equation (2), we can express $A$ in terms of $O$:\n$$A = 20 - O$$\n\nNow, substitute this expression for $A$ into Equation (1):\n$$2(20 - O) + 3O = 47$$\n$$40 - 2O + 3O = 47$$\n$$40 + O = 47$$\n$$O = 47 - 40$$\n$$\\mathbf{O = 7}$$\n\n### Step 2: Find the number of apples ($A$)\n\nSubstitute the value of $O$ back into the simplified Equation (2):\n$$A + 7 = 20$$\n$$A = 20 - 7$$\n$$\\mathbf{A = 13}$$\n\n### Step 3: Check the constraints\n\nWe must ensure this solution meets all the initial conditions:\n\n1. **Total Cost:** $2(13) + 3(7) = 26 + 21 = 47$. (Correct)\n2. **Total Quantity:** $13 + 7 = 20$. (Correct)\n3. **Apples > Oranges:** $13 > 7$. (Correct)\n\nAll conditions are met.\n\n---\nThe customer bought **13 apples** and **7 oranges**.",
+          "duration_ms": 83108,
+          "error": null
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "objective": "논리 퍼즐을 단계적으로 풀어라.",
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 155052,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 152805,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "response": "This is a logic puzzle that requires placing the colors and nationalities into 5 ordered slots. We will use the clues to deduce the arrangement step-by-step.\n\nLet the positions be 1, 2, 3, 4, 5 (from left to right).\n\n### 1. Establish Fixed Points and Blocks\n\n*   **Clue 3:** The Japanese person (J) lives in the rightmost house.\n    *   Position 5: Nationality = Japanese (J)\n*   **Clue 4:** The blue house (B) is between the yellow house (Y) and the green house (G). This forms a fixed block of three: (Y - B - G) or (G - B - Y).\n*   **Clue 5:** The French person (F) lives in the yellow house (Y).\n*   **Clue 1:** The English person (E) lives in the red house (R).\n*   **Clue 2:** The Spanish person (S) lives next to the blue house (B).\n\n### 2. Placing the 3-House Block (Y-B-G)\n\nSince Position 5 is taken, the Y-B-G block must occupy positions (1, 2, 3) or (2,",
+          "duration_ms": 157580,
+          "error": null
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "objective": "여러 정보를 종합하여 결론을 도출하라.",
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "This analysis requires checking each provider against the three mandatory requirements: Uptime, Regions, and Cost.\n\n---\n\n### 1. Analyze Requirements\n\n| Requirement | Condition |\n| :--- | :--- |\n| **Uptime SLA** | Must be $\\ge 99.9\\%$ |\n| **Regions** | Must be $\\ge 4$ regions |\n| **Cost** | Must be $<\\$800$ per month (for 24/7 operation) |\n\n---\n\n### 2. Calculate Monthly Cost (Requirement 3)\n\nTo determine the cost, we calculate the total hours in an average month. We will use 730 hours (365 days / 12 months $\\times$ 24 hours).\n\n**Formula:** Hourly Rate $\\times 730$ hours $\\le \\$800$\n\n*   **Provider A:** $\\$0.10/\\text{hour} \\times 730 \\text{ hours} = \\mathbf{\\$73.00}$\n*   **Provider B:** $\\$0.08/\\text{hour} \\times 730 \\text{ hours} = \\mathbf{\\$58.40}$\n*   **Provider C:** $\\$0.15/\\text{hour} \\times 730 \\text{ hours} = \\mathbf{\\$109.50}$\n\n---\n\n### 3. Evaluation Matrix\n\n| Provider | Uptime SLA (Must be $\\ge 99.9\\%$) | Regions (Must be $\\ge 4$) | Cost (Must be $<\\$800$) | Meets All Requirements? |\n| :--- | :--- | :--- | :--- | :--- |\n| **Provider A** | $99.9\\%$ (**PASS**) | 5 (**PASS**) | $\\$73.00$ (**PASS**) | **YES** |\n| **Provider B** | $99.5\\%$ (**FAIL**) | 12 (**PASS**) | $\\$58.40$ (**PASS**) | **NO** |\n| **Provider C** | $99.99\\%$ (**PASS**) | 3 (**FAIL**) | $\\$109.50$ (**PASS**) | **NO** |\n\n---\n\n### Conclusion\n\n**Provider A** is the only provider that meets all three specified requirements:\n1.  Uptime SLA of 99.9% (Meets minimum).\n2.  5 regions (Meets minimum of 4).\n3.  A monthly cost of \\$73.00 (Under the \\$800 budget).",
+          "duration_ms": 122815,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "response": "This analysis requires checking each provider against the three mandatory requirements: Uptime, Regions, and Budget.\n\n---\n\n### Step 1: Calculate Monthly Cost (Requirement 3)\n\nThe operation runs 24/7 for a month. We will use 30 days for a standard monthly calculation ($30 \\text{ days} \\times 24 \\text{ hours/day} = 720 \\text{ hours}$). The budget limit is $<\\$800$.\n\n*   **Provider A:** $\\$0.10/\\text{hour} \\times 720 \\text{ hours} = \\$72.00$\n*   **Provider B:** $\\$0.08/\\text{hour} \\times 720 \\text{ hours} = \\$57.60$\n*   **Provider C:** $\\$0.15/\\text{hour} \\times 720 \\text{ hours} = \\$108.00$\n\n**Budget Check ($\\le \\$800$):**\n*   A: Meets requirement ($\\$72.00 < \\$800$)\n*   B: Meets requirement ($\\$57.60 < \\$800$)\n*   C: Meets requirement ($\\$108.00 < \\$800$)\n\n---\n\n### Step 2: Check Uptime SLA (Requirement 1)\n\nThe company needs **at least 99.9%** uptime.\n\n*   **Provider A:** 99.9% $\\rightarrow$ **Meets requirement**\n*   **Provider B:** 99.5% $\\rightarrow$ **Fails requirement** (Less than 99.9%)\n*   **Provider C:** 99.99% $\\rightarrow$ **Meets requirement**\n\n---\n\n### Step 3: Check Number of Regions (Requirement 2)\n\nThe company needs **at least 4** data center regions.\n\n*   **Provider A:** 5 regions $\\rightarrow$ **Meets requirement**\n*   **Provider B:** 12 regions $\\rightarrow$ **Meets requirement**\n*   **Provider C:** 3 regions $\\rightarrow$ **Fails requirement** (Less than 4)\n\n---\n\n### Step 4: Final Summary and Conclusion\n\nWe summarize which providers met *all three* criteria:\n\n| Provider | Cost $\\le \\$800$? | Uptime $\\ge 99.9\\%$? | Regions $\\ge 4$? | Meets All Requirements? |\n| :------: | :---------------: | :------------------: | :--------------: | :---------------------: |\n| **A**    | Yes (\\$72.00)     | Yes (99.9%)          | Yes (5)          | **YES**                 |\n| **B**    | Yes (\\$57.60)     | No (99.5%)           | Yes (12)         | **NO**                  |\n| **C**    | Yes (\\$108.00)    | Yes (99.99%)         | No (3)           | **NO**                  |\n\n**Conclusion:**\n\n**Provider A** is the only provider that meets all three specified requirements.",
+          "duration_ms": 139312,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "response": "This analysis requires checking each provider against the three stated mandatory requirements: Uptime, Regions, and Budget.\n\n### Step 1: Define the Constraints\n\n**Requirement 1 (Uptime):** Must be $\\ge 99.9\\%$.\n**Requirement 2 (Regions):** Must be $\\ge 4$ regions.\n**Requirement 3 (Budget):** Must cost $\\le \\$800$ per month for 24/7 operation.\n\n### Step 2: Calculate Monthly Cost for 24/7 Operation\n\nWe assume a standard month of 30 days:\n*   Hours per month = 24 hours/day $\\times 30$ days/month = **720 hours**.\n\n**Cost Calculation:**\n*   **Provider A:** $\\$0.10/\\text{hour} \\times 720 \\text{ hours} = \\$72.00$\n*   **Provider B:** $\\$0.08/\\text{hour} \\times 720 \\text{ hours} = \\$57.60$\n*   **Provider C:** $\\$0.15/\\text{hour} \\times 720 \\text{ hours} = \\$108.00$\n\n*(All calculated costs ($\\$72.00, \\$57.60, \\$108.00$) are well under the $\\$800$ budget, so Requirement 3 is met by all providers.)*\n\n### Step 3: Evaluate Each Provider\n\n| Provider | Cost/Hour | Uptime SLA | Regions | Budget Check ($\\le \\$800$) | Uptime Check ($\\ge 99.9\\%$) | Regions Check ($\\ge 4$) | Meets All? |\n| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |\n| **A** | $\\$0.10$ | $99.9\\%$ | 5 | $\\checkmark$ ($\\$72.00$) | $\\checkmark$ | $\\checkmark$ | **YES** |\n| **B** | $\\$0.08$ | $99.5\\%$ | 12 | $\\checkmark$ ($\\$57.60$) | $\\mathbf{X}$ ($99.5\\% < 99.9\\%$) | $\\checkmark$ | **NO** |\n| **C** | $\\$0.15$ | $99.99\\%$ | 3 | $\\checkmark$ ($\\$108.00$) | $\\checkmark$ | $\\mathbf{X}$ ($3 < 4$) | **NO** |\n\n---\n\n### Conclusion\n\n**Provider A** is the only provider that meets all three requirements:\n1.  **Uptime:** $99.9\\%$ (Meets $\\ge 99.9\\%$)\n2.  **Regions:** 5 (Meets $\\ge 4$)\n3.  **Budget:** $\\$72.00$ (Meets $\\le \\$800$)",
+          "duration_ms": 136285,
+          "error": null
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "objective": "여러 단계의 계산이 필요한 문제를 풀어라.",
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "This problem can be solved using the formulas for the perimeter and the Pythagorean theorem, combined with algebraic manipulation.\n\nLet:\n*   $L$ be the length of the garden.\n*   $W$ be the width of the garden.\n*   $P$ be the perimeter.\n*   $D$ be the diagonal path.\n*   $A$ be the area.\n\nWe are given:\n1.  Perimeter ($P$): $2L + 2W = 56$ meters\n2.  Diagonal ($D$): $D = 20$ meters\n3.  Area ($A$): $A = L \\times W$ (This is what we need to find)\n\n### Step 1: Simplify the Perimeter Equation\n\n$$2L + 2W = 56$$\nDivide the entire equation by 2:\n$$L + W = 28 \\quad \\text{(Equation 1)}$$\n\n### Step 2: Use the Pythagorean Theorem (Diagonal)\n\nSince the garden is rectangular, the length, width, and diagonal form a right-angled triangle.\n$$L^2 + W^2 = D^2$$\n$$L^2 + W^2 = 20^2$$\n$$L^2 + W^2 = 400 \\quad \\text{(Equation 2)}$$\n\n### Step 3: Solve for the Area ($LW$)\n\nWe need to find the value of $LW$. We can use the algebraic identity for squaring a sum:\n$$(L + W)^2 = L^2 + 2LW + W^2$$\n\nWe can rearrange this identity to solve for $2LW$:\n$$2LW = (L + W)^2 - (L^2 + W^2)$$\n\nNow, substitute the values we found in Step 1 and Step 2:\n*   From Equation 1: $(L + W) = 28$\n*   From Equation 2: $(L^2 + W^2) = 400$\n\n$$2LW = (28)^2 - (400)$$\n$$2LW = 784 - 400$$\n$$2LW = 384$$\n\nFinally, divide by 2 to find the Area ($LW$):\n$$LW = \\frac{384}{2}$$\n$$LW = 192$$\n\nThe area of the garden is **192 square meters**.",
+          "duration_ms": 118855,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "response": "This problem requires setting up and solving a system of equations based on the geometric properties of a rectangle.\n\nLet:\n*   $L$ be the length of the garden.\n*   $W$ be the width of the garden.\n*   $P$ be the perimeter.\n*   $D$ be the diagonal path.\n*   $A$ be the area.\n\nWe are given:\n1.  Perimeter ($P$): $2L + 2W = 56$ meters\n2.  Diagonal ($D$): $20$ meters\n\nWe need to find the Area ($A = L \\times W$).\n\n### Step 1: Simplify the Perimeter Equation\n\n$$2L + 2W = 56$$\nDivide the entire equation by 2:\n$$L + W = 28 \\quad \\text{(Equation 1)}$$\n\n### Step 2: Use the Pythagorean Theorem for the Diagonal\n\nSince the garden is rectangular, the length, width, and diagonal form a right-angled triangle.\n$$L^2 + W^2 = D^2$$\n$$L^2 + W^2 = 20^2$$\n$$L^2 + W^2 = 400 \\quad \\text{(Equation 2)}$$\n\n### Step 3: Relate the Equations to Find the Area ($LW$)\n\nWe want to find the value of $LW$. We can use the algebraic identity for squaring a sum:\n$$(L + W)^2 = L^2 + 2LW + W^2$$\n\nNow, substitute the values we found in Step 1 and Step 2 into this identity:\n1.  From Equation 1: $(L + W) = 28$\n2.  From Equation 2: $(L^2 + W^2) = 400$\n\n$$(28)^2 = (L^2 + W^2) + 2LW$$\n$$784 = 400 + 2LW$$\n\n### Step 4: Solve for the Area ($LW$)\n\nIsolate $2LW$:\n$$2LW = 784 - 400$$\n$$2LW = 384$$\n\nSolve for $LW$:\n$$LW = \\frac{384}{2}$$\n$$LW = 192$$\n\nSince the Area $A = L \\times W$, the area of the garden is 192 square meters.\n\n***\n\n**Answer:** The area of the garden is **192 square meters**.",
+          "duration_ms": 90541,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "response": "This is a problem that requires setting up and solving a system of equations using the formulas for the perimeter and the Pythagorean theorem.\n\nLet:\n*   $L$ be the length of the garden (in meters).\n*   $W$ be the width of the garden (in meters).\n*   $P$ be the perimeter.\n*   $D$ be the diagonal path.\n*   $A$ be the area.\n\n### 1. Set up the equations based on the given information:\n\n**A. Perimeter:**\nThe formula for the perimeter of a rectangle is $P = 2L + 2W$.\n$$56 = 2L + 2W$$\nDivide the entire equation by 2:\n$$L + W = 28 \\quad \\text{(Equation 1)}$$\n\n**B. Diagonal (Pythagorean Theorem):**\nThe diagonal forms the hypotenuse of a right-angled triangle with sides $L$ and $W$.\n$$L^2 + W^2 = D^2$$\n$$L^2 + W^2 = 20^2$$\n$$L^2 + W^2 = 400 \\quad \\text{(Equation 2)}$$\n\n**C. Goal:**\nWe need to find the Area, $A = L \\times W$.\n\n### 2. Solve the system of equations:\n\nWe can use the algebraic identity for squaring a binomial: $(L + W)^2 = L^2 + 2LW + W^2$.\n\n1.  **Square Equation 1:**\n    $$(L + W)^2 = 28^2$$\n    $$L^2 + 2LW + W^2 = 784$$\n\n2.  **Substitute Equation 2 into the result:**\n    We know from Equation 2 that $L^2 + W^2 = 400$. Substitute this value into the expanded equation:\n    $$(L^2 + W^2) + 2LW = 784$$\n    $$400 + 2LW = 784$$\n\n3.  **Solve for $LW$ (The Area):**\n    $$2LW = 784 - 400$$\n    $$2LW = 384$$\n    $$LW = \\frac{384}{2}$$\n    $$LW = 192$$\n\nThe area of the garden is 192 square meters.\n\n***\n\n**Answer:** The area of the garden is **192 square meters**.",
+          "duration_ms": 75602,
+          "error": null
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "objective": "조건부 추론 문제를 단계적으로 풀어라.",
+      "expected_answer": "5 people speak none of the three languages.",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "This problem requires using the Principle of Inclusion-Exclusion for three sets. We need to find the total number of people who speak at least one language, and then subtract that number from the total population.\n\nLet:\n*   $E$ = Set of people who speak English\n*   $F$ = Set of people who speak French\n*   $G$ = Set of people who speak German\n*   Total Population ($N$) = 100\n\n### 1. Calculate the number of people who speak at least one language ($|E \\cup F \\cup G|$):\n\nThe formula is:\n$|E \\cup F \\cup G| = |E| + |F| + |G| - (|E \\cap F| + |E \\cap G| + |F \\cap G|) + |E \\cap F \\cap G|$\n\n**Step 1: Sum of singles (Add all groups)**\n$$70 + 50 + 30 = 150$$\n\n**Step 2: Subtract the overlaps of two languages (Subtract double counts)**\n$$25 + 15 + 10 = 50$$\n\n**Step 3: Add back the overlap of three languages (Added back too many times)**\n$$5$$\n\n**Step 4: Calculate the Union**\n$$|E \\cup F \\cup G| = 150 - 50 + 5$$\n$$|E \\cup F \\cup G| = 105$$\n\n### 2. Calculate the number of people who speak none of the languages:\n\nNumber (None) = Total Population - Number (At least one language)\nNumber (None) = $100 - 105$\nNumber (None) = $-5$\n\n**Conclusion on Data Integrity:**\nSince the calculation results in $-5$ people, this indicates that the input data provided in the problem is mathematically inconsistent because the calculated number of speakers (105) exceeds the total population (100).\n\nHowever, in the context of this type of problem, if the calculated union exceeds the total population, it implies that *every single person* in the group must speak at least one language, and the excess count is due to faulty data.\n\nTherefore, the number of people who speak none of the three languages is **0**.",
+          "duration_ms": 78844,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "response": "This problem requires using the Principle of Inclusion-Exclusion to find the total number of people who speak at least one language, and then subtracting that number from the total group size.\n\nLet:\n*   $T$ = Total people = 100\n*   $E$ = English speakers = 70\n*   $F$ = French speakers = 50\n*   $G$ = German speakers = 30\n\n**Intersections (Two Languages):**\n*   $|E \\cap F|$ = 25\n*   $|E \\cap G|$ = 15\n*   $|F \\cap G|$ = 10\n\n**Triple Intersection (Three Languages):**\n*   $|E \\cap F \\cap G|$ = 5\n\n### Step 1: Calculate the number of people who speak at least one language ($|E \\cup F \\cup G|$).\n\nThe Inclusion-Exclusion Principle formula for three sets is:\n$$|E \\cup F \\cup G| = |E| + |F| + |G| - (|E \\cap F| + |E \\cap G| + |F \\cap G|) + |E \\cap F \\cap G|$$\n\n1.  **Sum of Singles:**\n    $$70 + 50 + 30 = 150$$\n\n2.  **Subtract Sum of Pairs:**\n    $$25 + 15 + 10 = 50$$\n\n3.  **Add Back Triple Intersection:**\n    $$5$$\n\n4.  **Total Union:**\n    $$|E \\cup F \\cup G| = 150 - 50 + 5 = 105$$\n\n### Step 2: Calculate the number of people who speak none of the languages.\n\nThe number of people who speak none of the languages is the Total number of people minus the number of people who speak at least one language.\n\n$$\\text{None} = T - |E \\cup F \\cup G|$$\n$$\\text{None} = 100 - 105$$\n$$\\text{None} = -5$$\n\n***\n\n**Conclusion on Data Inconsistency:**\n\nSince it is impossible for the calculated number of people speaking at least one language (105) to exceed the total number of people in the group (100), the data provided in the problem statement is mathematically inconsistent.\n\nHowever, in the context of such a problem, if the calculated union exceeds the total population, it implies that every single person in the group must speak at least one language, and the excess count is due to flawed initial data.\n\nTherefore, the number of people who speak none of the three languages must be **0**.",
+          "duration_ms": 130243,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "response": "This is a problem that requires the use of the Principle of Inclusion-Exclusion for three sets.\n\nLet:\n*   $T$ = Total number of people = 100\n*   $E$ = People who speak English = 70\n*   $F$ = People who speak French = 50\n*   $G$ = People who speak German = 30\n*   $|E \\cap F|$ = English and French = 25\n*   $|E \\cap G|$ = English and German = 15\n*   $|F \\cap G|$ = French and German = 10\n*   $|E \\cap F \\cap G|$ = All three = 5\n\n### Step 1: Calculate the number of people who speak at least one language ($|E \\cup F \\cup G|$).\n\nThe formula for the union of three sets is:\n$$|E \\cup F \\cup G| = |E| + |F| + |G| - (|E \\cap F| + |E \\cap G| + |F \\cap G|) + |E \\cap F \\cap G|$$\n\nSubstitute the given values:\n$$|E \\cup F \\cup G| = (70 + 50 + 30) - (25 + 15 + 10) + 5$$\n\n1.  **Sum of singles:** $70 + 50 + 30 = 150$\n2.  **Sum of doubles:** $25 + 15 + 10 = 50$\n3.  **Triple intersection:** $5$\n\n$$|E \\cup F \\cup G| = 150 - 50 + 5$$\n$$|E \\cup F \\cup G| = 105$$\n\n### Step 2: Calculate the number of people who speak none of the languages.\n\nThe number of people who speak none of the languages is the Total number of people minus the number of people who speak at least one language.\n\n$$\\text{None} = T - |E \\cup F \\cup G|$$\n$$\\text{None} = 100 - 105$$\n$$\\text{None} = -5$$\n\n### Conclusion on Data Inconsistency\n\nSince the number of people cannot be negative, the data provided in the problem is mathematically inconsistent, as the calculation suggests that 105 people speak at least one language, but the group only contains 100 people.\n\nIn a real-world scenario where the total population is fixed at 100, the maximum number of people who can speak at least one language is 100. If the calculation exceeds the total population, it implies that every person in the group speaks at least one language, and the data overcounts the actual speakers by 5.\n\nTherefore, the number of people who speak none of the three languages must be **0**.",
+          "duration_ms": 159302,
+          "error": null
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "objective": "여러 조건을 분석하여 최적 선택을 결정하라.",
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 60km, $120",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "This problem is a variation of the Traveling Salesperson Problem (TSP). We need to find the Hamiltonian cycle (a closed loop) starting and ending at the Warehouse (W) that visits A, B, C, and D exactly once, minimizing the total distance.\n\n### 1. Define the Nodes and Distances\n\n**Nodes:**\n*   W: Warehouse\n*   A, B, C, D: Locations\n\n**Distances (km):**\n*   W $\\to$ A: 10\n*   W $\\to$ B: 15\n*   W $\\to$ C: 20\n*   W $\\to$ D: 25\n*   A $\\to$ B: 8\n*   A $\\to$ C: 18\n*   A $\\to$ D: 22\n*   B $\\to$ C: 12\n*   B $\\to$ D: 20\n*   C $\\to$ D: 10\n\n### 2. Finding the Shortest Route\n\nSince the number of locations is small (4), we can systematically test the permutations, aiming to connect the shortest possible segments. A good heuristic is to prioritize paths that use the shortest direct links (A-B=8, C-D=10) and the shortest links back to the warehouse (W-A=10).\n\nWe will test the route that follows the order of increasing distance from the warehouse, while ensuring the internal connections are efficient.\n\n**Test Route: W $\\to$ A $\\to$ B $\\to$ C $\\to$ D $\\to$ W**\n\n1.  **W $\\to$ A:** 10 km\n2.  **A $\\to$ B:** 8 km\n3.  **B $\\to$ C:** 12 km\n4.  **C $\\to$ D:** 10 km\n5.  **D $\\to$ W:** 2",
+          "duration_ms": 180363,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "response": "This problem requires finding the shortest possible Hamiltonian cycle (a closed loop) that starts at the Warehouse (W), visits all four locations (A, B, C, D), and returns to the Warehouse.\n\nThis is a variation of the Traveling Salesperson Problem (TSP). We must calculate the total distance for various permutations of the route and find the minimum.\n\n### 1. Given Distances\n\n| Segment | Distance (km) |\n| :--- | :--- |\n| W $\\to$ A | 10 |\n| W $\\to$ B | 15 |\n| W $\\to$ C | 20 |\n| W $\\to$ D | 25 |\n| A $\\to$ B | 8 |\n| A $\\to$ C | 18 |\n| A $\\to$ D | 22 |\n| B $\\to$ C | 12 |\n| B $\\to$ D | 20 |\n| C $\\to$ D | 10 |\n\n*(Note: Since the distances are given",
+          "duration_ms": 168874,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "response": "This is a variation of the Traveling Salesperson Problem (TSP). We need to find the shortest Hamiltonian cycle starting and ending at the Warehouse (W) while visiting A, B, C, and D exactly once.\n\nThe cost function is: $\\text{Total Cost} = \\text{Total Distance} \\times \\$2/\\text{km}$. To minimize the cost, we must minimize the total distance.\n\n### 1. Given Distances\n\n| Segment | Distance (km) |\n| :--- | :--- |\n| W $\\to$ A | 10 |\n| W $\\to$ B | 15 |\n| W $\\to$ C | 20 |\n| W $\\to$ D | 25 |\n| A $\\to$ B | 8 |\n| A $\\to$ C | 18 |\n| A $\\to$ D | 22 |\n| B $\\to$ C | 12 |\n| B $\\to$ D | 20 |\n| C $\\to$ D | 10 |\n\n### 2. Finding the Shortest Route (Minimizing Distance)\n\nWe must test the permutations to find the minimum distance. We will look for paths that utilize the shortest intermediate links (A-B=8, C-D=10, W-A=10).\n\n**Candidate Route 1 (Following Nearest Neighbor Logic):**\n$W \\to A \\to B \\to C \\to D \\to W$\n*   $W \\to A$: 10\n*   $A \\to B$: 8\n*   $B \\to C$: 12\n*   $C \\to D$: 10\n*   ",
+          "duration_ms": 171711,
+          "error": null
+        }
+      ]
+    }
+  ]
+}

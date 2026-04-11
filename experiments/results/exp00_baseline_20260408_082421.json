@@ -1,0 +1,156 @@
+{
+  "experiment": "baseline",
+  "model": "gemma4:e4b",
+  "results": [
+    {
+      "task_id": "math-01",
+      "objective": "주어진 수학 문제를 단계적으로 풀어라.",
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120653,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 120602,
+          "error": "timed out"
+        },
+        {
+          "trial": 3,
+          "response": "",
+          "duration_ms": 121400,
+          "error": "timed out"
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "objective": "논리 퍼즐을 단계적으로 풀어라.",
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120850,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 120544,
+          "error": "timed out"
+        },
+        {
+          "trial": 3,
+          "response": "",
+          "duration_ms": 120218,
+          "error": "timed out"
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "objective": "여러 정보를 종합하여 결론을 도출하라.",
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120268,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 120343,
+          "error": "timed out"
+        },
+        {
+          "trial": 3,
+          "response": "",
+          "duration_ms": 120216,
+          "error": "timed out"
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "objective": "여러 단계의 계산이 필요한 문제를 풀어라.",
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120597,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 121131,
+          "error": "timed out"
+        },
+        {
+          "trial": 3,
+          "response": "",
+          "duration_ms": 120304,
+          "error": "timed out"
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "objective": "조건부 추론 문제를 단계적으로 풀어라.",
+      "expected_answer": "5 people speak none of the three languages.",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120305,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 120227,
+          "error": "timed out"
+        },
+        {
+          "trial": 3,
+          "response": "",
+          "duration_ms": 120171,
+          "error": "timed out"
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "objective": "여러 조건을 분석하여 최적 선택을 결정하라.",
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 60km, $120",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120188,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 120244,
+          "error": "timed out"
+        },
+        {
+          "trial": 3,
+          "response": "",
+          "duration_ms": 120304,
+          "error": "timed out"
+        }
+      ]
+    }
+  ]
+}

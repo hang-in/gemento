@@ -1,0 +1,156 @@
+{
+  "experiment": "baseline",
+  "model": "gemma4:e4b",
+  "results": [
+    {
+      "task_id": "math-01",
+      "objective": "주어진 수학 문제를 단계적으로 풀어라.",
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120129,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "This is a system of linear equations problem based on the given constraints.\n\nLet:\n* $A$ be the number of apples.\n* $O$ be the number of oranges.\n\nWe are given the following information:\n\n1. **Total number of fruits:** $A + O = 20$\n2. **Total spending:** (Cost of apples) + (Cost of oranges) = \\$47\n   $2A + 3O = 47$\n3. **Constraint:** The customer buys more apples than oranges: $A > O$.\n\nWe can solve the system using the first two equations:\n\n**Step 1: Use the total number of fruits equation.**\nFrom $A + O = 20$, we can express $A$ in terms of $O$:\n$$A = 20 - O$$\n\n**Step 2: Substitute this expression into the total spending equation.**\n$$2(20 - O) + 3O = 47$$\n\n**Step 3: Solve for $O$ (number of oranges).**\n$$40 - 2O + 3O = 47$$\n$$40 + O = 47$$\n$$O = 47 - 40$$\n$$O = 7$$\n\n**Step 4: Solve for $A$ (number of apples).**\nSubstitute $O=7$ back into the equation $A = 20 - O$:\n$$A = 20 - 7$$\n$$A = 13$$\n\n**Step 5: Verify the constraints.**\n1. **Total fruits:** $13 + 7 = 20$. (Correct)\n2. **Total spending:** $2(13) + 3(7) = 26 + 21 = 47$. (Correct)\n3. **Apples vs Oranges:** $13 > 7$. (Correct)\n\nThe customer bought 13 apples and 7 oranges.",
+          "duration_ms": 118510,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "response": "This is a system of linear equations problem with an additional constraint. Let's define the variables and set up the equations.\n\n**1. Define Variables:**\n*   Let $A$ be the number of apples.\n*   Let $O$ be the number of oranges.\n\n**2. Set up the Equations based on the given information:**\n\n*   **Cost Equation:** (Apples cost \\$2, Oranges cost \\$3, Total spent is \\$47)\n    $$2A + 3O = 47 \\quad \\text{(Equation 1)}$$\n*   **Total Fruits Equation:** (Total number of fruits is 20)\n    $$A + O = 20 \\quad \\text{(Equation 2)}$$\n*   **Constraint:** (The customer buys more apples than oranges)\n    $$A > O \\quad \\text{(Inequality)}$$\n\n**3. Solve the System of Equations:**\n\nWe can use substitution or elimination. We will use substitution by solving Equation 2 for $A$:\n$$A = 20 - O$$\n\nNow, substitute this expression for $A$ into Equation 1:\n$$2(20 - O) + 3O = 47$$\n\nSolve for $O$:\n$$40 - 2O + 3O = 47$$\n$$40 + O = 47$$\n$$O = 47 - 40$$\n$$O = 7$$\n\nNow that we have the value for $O$, substitute it back into the rearranged Equation 2 to find $A$:\n$$A = 20 - O$$\n$$A = 20 - 7$$\n$$A = 13$$\n\n**4. Check the Solution against the Constraint:**\n\nWe found $A=13$ and $O=7$. We must check if $A > O$:\n$$13 > 7 \\quad (\\text{True})$$\n\nThe solution satisfies all conditions.\n\n**Answer:**\nThe customer bought **13 apples** and **7 oranges**.",
+          "duration_ms": 89358,
+          "error": null
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "objective": "논리 퍼즐을 단계적으로 풀어라.",
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120168,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 120145,
+          "error": "timed out"
+        },
+        {
+          "trial": 3,
+          "response": "",
+          "duration_ms": 120204,
+          "error": "timed out"
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "objective": "여러 정보를 종합하여 결론을 도출하라.",
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120186,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 120200,
+          "error": "timed out"
+        },
+        {
+          "trial": 3,
+          "response": "",
+          "duration_ms": 120270,
+          "error": "timed out"
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "objective": "여러 단계의 계산이 필요한 문제를 풀어라.",
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120189,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 120187,
+          "error": "timed out"
+        },
+        {
+          "trial": 3,
+          "response": "",
+          "duration_ms": 120236,
+          "error": "timed out"
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "objective": "조건부 추론 문제를 단계적으로 풀어라.",
+      "expected_answer": "5 people speak none of the three languages.",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120342,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 120417,
+          "error": "timed out"
+        },
+        {
+          "trial": 3,
+          "response": "",
+          "duration_ms": 121028,
+          "error": "timed out"
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "objective": "여러 조건을 분석하여 최적 선택을 결정하라.",
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 60km, $120",
+      "trials": [
+        {
+          "trial": 1,
+          "response": "",
+          "duration_ms": 120642,
+          "error": "timed out"
+        },
+        {
+          "trial": 2,
+          "response": "",
+          "duration_ms": 120081,
+          "error": "timed out"
+        },
+        {
+          "trial": 3,
+          "response": "",
+          "duration_ms": 120125,
+          "error": "timed out"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "experiment": "error_propagation",
+  "model": "gemma4:e4b",
+  "results": [
+    {
+      "task_id": "math-01",
+      "fault": {
+        "type": "corrupt_content",
+        "corrupted_value": "From Eq1: a = 20 + o",
+        "inject_at_loop": 2
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "fault_type": "corrupt_content",
+          "inject_at_loop": 2,
+          "post_injection_loops": 1,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0
+          ]
+        },
+        {
+          "trial": 2,
+          "fault_type": "corrupt_content",
+          "inject_at_loop": 2,
+          "post_injection_loops": 1,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0
+          ]
+        },
+        {
+          "trial": 3,
+          "fault_type": "corrupt_content",
+          "inject_at_loop": 2,
+          "post_injection_loops": 1,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-01",
+      "fault": {
+        "type": "inflate_confidence",
+        "inject_at_loop": 2
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "fault_type": "inflate_confidence",
+          "inject_at_loop": 2,
+          "post_injection_loops": 1,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0
+          ]
+        },
+        {
+          "trial": 2,
+          "fault_type": "inflate_confidence",
+          "inject_at_loop": 2,
+          "post_injection_loops": 1,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0
+          ]
+        },
+        {
+          "trial": 3,
+          "fault_type": "inflate_confidence",
+          "inject_at_loop": 2,
+          "post_injection_loops": 1,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "fault": {
+        "type": "corrupt_content",
+        "corrupted_value": "Uptime check - Provider B: 99.5% ≥ 99.9% ✓ (PASSES)",
+        "inject_at_loop": 3
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "fault_type": "corrupt_content",
+          "inject_at_loop": 3,
+          "post_injection_loops": 1,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0
+          ]
+        },
+        {
+          "trial": 2,
+          "fault_type": "corrupt_content",
+          "inject_at_loop": 3,
+          "post_injection_loops": 1,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0
+          ]
+        },
+        {
+          "trial": 3,
+          "fault_type": "corrupt_content",
+          "inject_at_loop": 3,
+          "post_injection_loops": 5,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "fault": {
+        "type": "corrupt_content",
+        "corrupted_value": "Diagonal by Pythagorean theorem: l² + w² = 20² = 200",
+        "inject_at_loop": 2
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "fault_type": "corrupt_content",
+          "inject_at_loop": 2,
+          "post_injection_loops": 1,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0
+          ]
+        },
+        {
+          "trial": 2,
+          "fault_type": "corrupt_content",
+          "inject_at_loop": 2,
+          "post_injection_loops": 2,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "trial": 3,
+          "fault_type": "corrupt_content",
+          "inject_at_loop": 2,
+          "post_injection_loops": 2,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "fault": {
+        "type": "contradiction",
+        "contradicting_assertion": "Route 1: W→A→B→C→D→W = 10+8+12+10+25 = 95km (not 65km)",
+        "inject_at_loop": 2
+      },
+      "trials": [
+        {
+          "trial": 1,
+          "fault_type": "contradiction",
+          "inject_at_loop": 2,
+          "post_injection_loops": 5,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0,
+            0.95,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "trial": 2,
+          "fault_type": "contradiction",
+          "inject_at_loop": 2,
+          "post_injection_loops": 2,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            0.95,
+            1.0
+          ]
+        },
+        {
+          "trial": 3,
+          "fault_type": "contradiction",
+          "inject_at_loop": 2,
+          "post_injection_loops": 1,
+          "final_confidence": 1.0,
+          "final_phase": "CONVERGED",
+          "confidence_trajectory": [
+            1.0
+          ]
+        }
+      ]
+    }
+  ]
+}

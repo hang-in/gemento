@@ -99,6 +99,7 @@ class Tattoo:
     assertions: list[Assertion] = field(default_factory=list)
     open_questions: list[str] = field(default_factory=list)
     next_directive: str = ""
+    critique_log: list[dict] = field(default_factory=list)  # B의 비판 기록 (A-B-C용)
 
     # ── 무결성 ──
     assertion_hash: str = ""
@@ -180,6 +181,7 @@ class Tattoo:
                 "assertions": [a.to_dict() for a in self.assertions],
                 "open_questions": self.open_questions,
                 "next_directive": self.next_directive,
+                "critique_log": self.critique_log,
             },
             "integrity": {
                 "assertion_hash": self.assertion_hash,
@@ -207,6 +209,7 @@ class Tattoo:
             assertions=[Assertion.from_dict(a) for a in state["assertions"]],
             open_questions=state.get("open_questions", []),
             next_directive=state.get("next_directive", ""),
+            critique_log=state.get("critique_log", []),
             assertion_hash=integrity["assertion_hash"],
             chain_hash=integrity["chain_hash"],
             confidence=integrity["confidence"],

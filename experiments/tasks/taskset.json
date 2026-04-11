@@ -132,7 +132,7 @@
       "difficulty": "hard",
       "objective": "조건부 추론 문제를 단계적으로 풀어라.",
       "prompt": "In a group of 100 people:\n- 70 people speak English\n- 50 people speak French\n- 30 people speak German\n- 25 people speak both English and French\n- 15 people speak both English and German\n- 10 people speak both French and German\n- 5 people speak all three languages\n\nHow many people speak none of the three languages?",
-      "expected_answer": "5 people speak none of the three languages.",
+      "expected_answer": "0 people speak none of the three languages (data is inconsistent: inclusion-exclusion gives 105 > 100).",
       "constraints": ["포함-배제 원리를 사용해야 한다"],
       "prefab_assertions": [
         "Using inclusion-exclusion principle for three sets",
@@ -141,12 +141,12 @@
         "|E∩F| = 25, |E∩G| = 15, |F∩G| = 10",
         "|E∩F∩G| = 5",
         "|E ∪ F ∪ G| = 70 + 50 + 30 - 25 - 15 - 10 + 5 = 105",
-        "Wait: 105 > 100, which seems wrong. Let me recheck.",
-        "70 + 50 + 30 = 150",
-        "150 - 25 - 15 - 10 = 100",
-        "100 + 5 = 105. But total is 100 people.",
-        "People speaking at least one language = min(105, 100) = need to recheck data",
-        "Actually |E ∪ F ∪ G| = 105 means the given numbers may have overlap counted. But in the problem, total=100. So at least one language = 95. None = 100 - 95 = 5."
+        "105 > 100: the given data is inconsistent (union exceeds total population)",
+        "Since we cannot have more speakers than people, the data over-counts by 5",
+        "Mathematically: 100 - 105 = -5, which is impossible",
+        "Conclusion: given the inconsistency, everyone speaks at least one language",
+        "People speaking none of the three languages = 0",
+        "The problem data contains an internal contradiction"
       ],
       "fault_injections": [
         {
@@ -162,7 +162,7 @@
       "difficulty": "hard",
       "objective": "여러 조건을 분석하여 최적 선택을 결정하라.",
       "prompt": "A delivery company needs to choose a route for daily deliveries to 4 locations from a warehouse.\n\nDistances (km):\n- Warehouse → A: 10\n- Warehouse → B: 15\n- Warehouse → C: 20\n- Warehouse → D: 25\n- A → B: 8\n- A → C: 18\n- A → D: 22\n- B → C: 12\n- B → D: 20\n- C → D: 10\n\nThe truck must visit all 4 locations and return to the warehouse. Fuel costs $2/km. Find the shortest route and its total fuel cost.",
-      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 60km, $120",
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
       "constraints": ["모든 가능한 경로를 비교해야 한다"],
       "prefab_assertions": [
         "This is a Traveling Salesman Problem (TSP) with 4 cities",
@@ -179,7 +179,14 @@
         "10 + 8 + 12 + 10 + 25 = 65km, cost = $130",
         "Actually checking W→A→B→C→D→W = 10+8+12+10+25 = 65"
       ],
-      "requires_tool": false
+      "requires_tool": false,
+      "fault_injections": [
+        {
+          "type": "contradiction",
+          "contradicting_assertion": "Route 1: W→A→B→C→D→W = 10+8+12+10+25 = 95km (not 65km)",
+          "inject_at_loop": 2
+        }
+      ]
     }
   ]
 }

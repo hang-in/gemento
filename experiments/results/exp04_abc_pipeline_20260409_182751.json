@@ -1,0 +1,1323 @@
+{
+  "experiment": "abc_pipeline",
+  "model": "gemma4:e4b",
+  "results": [
+    {
+      "task_id": "math-01",
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "total_cycles": 5,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 9,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "phase_transitions": [
+            "INVESTIGATE→SYNTHESIZE"
+          ],
+          "c_decisions": [
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 39917,
+              "a_error": null,
+              "b_duration_ms": 36677,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 20383,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 2,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 45554,
+              "a_error": null,
+              "b_duration_ms": 43664,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 23489,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 3,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 43015,
+              "a_error": null,
+              "b_duration_ms": 46442,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 26205,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 4,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 39200,
+              "a_error": null,
+              "b_duration_ms": 53099,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 20954,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "INVESTIGATE→SYNTHESIZE"
+            },
+            {
+              "cycle": 5,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 32810,
+              "a_error": null,
+              "b_duration_ms": 52659,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 24025,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "total_cycles": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "{'apples': 13, 'oranges': 7, 'verification': 'Total fruits: 13 + 7 = 20. Total cost: 2(13) + 3(7) = 26 + 21 = 47. Constraint A > O: 13 > 7. All conditions are met.'}",
+          "phase_transitions": [
+            "DECOMPOSE→INVESTIGATE",
+            "INVESTIGATE→SYNTHESIZE",
+            "SYNTHESIZE→VERIFY",
+            "VERIFY→CONVERGED"
+          ],
+          "c_decisions": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 34456,
+              "a_error": null,
+              "b_duration_ms": 28341,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 35045,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "DECOMPOSE→INVESTIGATE"
+            },
+            {
+              "cycle": 2,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 41612,
+              "a_error": null,
+              "b_duration_ms": 44694,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 25400,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "INVESTIGATE→SYNTHESIZE"
+            },
+            {
+              "cycle": 3,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 32507,
+              "a_error": null,
+              "b_duration_ms": 51132,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 22534,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "SYNTHESIZE→VERIFY"
+            },
+            {
+              "cycle": 4,
+              "phase": "VERIFY",
+              "a_duration_ms": 40466,
+              "a_error": null,
+              "b_duration_ms": 45846,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 30084,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "VERIFY→CONVERGED"
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "total_cycles": 5,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "phase_transitions": [
+            "INVESTIGATE→SYNTHESIZE"
+          ],
+          "c_decisions": [
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 29940,
+              "a_error": null,
+              "b_duration_ms": 20887,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 17570,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 2,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 52249,
+              "a_error": null,
+              "b_duration_ms": 30097,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 22828,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 3,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 54201,
+              "a_error": null,
+              "b_duration_ms": 44688,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 22814,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 4,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 43939,
+              "a_error": null,
+              "b_duration_ms": 44115,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 23647,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "INVESTIGATE→SYNTHESIZE"
+            },
+            {
+              "cycle": 5,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 36260,
+              "a_error": null,
+              "b_duration_ms": 43286,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 22672,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "total_cycles": 6,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "Provider A meets all requirements: it has $\\ge 99.9\\%$ uptime (99.9%), $\\ge 4$ regions (5), and a monthly cost of $72.00 (under $800). Provider B fails the uptime requirement (99.5%). Provider C fails the region requirement (3).",
+          "phase_transitions": [
+            "DECOMPOSE→INVESTIGATE",
+            "INVESTIGATE→SYNTHESIZE",
+            "SYNTHESIZE→VERIFY"
+          ],
+          "c_decisions": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 33599,
+              "a_error": null,
+              "b_duration_ms": 19424,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 20975,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 2,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 79761,
+              "a_error": null,
+              "b_duration_ms": 22159,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 24703,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "DECOMPOSE→INVESTIGATE"
+            },
+            {
+              "cycle": 3,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 165657,
+              "a_error": "JSON parse failed",
+              "b_duration_ms": 25146,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 21981,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "INVESTIGATE→SYNTHESIZE"
+            },
+            {
+              "cycle": 4,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 146833,
+              "a_error": "JSON parse failed",
+              "b_duration_ms": 38589,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 28907,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "SYNTHESIZE→VERIFY"
+            },
+            {
+              "cycle": 5,
+              "phase": "VERIFY",
+              "a_duration_ms": 112935,
+              "a_error": null,
+              "b_duration_ms": 23413,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 24708,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 6,
+              "phase": "VERIFY",
+              "a_duration_ms": 152619,
+              "a_error": null,
+              "b_duration_ms": 71834,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 23387,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "total_cycles": 8,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "Provider A meets all requirements: 1. Uptime (99.9% $\\ge 99.9\\%$) - PASS. 2. Regions (5 $\\ge 4$) - PASS. 3. Cost ($72.00 \\le $800) - PASS. Provider B fails the uptime requirement (99.5% < 99.9%). Provider C fails the region requirement (3 < 4).",
+          "phase_transitions": [
+            "INVESTIGATE→SYNTHESIZE",
+            "SYNTHESIZE→VERIFY",
+            "VERIFY→CONVERGED"
+          ],
+          "c_decisions": [
+            false,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 39457,
+              "a_error": null,
+              "b_duration_ms": 49474,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 1,
+              "c_duration_ms": 22987,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 2,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 69456,
+              "a_error": null,
+              "b_duration_ms": 55871,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 42754,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 3,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 57564,
+              "a_error": null,
+              "b_duration_ms": 65109,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 27454,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 4,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 76512,
+              "a_error": null,
+              "b_duration_ms": 57571,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 19035,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 5,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 113540,
+              "a_error": null,
+              "b_duration_ms": 60633,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 24415,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "INVESTIGATE→SYNTHESIZE"
+            },
+            {
+              "cycle": 6,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 58486,
+              "a_error": null,
+              "b_duration_ms": 63760,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 30959,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "SYNTHESIZE→VERIFY"
+            },
+            {
+              "cycle": 7,
+              "phase": "VERIFY",
+              "a_duration_ms": 137462,
+              "a_error": "JSON parse failed",
+              "b_duration_ms": 60226,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 19829,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 8,
+              "phase": "VERIFY",
+              "a_duration_ms": 70651,
+              "a_error": null,
+              "b_duration_ms": 58895,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 19507,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "VERIFY→CONVERGED"
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "total_cycles": 7,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "Provider A meets all requirements. Provider B fails due to insufficient uptime (99.5% < 99.9%), and Provider C fails due to insufficient regions (3 < 4).",
+          "phase_transitions": [
+            "INVESTIGATE→SYNTHESIZE",
+            "SYNTHESIZE→VERIFY",
+            "VERIFY→CONVERGED"
+          ],
+          "c_decisions": [
+            false,
+            true,
+            true,
+            false,
+            true,
+            true,
+            true
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 66547,
+              "a_error": null,
+              "b_duration_ms": 19993,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 27362,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 2,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 74220,
+              "a_error": null,
+              "b_duration_ms": 69349,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 22577,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 3,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 60051,
+              "a_error": null,
+              "b_duration_ms": 74410,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 21648,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 4,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 105837,
+              "a_error": null,
+              "b_duration_ms": 70433,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 19357,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 5,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 54176,
+              "a_error": null,
+              "b_duration_ms": 72169,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 20677,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "INVESTIGATE→SYNTHESIZE"
+            },
+            {
+              "cycle": 6,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 93378,
+              "a_error": "JSON parse failed",
+              "b_duration_ms": 65770,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 20101,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "SYNTHESIZE→VERIFY"
+            },
+            {
+              "cycle": 7,
+              "phase": "VERIFY",
+              "a_duration_ms": 131000,
+              "a_error": null,
+              "b_duration_ms": 67668,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 18545,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "VERIFY→CONVERGED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "total_cycles": 7,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "192 square meters",
+          "phase_transitions": [
+            "DECOMPOSE→INVESTIGATE",
+            "INVESTIGATE→SYNTHESIZE",
+            "SYNTHESIZE→VERIFY"
+          ],
+          "c_decisions": [
+            false,
+            false,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 38076,
+              "a_error": null,
+              "b_duration_ms": 28939,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 28796,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 2,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 49114,
+              "a_error": null,
+              "b_duration_ms": 39103,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 33631,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 3,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 47064,
+              "a_error": null,
+              "b_duration_ms": 43206,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 33256,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "DECOMPOSE→INVESTIGATE"
+            },
+            {
+              "cycle": 4,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 176766,
+              "a_error": "JSON parse failed",
+              "b_duration_ms": 45701,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 23384,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "INVESTIGATE→SYNTHESIZE"
+            },
+            {
+              "cycle": 5,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 145579,
+              "a_error": "JSON parse failed",
+              "b_duration_ms": 50484,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 30437,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "SYNTHESIZE→VERIFY"
+            },
+            {
+              "cycle": 6,
+              "phase": "VERIFY",
+              "a_duration_ms": 162843,
+              "a_error": "JSON parse failed",
+              "b_duration_ms": 44040,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 45311,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 7,
+              "phase": "VERIFY",
+              "a_duration_ms": 135536,
+              "a_error": null,
+              "b_duration_ms": 101169,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 24090,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "total_cycles": 8,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "phase_transitions": [
+            "SYNTHESIZE→VERIFY",
+            "VERIFY→CONVERGED"
+          ],
+          "c_decisions": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 43032,
+              "a_error": null,
+              "b_duration_ms": 23209,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 21839,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 2,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 46690,
+              "a_error": null,
+              "b_duration_ms": 37010,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 25707,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 3,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 45839,
+              "a_error": null,
+              "b_duration_ms": 42384,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 28441,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 4,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 60690,
+              "a_error": null,
+              "b_duration_ms": 58489,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 19834,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 5,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 34160,
+              "a_error": null,
+              "b_duration_ms": 59107,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 21987,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 6,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 38129,
+              "a_error": null,
+              "b_duration_ms": 62324,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 26869,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 7,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 33905,
+              "a_error": null,
+              "b_duration_ms": 54053,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 21108,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "SYNTHESIZE→VERIFY"
+            },
+            {
+              "cycle": 8,
+              "phase": "VERIFY",
+              "a_duration_ms": 113509,
+              "a_error": "JSON parse failed",
+              "b_duration_ms": 53463,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 18782,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "VERIFY→CONVERGED"
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "total_cycles": 5,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 8,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "phase_transitions": [
+            "DECOMPOSE→INVESTIGATE"
+          ],
+          "c_decisions": [
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 32474,
+              "a_error": null,
+              "b_duration_ms": 23834,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 27400,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 2,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 40799,
+              "a_error": null,
+              "b_duration_ms": 32499,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 26736,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "DECOMPOSE→INVESTIGATE"
+            },
+            {
+              "cycle": 3,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 72485,
+              "a_error": null,
+              "b_duration_ms": 140275,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 27473,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 4,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 28120,
+              "a_error": null,
+              "b_duration_ms": 68789,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 16615,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 5,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 40160,
+              "a_error": null,
+              "b_duration_ms": 70835,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 23191,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
+      "trials": [
+        {
+          "trial": 1,
+          "total_cycles": 7,
+          "final_phase": "CONVERGED",
+          "final_confidence": 0.95,
+          "total_assertions": 10,
+          "final_answer": null,
+          "phase_transitions": [
+            "DECOMPOSE→INVESTIGATE",
+            "INVESTIGATE→SYNTHESIZE",
+            "SYNTHESIZE→VERIFY",
+            "VERIFY→CONVERGED"
+          ],
+          "c_decisions": [
+            false,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 33983,
+              "a_error": null,
+              "b_duration_ms": 50198,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 1,
+              "c_duration_ms": 19914,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 2,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 41271,
+              "a_error": null,
+              "b_duration_ms": 49650,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 31758,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "DECOMPOSE→INVESTIGATE"
+            },
+            {
+              "cycle": 3,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 67475,
+              "a_error": null,
+              "b_duration_ms": 86986,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 30665,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "INVESTIGATE→SYNTHESIZE"
+            },
+            {
+              "cycle": 4,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 42722,
+              "a_error": null,
+              "b_duration_ms": 88667,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 20865,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 5,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 48740,
+              "a_error": null,
+              "b_duration_ms": 91779,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 27758,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "SYNTHESIZE→VERIFY"
+            },
+            {
+              "cycle": 6,
+              "phase": "VERIFY",
+              "a_duration_ms": 70563,
+              "a_error": null,
+              "b_duration_ms": 95236,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 25589,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 7,
+              "phase": "VERIFY",
+              "a_duration_ms": 166979,
+              "a_error": null,
+              "b_duration_ms": 192270,
+              "b_error": "JSON parse failed",
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 18494,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "VERIFY→CONVERGED"
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "total_cycles": 6,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "The shortest route visiting all 4 locations (A, B, C, D) and returning to the warehouse has a minimum total distance of 65 km. Given a fuel cost of $2/km, the final total fuel cost is $130.",
+          "phase_transitions": [
+            "DECOMPOSE→INVESTIGATE"
+          ],
+          "c_decisions": [
+            false,
+            false,
+            true,
+            true,
+            true,
+            false
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 37346,
+              "a_error": null,
+              "b_duration_ms": 27371,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 19974,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 2,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 37907,
+              "a_error": null,
+              "b_duration_ms": 69575,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 1,
+              "c_duration_ms": 27713,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 3,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 50346,
+              "a_error": null,
+              "b_duration_ms": 33270,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 28496,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "DECOMPOSE→INVESTIGATE"
+            },
+            {
+              "cycle": 4,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 99092,
+              "a_error": null,
+              "b_duration_ms": 85436,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 24614,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 5,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 47196,
+              "a_error": null,
+              "b_duration_ms": 181567,
+              "b_error": "JSON parse failed",
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 25679,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": null
+            },
+            {
+              "cycle": 6,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 38632,
+              "a_error": null,
+              "b_duration_ms": 209563,
+              "b_error": "JSON parse failed",
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 30531,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "total_cycles": 5,
+          "final_phase": "CONVERGED",
+          "final_confidence": 0.95,
+          "total_assertions": 8,
+          "final_answer": null,
+          "phase_transitions": [
+            "DECOMPOSE→INVESTIGATE",
+            "INVESTIGATE→SYNTHESIZE",
+            "SYNTHESIZE→VERIFY",
+            "VERIFY→CONVERGED"
+          ],
+          "c_decisions": [
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          "cycle_details": [
+            {
+              "cycle": 1,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 77802,
+              "a_error": null,
+              "b_duration_ms": 23741,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 24321,
+              "c_error": null,
+              "c_converged": false,
+              "phase_transition": null
+            },
+            {
+              "cycle": 2,
+              "phase": "DECOMPOSE",
+              "a_duration_ms": 31836,
+              "a_error": null,
+              "b_duration_ms": 59433,
+              "b_error": null,
+              "b_invalid_count": 1,
+              "b_suspect_count": 0,
+              "c_duration_ms": 26984,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "DECOMPOSE→INVESTIGATE"
+            },
+            {
+              "cycle": 3,
+              "phase": "INVESTIGATE",
+              "a_duration_ms": 58553,
+              "a_error": null,
+              "b_duration_ms": 51590,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 24229,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "INVESTIGATE→SYNTHESIZE"
+            },
+            {
+              "cycle": 4,
+              "phase": "SYNTHESIZE",
+              "a_duration_ms": 131711,
+              "a_error": null,
+              "b_duration_ms": 51761,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 29369,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "SYNTHESIZE→VERIFY"
+            },
+            {
+              "cycle": 5,
+              "phase": "VERIFY",
+              "a_duration_ms": 49868,
+              "a_error": null,
+              "b_duration_ms": 56482,
+              "b_error": null,
+              "b_invalid_count": 0,
+              "b_suspect_count": 0,
+              "c_duration_ms": 24049,
+              "c_error": null,
+              "c_converged": true,
+              "phase_transition": "VERIFY→CONVERGED"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
