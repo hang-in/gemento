@@ -247,6 +247,14 @@ def print_report(analysis: dict):
             print(f"  {t['task_id']:<15} {t['trial']:>6} {conv:>6} {t['score']:>6.2f} "
                   f"{t['total_cycles']:>8} {t['c_transitions']:>6}")
 
+    elif exp == "handoff_protocol":
+        print(f"\n  전체 Handoff Loss Rate: {analysis['overall_avg_loss_rate']:.1%}")
+        print(f"  전체 Backprop Accuracy: {analysis['overall_avg_backprop_accuracy']:.1%}")
+        print(f"\n  {'태스크':<20} {'Loss Rate':>10} {'Backprop Acc':>12} {'샘플':>6}")
+        print(f"  {'-' * 52}")
+        for t in analysis["tasks"]:
+            print(f"  {t['task_id']:<20} {t['avg_handoff_loss']:>10.1%} {t['avg_backprop_accuracy']:>12.1%} {t['sample_cycles']:>6}")
+
     print()
 
 
@@ -327,7 +335,83 @@ def analyze_cross_validation(data: dict) -> dict:
     }
 
 
+def analyze_handoff_protocol(data: dict) -> dict:
+    """실험 4.5 분석: Handoff Protocol 메트릭 (v1)."""
+    summary = {
+        "experiment": "handoff_protocol",
+        "handoff_loss_rates": [],
+        "backprop_accuracies": [],
+        "tasks": []
+    }
+
+    for task_result in data.get("results", []):
+        task_handoff_scores = []
+        task_backprop_scores = []
+
+        for trial in task_result.get("trials", []):
+            cycles = trial.get("cycle_details", [])
+            for i in range(len(cycles)):
+                cycle = cycles[i]
+                tattoo_in = cycle.get("tattoo_in", {})
+                tattoo_out = cycle.get("tattoo_out", {})
+                
+                # ── 1. handoff_loss_rate 계산 ──
+                # A2B의 제약 조건이 B2C에서 언급되었는지 확인
+                handoff_a2b = tattoo_out.get("handoff", {}).get("a2b", {})
+                handoff_b2c = tattoo_out.get("handoff", {}).get("b2c", {})
+                
+                constraints = handoff_a2b.get("constraints", [])
+                if constraints:
+                    b_content = str(handoff_b2c.get("implementation_summary", "")) + \
+                                str(handoff_b2c.get("self_test_results", ""))
+                    
+                    matched = 0
+                    for c in constraints:
+                        # 키워드/문장 포함 여부 확인 (소형 모델 대응)
+                        if c.lower() in b_content.lower():
+                            matched += 1
+                        else:
+                            # 핵심 키워드 매칭 시도 (단어 3개 이상 겹치면 일치로 간주)
+                            c_words = set(re.findall(r'\b\w+\b', c.lower()))
+                            b_words = set(re.findall(r'\b\w+\b', b_content.lower()))
+                            if len(c_words & b_words) >= 3:
+                                matched += 1
+                    
+                    loss_rate = 1.0 - (matched / len(constraints))
+                    task_handoff_scores.append(loss_rate)
+
+                # ── 2. backprop_accuracy 계산 ──
+                # RejectMemo가 A를 향했을 때, 다음 턴의 A가 blueprint를 수정했는지 확인
+                reject_memo = tattoo_out.get("handoff", {}).get("reject_memo")
+                if reject_memo and reject_memo.get("target_phase") == "A" and i + 1 < len(cycles):
+                    next_cycle = cycles[i+1]
+                    next_tattoo_out = next_cycle.get("tattoo_out", {})
+                    
+                    prev_blueprint = handoff_a2b.get("blueprint", "")
+                    next_blueprint = next_tattoo_out.get("handoff", {}).get("a2b", {}).get("blueprint", "")
+                    
+                    # blueprint가 변경되었으면 수정한 것으로 간주
+                    modified = prev_blueprint != next_blueprint
+                    task_backprop_scores.append(1.0 if modified else 0.0)
+
+        summary["tasks"].append({
+            "task_id": task_result["task_id"],
+            "avg_handoff_loss": sum(task_handoff_scores) / len(task_handoff_scores) if task_handoff_scores else 0,
+            "avg_backprop_accuracy": sum(task_backprop_scores) / len(task_backprop_scores) if task_backprop_scores else 0,
+            "sample_cycles": len(task_handoff_scores),
+        })
+
+    all_loss = [t["avg_handoff_loss"] for t in summary["tasks"]]
+    all_acc = [t["avg_backprop_accuracy"] for t in summary["tasks"]]
+    
+    summary["overall_avg_loss_rate"] = sum(all_loss) / len(all_loss) if all_loss else 0
+    summary["overall_avg_backprop_accuracy"] = sum(all_acc) / len(all_acc) if all_acc else 0
+    
+    return summary
+
+
 def analyze_abc_pipeline(data: dict) -> dict:
+# ... (기존 코드)
     """실험 4 분석: A-B-C 파이프라인 품질."""
     import re
 
@@ -382,6 +466,7 @@ ANALYZERS = {
     "error_propagation": analyze_error_propagation,
     "cross_validation": analyze_cross_validation,
     "abc_pipeline": analyze_abc_pipeline,
+    "handoff_protocol": analyze_handoff_protocol,
 }
 
 

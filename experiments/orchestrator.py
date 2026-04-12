@@ -20,6 +20,7 @@ from schema import (
     Tattoo, Phase, AssertionStatus,
     VALID_TRANSITIONS, EMERGENCY_VERIFY_ALLOWED_FROM,
     create_initial_tattoo,
+    HandoffA2B, HandoffB2C, RejectMemo
 )
 from system_prompt import build_prompt
 from config import (
@@ -141,7 +142,14 @@ def apply_llm_response(tattoo: Tattoo, response: dict, loop_index: int) -> tuple
         assertions=copy.deepcopy(tattoo.assertions),
         open_questions=list(tattoo.open_questions),
         next_directive="",
+        handoff_a2b=tattoo.handoff_a2b,
+        handoff_b2c=tattoo.handoff_b2c,
+        reject_memo=tattoo.reject_memo,
     )
+
+    # ── HandoffA2B 파싱 (Architect A의 응답) ──
+    if response.get("handoff_a2b"):
+        new_tattoo.handoff_a2b = HandoffA2B.from_dict(response["handoff_a2b"])
 
     # 1. Assertion 무효화
     for inv in response.get("invalidated_assertions", []):
@@ -166,14 +174,26 @@ def apply_llm_response(tattoo: Tattoo, response: dict, loop_index: int) -> tuple
             source_loop=loop_index,
         )
 
-    # 3. 질문 해결/추가
-    resolved = set(response.get("resolved_questions", []))
+    # 3. 질문 해결/추가 (방어 로직: 요소가 dict인 경우 대응)
+    raw_resolved = response.get("resolved_questions", [])
+    resolved_list = []
+    for r in raw_resolved:
+        if isinstance(r, dict):
+            # dict인 경우 가장 그럴듯한 키값을 찾거나 전체를 문자열화
+            resolved_list.append(str(r.get("question", r.get("content", str(r)))))
+        else:
+            resolved_list.append(str(r))
+    
+    resolved_set = set(resolved_list)
     new_tattoo.open_questions = [
-        q for q in new_tattoo.open_questions if q not in resolved
+        q for q in new_tattoo.open_questions if str(q) not in resolved_set
     ]
-    for nq in response.get("new_questions", []):
-        if nq not in new_tattoo.open_questions:
-            new_tattoo.open_questions.append(nq)
+    
+    raw_new_q = response.get("new_questions", [])
+    for nq in raw_new_q:
+        q_str = str(nq.get("question", nq.get("content", str(nq)))) if isinstance(nq, dict) else str(nq)
+        if q_str not in new_tattoo.open_questions:
+            new_tattoo.open_questions.append(q_str)
 
     # 4. Confidence
     try:
@@ -434,7 +454,11 @@ def run_abc_chain(
 
         assertions_for_b = [a.to_dict() for a in tattoo.active_assertions]
         if assertions_for_b:
-            b_messages = build_critic_prompt(prompt, assertions_for_b)
+            b_messages = build_critic_prompt(
+                prompt, 
+                assertions_for_b, 
+                handoff_a2b=tattoo.handoff_a2b.to_dict() if tattoo.handoff_a2b else None
+            )
             for attempt in range(2):
                 try:
                     b_raw = call_ollama(b_messages)
@@ -454,8 +478,13 @@ def run_abc_chain(
 
         b_duration = int((time.time() - b_start) * 1000)
 
+        # ── HandoffB2C 파싱 ──
+        if b_parsed and b_parsed.get("handoff_b2c"):
+            tattoo.handoff_b2c = HandoffB2C.from_dict(b_parsed["handoff_b2c"])
+
         # B의 비판 결과로 assertion 무효화
         if b_parsed and "judgments" in b_parsed:
+            # ... (기존 비판 처리 유지)
             for j in b_parsed["judgments"]:
                 if j.get("status") == "invalid":
                     aid = j.get("assertion_id", "")
@@ -567,9 +596,13 @@ def run_abc_chain(
                         print(f"    C: converged but invalid next_phase={next_phase_str} "
                               f"(expected {expected}) — ignored | {c_duration}ms")
             else:
-                # 수렴하지 않음 — C의 directive를 다음 라운드에 반영
+                # 수렴하지 않음 ── C의 directive 및 RejectMemo 반영 ──
                 if c_directive:
                     tattoo.next_directive = c_directive
+                
+                if c_parsed.get("reject_memo"):
+                    tattoo.reject_memo = RejectMemo.from_dict(c_parsed["reject_memo"])
+                
                 if logger:
                     logger.agent_c(c_duration, False, None, c_error)
                     logger.agent_c_reasoning(c_parsed.get("reasoning", ""))

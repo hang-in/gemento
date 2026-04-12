@@ -12,7 +12,7 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
+from typing import Optional, List, Dict, Any
 
 
 class Phase(str, Enum):
@@ -42,6 +42,78 @@ VALID_TRANSITIONS: dict[Phase, set[Phase]] = {
 EMERGENCY_VERIFY_ALLOWED_FROM = {
     Phase.DECOMPOSE, Phase.INVESTIGATE, Phase.SYNTHESIZE,
 }
+
+
+@dataclass
+class HandoffA2B:
+    """Architect(A) -> Developer(B) 인계 문서."""
+    blueprint: str = ""
+    constraints: List[str] = field(default_factory=list)
+    prioritized_focus: str = ""
+    open_questions: List[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return {
+            "blueprint": self.blueprint,
+            "constraints": self.constraints,
+            "prioritized_focus": self.prioritized_focus,
+            "open_questions": self.open_questions
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> HandoffA2B:
+        return cls(
+            blueprint=d.get("blueprint", ""),
+            constraints=d.get("constraints", []),
+            prioritized_focus=d.get("prioritized_focus", ""),
+            open_questions=d.get("open_questions", [])
+        )
+
+
+@dataclass
+class HandoffB2C:
+    """Developer(B) -> Reviewer(C) 인계 문서."""
+    implementation_summary: str = ""
+    deviations: List[dict] = field(default_factory=list)
+    self_test_results: str = ""
+
+    def to_dict(self) -> dict:
+        return {
+            "implementation_summary": self.implementation_summary,
+            "deviations": self.deviations,
+            "self_test_results": self.self_test_results
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> HandoffB2C:
+        return cls(
+            implementation_summary=d.get("implementation_summary", ""),
+            deviations=d.get("deviations", []),
+            self_test_results=d.get("self_test_results", "")
+        )
+
+
+@dataclass
+class RejectMemo:
+    """Reviewer(C) -> A/B 반려 메모."""
+    target_phase: str = "A"  # "A" or "B"
+    failed_assertions: List[str] = field(default_factory=list)
+    remediation_hint: str = ""
+
+    def to_dict(self) -> dict:
+        return {
+            "target_phase": self.target_phase,
+            "failed_assertions": self.failed_assertions,
+            "remediation_hint": self.remediation_hint
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> RejectMemo:
+        return cls(
+            target_phase=d.get("target_phase", "A"),
+            failed_assertions=d.get("failed_assertions", []),
+            remediation_hint=d.get("remediation_hint", "")
+        )
 
 
 @dataclass
@@ -101,10 +173,17 @@ class Tattoo:
     next_directive: str = ""
     critique_log: list[dict] = field(default_factory=list)  # B의 비판 기록 (A-B-C용)
 
+    # ── Handoff Protocol (실험 4.5) ──
+    handoff_a2b: Optional[HandoffA2B] = None
+    handoff_b2c: Optional[HandoffB2C] = None
+    reject_memo: Optional[RejectMemo] = None
+
     # ── 무결성 ──
     assertion_hash: str = ""
     chain_hash: str = ""
     confidence: float = 1.0
+
+    # ... (생략된 메서드들은 그대로 유지되도록 명령 수행)
 
     # ── 불변 규칙 적용 ──
 
@@ -163,7 +242,7 @@ class Tattoo:
         return False
 
     def to_dict(self) -> dict:
-        return {
+        d = {
             "meta": {
                 "tattoo_id": self.tattoo_id,
                 "task_id": self.task_id,
@@ -183,12 +262,20 @@ class Tattoo:
                 "next_directive": self.next_directive,
                 "critique_log": self.critique_log,
             },
+            "handoff": {},
             "integrity": {
                 "assertion_hash": self.assertion_hash,
                 "chain_hash": self.chain_hash,
                 "confidence": self.confidence,
             },
         }
+        if self.handoff_a2b:
+            d["handoff"]["a2b"] = self.handoff_a2b.to_dict()
+        if self.handoff_b2c:
+            d["handoff"]["b2c"] = self.handoff_b2c.to_dict()
+        if self.reject_memo:
+            d["handoff"]["reject_memo"] = self.reject_memo.to_dict()
+        return d
 
     @classmethod
     def from_dict(cls, d: dict) -> Tattoo:
@@ -196,6 +283,8 @@ class Tattoo:
         goal = d["goal"]
         state = d["state"]
         integrity = d["integrity"]
+        handoff = d.get("handoff", {})
+        
         t = cls(
             tattoo_id=meta["tattoo_id"],
             task_id=meta["task_id"],
@@ -214,6 +303,14 @@ class Tattoo:
             chain_hash=integrity["chain_hash"],
             confidence=integrity["confidence"],
         )
+        
+        if "a2b" in handoff:
+            t.handoff_a2b = HandoffA2B.from_dict(handoff["a2b"])
+        if "b2c" in handoff:
+            t.handoff_b2c = HandoffB2C.from_dict(handoff["b2c"])
+        if "reject_memo" in handoff:
+            t.reject_memo = RejectMemo.from_dict(handoff["reject_memo"])
+            
         return t
 
     def to_json(self, indent: int = 2) -> str:

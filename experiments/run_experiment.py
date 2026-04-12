@@ -677,6 +677,97 @@ def run_tool_separation():
     save_result("exp04_tool_separation", {"experiment": "tool_separation", "model": MODEL_NAME, "results": results})
 
 
+# ── 실험 4.5: Handoff Protocol ──
+
+def run_handoff_protocol():
+    """실험 4.5: A-B-C 직렬 파이프라인 + Handoff Protocol 메트릭 측정.
+    
+    체크포인트 기능 포함: 중간 실패 시 이어서 시작 가능.
+    """
+    tasks = load_tasks()
+    partial_path = RESULTS_DIR / "partial_handoff_protocol.json"
+    
+    # 이어하기 시도
+    results = []
+    finished_task_ids = set()
+    if partial_path.exists():
+        try:
+            with open(partial_path) as f:
+                partial_data = json.load(f)
+                results = partial_data.get("results", [])
+                finished_task_ids = {r["task_id"] for r in results}
+                print(f"  → Resuming from checkpoint: {len(finished_task_ids)} tasks already finished.")
+        except Exception:
+            print("  ⚠ Failed to load checkpoint, starting from scratch.")
+
+    for task in tasks:
+        if task["id"] in finished_task_ids:
+            continue
+
+        print(f"\n[Handoff Protocol] Task: {task['id']} — {task['objective']}")
+        task_results = []
+
+        for trial_idx in range(DEFAULT_REPEAT):
+            print(f"  Trial {trial_idx + 1}/{DEFAULT_REPEAT}...")
+            
+            tattoo, abc_logs, final_answer = run_abc_chain(
+                task_id=task["id"],
+                objective=task["objective"],
+                prompt=task["prompt"],
+                constraints=task.get("constraints"),
+                termination="모든 비판이 수렴하고 최종 답변이 확정되면 종료",
+            )
+
+            cycle_details = []
+            for cl in abc_logs:
+                detail = {
+                    "cycle": cl.cycle,
+                    "phase": cl.phase,
+                    "tattoo_in": cl.a_log.tattoo_in,
+                    "tattoo_out": cl.a_log.tattoo_out,
+                    "b_handoff": cl.b_judgments.get("handoff_b2c") if cl.b_judgments else None,
+                    "c_reject": cl.c_decision.get("reject_memo") if cl.c_decision else None,
+                }
+                cycle_details.append(detail)
+
+            task_results.append({
+                "trial": trial_idx + 1,
+                "final_answer": str(final_answer) if final_answer else None,
+                "total_cycles": len(abc_logs),
+                "final_phase": tattoo.phase.value,
+                "total_assertions": len(tattoo.assertions),
+                "cycle_details": cycle_details,
+            })
+
+        results.append({
+            "task_id": task["id"],
+            "objective": task["objective"],
+            "expected_answer": task.get("expected_answer"),
+            "trials": task_results,
+        })
+
+        # 태스크 완료 시마다 중간 저장
+        with open(partial_path, "w") as f:
+            json.dump({
+                "experiment": "handoff_protocol",
+                "model": MODEL_NAME,
+                "results": results
+            }, f, indent=2, ensure_ascii=False)
+        print(f"  ✓ Task {task['id']} saved to checkpoint.")
+
+    # 최종 결과 저장
+    final_path = save_result("exp045_handoff_protocol", {
+        "experiment": "handoff_protocol",
+        "model": MODEL_NAME,
+        "results": results
+    })
+    
+    # 완료 후 체크포인트 파일 삭제 (깔끔하게 정리)
+    if partial_path.exists():
+        partial_path.unlink()
+        print(f"  → Checkpoint cleared.")
+
+
 # ── CLI ──
 
 EXPERIMENTS = {
@@ -687,6 +778,7 @@ EXPERIMENTS = {
     "cross-validation": run_cross_validation,
     "abc-pipeline": run_abc_pipeline,
     "prompt-enhance": run_prompt_enhance,
+    "handoff-protocol": run_handoff_protocol,
     "tool-separation": run_tool_separation,
 }
 
