@@ -1,11 +1,11 @@
 ---
 type: result
-status: in-progress
+status: done
 updated_at: 2026-04-12
 experiment: 실험 4.5 — Handoff Protocol (단계 간 정보 전달 규격화)
 ---
 
-# 실험 4.5: Handoff Protocol 핸드오프 리포트
+# 실험 4.5: Handoff Protocol 결과
 
 ## 1. 개요
 소형 LLM(Gemma 4 E4B)의 추론 과정에서 발생하는 '주의력 분산'과 '지시 무시' 현상을 억제하기 위해, 에이전트 간(A-B-C) 인계되는 정보를 엄격한 데이터 구조로 규격화한 실험입니다.
@@ -25,19 +25,50 @@ experiment: 실험 4.5 — Handoff Protocol (단계 간 정보 전달 규격화)
 - **태스크 단위 체크포인트**: 실험 중 중단되어도 `partial_handoff_protocol.json`을 통해 마지막 태스크부터 이어하기 가능.
 - **방어 로직**: `resolved_questions` 등에서 모델이 문자열 대신 딕셔너리를 출력하는 경우에 대한 예외 처리.
 
-## 3. 측정 지표 (`measure.py`)
-- **handoff_loss_rate**: A2B의 `constraints`가 B2C 결과물에서 얼마나 누락되었는지 측정 (키워드/LLM 기반).
-- **backprop_accuracy**: C의 `RejectMemo` 지시가 다음 턴 A의 `blueprint` 수정에 반영되었는지 여부(Boolean).
+## 3. 실험 결과
 
-## 4. 현재 진행 상태 및 인계 사항
-- **코드 상태**: 모든 핵심 파일(`schema`, `orchestrator`, `system_prompt`, `measure`, `run_experiment`)이 4.5 규격으로 업데이트됨.
-- **데이터 상태**: 초기 실험 결과(`exp045_handoff_protocol_*.json`)가 깃헙에 푸시됨.
-- **디렉토리 정리**: 루트 디렉토리의 중복 파일들을 제거하고 `experiments/` 폴더로 단일화함.
+### 3.1. 정확도 (6 태스크, 18 트라이얼)
 
-### 다음 단계 가이드 (Opus 분석용)
-1. 깃헙에서 최신 코드를 pull 받은 후, `experiments/results/`에 있는 4.5 결과 데이터를 분석할 것.
-2. `python measure.py results/exp045_*.json`을 실행하여 규격화된 지표 확인.
-3. Handoff Protocol 도입 전(실험 4)과 도입 후(실험 4.5)의 수렴 속도 및 논리적 정합성 비교 분석 필요.
+| 태스크 | T1 | T2 | T3 | 정답률 | 수렴률 | 평균 사이클 |
+|--------|----|----|----|----|----|----|
+| math-01 | ✓ | ✓ | ✓ | 3/3 | 3/3 | 7.0 |
+| math-02 | ✓ | ✓ | ✓ | 3/3 | 3/3 | 7.3 |
+| logic-01 | ✓ | ✓ | ✓ | 3/3 | 3/3 | 7.0 |
+| logic-02 | ✓ | ✓ | ✓ | 3/3 | 3/3 | 8.0 |
+| synthesis-01 | ✓ | ✓ | ✓ | 3/3 | 3/3 | 7.0 |
+| synthesis-02 | ✓ | ✓ | ✓ | 3/3 | 3/3 | 7.0 |
+| **전체** | | | | **18/18 (100%)** | **18/18 (100%)** | **7.2** |
 
----
-**Windows Agent (Gemini CLI) 작성**
+### 3.2. 실험 4 대비 개선
+
+| 지표 | 실험 4 | 실험 4.5 | 변화 |
+|------|--------|---------|------|
+| 정답률 | 83.3% (10/12) | **100% (18/18)** | +16.7%p |
+| synthesis-02 | 1/3 | **3/3** | 완전 해결 |
+| 태스크 수 | 4개 | **6개** | logic 2개 추가 |
+| 평균 사이클 | 5.8 | 7.2 | +1.4 (품질 향상 대가) |
+
+### 3.3. Handoff 메트릭 (`measure.py` 실측)
+
+| 지표 | 전체 | math-01 | logic-01 | synthesis-01 | math-02 | logic-02 | synthesis-02 |
+|------|------|---------|---------|-------------|--------|---------|-------------|
+| Handoff Loss Rate | **26.4%** | 22.6% | 25.2% | 38.3% | 28.8% | 19.7% | 23.8% |
+| Backprop Accuracy | **9.5%** | 0.0% | 0.0% | 0.0% | 0.0% | 57.1% | 0.0% |
+
+## 4. 핵심 발견
+
+### 4.1. Handoff Protocol이 synthesis-02 문제를 완전 해결
+이전 실험 4, 5a에서 반복됐던 `final_answer=None` 패턴이 사라졌습니다. `HandoffA2B`의 `prioritized_focus`와 `constraints` 필드가 A의 JSON 출력 구조를 안정화했습니다.
+
+### 4.2. 역설적 결과 — 낮은 Backprop에도 100% 정확도
+`backprop_accuracy`가 9.5%에 불과하지만 정확도는 100%입니다. 이는 시스템이 피드백 전파가 아니라 **반복 루프의 수렴**으로 작동한다는 의미입니다. C의 RejectMemo가 A에게 전달되지 않아도, 충분한 사이클(평균 7.2)을 거치면 올바른 답에 도달합니다.
+
+### 4.3. 정보 전달 구조화의 효과
+- 프롬프트 강화(실험 5a)는 synthesis-02 해결 불가
+- 스키마 강제(실험 4.5)는 즉시 해결
+- **결론: 소형 LLM에게 지시를 강조하는 것보다 출력 형식을 구조화하는 것이 더 효과적**
+
+## 5. 다음 단계
+- **실험 5b**: 더 어려운 태스크로 100% 정확도의 한계선 탐색 (Option A)
+- **Backprop 개선**: RejectMemo → A 반영 경로 강화 (현재 9.5% → 목표 50%+)
+- 실험 결과 데이터: `experiments/results/exp045_handoff_protocol_20260412_004441.json`
