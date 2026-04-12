@@ -187,6 +187,39 @@
           "inject_at_loop": 2
         }
       ]
+    },
+    {
+      "id": "math-03",
+      "category": "math",
+      "difficulty": "hard",
+      "objective": "연립방정식으로 풀어야 하는 문제를 단계적으로 풀어라.",
+      "prompt": "A school has 3 types of tables: round (seats 4), square (seats 6), and rectangular (seats 8). The total number of tables is 15. The total number of seats is 96. The number of rectangular tables equals the number of round tables minus 1. How many of each type of table are there?",
+      "expected_answer": "round=6, square=4, rectangular=5",
+      "constraints": ["연립방정식을 세워야 한다", "모든 값은 양의 정수여야 한다", "검산 필수"],
+      "prefab_assertions": [],
+      "fault_injections": []
+    },
+    {
+      "id": "logic-03",
+      "category": "logic",
+      "difficulty": "hard",
+      "objective": "시간 순서 조건을 분석하여 각 이벤트의 요일을 결정하라.",
+      "prompt": "Five events (A, B, C, D, E) happened on different days of the week (Monday to Friday, one event per day). Clues:\n1. Event A happened before Event C, with exactly one day between them.\n2. Event D happened on Wednesday.\n3. Event B happened after Event D.\n4. Event E happened on the day immediately before Event A.\n5. Event C did not happen on Friday.\nWhat day did each event occur?",
+      "expected_answer": "E=Monday, A=Tuesday, C=Thursday, D=Wednesday, B=Friday",
+      "constraints": ["모든 단서를 활용해야 한다", "모순 없이 배치해야 한다", "5일에 정확히 1개씩 배치해야 한다"],
+      "prefab_assertions": [],
+      "fault_injections": []
+    },
+    {
+      "id": "synthesis-03",
+      "category": "information_synthesis",
+      "difficulty": "very_hard",
+      "objective": "5명의 후보를 4가지 조건으로 평가하여 적격자를 선별하고 순위를 매겨라.",
+      "prompt": "A startup needs to hire a CTO. Five candidates:\n- Alice: 10yr exp, asks $180k/yr, knows Python+Go, available in 2 weeks\n- Bob: 7yr exp, asks $140k/yr, knows Python+JS, available immediately\n- Carol: 12yr exp, asks $200k/yr, knows Go+Rust, available in 1 month\n- David: 8yr exp, asks $160k/yr, knows Python+Go+JS, available in 1 week\n- Eve: 6yr exp, asks $130k/yr, knows JS+Rust, available immediately\n\nRequirements: (1) Must know Python OR Go, (2) Salary budget max $170k/yr, (3) Must be available within 2 weeks, (4) At least 8 years of experience.\n\nWhich candidates qualify? Among qualified candidates, rank them by years of experience (highest first).",
+      "expected_answer": "Only David qualifies (8yr, $160k, Python+Go+JS, 1 week). Alice fails budget ($180k). Carol fails availability (1 month) and budget. Bob fails experience (7yr). Eve fails experience (6yr) and language requirement.",
+      "constraints": ["모든 후보를 모든 조건에 대해 체크해야 한다", "탈락 이유를 명시해야 한다", "적격자를 경력 순으로 정렬해야 한다"],
+      "prefab_assertions": [],
+      "fault_injections": []
     }
   ]
 }

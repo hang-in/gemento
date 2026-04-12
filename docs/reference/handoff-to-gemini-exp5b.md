@@ -117,24 +117,12 @@ cd experiments
 ollama list   # gemma4:e4b 있어야 함
 ```
 
-### 3.2. 태스크 추가
+### 3.2. 태스크 확인 (이미 추가됨)
 
-`experiments/tasks/taskset.json`의 `"tasks"` 배열 마지막에 위 3개 태스크를 추가합니다.
-
-각 태스크 구조:
-```json
-{
-  "id": "math-03",
-  "category": "math",
-  "difficulty": "hard",
-  "objective": "연립방정식으로 풀어야 하는 문제를 단계적으로 풀어라.",
-  "prompt": "...(문제 텍스트)...",
-  "expected_answer": "round=6, square=4, rectangular=5",
-  "constraints": ["연립방정식을 세워야 한다", "모든 값은 양의 정수여야 한다", "검산 필수"],
-  "prefab_assertions": [],
-  "fault_injections": []
-}
-```
+`experiments/tasks/taskset.json`에 3개 태스크가 이미 추가되어 있습니다:
+- `math-03` — 3변수 연립방정식 (테이블 문제)
+- `logic-03` — 시간 순서 추론 (요일 배치)
+- `synthesis-03` — 5명 후보 다중 조건 선별
 
 ### 3.3. 실험 실행
 
