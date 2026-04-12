@@ -22,8 +22,8 @@ CONFIDENCE_PROMOTION_MIN = 0.5  # assertion 승격 최소 confidence
 CONFIDENCE_CAP_NO_TOOL = 0.7  # 외부 도구 없이 도출된 주장의 confidence 상한
 
 # ── 실험 ──
-DEFAULT_REPEAT = 3  # 각 조건 반복 횟수
-MAX_LOOPS = 12  # 루프 상한 (무한 루프 방지)
+DEFAULT_REPEAT = 5  # 각 조건 반복 횟수 (3→5: 통계적 신뢰도 향상)
+MAX_LOOPS = 15  # 루프 상한 (12→15: 어려운 태스크 조기 종료 방지)
 
 # ── Ollama API ──
 OLLAMA_GENERATE_URL = f"{OLLAMA_BASE_URL}/api/chat"

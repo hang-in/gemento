@@ -142,8 +142,11 @@ ollama list   # gemma4:e4b 있어야 함
 
 ```powershell
 python run_experiment.py handoff-protocol
-# 예상 소요: 3-5시간 (9 태스크 × 3 트라이얼)
+# 예상 소요: 6-10시간 (9 태스크 × 5 트라이얼, 사이클 상한 15)
 ```
+
+> **설정 변경 사항** (`config.py`): `DEFAULT_REPEAT` 3→**5**, `MAX_LOOPS` 12→**15**
+> 이터레이션이 늘어도 신뢰성 높은 결과를 얻기 위한 조정입니다.
 
 실험 중 체크포인트가 자동으로 저장됩니다:
 ```
