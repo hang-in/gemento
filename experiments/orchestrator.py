@@ -52,10 +52,15 @@ def call_ollama(messages: list[dict], model: str = MODEL_NAME) -> str:
     payload = {
         "model": model,
         "messages": messages,
+        "format": "json",       # 엔진 수준에서 JSON 출력 강제 (가장 중요)
         "stream": False,
         "options": {
-            "temperature": 0.7,
+            "temperature": 0.1,
             "num_predict": 4096,
+            "num_ctx": 4096,
+            "num_gpu": 35,
+            "f16_kv": True,
+            "num_thread": 8,
         },
     }
     with httpx.Client(timeout=httpx.Timeout(OLLAMA_TIMEOUT, connect=30.0)) as client:
@@ -65,23 +70,33 @@ def call_ollama(messages: list[dict], model: str = MODEL_NAME) -> str:
 
 
 def extract_json_from_response(raw: str) -> dict | None:
-    """LLM 응답에서 JSON 블록을 추출한다."""
-    match = re.search(r"```json\s*(.*?)\s*```", raw, re.DOTALL)
+    """LLM 응답에서 JSON 블록을 추출한다. (JSON Mode 대응)"""
+    if not raw:
+        return None
+    
+    # 1. JSON Mode일 경우 응답 자체가 JSON 문자열일 가능성이 높음
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        pass
+        
+    # 2. 마크다운 블록이 포함된 경우 추출
+    match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", raw, re.DOTALL)
     if match:
         try:
             return json.loads(match.group(1))
         except json.JSONDecodeError:
             pass
+
+    # 3. 텍스트 중간에 JSON이 섞인 경우 (최후의 수단)
     try:
-        return json.loads(raw)
-    except json.JSONDecodeError:
+        start = raw.find('{')
+        end = raw.rfind('}')
+        if start != -1 and end != -1:
+            return json.loads(raw[start:end+1])
+    except Exception:
         pass
-    match = re.search(r"\{.*\}", raw, re.DOTALL)
-    if match:
-        try:
-            return json.loads(match.group(0))
-        except json.JSONDecodeError:
-            pass
+
     return None
 
 
