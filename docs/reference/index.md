@@ -13,6 +13,7 @@ Reference document index.
 ## 핸드오프
 
 - [handoff-to-gemini-exp5b.md](handoff-to-gemini-exp5b.md) — Gemini 인계: 실험 5b 태스크 스케일업 지시서
+- [handoff-to-gemini-exp6.md](handoff-to-gemini-exp6.md) — Gemini 인계: 실험 6 Solo vs ABC 시너지 측정
 
 ## 실험 결과
 

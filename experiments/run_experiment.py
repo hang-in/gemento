@@ -8,6 +8,8 @@ Usage:
     python run_experiment.py cross-validation  # 실험 3.5: 교차 검증 게이트
     python run_experiment.py abc-pipeline      # 실험 4: A-B-C 직렬 파이프라인
     python run_experiment.py prompt-enhance    # 실험 5a: 프롬프트 강화
+    python run_experiment.py handoff-protocol  # 실험 4.5/5b: Handoff Protocol
+    python run_experiment.py solo-budget       # 실험 6: Solo 단일 에이전트 (ABC 시너지 비교군)
     python run_experiment.py tool-separation   # (보류) 도구 분리
 """
 
@@ -768,6 +770,106 @@ def run_handoff_protocol():
         print(f"  → Checkpoint cleared.")
 
 
+# ── 실험 6: Solo Budget (ABC 시너지 비교군) ──
+
+SOLO_MAX_LOOPS = 21  # ABC 평균 7.2 사이클 × 3 에이전트 ≈ 21 Ollama 호출
+
+def run_solo_budget():
+    """실험 6: 단일 E4B 에이전트가 ABC와 동일한 총 compute 예산을 받았을 때의 성능.
+
+    비교군: exp 5b (handoff-protocol, 9 태스크 × 5 trials, 88.9%, 평균 21.6 Ollama calls)
+    목적: A-B-C 역할 분리가 단순히 반복 횟수 증가로 환원 가능한지 판별.
+    """
+    tasks = load_tasks()
+    partial_path = RESULTS_DIR / "partial_solo_budget.json"
+
+    results = []
+    finished_task_ids = set()
+    if partial_path.exists():
+        try:
+            with open(partial_path) as f:
+                partial_data = json.load(f)
+                results = partial_data.get("results", [])
+                finished_task_ids = {r["task_id"] for r in results}
+                print(f"  → Resuming: {len(finished_task_ids)} tasks already finished.")
+        except Exception:
+            print("  ⚠ Checkpoint load failed, starting fresh.")
+
+    for task in tasks:
+        if task["id"] in finished_task_ids:
+            continue
+
+        print(f"\n[Solo Budget] Task: {task['id']} — {task['objective']}")
+        task_results = []
+
+        for trial_idx in range(DEFAULT_REPEAT):
+            print(f"  Trial {trial_idx + 1}/{DEFAULT_REPEAT}...")
+
+            final_tattoo, logs, final_answer = run_chain(
+                task_id=f"{task['id']}_solo_t{trial_idx}",
+                objective=f"{task['objective']}\n\nProblem:\n{task['prompt']}",
+                constraints=task.get("constraints", []),
+                max_loops=SOLO_MAX_LOOPS,
+            )
+
+            loop_details = []
+            for l in logs:
+                loop_details.append({
+                    "loop": l.loop_index,
+                    "phase": l.tattoo_out["state"]["phase"],
+                    "assertions": len([
+                        a for a in l.tattoo_out["state"]["assertions"]
+                        if a["status"] == "active"
+                    ]),
+                    "confidence": l.tattoo_out["integrity"]["confidence"],
+                    "duration_ms": l.duration_ms,
+                    "error": l.error,
+                })
+
+            task_results.append({
+                "trial": trial_idx + 1,
+                "max_loops": SOLO_MAX_LOOPS,
+                "actual_loops": len(logs),
+                "final_phase": final_tattoo.phase.value,
+                "final_confidence": final_tattoo.confidence,
+                "total_assertions": len(final_tattoo.active_assertions),
+                "final_answer": str(final_answer) if final_answer else None,
+                "loop_details": loop_details,
+            })
+
+            status = "✓" if final_tattoo.phase == Phase.CONVERGED else "✗"
+            print(f"    {status} loops={len(logs)} phase={final_tattoo.phase.value} "
+                  f"answer={'yes' if final_answer else 'no'}")
+
+        results.append({
+            "task_id": task["id"],
+            "objective": task["objective"],
+            "expected_answer": task.get("expected_answer"),
+            "trials": task_results,
+        })
+
+        # 체크포인트 저장
+        with open(partial_path, "w") as f:
+            json.dump({
+                "experiment": "solo_budget",
+                "model": MODEL_NAME,
+                "max_loops": SOLO_MAX_LOOPS,
+                "results": results
+            }, f, indent=2, ensure_ascii=False)
+        print(f"  ✓ Task {task['id']} saved to checkpoint.")
+
+    save_result("exp06_solo_budget", {
+        "experiment": "solo_budget",
+        "model": MODEL_NAME,
+        "max_loops": SOLO_MAX_LOOPS,
+        "baseline_comparison": "exp045_handoff_protocol (5b): 9 tasks × 5 trials, 88.9% accuracy, ~21.6 Ollama calls/trial",
+        "results": results
+    })
+
+    if partial_path.exists():
+        partial_path.unlink()
+
+
 # ── CLI ──
 
 EXPERIMENTS = {
@@ -779,6 +881,7 @@ EXPERIMENTS = {
     "abc-pipeline": run_abc_pipeline,
     "prompt-enhance": run_prompt_enhance,
     "handoff-protocol": run_handoff_protocol,
+    "solo-budget": run_solo_budget,
     "tool-separation": run_tool_separation,
 }
 
