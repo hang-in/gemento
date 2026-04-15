@@ -1,0 +1,2182 @@
+{
+  "experiment": "solo_budget",
+  "model": "gemma4:e4b",
+  "max_loops": 21,
+  "baseline_comparison": "exp045_handoff_protocol (5b): 9 tasks × 5 trials, 88.9% accuracy, ~21.6 Ollama calls/trial",
+  "results": [
+    {
+      "task_id": "math-01",
+      "objective": "주어진 수학 문제를 단계적으로 풀어라.",
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 109590,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 94666,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 86183,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 67422,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 76505,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 0.95,
+              "duration_ms": 87691,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 95674,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 73019,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 8,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 81954,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 0.98,
+              "duration_ms": 101498,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 8,
+              "confidence": 1.0,
+              "duration_ms": 89889,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 8,
+              "confidence": 1.0,
+              "duration_ms": 51105,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 4,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 76479,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 73156,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 88723,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 55726,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 5,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "The customer bought 13 apples and 7 oranges.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 100760,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 0.95,
+              "duration_ms": 98256,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 88130,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 70396,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-01",
+      "objective": "논리 퍼즐을 단계적으로 풀어라.",
+      "expected_answer": "Spanish",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": "The nationality of the person in the green house is Spanish.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 79331,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.95,
+              "duration_ms": 96581,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 302498,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 67783,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 5,
+          "final_answer": "Spanish",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 96196,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 93727,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 219007,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 82869,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 21,
+          "actual_loops": 7,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 8,
+          "final_answer": "The nationality of the person in the green house is Spanish.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 89971,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 104744,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 8,
+              "confidence": 1.0,
+              "duration_ms": 627470,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 8,
+              "confidence": 0.7,
+              "duration_ms": 307193,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 8,
+              "confidence": 0.7,
+              "duration_ms": 174770,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 8,
+              "confidence": 0.7,
+              "duration_ms": 128689,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "CONVERGED",
+              "assertions": 8,
+              "confidence": 1.0,
+              "duration_ms": 110055,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 4,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 8,
+          "final_answer": "The nationality of the person in the green house is Spanish.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.9,
+              "duration_ms": 101056,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 95255,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 8,
+              "confidence": 1.0,
+              "duration_ms": 217641,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 8,
+              "confidence": 1.0,
+              "duration_ms": 99932,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 5,
+          "max_loops": 21,
+          "actual_loops": 7,
+          "final_phase": "CONVERGED",
+          "final_confidence": 0.7,
+          "total_assertions": 5,
+          "final_answer": null,
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 94686,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 0.95,
+              "duration_ms": 87433,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 0.95,
+              "duration_ms": 420671,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "SYNTHESIZE",
+              "assertions": 5,
+              "confidence": 0.95,
+              "duration_ms": 438528,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 5,
+              "phase": "SYNTHESIZE",
+              "assertions": 5,
+              "confidence": 0.7,
+              "duration_ms": 243047,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "VERIFY",
+              "assertions": 5,
+              "confidence": 0.7,
+              "duration_ms": 391385,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 7,
+              "phase": "VERIFY",
+              "assertions": 5,
+              "confidence": 0.7,
+              "duration_ms": 256538,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-01",
+      "objective": "여러 정보를 종합하여 결론을 도출하라.",
+      "expected_answer": "Only Provider A meets all three requirements.",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 21,
+          "actual_loops": 3,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 5,
+          "final_answer": "Based on the analysis of the requirements:\n\n**Requirements Check:**\n1.  **Uptime SLA:** Must be $\\ge 99.9\\%$.\n2.  **Regions:** Must be $\\ge 4$.\n3.  **Budget:** Must be $\\le $800/month.\n\n**Cost Calculation (Monthly):**\n*   Provider A: $0.10/hr * 24 hrs/day * 30 days/month = $72.00$\n*   Provider B: $0.08/hr * 24 hrs/day * 30 days/month = $57.60$\n*   Provider C: $0.15/hr * 24 hrs/day * 30 days/month = $108.00$\n\n**Provider Evaluation:**\n*   **Provider A:** Uptime (99.9% $\\ge 99.9\\%$ - PASS), Regions (5 $\\ge 4$ - PASS), Cost ($72.00 $\\le $800 - PASS). **Meets all requirements.**\n*   **Provider B:** Uptime (99.5% $< 99.9%$ - FAIL). **Does not meet all requirements.**\n*   **Provider C:** Regions (3 $< 4$ - FAIL). **Does not meet all requirements.**\n\n**Conclusion:**\nThe only provider that meets all specified requirements is **Provider A**.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 109669,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 0.98,
+              "duration_ms": 114106,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "CONVERGED",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 134938,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "Based on the analysis of the three cloud providers against the company's requirements:\n\n**Requirements:**\n1. Uptime SLA: $\\ge$ 99.9%\n2. Regions: $\\ge$ 4\n3. Monthly Budget: $\\le$ $800\n\n**Cost Calculation (Monthly):**\nFormula: Hourly Rate $\\times$ 24 hours/day $\\times$ 30 days/month.\n\n*   **Provider A:** $0.10/hr \\times 24 \\times 30 = $72.00/month.\n*   **Provider B:** $0.08/hr \\times 24 \\times 30 = $57.60/month.\n*   **Provider C:** $0.15/hr \\times 24 \\times 30 = $108.00/month.\n\n**Provider Evaluation:**\n\n*   **Provider A:**\n    *   Uptime: 99.9% (PASS)\n    *   Regions: 5 (PASS)\n    *   Cost: $72.00 (PASS)\n    *   **Overall: Meets all requirements.**\n\n*   **Provider B:**\n    *   Uptime: 99.5% (FAIL - Below 99.9%)\n    *   Regions: 12 (PASS)\n    *   Cost: $57.60 (PASS)\n    *   **Overall: Fails due to insufficient uptime SLA.**\n\n*   **Provider C:**\n    *   Uptime: 99.99% (PASS)\n    *   Regions: 3 (FAIL - Below 4 regions)\n    *   Cost: $108.00 (PASS)\n    *   **Overall: Fails due to insufficient number of regions.**\n\n**Conclusion:**\nOnly **Provider A** meets all three specified requirements: at least 99.9% uptime, presence in at least 4 regions, and a monthly budget under $800.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.95,
+              "duration_ms": 90393,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 0.9,
+              "duration_ms": 88252,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 0.95,
+              "duration_ms": 91693,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 136932,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 8,
+          "final_answer": "Based on the analysis of the three cloud providers against the company's requirements, only Provider A meets all necessary criteria.\n\n**Requirements Check:**\n1.  **Uptime SLA:** Must be $\\ge 99.9\\%$.\n2.  **Regions:** Must be $\\ge 4$ data center regions.\n3.  **Budget:** Must be $\\le $800/month (Calculated operational cost for 720 hours).\n\n**Provider Analysis:**\n*   **Provider A:** Uptime (99.9% $\\ge 99.9\\%$), Regions (5 $\\ge 4$), Cost ($0.10/hr * 720 hrs = $72.00 $\\le $800). **(Meets all requirements)**\n*   **Provider B:** Uptime (99.5% $< 99.9\\%$). **(Fails uptime requirement)**\n*   **Provider C:** Regions (3 $< 4$). **(Fails region requirement)**\n\n**Conclusion:** Provider A is the only suitable choice.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 65843,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 89338,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 8,
+              "confidence": 1.0,
+              "duration_ms": 119984,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 8,
+              "confidence": 1.0,
+              "duration_ms": 76954,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 4,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "Based on the analysis of the company's requirements:\n\n**Requirements:**\n1. Uptime SLA: $\\ge$ 99.9%\n2. Regions: $\\ge$ 4\n3. Monthly Budget: $\\le$ $800\n\n**Provider Analysis:**\n\n*   **Provider A:**\n    *   Uptime: 99.9% (Pass)\n    *   Regions: 5 (Pass)\n    *   Cost: $72.00 (Pass)\n    *   **Result: Meets all requirements.**\n*   **Provider B:**\n    *   Uptime: 99.5% (Fail - Below 99.9%)\n    *   Regions: 12 (Pass)\n    *   Cost: $57.60 (Pass)\n    *   **Result: Fails requirement 1.**\n*   **Provider C:**\n    *   Uptime: 99.99% (Pass)\n    *   Regions: 3 (Fail - Below 4)\n    *   Cost: $108.00 (Pass)\n    *   **Result: Fails requirement 2.**\n\n**Conclusion:**\nOnly **Provider A** meets all three specified requirements (Uptime $\\ge$ 99.9%, Regions $\\ge$ 4, and Budget $\\le$ $800). Therefore, Provider A is the recommended choice.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 77412,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 93428,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 0.95,
+              "duration_ms": 120170,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 109385,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 5,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "Based on the analysis of the company's requirements (1) at least 99.9% uptime, (2) presence in at least 4 regions, and (3) monthly budget under $800 (which limits the hourly rate to approximately $0.111/hour):\n\n*   **Provider A:** Meets all requirements. (Uptime: 99.9% $\\ge 99.9\\%$; Regions: 5 $\\ge 4$; Cost: $0.10/hr \\le 0.111/hr$).\n*   **Provider B:** Fails the uptime requirement (99.5% < 99.9%).\n*   **Provider C:** Fails both the budget requirement ($0.15/hr > 0.111/hr$) and the region requirement (3 < 4).\n\n**Conclusion:** Only Provider A meets all specified requirements.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.95,
+              "duration_ms": 83367,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.95,
+              "duration_ms": 97134,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 138149,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 72662,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-02",
+      "objective": "여러 단계의 계산이 필요한 문제를 풀어라.",
+      "expected_answer": "192 square meters",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 83775,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 86936,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 113954,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 60023,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 9,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.95,
+              "duration_ms": 92670,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 0.98,
+              "duration_ms": 92398,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 9,
+              "confidence": 1.0,
+              "duration_ms": 100713,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 9,
+              "confidence": 1.0,
+              "duration_ms": 89843,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "192 square meters",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 86809,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 0.95,
+              "duration_ms": 105071,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 107564,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 90826,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 4,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 9,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 84317,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 6,
+              "confidence": 0.95,
+              "duration_ms": 98909,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 9,
+              "confidence": 1.0,
+              "duration_ms": 115318,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 9,
+              "confidence": 1.0,
+              "duration_ms": 79472,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 5,
+          "max_loops": 21,
+          "actual_loops": 5,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 8,
+          "final_answer": "The area of the garden is 192 square meters.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 83858,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 0.95,
+              "duration_ms": 86193,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 0.95,
+              "duration_ms": 112681,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 8,
+              "confidence": 0.98,
+              "duration_ms": 146599,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "CONVERGED",
+              "assertions": 8,
+              "confidence": 1.0,
+              "duration_ms": 82871,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-02",
+      "objective": "조건부 추론 문제를 단계적으로 풀어라.",
+      "expected_answer": "0 people speak none of the three languages (data is inconsistent: inclusion-exclusion gives 105 > 100).",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 21,
+          "actual_loops": 6,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": "The provided data is mathematically inconsistent. Using the Inclusion-Exclusion Principle, the calculated number of people speaking at least one language is 105 (70+50+30 - (25+15+10) + 5 = 105). Since the total population is only 100, it is impossible for 105 people to speak at least one language. Therefore, there is no valid, non-negative integer solution for the number of people who speak none of the three languages.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.95,
+              "duration_ms": 100103,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 113765,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 0.9,
+              "duration_ms": 133087,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 126539,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 93767,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 102279,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 21,
+          "actual_loops": 7,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 9,
+          "final_answer": "The problem statement contains mathematically inconsistent data. Using the Inclusion-Exclusion Principle, the number of people speaking at least one language is calculated as 105 ($|E \ncup F \ncup G| = 105$). Since the total population is only 100 ($|U| = 100$), it is impossible for 105 people to speak at least one language within a group of 100. Therefore, a definitive numerical answer for the number of people who speak none of the three languages cannot be derived from the provided premises.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 92851,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.98,
+              "duration_ms": 89664,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 8,
+              "confidence": 0.95,
+              "duration_ms": 148424,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 8,
+              "confidence": 1.0,
+              "duration_ms": 86628,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 9,
+              "confidence": 1.0,
+              "duration_ms": 96313,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 9,
+              "confidence": 1.0,
+              "duration_ms": 91369,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "CONVERGED",
+              "assertions": 9,
+              "confidence": 1.0,
+              "duration_ms": 90421,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 0.9,
+          "total_assertions": 9,
+          "final_answer": "0 (Note: The input data is mathematically inconsistent as the calculated union (105) exceeds the total population (100). Assuming the total population constraint is absolute, the number of people speaking none must be 0.)",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 92251,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 9,
+              "confidence": 1.0,
+              "duration_ms": 117339,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 9,
+              "confidence": 1.0,
+              "duration_ms": 178250,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 9,
+              "confidence": 0.9,
+              "duration_ms": 138727,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 4,
+          "max_loops": 21,
+          "actual_loops": 6,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "0",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 94268,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 9,
+              "confidence": 0.98,
+              "duration_ms": 86693,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 9,
+              "confidence": 0.98,
+              "duration_ms": 183821,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "SYNTHESIZE",
+              "assertions": 9,
+              "confidence": 0.9,
+              "duration_ms": 137360,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "SYNTHESIZE",
+              "assertions": 9,
+              "confidence": 0.95,
+              "duration_ms": 148280,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "CONVERGED",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 153714,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 5,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 0.9,
+          "total_assertions": 9,
+          "final_answer": "The calculation based on the provided data yields 105 people speaking at least one language, resulting in -5 people speaking none. This indicates the input data is mathematically inconsistent, as the number of people cannot be negative. Assuming the calculation steps are the required output, the derived value for those speaking none is -5.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 96319,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 9,
+              "confidence": 0.98,
+              "duration_ms": 108766,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 9,
+              "confidence": 0.98,
+              "duration_ms": 194836,
+              "error": "JSON parse failed"
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 9,
+              "confidence": 0.9,
+              "duration_ms": 253205,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-02",
+      "objective": "여러 조건을 분석하여 최적 선택을 결정하라.",
+      "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 5,
+          "final_answer": "{'shortest_route': 'Warehouse $\\to$ A $\\to$ B $\\to$ C $\\to$ D $\\to$ Warehouse', 'total_distance_km': 65, 'total_fuel_cost': '$130'}",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 87080,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.98,
+              "duration_ms": 96474,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 115521,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 174931,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": "{'optimal_route': 'Warehouse → A → B → C → D → Warehouse (or reverse)', 'total_distance_km': 65, 'total_fuel_cost': 130}",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.95,
+              "duration_ms": 90635,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 88261,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 108685,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 154109,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": "{'shortest_route': 'Warehouse $\\\\to$ A $\\\\to$ B $\\\\to$ C $\\\\to$ D $\\\\to$ Warehouse (or reverse)', 'total_distance_km': 65, 'total_fuel_cost': 130}",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 94740,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.95,
+              "duration_ms": 90284,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 125068,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 160217,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 4,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "The shortest route visiting all 4 locations and returning to the warehouse is W -> A -> B -> C -> D -> W (or reverse). The minimum total distance is 65 km, resulting in a total fuel cost of $130.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.95,
+              "duration_ms": 90247,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.98,
+              "duration_ms": 89683,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 94430,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 161509,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 5,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "{'shortest_route_distance': '65 km', 'optimal_route_example': 'Warehouse → A → B → C → D → Warehouse (or reverse)', 'total_fuel_cost': '$130'}",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.95,
+              "duration_ms": 83447,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.95,
+              "duration_ms": 94802,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 0.98,
+              "duration_ms": 103603,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 181690,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "math-03",
+      "objective": "연립방정식으로 풀어야 하는 문제를 단계적으로 풀어라.",
+      "expected_answer": "round=6, square=4, rectangular=5",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 21,
+          "actual_loops": 7,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "The problem statement contains inconsistent parameters. Based on the constraints (Total Tables = 15 and Rectangular = Round - 1), the Total Seats must be 88, not 96. \n\n**Solution:**\n*   Round tables (R, 4 seats): 5\n*   Square tables (S, 6 seats): 6\n*   Rectangular tables (T, 8 seats): 4\n\n**Verification (검산):**\n1.  **Total Tables:** $5 + 6 + 4 = 15$ (Matches)\n2.  **Total Seats:** $(5 \times 4) + (6 \times 6) + (4 \times 8) = 20 + 36 + 32 = 88$ (Matches the corrected total)\n3.  **Relationship:** $T = R - 1 \rightarrow 4 = 5 - 1$ (Matches)",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 0.95,
+              "duration_ms": 99012,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 0.98,
+              "duration_ms": 82587,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 0.95,
+              "duration_ms": 147061,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 0.95,
+              "duration_ms": 170760,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 0.95,
+              "duration_ms": 212189,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 0.9,
+              "duration_ms": 213120,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "CONVERGED",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 222966,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "The system of equations derived from the problem statement is mathematically inconsistent. \n\nLet R = round tables (4 seats), S = square tables (6 seats), T = rectangular tables (8 seats).\n\n1. Total Tables: R + S + T = 15\n2. Total Seats: 4R + 6S + 8T = 96\n3. Relationship: T = R - 1\n\nSubstituting (3) into (1) and (2):\n\nFrom (1): R + S + (R - 1) = 15 \rightarrow 2R + S = 16 \rightarrow S = 16 - 2R\n\nSubstitute S and T into (2):\n4R + 6(16 - 2R) + 8(R - 1) = 96\n4R + 96 - 12R + 8R - 8 = 96\n(4R - 12R + 8R) + (96 - 8) = 96\n0R + 88 = 96\n88 = 96\n\nSince 88 $\\neq$ 96, the system of equations is mathematically inconsistent. Therefore, there is no combination of tables that satisfies all three conditions simultaneously.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.95,
+              "duration_ms": 77332,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 6,
+              "confidence": 0.95,
+              "duration_ms": 81081,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 0.9,
+              "duration_ms": 162173,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 106095,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 21,
+          "actual_loops": 7,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 10,
+          "final_answer": "The problem statement is mathematically inconsistent. No combination of tables satisfies all three given conditions:\n\n1.  **Total Tables:** $R + S + T = 15$\n2.  **Total Seats:** $4R + 6S + 8T = 96$\n3.  **Relationship:** $T = R - 1$\n\n**Proof of Inconsistency:**\n*   Using (1) and (3): Substituting $T=R-1$ into (1) yields $R + S + (R-1) = 15$, which simplifies to $2R + S = 16$. This implies $S = 16 - 2R$.\n*   Now, substitute $T=R-1$ and $S=16-2R$ into (2):\n    $4R + 6(16 - 2R) + 8(R - 1) = 96$\n    $4R + 96 - 12R + 8R - 8 = 96$\n    $(4R - 12R + 8R) + (96 - 8) = 96$\n    $0R + 88 = 96$\n    $88 = 96 \text{ (False)}$\n\nSince $88 \neq 96$, the constraints provided in the problem statement cannot all be true simultaneously. Therefore, there is no solution for the number of tables.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 6,
+              "confidence": 0.95,
+              "duration_ms": 86030,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 7,
+              "confidence": 0.98,
+              "duration_ms": 83660,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 0.9,
+              "duration_ms": 163273,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 9,
+              "confidence": 0.9,
+              "duration_ms": 225180,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 10,
+              "confidence": 0.7,
+              "duration_ms": 290865,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 10,
+              "confidence": 0.7,
+              "duration_ms": 296508,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "CONVERGED",
+              "assertions": 10,
+              "confidence": 1.0,
+              "duration_ms": 196121,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 4,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "The system of equations derived from the problem statement is mathematically inconsistent. \n\nLet R = round tables (4 seats), S = square tables (6 seats), T = rectangular tables (8 seats).\n\nEquations:\n1. Total Tables: R + S + T = 15\n2. Total Seats: 4R + 6S + 8T = 96\n3. Relationship: T = R - 1\n\nSolving the system leads to the contradiction $88 = 96$. Therefore, there are no non-negative integer values for R, S, and T that satisfy all three conditions simultaneously. The problem statement contains conflicting information.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 71965,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 76272,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 0.9,
+              "duration_ms": 165001,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 103216,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 5,
+          "max_loops": 21,
+          "actual_loops": 7,
+          "final_phase": "CONVERGED",
+          "final_confidence": 0.7,
+          "total_assertions": 9,
+          "final_answer": "Based on the assumption that the numerical totals (15 and 96) are correct, and prioritizing the first valid integer solution found: R=1, S=10, T=4.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 84591,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 6,
+              "confidence": 0.9,
+              "duration_ms": 119044,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 0.95,
+              "duration_ms": 204190,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 0.9,
+              "duration_ms": 158533,
+              "error": null
+            },
+            {
+              "loop": 5,
+              "phase": "INVESTIGATE",
+              "assertions": 9,
+              "confidence": 0.95,
+              "duration_ms": 204988,
+              "error": null
+            },
+            {
+              "loop": 6,
+              "phase": "INVESTIGATE",
+              "assertions": 9,
+              "confidence": 0.9,
+              "duration_ms": 224039,
+              "error": null
+            },
+            {
+              "loop": 7,
+              "phase": "CONVERGED",
+              "assertions": 9,
+              "confidence": 0.7,
+              "duration_ms": 274985,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "logic-03",
+      "objective": "시간 순서 조건을 분석하여 각 이벤트의 요일을 결정하라.",
+      "expected_answer": "E=Monday, A=Tuesday, C=Thursday, D=Wednesday, B=Friday",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 2,
+          "final_answer": "The event schedule is as follows:\n*   Monday: Event E\n*   Tuesday: Event A\n*   Wednesday: Event D\n*   Thursday: Event C\n*   Friday: Event B",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 100709,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 314468,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 82661,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 48729,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 5,
+          "final_answer": "Event A occurred on Tuesday, Event B occurred on Friday, Event C occurred on Thursday, Event D occurred on Wednesday, and Event E occurred on Monday.",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 95361,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 170920,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 82773,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 60200,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 3,
+          "final_answer": "The final schedule is: Monday=E, Tuesday=A, Wednesday=D, Thursday=C, Friday=B. (Korean: 월요일=E, 화요일=A, 수요일=D, 목요일=C, 금요일=B)",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 106143,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 154935,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 95480,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 72135,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 4,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "{'A': 'Tuesday', 'B': 'Friday', 'C': 'Thursday', 'D': 'Wednesday', 'E': 'Monday'}",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.9,
+              "duration_ms": 191699,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 0.95,
+              "duration_ms": 95298,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 252202,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 69954,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 5,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": "The schedule is as follows:\n- Monday: Event E\n- Tuesday: Event A\n- Wednesday: Event D\n- Thursday: Event C\n- Friday: Event B",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 0.9,
+              "duration_ms": 114959,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 146639,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 83432,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 62113,
+              "error": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "synthesis-03",
+      "objective": "5명의 후보를 4가지 조건으로 평가하여 적격자를 선별하고 순위를 매겨라.",
+      "expected_answer": "Only David qualifies (8yr, $160k, Python+Go+JS, 1 week). Alice fails budget ($180k). Carol fails availability (1 month) and budget. Bob fails experience (7yr). Eve fails experience (6yr) and language requirement.",
+      "trials": [
+        {
+          "trial": 1,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 5,
+          "final_answer": "Based on the evaluation against the four requirements (1) Must know Python OR Go, (2) Salary budget max $170k/yr, (3) Must be available within 2 weeks, (4) At least 8 years of experience, the following candidates qualify:\n\n**Qualified Candidates:**\n*   David\n\n**Ranking (by years of experience, highest first):**\n1. David (8 years of experience)\n\n**Summary of Failures:**\n*   Alice failed due to salary ($180k > $170k).\n*   Bob failed due to insufficient experience (7yr < 8yr).\n*   Carol failed due to salary ($200k > $170k) and availability (1 month > 2 weeks).\n*   Eve failed due to insufficient experience (6yr < 8yr) and lacking required skills (Python OR Go).",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 74328,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 75459,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 157104,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 5,
+              "confidence": 1.0,
+              "duration_ms": 72063,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 2,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 4,
+          "final_answer": "Based on the evaluation of all five candidates against the four mandatory requirements:\n\n**Requirements:**\n1. Must know Python OR Go.\n2. Salary budget max $170k/yr.\n3. Must be available within 2 weeks.\n4. At least 8 years of experience.\n\n**Evaluation Summary:**\n*   **Alice:** Fails Requirement 2 ($180k > $170k).\n*   **Bob:** Fails Requirement 4 (7 years < 8 years).\n*   **Carol:** Fails Requirement 2 ($200k > $170k) and Requirement 3 (1 month > 2 weeks).\n*   **David:** Meets all requirements (Python+Go, $160k, 1 week, 8 years).\n*   **Eve:** Fails Requirement 1 (Does not know Python or Go) and Requirement 4 (6 years < 8 years).\n\n**Conclusion:**\nOnly David qualifies for the CTO role.\n\n**Ranked List of Qualified Candidates (Experience Descending):**\n1. David (8 years)\n\n(Note: Since only one candidate qualifies, the ranking is straightforward.)",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 65221,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 80451,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 121699,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 4,
+              "confidence": 1.0,
+              "duration_ms": 90030,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 3,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 7,
+          "final_answer": "Based on the evaluation against the four requirements (1) Must know Python OR Go, (2) Salary budget max $170k/yr, (3) Must be available within 2 weeks, (4) At least 8 years of experience, the following candidates were evaluated:\n\n*   **Alice:** Failed (Salary $180k exceeds budget).\n*   **Bob:** Failed (Experience 7 years is below the 8-year minimum).\n*   **Carol:** Failed (Salary $200k exceeds budget AND Availability is too long).\n*   **David:** Passed all criteria.\n*   **Eve:** Failed (Does not meet the required tech stack AND Experience is too low).\n\n**Conclusion:**\n\nOnly **David** qualifies for the CTO role.\n\n**Ranking (by Experience, Highest First):**\n1. David (8 years of experience)",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 69632,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 80849,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 154078,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 7,
+              "confidence": 1.0,
+              "duration_ms": 65757,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 4,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 3,
+          "final_answer": "Based on the evaluation of the five candidates against the four mandatory requirements:\n\n**Requirements:**\n1. Skills: Must know Python OR Go.\n2. Salary: Budget max $170k/yr.\n3. Availability: Must be available within 2 weeks.\n4. Experience: At least 8 years of experience.\n\n**Evaluation Summary:**\n*   **Alice:** Fails Salary ($180k > $170k).\n*   **Bob:** Fails Experience (7yr < 8yr).\n*   **Carol:** Fails Availability (1 month > 2 weeks).\n*   **David:** **QUALIFIES** (Experience: 8yr $\\ge 8$yr; Salary: $160k $\\le $170k; Availability: 1 week $\\le 2$ weeks; Skills: Python+Go+JS contains Python and Go).\n*   **Eve:** Fails Experience (6yr < 8yr).\n\n**Conclusion:**\nOnly David qualifies for the CTO role.\n\n**Ranked List (Highest Experience First):**\n1. David (8 years of experience)",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 2,
+              "confidence": 1.0,
+              "duration_ms": 78355,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 80886,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 134991,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 3,
+              "confidence": 1.0,
+              "duration_ms": 82218,
+              "error": null
+            }
+          ]
+        },
+        {
+          "trial": 5,
+          "max_loops": 21,
+          "actual_loops": 4,
+          "final_phase": "CONVERGED",
+          "final_confidence": 1.0,
+          "total_assertions": 6,
+          "final_answer": "Based on the evaluation against the four requirements (1) Python OR Go, (2) Salary $\\le$ $170k/yr, (3) Available $\\le 2$ weeks, and (4) Experience $\\ge 8$ years, only one candidate qualifies:\n\n**Qualified Candidates:**\n*   **David**\n\n**Ranking by Experience (Highest First):**\n1.  David (8 years)\n\n**Summary of Failures:**\n*   **Alice:** Failed due to salary ($180k > $170k).\n*   **Bob:** Failed due to insufficient experience (7 years < 8 years).\n*   **Carol:** Failed due to salary ($200k > $170k).\n*   **Eve:** Failed due to insufficient experience (6 years < 8 years).",
+          "loop_details": [
+            {
+              "loop": 1,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 1.0,
+              "duration_ms": 73244,
+              "error": null
+            },
+            {
+              "loop": 2,
+              "phase": "DECOMPOSE",
+              "assertions": 1,
+              "confidence": 0.7,
+              "duration_ms": 78694,
+              "error": null
+            },
+            {
+              "loop": 3,
+              "phase": "INVESTIGATE",
+              "assertions": 6,
+              "confidence": 0.95,
+              "duration_ms": 125723,
+              "error": null
+            },
+            {
+              "loop": 4,
+              "phase": "CONVERGED",
+              "assertions": 6,
+              "confidence": 1.0,
+              "duration_ms": 80481,
+              "error": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
