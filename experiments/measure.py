@@ -212,6 +212,43 @@ def generate_markdown_report(analysis: dict) -> str:
         for t in analysis["tasks"]:
             conv = "✓" if t["converged"] else "✗"
             lines.append(f"| {t['task_id']} | {conv} | {t['score']:.2f} | {t['total_cycles']} |")
+    elif exp == "loop_saturation":
+        lines.append(f"> {analysis.get('note', '')}")
+        lines.append("")
+
+        # 포화 곡선 테이블
+        lines.append("## Loop Saturation Curve")
+        lines.append("")
+        lines.append("| MAX_CYCLES | Baseline 정답률 | Phase 정답률 | Delta | Baseline 수렴률 | Phase 수렴률 |")
+        lines.append("|------------|----------------|-------------|-------|-----------------|-------------|")
+        curve = analysis.get("saturation_curve", {})
+        baseline_curve = curve.get("baseline", {})
+        phase_curve = curve.get("phase", {})
+        delta_map = analysis.get("phase_prompt_delta", {})
+        for mc in sorted(set(list(baseline_curve.keys()) + list(phase_curve.keys()))):
+            b = baseline_curve.get(mc, {})
+            p = phase_curve.get(mc, {})
+            b_acc = f"{b.get('accuracy', 0):.1%}" if b else "N/A"
+            p_acc = f"{p.get('accuracy', 0):.1%}" if p else "N/A"
+            delta = delta_map.get(mc)
+            delta_str = f"{delta:+.1%}" if delta is not None else "N/A"
+            b_conv = f"{b.get('convergence', 0):.1%}" if b else "N/A"
+            p_conv = f"{p.get('convergence', 0):.1%}" if p else "N/A"
+            lines.append(f"| {mc} | {b_acc} | {p_acc} | {delta_str} | {b_conv} | {p_conv} |")
+
+        lines.append("")
+
+        # 고난도 태스크 테이블
+        new_results = analysis.get("new_task_results", {})
+        if new_results:
+            lines.append("## High-Difficulty Tasks (04)")
+            lines.append("")
+            lines.append("| Task | Best Accuracy | Best Condition |")
+            lines.append("|------|--------------|---------------|")
+            for tid in sorted(new_results.keys()):
+                r = new_results[tid]
+                lines.append(f"| {tid} | {r['best_accuracy']:.1%} | {r['best_condition']} |")
+
     return "\n".join(lines)
 
 def analyze_loop_saturation(data: dict, task_map: dict = None) -> dict:
