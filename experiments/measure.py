@@ -243,11 +243,12 @@ def generate_markdown_report(analysis: dict) -> str:
         if new_results:
             lines.append("## High-Difficulty Tasks (04)")
             lines.append("")
-            lines.append("| Task | Best Accuracy | Best Condition |")
-            lines.append("|------|--------------|---------------|")
+            lines.append("| Task | Best Accuracy | Best Condition | Avg Cycles |")
+            lines.append("|------|--------------|---------------|------------|")
             for tid in sorted(new_results.keys()):
                 r = new_results[tid]
-                lines.append(f"| {tid} | {r['best_accuracy']:.1%} | {r['best_condition']} |")
+                avg_cyc = r.get("best_condition_avg_cycles", 0.0)
+                lines.append(f"| {tid} | {r['best_accuracy']:.1%} | {r['best_condition']} | {avg_cyc:.1f} |")
 
     return "\n".join(lines)
 
@@ -329,13 +330,16 @@ def analyze_loop_saturation(data: dict, task_map: dict = None) -> dict:
             continue
         best_acc = 0.0
         best_cond = ""
+        best_cond_avg_cycles = 0.0
         for lbl, stats in per_task[tid].items():
             if stats["accuracy"] > best_acc:
                 best_acc = stats["accuracy"]
                 best_cond = lbl
+                best_cond_avg_cycles = stats["avg_cycles"]
         new_task_results[tid] = {
             "best_accuracy": best_acc,
             "best_condition": best_cond,
+            "best_condition_avg_cycles": best_cond_avg_cycles,
         }
 
     return {
