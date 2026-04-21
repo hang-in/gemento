@@ -42,12 +42,34 @@ def score_answer(response: str, expected: str) -> float:
     return 0.0
 
 
+def score_answer_v2(response: str, task_entry: dict) -> float:
+    """
+    keyword-group 기반 채점.
+    scoring_keywords: [[token, ...], ...]
+    각 그룹의 모든 토큰이 response에 포함되면 해당 그룹 매칭.
+    점수 = 매칭된 그룹 수 / 전체 그룹 수
+    scoring_keywords 없으면 score_answer(v1) fallback.
+    """
+    keywords = task_entry.get("scoring_keywords")
+    if not keywords:
+        return score_answer(response, task_entry.get("expected_answer", ""))
+
+    response_lower = response.lower()
+    matched = sum(
+        1 for group in keywords
+        if all(token.lower() in response_lower for token in group)
+    )
+    return matched / len(keywords)
+
+
 # ── 실험별 분석 로직 ──
 
-def analyze_baseline(data: dict) -> dict:
+def analyze_baseline(data: dict, task_map: dict = None) -> dict:
     summary = {"experiment": "baseline", "tasks": []}
+    task_map = task_map or {}
     for tr in data["results"]:
-        scores = [score_answer(t["response"], tr.get("expected_answer", "")) for t in tr["trials"] if not t.get("error")]
+        task_entry = task_map.get(tr["task_id"], tr)
+        scores = [score_answer_v2(t["response"], task_entry) for t in tr["trials"] if not t.get("error")]
         summary["tasks"].append({
             "task_id": tr["task_id"],
             "avg_score": sum(scores) / len(scores) if scores else 0,
@@ -57,12 +79,14 @@ def analyze_baseline(data: dict) -> dict:
     summary["overall_avg_score"] = sum(all_scores) / len(all_scores) if all_scores else 0
     return summary
 
-def analyze_multiloop(data: dict) -> dict:
+def analyze_multiloop(data: dict, task_map: dict = None) -> dict:
     summary = {"experiment": "multiloop", "by_loops": defaultdict(list)}
+    task_map = task_map or {}
     for tr in data["results"]:
         max_loops = tr["max_loops"]
+        task_entry = task_map.get(tr["task_id"], tr)
         for trial in tr["trials"]:
-            score = score_answer(str(trial.get("final_answer", "")), tr.get("expected_answer", ""))
+            score = score_answer_v2(str(trial.get("final_answer", "")), task_entry)
             summary["by_loops"][max_loops].append({"score": score, "converged": trial["final_phase"] == "CONVERGED"})
     
     loop_summary = []
@@ -75,11 +99,13 @@ def analyze_multiloop(data: dict) -> dict:
         })
     return {"experiment": "multiloop", "loop_analysis": loop_summary}
 
-def analyze_abc_pipeline(data: dict) -> dict:
+def analyze_abc_pipeline(data: dict, task_map: dict = None) -> dict:
     summary = {"experiment": "abc_pipeline", "tasks": []}
+    task_map = task_map or {}
     for tr in data["results"]:
+        task_entry = task_map.get(tr["task_id"], tr)
         for trial in tr["trials"]:
-            score = score_answer(str(trial.get("final_answer", "")), tr.get("expected_answer", ""))
+            score = score_answer_v2(str(trial.get("final_answer", "")), task_entry)
             summary["tasks"].append({
                 "task_id": tr["task_id"],
                 "trial": trial["trial"],
@@ -134,11 +160,13 @@ def analyze_handoff_protocol(data: dict) -> dict:
     summary["overall_avg_backprop_accuracy"] = sum(task_backprop_scores) / len(task_backprop_scores) if task_backprop_scores else 0
     return summary
 
-def analyze_solo_budget(data: dict) -> dict:
+def analyze_solo_budget(data: dict, task_map: dict = None) -> dict:
     summary = {"experiment": "solo_budget", "tasks": []}
+    task_map = task_map or {}
     for tr in data["results"]:
+        task_entry = task_map.get(tr["task_id"], tr)
         for trial in tr["trials"]:
-            score = score_answer(str(trial.get("final_answer", "")), tr.get("expected_answer", ""))
+            score = score_answer_v2(str(trial.get("final_answer", "")), task_entry)
             summary["tasks"].append({
                 "task_id": tr["task_id"],
                 "trial": trial["trial"],
@@ -186,30 +214,210 @@ def generate_markdown_report(analysis: dict) -> str:
             lines.append(f"| {t['task_id']} | {conv} | {t['score']:.2f} | {t['total_cycles']} |")
     return "\n".join(lines)
 
+def analyze_loop_saturation(data: dict, task_map: dict = None) -> dict:
+    """실험 7: Loop Saturation + Loop-Phase 분석."""
+    task_map = task_map or {}
+    results_by_condition = data.get("results_by_condition", {})
+
+    # 조건별 집계: {label: {max_cycles, use_phase_prompt, accuracy, convergence, avg_cycles}}
+    condition_stats: dict[str, dict] = {}
+    per_task: dict[str, dict[str, dict]] = {}
+
+    for label, task_list in results_by_condition.items():
+        scores, converged_flags, cycle_counts = [], [], []
+
+        for tr in task_list:
+            task_entry = task_map.get(tr["task_id"], tr)
+            task_id = tr["task_id"]
+            if task_id not in per_task:
+                per_task[task_id] = {}
+
+            t_scores, t_cycles, t_conv = [], [], []
+            for trial in tr.get("trials", []):
+                s = score_answer_v2(str(trial.get("final_answer", "")), task_entry)
+                conv = trial.get("final_phase") == "CONVERGED"
+                cyc = trial.get("actual_cycles", 0)
+                scores.append(s)
+                converged_flags.append(conv)
+                cycle_counts.append(cyc)
+                t_scores.append(s)
+                t_conv.append(conv)
+                t_cycles.append(cyc)
+
+            per_task[task_id][label] = {
+                "accuracy": sum(t_scores) / len(t_scores) if t_scores else 0.0,
+                "convergence": sum(t_conv) / len(t_conv) if t_conv else 0.0,
+                "avg_cycles": sum(t_cycles) / len(t_cycles) if t_cycles else 0.0,
+            }
+
+        # 조건 메타 파싱 (label 형식: baseline_8 / phase_20)
+        parts = label.split("_")
+        use_phase = parts[0] == "phase"
+        max_cyc = int(parts[-1])
+
+        condition_stats[label] = {
+            "max_cycles": max_cyc,
+            "use_phase_prompt": use_phase,
+            "accuracy": sum(scores) / len(scores) if scores else 0.0,
+            "convergence": sum(converged_flags) / len(converged_flags) if converged_flags else 0.0,
+            "avg_cycles": sum(cycle_counts) / len(cycle_counts) if cycle_counts else 0.0,
+        }
+
+    # 포화 곡선: baseline vs phase 각 max_cycles별 집계
+    max_cycles_values = sorted({v["max_cycles"] for v in condition_stats.values()})
+    saturation_curve: dict[str, dict] = {"baseline": {}, "phase": {}}
+    for mc in max_cycles_values:
+        for prompt_type in ("baseline", "phase"):
+            lbl = f"{prompt_type}_{mc}"
+            if lbl in condition_stats:
+                saturation_curve[prompt_type][mc] = {
+                    "accuracy": condition_stats[lbl]["accuracy"],
+                    "convergence": condition_stats[lbl]["convergence"],
+                    "avg_cycles": condition_stats[lbl]["avg_cycles"],
+                }
+
+    # phase - baseline 정답률 델타
+    phase_delta: dict[int, float] = {}
+    for mc in max_cycles_values:
+        b = saturation_curve["baseline"].get(mc, {}).get("accuracy", 0.0)
+        p = saturation_curve["phase"].get(mc, {}).get("accuracy", 0.0)
+        if f"baseline_{mc}" in condition_stats and f"phase_{mc}" in condition_stats:
+            phase_delta[mc] = round(p - b, 4)
+
+    # 신규 04급 태스크 결과
+    new_task_ids = {"math-04", "logic-04", "synthesis-04"}
+    new_task_results: dict[str, dict] = {}
+    for tid in new_task_ids:
+        if tid not in per_task:
+            continue
+        best_acc = 0.0
+        best_cond = ""
+        for lbl, stats in per_task[tid].items():
+            if stats["accuracy"] > best_acc:
+                best_acc = stats["accuracy"]
+                best_cond = lbl
+        new_task_results[tid] = {
+            "best_accuracy": best_acc,
+            "best_condition": best_cond,
+        }
+
+    return {
+        "experiment": "loop_saturation",
+        "note": "n=3 per condition per task — interpret with caution",
+        "saturation_curve": saturation_curve,
+        "condition_stats": condition_stats,
+        "per_task": per_task,
+        "phase_prompt_delta": phase_delta,
+        "new_task_results": new_task_results,
+    }
+
+
 ANALYZERS = {
     "baseline": analyze_baseline,
     "multiloop": analyze_multiloop,
     "abc_pipeline": analyze_abc_pipeline,
     "handoff_protocol": analyze_handoff_protocol,
     "solo_budget": analyze_solo_budget,
+    "loop_saturation": analyze_loop_saturation,
 }
+
+
+def rescore_all(results_dir: Path, task_map: dict):
+    """
+    results/ 디렉토리의 모든 JSON을 v1/v2로 재채점하여 비교표 출력.
+    결과 JSON은 수정하지 않는다 (읽기 전용).
+    """
+    import glob as _glob
+
+    # 실험 타입별 최신 파일 결정
+    type_to_files: dict[str, list] = {}
+    for path in sorted(results_dir.glob("*.json")):
+        try:
+            data = load_result(str(path))
+        except Exception as e:
+            print(f"[warn] skip {path.name}: {e}", file=sys.stderr)
+            continue
+        exp_type = data.get("experiment", "unknown")
+        type_to_files.setdefault(exp_type, []).append((path, data))
+
+    # 모든 실험 타입을 v1/v2로 재채점한다.
+    SKIP_TYPES: set[str] = set()
+
+    print(f"\n{'═' * 51}")
+    print("  Rescore 결과 비교 (v1 substring vs v2 keyword)")
+    print(f"{'═' * 51}")
+    print(f"  {'파일명':<35} {'v1 avg':>7} {'v2 avg':>7} {'diff':>8}")
+    print(f"  {'-' * 49}")
+
+    for exp_type, entries in sorted(type_to_files.items()):
+        if exp_type in SKIP_TYPES:
+            path = entries[-1][0]
+            print(f"  {path.name:<35} {'N/A':>7} {'N/A':>7} {'(skip)':>8}")
+            continue
+
+        path, data = entries[-1]  # 가장 최신
+
+        def _score_trials(score_fn):
+            scores = []
+            for tr in data.get("results", []):
+                task_entry_v2 = task_map.get(tr["task_id"], tr)
+                for trial in tr.get("trials", []):
+                    if exp_type == "baseline":
+                        resp = trial.get("response", "")
+                    else:
+                        resp = str(trial.get("final_answer", ""))
+                    scores.append(score_fn(resp, tr, task_entry_v2))
+            return sum(scores) / len(scores) if scores else 0.0
+
+        v1_avg = _score_trials(lambda r, tr, _: score_answer(r, tr.get("expected_answer", "")))
+        v2_avg = _score_trials(lambda r, _, te: score_answer_v2(r, te))
+        diff = v2_avg - v1_avg
+        sign = "+" if diff >= 0 else ""
+        print(f"  {path.name:<35} {v1_avg:>7.3f} {v2_avg:>7.3f} {sign}{diff*100:>6.1f}%")
+
+    print()
+
+
+def load_task_map() -> dict:
+    taskset_path = Path(__file__).parent / "tasks" / "taskset.json"
+    if not taskset_path.exists():
+        print(f"[warn] taskset.json not found at {taskset_path}, falling back to v1 scoring", file=sys.stderr)
+        return {}
+    with open(taskset_path) as f:
+        ts = json.load(f)
+    return {t["id"]: t for t in ts.get("tasks", [])}
+
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("result_file")
+    parser.add_argument("result_file", nargs="?", help="단일 파일 분석")
     parser.add_argument("--markdown", action="store_true")
+    parser.add_argument("--rescore", action="store_true", help="전체 결과 재채점 비교")
     args = parser.parse_args()
 
-    import glob
-    matches = sorted(glob.glob(args.result_file))
-    if not matches: return
-    
-    data = load_result(matches[-1])
-    exp_type = data["experiment"]
-    if exp_type in ANALYZERS:
-        analysis = ANALYZERS[exp_type](data)
-        print_report(analysis)
-        if args.markdown: print("\n" + generate_markdown_report(analysis))
+    task_map = load_task_map()
+
+    if args.rescore:
+        rescore_all(Path(__file__).parent / "results", task_map)
+    elif args.result_file:
+        import glob
+        matches = sorted(glob.glob(args.result_file))
+        if not matches:
+            return
+
+        data = load_result(matches[-1])
+        exp_type = data["experiment"]
+        if exp_type in ANALYZERS:
+            analyzer = ANALYZERS[exp_type]
+            if exp_type == "handoff_protocol":
+                analysis = analyzer(data)
+            else:
+                analysis = analyzer(data, task_map)
+            print_report(analysis)
+            if args.markdown:
+                print("\n" + generate_markdown_report(analysis))
+    else:
+        parser.print_help()
 
 if __name__ == "__main__":
     main()

@@ -9,6 +9,7 @@
       "objective": "주어진 수학 문제를 단계적으로 풀어라.",
       "prompt": "A store sells apples at $2 each and oranges at $3 each. A customer buys some apples and oranges, spending exactly $47. The customer buys more apples than oranges. The total number of fruits is 20. How many apples and how many oranges did the customer buy?",
       "expected_answer": "13 apples and 7 oranges",
+      "scoring_keywords": [["13", "apples"], ["7", "oranges"]],
       "constraints": ["정확한 숫자를 구해야 한다", "검산을 해야 한다"],
       "prefab_assertions": [
         "Let a = number of apples, o = number of oranges",
@@ -43,6 +44,7 @@
       "objective": "논리 퍼즐을 단계적으로 풀어라.",
       "prompt": "There are 5 houses in a row, each painted a different color: red, green, blue, yellow, white. Each house is occupied by a person of a different nationality. We know:\n1. The English person lives in the red house.\n2. The Spanish person lives in the house next to the blue house.\n3. The Japanese person lives in the rightmost house.\n4. The blue house is between the yellow house and the green house.\n5. The French person lives in the yellow house.\nWhat is the nationality of the person in the green house?",
       "expected_answer": "Spanish",
+      "scoring_keywords": [["spanish"]],
       "constraints": ["모든 단서를 활용해야 한다", "모순이 없어야 한다"],
       "prefab_assertions": [
         "House positions: 1(leftmost) to 5(rightmost)",
@@ -73,6 +75,7 @@
       "objective": "여러 정보를 종합하여 결론을 도출하라.",
       "prompt": "A company is deciding between three cloud providers for their new service:\n- Provider A: $0.10/hour, 99.9% uptime SLA, 5 data center regions\n- Provider B: $0.08/hour, 99.5% uptime SLA, 12 data center regions\n- Provider C: $0.15/hour, 99.99% uptime SLA, 3 data center regions\n\nThe company needs: (1) at least 99.9% uptime, (2) presence in at least 4 regions, (3) monthly budget under $800 for 24/7 operation.\n\nWhich provider(s) meet all requirements? Show your analysis.",
       "expected_answer": "Only Provider A meets all three requirements.",
+      "scoring_keywords": [["provider a", "only"]],
       "constraints": ["모든 요구사항을 체크해야 한다", "계산이 정확해야 한다"],
       "prefab_assertions": [
         "Monthly hours = 24 * 30 = 720 hours",
@@ -103,6 +106,7 @@
       "objective": "여러 단계의 계산이 필요한 문제를 풀어라.",
       "prompt": "A rectangular garden has a perimeter of 56 meters. A diagonal path across the garden is 20 meters long. What is the area of the garden?",
       "expected_answer": "192 square meters",
+      "scoring_keywords": [["192"]],
       "constraints": ["피타고라스 정리를 사용해야 한다", "검산 필수"],
       "prefab_assertions": [
         "Let length = l, width = w",
@@ -133,6 +137,7 @@
       "objective": "조건부 추론 문제를 단계적으로 풀어라.",
       "prompt": "In a group of 100 people:\n- 70 people speak English\n- 50 people speak French\n- 30 people speak German\n- 25 people speak both English and French\n- 15 people speak both English and German\n- 10 people speak both French and German\n- 5 people speak all three languages\n\nHow many people speak none of the three languages?",
       "expected_answer": "0 people speak none of the three languages (data is inconsistent: inclusion-exclusion gives 105 > 100).",
+      "scoring_keywords": [["105", "inconsistent"], ["0"]],
       "constraints": ["포함-배제 원리를 사용해야 한다"],
       "prefab_assertions": [
         "Using inclusion-exclusion principle for three sets",
@@ -163,6 +168,7 @@
       "objective": "여러 조건을 분석하여 최적 선택을 결정하라.",
       "prompt": "A delivery company needs to choose a route for daily deliveries to 4 locations from a warehouse.\n\nDistances (km):\n- Warehouse → A: 10\n- Warehouse → B: 15\n- Warehouse → C: 20\n- Warehouse → D: 25\n- A → B: 8\n- A → C: 18\n- A → D: 22\n- B → C: 12\n- B → D: 20\n- C → D: 10\n\nThe truck must visit all 4 locations and return to the warehouse. Fuel costs $2/km. Find the shortest route and its total fuel cost.",
       "expected_answer": "Warehouse→A→B→C→D→Warehouse: 65km, $130",
+      "scoring_keywords": [["65"], ["130"]],
       "constraints": ["모든 가능한 경로를 비교해야 한다"],
       "prefab_assertions": [
         "This is a Traveling Salesman Problem (TSP) with 4 cities",
@@ -195,6 +201,7 @@
       "objective": "연립방정식으로 풀어야 하는 문제를 단계적으로 풀어라.",
       "prompt": "A school has 3 types of tables: round (seats 4), square (seats 6), and rectangular (seats 8). The total number of tables is 15. The total number of seats is 96. The number of rectangular tables equals the number of round tables minus 1. How many of each type of table are there?",
       "expected_answer": "round=6, square=4, rectangular=5",
+      "scoring_keywords": [["6"], ["4"], ["5"]],
       "constraints": ["연립방정식을 세워야 한다", "모든 값은 양의 정수여야 한다", "검산 필수"],
       "prefab_assertions": [],
       "fault_injections": []
@@ -206,6 +213,7 @@
       "objective": "시간 순서 조건을 분석하여 각 이벤트의 요일을 결정하라.",
       "prompt": "Five events (A, B, C, D, E) happened on different days of the week (Monday to Friday, one event per day). Clues:\n1. Event A happened before Event C, with exactly one day between them.\n2. Event D happened on Wednesday.\n3. Event B happened after Event D.\n4. Event E happened on the day immediately before Event A.\n5. Event C did not happen on Friday.\nWhat day did each event occur?",
       "expected_answer": "E=Monday, A=Tuesday, C=Thursday, D=Wednesday, B=Friday",
+      "scoring_keywords": [["monday", "e"], ["tuesday", "a"], ["wednesday", "d"], ["thursday", "c"], ["friday", "b"]],
       "constraints": ["모든 단서를 활용해야 한다", "모순 없이 배치해야 한다", "5일에 정확히 1개씩 배치해야 한다"],
       "prefab_assertions": [],
       "fault_injections": []
@@ -217,7 +225,44 @@
       "objective": "5명의 후보를 4가지 조건으로 평가하여 적격자를 선별하고 순위를 매겨라.",
       "prompt": "A startup needs to hire a CTO. Five candidates:\n- Alice: 10yr exp, asks $180k/yr, knows Python+Go, available in 2 weeks\n- Bob: 7yr exp, asks $140k/yr, knows Python+JS, available immediately\n- Carol: 12yr exp, asks $200k/yr, knows Go+Rust, available in 1 month\n- David: 8yr exp, asks $160k/yr, knows Python+Go+JS, available in 1 week\n- Eve: 6yr exp, asks $130k/yr, knows JS+Rust, available immediately\n\nRequirements: (1) Must know Python OR Go, (2) Salary budget max $170k/yr, (3) Must be available within 2 weeks, (4) At least 8 years of experience.\n\nWhich candidates qualify? Among qualified candidates, rank them by years of experience (highest first).",
       "expected_answer": "Only David qualifies (8yr, $160k, Python+Go+JS, 1 week). Alice fails budget ($180k). Carol fails availability (1 month) and budget. Bob fails experience (7yr). Eve fails experience (6yr) and language requirement.",
+      "scoring_keywords": [["david"], ["alice", "180"], ["bob", "7"]],
       "constraints": ["모든 후보를 모든 조건에 대해 체크해야 한다", "탈락 이유를 명시해야 한다", "적격자를 경력 순으로 정렬해야 한다"],
+      "prefab_assertions": [],
+      "fault_injections": []
+    },
+    {
+      "id": "math-04",
+      "category": "math",
+      "difficulty": "very_hard",
+      "objective": "제약 조건이 있는 최적화 문제를 단계적으로 풀어라.",
+      "prompt": "A factory produces three products X, Y, Z. Each unit of X requires 2 hours of labor and 3 kg of material. Each unit of Y requires 3 hours of labor and 2 kg of material. Each unit of Z requires 4 hours of labor and 1 kg of material. Available: 240 hours of labor and 150 kg of material per week. Profit per unit: X=$50, Y=$40, Z=$30. Additionally, the factory must produce at least 10 units of each product. What production plan maximizes weekly profit? Find the exact quantities.",
+      "expected_answer": "X=30, Y=30, Z=10, profit=$2800",
+      "scoring_keywords": [["30"], ["2800"]],
+      "constraints": ["모든 제약 조건을 명시해야 한다", "가능 영역 경계점을 검사해야 한다", "검산 필수"],
+      "prefab_assertions": [],
+      "fault_injections": []
+    },
+    {
+      "id": "logic-04",
+      "category": "logic",
+      "difficulty": "very_hard",
+      "objective": "각 인물의 진실/거짓을 판별하고 범인을 찾아라.",
+      "prompt": "A crime was committed by exactly one of four suspects: Alex, Blake, Casey, Dana. Each makes two statements:\n\nAlex: 'I didn't do it.' 'Blake did it.'\nBlake: 'I didn't do it.' 'Casey did it.'\nCasey: 'I didn't do it.' 'I was at home all day.'\nDana: 'I didn't do it.' 'Alex is lying about Blake.'\n\nRules: The guilty person lies in BOTH statements. Each innocent person tells the truth in EXACTLY ONE of their two statements. Who committed the crime?",
+      "expected_answer": "Casey committed the crime",
+      "scoring_keywords": [["casey"]],
+      "constraints": ["각 인물의 두 진술을 모두 분석해야 한다", "가정 후 모순 검증(귀류법)을 사용해야 한다", "모든 4명을 테스트해야 한다"],
+      "prefab_assertions": [],
+      "fault_injections": []
+    },
+    {
+      "id": "synthesis-04",
+      "category": "information_synthesis",
+      "difficulty": "very_hard",
+      "objective": "6개의 데이터 소스를 교차 검증하여 모순을 식별하고 가장 신뢰할 수 있는 결론을 도출하라.",
+      "prompt": "A research team is investigating the population of a rare bird species in a region. Six reports:\n\nReport 1 (2024 field survey): 'Counted 340 individuals in 5 zones. Zone A: 80, Zone B: 65, Zone C: 70, Zone D: 55, Zone E: 70.'\nReport 2 (satellite imagery, 2024): 'Estimated 400±50 individuals based on nest counts.'\nReport 3 (local ranger, 2024): 'Population has declined 20% since 2020 when it was 500.'\nReport 4 (university study, 2023): 'Population was 380 in 2023 with 5% annual growth expected.'\nReport 5 (conservation NGO, 2024): 'Zone C was destroyed by wildfire in early 2024. No birds remain in Zone C.'\nReport 6 (government census, 2024): 'Total population across all zones: 350. Zone C: 60 individuals.'\n\nIdentify all contradictions between reports. Which reports are most likely reliable? What is the best estimate of the current population?",
+      "expected_answer": "Reports 5 and 6 contradict on Zone C (0 vs 60). Reports 1 and 6 conflict on total (340 vs 350). Report 3 implies 400 (500×0.8) which aligns with Report 2. Report 4 predicts 399 (380×1.05) for 2024. If Zone C is destroyed (Report 5), adjusted Report 1 total = 340-70 = 270. Best estimate: 270-280 (field survey minus destroyed zone).",
+      "scoring_keywords": [["270"], ["contradict", "zone c"], ["report 5", "report 6"]],
+      "constraints": ["모든 6개 보고서를 분석해야 한다", "보고서 간 모순을 명시적으로 나열해야 한다", "신뢰도 판단 근거를 제시해야 한다", "최종 추정치에 계산 과정을 포함해야 한다"],
       "prefab_assertions": [],
       "fault_injections": []
     }

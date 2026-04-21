@@ -4,7 +4,8 @@ Reference document index.
 
 ## 종합
 
-- [experimentSummary.md](experimentSummary.md) — **실험 종합 보고서** (H1 채택, H2 기각, A-B-C 직렬 구조 성립)
+- [researchNotebook.md](researchNotebook.md) — **연구 노트** (육하원칙 기반, 증분형 — Exp00~06 + 채점 V2)
+- [experimentSummary.md](experimentSummary.md) — 실험 종합 보고서 (04-10 기준, `superseded_by: researchNotebook.md`)
 
 ## 설계
 
@@ -14,6 +15,7 @@ Reference document index.
 
 - [handoff-to-gemini-exp5b.md](handoff-to-gemini-exp5b.md) — Gemini 인계: 실험 5b 태스크 스케일업 지시서
 - [handoff-to-gemini-exp6.md](handoff-to-gemini-exp6.md) — Gemini 인계: 실험 6 Solo vs ABC 시너지 측정
+- [handoff-to-gemini-exp7.md](handoff-to-gemini-exp7.md) — Gemini 인계: 실험 7 Loop Saturation + Loop-Phase
 
 ## 실험 결과
 

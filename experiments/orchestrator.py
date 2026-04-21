@@ -241,7 +241,11 @@ class LoopLog:
     error: str | None = None
 
 
-def run_loop(tattoo: Tattoo, loop_index: int) -> tuple[Tattoo, LoopLog, str | None]:
+def run_loop(
+    tattoo: Tattoo,
+    loop_index: int,
+    phase_prompt_args: tuple[int, int] | None = None,
+) -> tuple[Tattoo, LoopLog, str | None]:
     """단일 루프를 실행한다."""
     selected = select_assertions(tattoo)
     display_tattoo = Tattoo(
@@ -262,7 +266,11 @@ def run_loop(tattoo: Tattoo, loop_index: int) -> tuple[Tattoo, LoopLog, str | No
         confidence=tattoo.confidence,
     )
     tattoo_json = display_tattoo.to_json()
-    messages = build_prompt(tattoo_json)
+    if phase_prompt_args is not None:
+        from system_prompt import build_prompt_with_phase
+        messages = build_prompt_with_phase(tattoo_json, cycle=phase_prompt_args[0], max_cycles=phase_prompt_args[1])
+    else:
+        messages = build_prompt(tattoo_json)
 
     start = time.time()
     error = None
@@ -416,6 +424,8 @@ def run_abc_chain(
     constraints: list[str] | None = None,
     termination: str = "모든 비판이 수렴하고 최종 답변이 확정되면 종료",
     logger=None,
+    max_cycles: int = MAX_TOTAL_CYCLES,
+    use_phase_prompt: bool = False,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -436,7 +446,7 @@ def run_abc_chain(
     cycles_in_current_phase = 0
     previous_critique = None
 
-    for cycle in range(1, MAX_TOTAL_CYCLES + 1):
+    for cycle in range(1, max_cycles + 1):
         phase_str = tattoo.phase.value
 
         # ── A: 제안자 ──
@@ -448,7 +458,8 @@ def run_abc_chain(
                   f"assertions={len(tattoo.active_assertions)} | "
                   f"confidence={tattoo.confidence:.2f}")
 
-        tattoo, a_log, answer = run_loop(tattoo, cycle)
+        phase_args = (cycle, max_cycles) if use_phase_prompt else None
+        tattoo, a_log, answer = run_loop(tattoo, cycle, phase_prompt_args=phase_args)
 
         if answer:
             final_answer = answer
@@ -469,11 +480,21 @@ def run_abc_chain(
 
         assertions_for_b = [a.to_dict() for a in tattoo.active_assertions]
         if assertions_for_b:
-            b_messages = build_critic_prompt(
-                prompt, 
-                assertions_for_b, 
-                handoff_a2b=tattoo.handoff_a2b.to_dict() if tattoo.handoff_a2b else None
-            )
+            if use_phase_prompt:
+                from system_prompt import build_critic_prompt_with_phase
+                b_messages = build_critic_prompt_with_phase(
+                    prompt,
+                    assertions_for_b,
+                    handoff_a2b=tattoo.handoff_a2b.to_dict() if tattoo.handoff_a2b else None,
+                    cycle=cycle,
+                    max_cycles=max_cycles,
+                )
+            else:
+                b_messages = build_critic_prompt(
+                    prompt,
+                    assertions_for_b,
+                    handoff_a2b=tattoo.handoff_a2b.to_dict() if tattoo.handoff_a2b else None,
+                )
             for attempt in range(2):
                 try:
                     b_raw = call_ollama(b_messages)
@@ -538,13 +559,26 @@ def run_abc_chain(
         c_raw = ""
         phase_transition = None
 
-        c_messages = build_judge_prompt(
-            problem=prompt,
-            current_phase=phase_str,
-            current_critique=current_critique,
-            previous_critique=previous_critique,
-            assertion_count=len(tattoo.active_assertions),
-        )
+        if use_phase_prompt:
+            from system_prompt import build_judge_prompt_with_phase
+            c_messages = build_judge_prompt_with_phase(
+                problem=prompt,
+                current_phase=phase_str,
+                current_critique=current_critique,
+                previous_critique=previous_critique,
+                assertion_count=len(tattoo.active_assertions),
+                handoff_b2c=tattoo.handoff_b2c.to_dict() if tattoo.handoff_b2c else None,
+                cycle=cycle,
+                max_cycles=max_cycles,
+            )
+        else:
+            c_messages = build_judge_prompt(
+                problem=prompt,
+                current_phase=phase_str,
+                current_critique=current_critique,
+                previous_critique=previous_critique,
+                assertion_count=len(tattoo.active_assertions),
+            )
 
         for attempt in range(2):
             try:
@@ -675,5 +709,5 @@ def run_abc_chain(
             print(f"  ✓ Converged at cycle {cycle}")
             return tattoo, logs, final_answer
 
-    print(f"  ⚠ Max cycles ({MAX_TOTAL_CYCLES}) reached without convergence")
+    print(f"  ⚠ Max cycles ({max_cycles}) reached without convergence")
     return tattoo, logs, final_answer

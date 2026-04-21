@@ -195,3 +195,141 @@ def build_judge_prompt(
     messages.append({"role": "user", "content": user_content})
 
     return messages
+
+
+# ── Loop-Phase 프롬프트 (실험 7) ──
+
+def _get_phase_mode(cycle: int, max_cycles: int) -> str:
+    """현재 사이클에 따라 탐색/정제/커밋 모드를 반환한다."""
+    import math
+    if cycle <= math.ceil(max_cycles * 0.33):
+        return "explore"
+    elif cycle <= math.ceil(max_cycles * 0.66):
+        return "refine"
+    else:
+        return "commit"
+
+
+def build_prompt_with_phase(
+    tattoo_json: str,
+    cycle: int,
+    max_cycles: int,
+    tool_results: str | None = None,
+) -> list[dict]:
+    """Loop-Phase 인식 버전의 Agent A 프롬프트를 생성한다."""
+    mode = _get_phase_mode(cycle, max_cycles)
+
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+    ]
+
+    user_content = f"## Current Tattoo\n\n```json\n{tattoo_json}\n```"
+
+    if tool_results:
+        user_content += f"\n\n## Tool Results\n\n{tool_results}"
+
+    user_content += f"""
+
+## Loop Progress
+You are in cycle {cycle}/{max_cycles}. Mode: {mode}.
+
+### Mode instructions
+- explore: Generate diverse hypotheses. Explore multiple approaches. Do NOT converge early.
+- refine: Narrow down hypotheses. Eliminate weak evidence. Reduce open_questions.
+- commit: Finalize your answer. Close ALL remaining open_questions. You MUST set final_answer if possible.
+
+Follow the next_directive and output the JSON response."""
+
+    messages.append({"role": "user", "content": user_content})
+
+    return messages
+
+
+def build_critic_prompt_with_phase(
+    problem: str,
+    assertions: list[dict],
+    handoff_a2b: dict | None,
+    cycle: int,
+    max_cycles: int,
+) -> list[dict]:
+    """Loop-Phase 인식 버전의 Agent B 프롬프트를 생성한다."""
+    import json
+    mode = _get_phase_mode(cycle, max_cycles)
+
+    messages = [
+        {"role": "system", "content": CRITIC_PROMPT},
+    ]
+
+    user_content = f"## Problem\n\n{problem}\n\n"
+
+    if handoff_a2b:
+        user_content += f"## Handoff from Architect (A2B)\n\n```json\n{json.dumps(handoff_a2b, indent=2, ensure_ascii=False)}\n```\n\n"
+
+    user_content += f"## Assertions to review\n\n```json\n{json.dumps(assertions, indent=2, ensure_ascii=False)}\n```"
+
+    user_content += f"""
+
+## Loop Progress
+Cycle {cycle}/{max_cycles}. Mode: {mode}.
+
+### Mode instructions for critic
+- explore: Focus on finding logical gaps and unstated assumptions. Be aggressive.
+- refine: Focus on eliminating remaining uncertainties. Challenge weak assertions.
+- commit: Final verification pass. Identify any remaining errors before convergence.
+
+Follow the Architect's handoff and judge each assertion. Output the JSON response."""
+
+    messages.append({"role": "user", "content": user_content})
+
+    return messages
+
+
+def build_judge_prompt_with_phase(
+    problem: str,
+    current_phase: str,
+    current_critique: dict | None,
+    previous_critique: dict | None,
+    assertion_count: int,
+    handoff_b2c: dict | None,
+    cycle: int,
+    max_cycles: int,
+) -> list[dict]:
+    """Loop-Phase 인식 버전의 Agent C 프롬프트를 생성한다."""
+    import json
+    mode = _get_phase_mode(cycle, max_cycles)
+
+    messages = [
+        {"role": "system", "content": JUDGE_PROMPT},
+    ]
+
+    user_content = f"## Problem\n\n{problem}\n\n"
+    user_content += f"## Current phase: {current_phase}\n\n"
+    user_content += f"## Active assertions: {assertion_count}\n\n"
+
+    if handoff_b2c:
+        user_content += f"## Handoff from Developer (B2C)\n\n```json\n{json.dumps(handoff_b2c, indent=2, ensure_ascii=False)}\n```\n\n"
+
+    if current_critique:
+        user_content += f"## Current critique (this round)\n\n```json\n{json.dumps(current_critique, indent=2, ensure_ascii=False)}\n```\n\n"
+    else:
+        user_content += "## Current critique\n\nNo critique available (critic failed to respond).\n\n"
+
+    if previous_critique:
+        user_content += f"## Previous critique (last round)\n\n```json\n{json.dumps(previous_critique, indent=2, ensure_ascii=False)}\n```\n\n"
+    else:
+        user_content += "## Previous critique\n\nNo previous critique (this is the first round).\n\n"
+
+    user_content += f"""
+## Loop Progress
+Cycle {cycle}/{max_cycles}. Mode: {mode}.
+
+### Mode instructions for judge
+- explore: Resist early convergence. If progress is being made, encourage more exploration.
+- refine: Allow convergence if evidence is strong. Push phase transitions when progress stalls.
+- commit: Actively push toward CONVERGED. Only reject if there are clear errors remaining.
+
+Compare the critiques and handoff, and decide if the discussion has converged. Output the JSON response."""
+
+    messages.append({"role": "user", "content": user_content})
+
+    return messages
