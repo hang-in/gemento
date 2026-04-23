@@ -236,8 +236,8 @@
       "difficulty": "very_hard",
       "objective": "제약 조건이 있는 최적화 문제를 단계적으로 풀어라.",
       "prompt": "A factory produces three products X, Y, Z. Each unit of X requires 2 hours of labor and 3 kg of material. Each unit of Y requires 3 hours of labor and 2 kg of material. Each unit of Z requires 4 hours of labor and 1 kg of material. Available: 240 hours of labor and 150 kg of material per week. Profit per unit: X=$50, Y=$40, Z=$30. Additionally, the factory must produce at least 10 units of each product. What production plan maximizes weekly profit? Find the exact quantities.",
-      "expected_answer": "X=30, Y=30, Z=10, profit=$2800",
-      "scoring_keywords": [["30"], ["2800"]],
+      "expected_answer": "X=31, Y=10, Z=37, profit=$3060",
+      "scoring_keywords": [["31"], ["37"], ["3060"]],
       "constraints": ["모든 제약 조건을 명시해야 한다", "가능 영역 경계점을 검사해야 한다", "검산 필수"],
       "prefab_assertions": [],
       "fault_injections": []
