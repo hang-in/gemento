@@ -27,10 +27,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from config import (
     RESULTS_DIR, DEFAULT_REPEAT, MODEL_NAME,
-    OLLAMA_GENERATE_URL, OLLAMA_TIMEOUT,
+    API_CHAT_URL, API_TIMEOUT,
 )
 from schema import Tattoo, Phase, create_initial_tattoo
-from orchestrator import run_chain, call_ollama, LoopLog, run_abc_chain, ABCCycleLog
+from orchestrator import run_chain, call_model, LoopLog, run_abc_chain, ABCCycleLog
 
 
 def load_tasks() -> list[dict]:
@@ -69,7 +69,7 @@ def run_baseline():
             ]
             start = time.time()
             try:
-                raw = call_ollama(messages)
+                raw = call_model(messages)
                 error = None
             except Exception as e:
                 raw = ""

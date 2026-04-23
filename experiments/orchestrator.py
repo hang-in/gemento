@@ -24,7 +24,7 @@ from schema import (
 )
 from system_prompt import build_prompt
 from config import (
-    MODEL_NAME, OLLAMA_GENERATE_URL, OLLAMA_TIMEOUT,
+    MODEL_NAME, API_CHAT_URL, API_TIMEOUT,
     ASSERTION_SOFT_CAP, ASSERTION_HARD_CAP,
     CONFIDENCE_FLOOR, CONFIDENCE_PROMOTION_MIN, CONFIDENCE_CAP_NO_TOOL,
     MAX_LOOPS,
@@ -47,26 +47,20 @@ PHASE_MAX_LOOPS = {
 }
 
 
-def call_ollama(messages: list[dict], model: str = MODEL_NAME) -> str:
-    """Ollama chat API를 호출하고 응답 텍스트를 반환한다."""
+def call_model(messages: list[dict], model: str = MODEL_NAME) -> str:
+    """OpenAI-compatible chat API를 호출하고 응답 텍스트를 반환한다."""
     payload = {
         "model": model,
         "messages": messages,
-        "format": "json",       # 엔진 수준에서 JSON 출력 강제 (가장 중요)
-        "stream": False,
-        "options": {
-            "temperature": 0.1,
-            "num_predict": 4096,
-            "num_ctx": 4096,
-            "num_gpu": 35,
-            "f16_kv": True,
-            "num_thread": 8,
-        },
+        "max_tokens": 4096,
+        "temperature": 0.1,
+        "response_format": {"type": "json_object"},
     }
-    with httpx.Client(timeout=httpx.Timeout(OLLAMA_TIMEOUT, connect=30.0)) as client:
-        resp = client.post(OLLAMA_GENERATE_URL, json=payload)
+    with httpx.Client(timeout=httpx.Timeout(API_TIMEOUT, connect=30.0)) as client:
+        resp = client.post(API_CHAT_URL, json=payload)
         resp.raise_for_status()
-        return resp.json()["message"]["content"]
+        data = resp.json()
+        return data["choices"][0]["message"]["content"]
 
 
 def extract_json_from_response(raw: str) -> dict | None:
@@ -280,7 +274,7 @@ def run_loop(
 
     for attempt in range(2):
         try:
-            raw = call_ollama(messages)
+            raw = call_model(messages)
             parsed = extract_json_from_response(raw)
         except Exception as e:
             raw = ""
@@ -497,7 +491,7 @@ def run_abc_chain(
                 )
             for attempt in range(2):
                 try:
-                    b_raw = call_ollama(b_messages)
+                    b_raw = call_model(b_messages)
                     b_parsed = extract_json_from_response(b_raw)
                 except Exception as e:
                     b_raw = ""
@@ -582,7 +576,7 @@ def run_abc_chain(
 
         for attempt in range(2):
             try:
-                c_raw = call_ollama(c_messages)
+                c_raw = call_model(c_messages)
                 c_parsed = extract_json_from_response(c_raw)
             except Exception as e:
                 c_raw = ""

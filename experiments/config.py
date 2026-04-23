@@ -10,8 +10,10 @@ RESULTS_DIR = EXPERIMENTS_DIR / "results"
 LOGS_DIR = EXPERIMENTS_DIR / "logs"
 
 # ── 모델 ──
-MODEL_NAME = "gemma4:e4b"
-OLLAMA_BASE_URL = "http://localhost:11434"
+MODEL_NAME = "gemma4-e4b"
+API_BASE_URL = "http://yongseek.iptime.org:8005"
+API_CHAT_URL = f"{API_BASE_URL}/v1/chat/completions"
+API_TIMEOUT = 600
 
 # ── 문신 제약 ──
 ASSERTION_SOFT_CAP = 8
@@ -24,7 +26,3 @@ CONFIDENCE_CAP_NO_TOOL = 0.7  # 외부 도구 없이 도출된 주장의 confide
 # ── 실험 ──
 DEFAULT_REPEAT = 5  # 각 조건 반복 횟수 (3→5: 통계적 신뢰도 향상)
 MAX_LOOPS = 15  # 루프 상한 (12→15: 어려운 태스크 조기 종료 방지)
-
-# ── Ollama API ──
-OLLAMA_GENERATE_URL = f"{OLLAMA_BASE_URL}/api/chat"
-OLLAMA_TIMEOUT = 600  # seconds (E4B 첫 로딩 + 긴 추론 고려)
