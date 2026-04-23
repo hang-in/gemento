@@ -1,7 +1,7 @@
 ---
 type: reference
 status: in_progress
-updated_at: 2026-04-15
+updated_at: 2026-04-24
 ---
 
 # 제멘토 연구 노트 (Research Notebook)
@@ -17,8 +17,8 @@ updated_at: 2026-04-15
 |------|------|
 | 프로젝트명 | 제멘토 (Gemento) |
 | 핵심 질문 | 소형 LLM(4.5B)에 외부 상태(문신) + 반복 추론 구조를 부여하면, 단일 추론 대비 통계적으로 유의미한 품질 향상이 가능한가? |
-| 대상 모델 | Gemma 4 E4B (4.5B params, Q4_K_M, Ollama) |
-| 실행 환경 | Windows (Ollama + GPU) — 실험 실행 / macOS — 분석·문서화 |
+| 대상 모델 | Gemma 4 E4B (Exp00~06: Q4_K_M / Ollama, Exp07부터: Q8_0 / llama.cpp GPU 서버) |
+| 실행 환경 | Windows (Ollama 또는 llama.cpp) — 실험 실행 / macOS — 분석·문서화 |
 | 연구 기간 | 2026-04-08 ~ 진행 중 |
 
 ### 핵심 가설
@@ -29,6 +29,8 @@ updated_at: 2026-04-15
 | H2 | 오류가 루프를 거치며 증폭된다 | **기각** (오류 무감지) | Exp03 |
 | H3 | 교차 검증(역할 분리)이 오류를 감지할 수 있다 | **채택** (80%) | Exp035 |
 | H4 | A-B-C 역할 분리가 단일 에이전트 반복보다 우수하다 | **채택** (+22.6%p) | Exp06 |
+| H5 | MAX_CYCLES 상향이 정답률 향상에 기여한다 (루프 포화점 존재) | **부분 기각** (상한 확장 무효, actual_cycles≈7에서 포화) | Exp07 |
+| H6 | Phase별 특화 프롬프트가 baseline 대비 우수하다 | **조건부 채택** (장기 루프 15~20에서 +5~6%p) | Exp07 |
 
 ---
 
@@ -349,6 +351,66 @@ updated_at: 2026-04-15
 
 ---
 
+### Exp07: Loop Saturation + Loop-Phase 프롬프트
+
+| 항목 | 내용 |
+|------|------|
+| **누가** | Gemma 4 E4B × 3 (A-B-C) — 모델 소스가 Ollama Q4_K_M → llama.cpp Q8_0으로 전환 |
+| **언제** | 2026-04-23 ~ 2026-04-24 (Gemini CLI / Windows에서 완주) |
+| **어디서** | Windows + 외부 llama.cpp GPU 서버 (`yongseek.iptime.org:8005`, OpenAI 호환 `/v1/chat/completions`) |
+| **무엇을** | 2(프롬프트: baseline/phase) × 4(MAX_CYCLES: 8/11/15/20) 요인설계로 루프 포화점 식별 + phase 특화 프롬프트 효과 측정 |
+| **왜** | "11루프는 정말 충분한 샘플인가?"라는 의문에서 출발. 기존 태스크셋이 저난도(조기 수렴)에 치우쳐 루프 한계를 측정하지 못함. 고난도 태스크(04급) 3종 추가 + MAX_CYCLES 상한을 변수화하여 **한계 수익 0에 수렴하는 포화점 탐색** |
+| **어떻게** | 고난도 태스크(math-04, logic-04, synthesis-04) 3종 추가 → 총 12 태스크. 각 태스크 × 3 trial × 8 조건 = **288 시행**. `orchestrator.py`/`config.py`에 MAX_CYCLES·use_phase_prompt 파라미터 추가, `run_experiment.py`에 loop_saturation 분기 추가, measure.py에 phase별 집계 + High-Difficulty 표 추가 |
+
+**결과 (정답률, substring 기반 — exp07_report.md):**
+
+| MAX_CYCLES | Baseline 정답률 | Phase 정답률 | Δ (Phase − Base) | Baseline 수렴률 | Phase 수렴률 |
+|------------|----------------|-------------|------------------|-----------------|--------------|
+| 8  | 79.2% | 83.8% | +4.6%p  | 91.7%  | 100.0% |
+| 11 | 86.6% | 83.8% | −2.8%p  | 100.0% | 100.0% |
+| 15 | 81.5% | **88.0%** | **+6.5%p** | 100.0% | 100.0% |
+| 20 | 80.1% | 85.6% | +5.6%p  | 100.0% | 100.0% |
+
+**고난도(04) 태스크:**
+
+| 태스크 | 최고 정답률 | 최고 조건 | 평균 cycles |
+|--------|-----------|-----------|-------------|
+| logic-04     | 100.0% | baseline_11 | 7.0 |
+| math-04      | **50.0%** | baseline_11 | 6.0 |
+| synthesis-04 | 100.0% | baseline_11 | 7.0 |
+
+**actual_cycles 분포 (모든 조건, 288 trial 원시 데이터):**
+
+| 조건 | 평균 actual_cycles |
+|------|-------------------|
+| baseline_8  | 7.00 |
+| baseline_11 | 7.00 |
+| baseline_15 | 6.89 |
+| baseline_20 | 6.86 |
+| phase_8     | 7.03 |
+| phase_11    | 6.97 |
+| phase_15    | 7.11 |
+| phase_20    | 7.00 |
+
+**핵심 발견:**
+1. **포화점은 MAX_CYCLES가 아니라 actual_cycles ≈ 7** — MAX_CYCLES 상한을 15, 20으로 올려도 실제 사용 cycle은 약 7에서 멈춤. 즉 C(판정자)의 수렴 판정이 "루프 예산 소진" 이전에 항상 선행됨.
+2. **H5 부분 기각** — "상한 확장 = 정답률 증가"는 성립하지 않음. MAX_CYCLES=11에서 baseline이 가장 좋고(86.6%), 15/20에서는 오히려 소폭 감소. 상한 자체는 정답률의 함수가 아니라 "안전장치" 역할.
+3. **H6 조건부 채택** — Phase 특화 프롬프트는 **장기 루프(15, 20)에서만** baseline 대비 +5~6%p 우위. 짧은 루프(11)에서는 오히려 −2.8%p. 해석: phase 가이드는 "짧은 추론에선 불필요, 긴 추론에선 drift 억제" 효과.
+4. **math-04 벽** — 수학적 다단계 추론(04급)은 루프·프롬프트 양쪽 어떤 조건으로도 50%를 넘지 못함. logic-04/synthesis-04는 모든 조건에서 100%. → 수학 추론 한계는 구조 개선으로 해소되지 않음.
+5. **수렴률은 거의 무차별** — baseline_8만 91.7%, 나머지 7개 조건 100%. Q8_0 전환 + 루프 여유로 수렴 자체는 안정화됨.
+6. **인프라 전환 영향** — Q4_K_M(Ollama) → Q8_0(llama.cpp) 전환으로 모델 정밀도 2배. 이전 실험 대비 같은 태스크(math-01~03, logic-01~03, synthesis-01~03)의 기저 품질이 상승했을 가능성. **Exp05b와의 직접 비교는 주의.**
+
+**결론:**
+- **루프 수 증가로 얻을 수 있는 이득은 이미 소진됨** — E4B A-B-C 구조의 cycle 포화점은 약 7.
+- **Phase 프롬프트는 "비용 없는 안전마진"**으로 작용 — 긴 루프에서 drift 억제 효과.
+- **다음 병목은 루프가 아닌 task-intrinsic 복잡도** (math-04).
+- 운영 기본값: `MAX_CYCLES=11, use_phase_prompt=True` 권장 (phase_11이 저비용·고안정).
+
+**알려진 이슈:**
+- `experiments/results/exp07_report.md`가 UTF-16 LE로 저장됨 (Windows PowerShell `>` 리다이렉트 기본 인코딩). `measure.py` 출력 경로 또는 run 스크립트에서 UTF-8 강제 필요 — 후속 정리 항목.
+
+---
+
 ## 채점 시스템 변천
 
 ### v1 → v2 전환 (2026-04-15)
@@ -401,12 +463,18 @@ Python          = 안전장치만 (safety net, 0회 발동)
 ### 완료된 보조 작업
 - [x] Scoring V2 채점 체계 구축 (2026-04-15)
 - [x] Exp045 v2 재채점 (2026-04-15)
+- [x] E4B API 전환: Ollama(`gemma4:e4b`, Q4_K_M) → llama.cpp(`gemma4-e4b`, Q8_0) (2026-04-21)
+- [x] Exp07 Loop Saturation + Phase Prompt (288 시행, 2026-04-24)
 
 ### 열린 질문
 1. **v2 역행 조사** — Exp04, Exp05a에서 v2가 v1보다 낮은 이유 분석 필요
 2. **Solo 표본 확대** — Exp06 Solo의 9개 표본으로는 통계적 신뢰도 부족
 3. **Backprop 개선** — 현재 4.2~9.5% → 목표 50%+
 4. **Mixed Intelligence** — E4B × 2 + 대형 모델(9B+) Judge 조합 테스트
+5. **math-04 벽 돌파** — Exp07에서 50%에 고정. 도메인 특화 프롬프트, tool-use(계산기), 또는 MoE 방식 후보
+6. **컨텍스트 한계 직접 검증** — 현재 태스크셋은 sliding_window(512)를 스트레스하지 않음. Long-context multi-hop QA 실험 설계 필요 (후보: Exp08)
+7. **문신 점유율 측정** — 루프 진행 시 문신이 context window를 차지하는 비율 추적 필요
+8. **Exp07 결과 보고 인코딩** — `experiments/results/exp07_report.md`가 UTF-16 LE. Windows 측 출력 경로 UTF-8 강제 필요
 
 ---
 
