@@ -16,6 +16,7 @@ Reference document index.
 - [handoff-to-gemini-exp5b.md](handoff-to-gemini-exp5b.md) — Gemini 인계: 실험 5b 태스크 스케일업 지시서
 - [handoff-to-gemini-exp6.md](handoff-to-gemini-exp6.md) — Gemini 인계: 실험 6 Solo vs ABC 시너지 측정
 - [handoff-to-gemini-exp7.md](handoff-to-gemini-exp7.md) — Gemini 인계: 실험 7 Loop Saturation + Loop-Phase
+- [handoff-to-gemini-exp8.md](handoff-to-gemini-exp8.md) — 실험 8 Gemini 핸드오프 (Math Tool-Use)
 
 ## 실험 결과
 

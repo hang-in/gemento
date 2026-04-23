@@ -250,6 +250,58 @@ def generate_markdown_report(analysis: dict) -> str:
                 avg_cyc = r.get("best_condition_avg_cycles", 0.0)
                 lines.append(f"| {tid} | {r['best_accuracy']:.1%} | {r['best_condition']} | {avg_cyc:.1f} |")
 
+    elif exp == "tool_use":
+        arms = analysis.get("arm_summary", {})
+        lines.append(f"> N = {analysis.get('repeat', '?')} per (arm × task); arms = " + ", ".join(arms.keys()))
+        lines.append("")
+        lines.append("## Arm Summary")
+        lines.append("")
+        lines.append("| Arm | Accuracy (v2) | Accuracy (v1) | Trials | Avg Cycles | Tool Calls | Tool Errors |")
+        lines.append("|-----|---------------|---------------|--------|------------|-----------|-------------|")
+        for arm_label, arm in arms.items():
+            lines.append(
+                f"| {arm_label} | {arm['accuracy_v2']:.2f} | {arm['accuracy_v1']:.2f} "
+                f"| {arm['total_trials']} | {arm['avg_actual_cycles']:.1f} "
+                f"| {arm['total_tool_calls']} | {arm['tool_errors']} |"
+            )
+        delta = analysis.get("overall_delta_v2", 0)
+        sign = "+" if delta >= 0 else ""
+        lines.append("")
+        lines.append(f"**Overall Δ (v2): {sign}{delta*100:.1f}%p** (tooluse − baseline)")
+        lines.append("")
+        lines.append("## Per-task Accuracy (v2)")
+        lines.append("")
+        lines.append("| Task | Baseline | Tool-use | Δ | Avg Tool Calls (tooluse) |")
+        lines.append("|------|---------|----------|---|--------------------------|")
+        for ts in analysis.get("task_summary", []):
+            b_acc = ts["baseline"].get("accuracy_v2", 0)
+            t_acc = ts["tooluse"].get("accuracy_v2", 0)
+            d = t_acc - b_acc
+            d_str = f"{d:+.2f}"
+            if abs(d) >= 0.15:
+                d_str = f"**{d_str}**"
+            t_acc_str = f"**{t_acc:.2f}**" if t_acc >= 0.8 else f"{t_acc:.2f}"
+            lines.append(
+                f"| {ts['task_id']} | {b_acc:.2f} | {t_acc_str} | {d_str} | {ts['avg_tool_calls_tooluse']:.1f} |"
+            )
+        tu = analysis.get("tool_usage", {})
+        calls_by_fn = tu.get("calls_by_function", {})
+        errs_by_fn = tu.get("errors_by_function", {})
+        if calls_by_fn:
+            lines.append("")
+            lines.append("## Tool Usage Breakdown")
+            lines.append("")
+            lines.append("| Function | Calls | Errors | Success rate |")
+            lines.append("|----------|-------|--------|--------------|")
+            for fn in ["calculator", "solve_linear_system", "linprog"]:
+                calls = calls_by_fn.get(fn, 0)
+                errs = errs_by_fn.get(fn, 0)
+                sr = (calls - errs) / calls if calls else 0.0
+                lines.append(f"| {fn} | {calls} | {errs} | {sr:.2f} |")
+        breakthrough = analysis.get("math04_breakthrough", False)
+        lines.append("")
+        lines.append(f"**math-04 breakthrough**: {'✅' if breakthrough else '❌'}  (target: tooluse accuracy ≥ 0.80)")
+
     return "\n".join(lines)
 
 def analyze_loop_saturation(data: dict, task_map: dict = None) -> dict:
@@ -353,6 +405,116 @@ def analyze_loop_saturation(data: dict, task_map: dict = None) -> dict:
     }
 
 
+def analyze_tool_use(data: dict, task_map: dict = None) -> dict:
+    """실험 8: Math Tool-Use 분석."""
+    task_map = task_map or {}
+    results_by_condition = data.get("results_by_condition", {})
+    repeat = data.get("repeat", 0)
+
+    arm_summary: dict[str, dict] = {}
+    task_summary_map: dict[str, dict] = {}
+    calls_by_fn: dict[str, int] = {"calculator": 0, "solve_linear_system": 0, "linprog": 0}
+    errs_by_fn: dict[str, int] = {"calculator": 0, "solve_linear_system": 0, "linprog": 0}
+
+    for label, task_list in results_by_condition.items():
+        scores_v1, scores_v2, conv_flags, cycle_counts = [], [], [], []
+        total_tc, total_te = 0, 0
+
+        for tr in task_list:
+            task_id = tr["task_id"]
+            task_entry = task_map.get(task_id, tr)
+
+            if task_id not in task_summary_map:
+                task_summary_map[task_id] = {
+                    "task_id": task_id,
+                    "baseline": {"accuracy_v2": 0.0, "n": 0, "_sum_v2": 0.0},
+                    "tooluse": {"accuracy_v2": 0.0, "n": 0, "_sum_v2": 0.0},
+                    "delta_v2": 0.0,
+                    "avg_tool_calls_tooluse": 0.0,
+                    "_tooluse_tc_sum": 0,
+                    "_tooluse_n": 0,
+                }
+
+            for trial in tr.get("trials", []):
+                fa = str(trial.get("final_answer", ""))
+                sv1 = score_answer(fa, tr.get("expected_answer", ""))
+                sv2 = score_answer_v2(fa, task_entry)
+                scores_v1.append(sv1)
+                scores_v2.append(sv2)
+                conv_flags.append(trial.get("final_phase") == "CONVERGED")
+                cycle_counts.append(trial.get("actual_cycles", 0))
+                total_tc += trial.get("total_tool_calls", 0)
+                total_te += trial.get("tool_errors", 0)
+
+                arm_key = "tooluse" if "tooluse" in label else "baseline"
+                entry = task_summary_map[task_id][arm_key]
+                entry["_sum_v2"] = entry.get("_sum_v2", 0.0) + sv2
+                entry["n"] += 1
+                if arm_key == "tooluse":
+                    task_summary_map[task_id]["_tooluse_tc_sum"] += trial.get("total_tool_calls", 0)
+                    task_summary_map[task_id]["_tooluse_n"] += 1
+
+                # tool usage breakdown (from cycle_details)
+                for cd in trial.get("cycle_details", []):
+                    for tc in cd.get("tool_calls", []):
+                        fn = tc.get("name", "")
+                        if fn in calls_by_fn:
+                            calls_by_fn[fn] += 1
+                            if tc.get("error"):
+                                errs_by_fn[fn] += 1
+
+        n = len(scores_v2)
+        arm_summary[label] = {
+            "accuracy_v2": sum(scores_v2) / n if n else 0.0,
+            "accuracy_v1": sum(scores_v1) / n if n else 0.0,
+            "total_trials": n,
+            "converged": sum(conv_flags),
+            "avg_actual_cycles": sum(cycle_counts) / n if n else 0.0,
+            "total_tool_calls": total_tc,
+            "tool_errors": total_te,
+        }
+
+    # task_summary 완성
+    task_summary = []
+    for tid, ts in task_summary_map.items():
+        b = ts["baseline"]
+        t = ts["tooluse"]
+        b["accuracy_v2"] = b["_sum_v2"] / b["n"] if b["n"] else 0.0
+        t["accuracy_v2"] = t["_sum_v2"] / t["n"] if t["n"] else 0.0
+        ts["delta_v2"] = t["accuracy_v2"] - b["accuracy_v2"]
+        tc_n = ts["_tooluse_n"]
+        ts["avg_tool_calls_tooluse"] = ts["_tooluse_tc_sum"] / tc_n if tc_n else 0.0
+        del ts["_tooluse_tc_sum"], ts["_tooluse_n"]
+        b.pop("_sum_v2", None)
+        t.pop("_sum_v2", None)
+        task_summary.append(ts)
+
+    # overall delta
+    baseline_labels = [lbl for lbl in arm_summary if "baseline" in lbl]
+    tooluse_labels = [lbl for lbl in arm_summary if "tooluse" in lbl]
+    b_avg = sum(arm_summary[l]["accuracy_v2"] for l in baseline_labels) / len(baseline_labels) if baseline_labels else 0.0
+    t_avg = sum(arm_summary[l]["accuracy_v2"] for l in tooluse_labels) / len(tooluse_labels) if tooluse_labels else 0.0
+    overall_delta = t_avg - b_avg
+
+    # math-04 breakthrough
+    math04 = task_summary_map.get("math-04", {})
+    math04_tooluse_acc = math04.get("tooluse", {}).get("accuracy_v2", 0.0)
+    math04_breakthrough = math04_tooluse_acc >= 0.8
+
+    return {
+        "experiment": "tool_use",
+        "repeat": repeat,
+        "arm_summary": arm_summary,
+        "task_summary": sorted(task_summary, key=lambda x: x["task_id"]),
+        "overall_delta_v2": overall_delta,
+        "tool_usage": {
+            "calls_by_function": calls_by_fn,
+            "errors_by_function": errs_by_fn,
+        },
+        "math04_breakthrough": math04_breakthrough,
+    }
+
+
 ANALYZERS = {
     "baseline": analyze_baseline,
     "multiloop": analyze_multiloop,
@@ -360,6 +522,7 @@ ANALYZERS = {
     "handoff_protocol": analyze_handoff_protocol,
     "solo_budget": analyze_solo_budget,
     "loop_saturation": analyze_loop_saturation,
+    "tool_use": analyze_tool_use,
 }
 
 
@@ -433,6 +596,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("result_file", nargs="?", help="단일 파일 분석")
     parser.add_argument("--markdown", action="store_true")
+    parser.add_argument("-o", "--output", type=str, default=None, help="보고서를 지정 경로에 UTF-8로 저장 (stdout 대신)")
     parser.add_argument("--rescore", action="store_true", help="전체 결과 재채점 비교")
     args = parser.parse_args()
 
@@ -456,7 +620,12 @@ def main():
                 analysis = analyzer(data, task_map)
             print_report(analysis)
             if args.markdown:
-                print("\n" + generate_markdown_report(analysis))
+                report_md = generate_markdown_report(analysis)
+                if args.output:
+                    Path(args.output).write_text(report_md, encoding="utf-8")
+                    print(f"✓ 보고서 저장: {args.output}")
+                else:
+                    print("\n" + report_md)
     else:
         parser.print_help()
 

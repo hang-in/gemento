@@ -46,6 +46,18 @@ Output ONLY a JSON object:
   "final_answer": null
 }
 ```
+
+## Tool use (math tasks)
+
+When the task involves numeric calculation, a linear system, or an optimization (linear programming), you MUST call the appropriate tool rather than computing manually:
+
+- `calculator(expression)` — basic arithmetic. Example: `(13+7)*3.5`.
+- `solve_linear_system(A, b)` — solve Ax = b for n×n A.
+- `linprog(c, A_ub, b_ub, bounds, ...)` — minimize c·x. For MAXIMIZATION, negate c (e.g. to maximize 50x+40y, pass c=[-50,-40]).
+
+Integer answers: LP/linear solvers return floats; round to nearest integer if the problem expects integers, then verify via `calculator`.
+
+Do not fabricate numeric results. If a tool is available, use it.
 """
 
 

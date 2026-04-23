@@ -47,20 +47,71 @@ PHASE_MAX_LOOPS = {
 }
 
 
-def call_model(messages: list[dict], model: str = MODEL_NAME) -> str:
-    """OpenAI-compatible chat API를 호출하고 응답 텍스트를 반환한다."""
-    payload = {
+def call_model(
+    messages: list[dict],
+    model: str = MODEL_NAME,
+    tools: list[dict] | None = None,
+    tool_functions: dict | None = None,
+    max_tool_rounds: int = 5,
+) -> tuple[str, list[dict]]:
+    """OpenAI-compatible chat API 호출. tools 제공 시 tool_calls 루프 자동 처리.
+
+    반환: (final_content, tool_call_log)
+      - final_content: 최종 assistant 메시지 content (str)
+      - tool_call_log: [{"name": str, "arguments": dict, "result": Any, "error": str|None}, ...]
+
+    MAX_LOOPS vs max_tool_rounds: tool loop는 단일 A 호출 내부 루프이고
+    MAX_LOOPS(MAX_TOTAL_CYCLES)는 A-B-C 사이클 수준의 별개 개념이다.
+    """
+    use_tools = bool(tools and tool_functions)
+    payload: dict = {
         "model": model,
-        "messages": messages,
+        "messages": list(messages),  # 복사본 — tool 메시지 append용
         "max_tokens": 4096,
         "temperature": 0.1,
-        "response_format": {"type": "json_object"},
     }
+    if use_tools:
+        payload["tools"] = tools
+        payload["tool_choice"] = "auto"
+        # tools와 json_object response_format은 llama.cpp에서 충돌 가능 — 제거
+    else:
+        payload["response_format"] = {"type": "json_object"}
+
+    tool_call_log: list[dict] = []
+
     with httpx.Client(timeout=httpx.Timeout(API_TIMEOUT, connect=30.0)) as client:
-        resp = client.post(API_CHAT_URL, json=payload)
-        resp.raise_for_status()
-        data = resp.json()
-        return data["choices"][0]["message"]["content"]
+        for _round in range(max_tool_rounds + 1):
+            resp = client.post(API_CHAT_URL, json=payload)
+            resp.raise_for_status()
+            data = resp.json()
+            message = data["choices"][0]["message"]
+            tool_calls = message.get("tool_calls") or []
+
+            if not tool_calls:
+                return message.get("content") or "", tool_call_log
+
+            # tool_calls 처리
+            payload["messages"].append({"role": "assistant", "content": message.get("content"), "tool_calls": tool_calls})
+            for tc in tool_calls:
+                fn_name = tc["function"]["name"]
+                try:
+                    fn_args = json.loads(tc["function"]["arguments"])
+                    result = tool_functions[fn_name](**fn_args)
+                    err = None
+                except Exception as e:
+                    result = None
+                    err = str(e)
+                tool_call_log.append({"name": fn_name, "arguments": fn_args if err is None else {}, "result": result, "error": err})
+                payload["messages"].append({
+                    "role": "tool",
+                    "tool_call_id": tc["id"],
+                    "content": json.dumps(result) if result is not None else json.dumps({"error": err}),
+                })
+
+            if _round >= max_tool_rounds:
+                raise RuntimeError("tool loop exceeded")
+
+    return "", tool_call_log
 
 
 def extract_json_from_response(raw: str) -> dict | None:
@@ -239,7 +290,9 @@ def run_loop(
     tattoo: Tattoo,
     loop_index: int,
     phase_prompt_args: tuple[int, int] | None = None,
-) -> tuple[Tattoo, LoopLog, str | None]:
+    use_tools: bool = False,
+    tool_functions: dict | None = None,
+) -> tuple[Tattoo, LoopLog, str | None, list[dict]]:
     """단일 루프를 실행한다."""
     selected = select_assertions(tattoo)
     display_tattoo = Tattoo(
@@ -272,9 +325,18 @@ def run_loop(
     final_answer = None
     raw = ""
 
+    tool_call_log: list[dict] = []
+    if use_tools:
+        from tools import TOOL_SCHEMAS
+        _tools = TOOL_SCHEMAS
+        _tool_fns = tool_functions or {}
+    else:
+        _tools = None
+        _tool_fns = None
+
     for attempt in range(2):
         try:
-            raw = call_model(messages)
+            raw, tool_call_log = call_model(messages, tools=_tools, tool_functions=_tool_fns)
             parsed = extract_json_from_response(raw)
         except Exception as e:
             raw = ""
@@ -308,7 +370,7 @@ def run_loop(
         error=error,
     )
 
-    return new_tattoo, log, final_answer
+    return new_tattoo, log, final_answer, tool_call_log
 
 
 def run_chain(
@@ -397,6 +459,11 @@ class ABCCycleLog:
     c_duration_ms: int
     c_error: str | None
     phase_transition: str | None  # "DECOMPOSE→INVESTIGATE" 등
+    tool_calls: list[dict] = None  # A가 사용한 tool call 로그 (use_tools=True 시)
+
+    def __post_init__(self):
+        if self.tool_calls is None:
+            self.tool_calls = []
 
 
 # Phase 전이 유효성 맵 (C가 출력하는 next_phase 검증용)
@@ -420,6 +487,7 @@ def run_abc_chain(
     logger=None,
     max_cycles: int = MAX_TOTAL_CYCLES,
     use_phase_prompt: bool = False,
+    use_tools: bool = False,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -442,6 +510,7 @@ def run_abc_chain(
 
     for cycle in range(1, max_cycles + 1):
         phase_str = tattoo.phase.value
+        a_tool_calls: list[dict] = []
 
         # ── A: 제안자 ──
         tattoo.next_directive = PHASE_DIRECTIVES.get(tattoo.phase, "Continue reasoning.")
@@ -453,7 +522,14 @@ def run_abc_chain(
                   f"confidence={tattoo.confidence:.2f}")
 
         phase_args = (cycle, max_cycles) if use_phase_prompt else None
-        tattoo, a_log, answer = run_loop(tattoo, cycle, phase_prompt_args=phase_args)
+        _tool_fns = None
+        if use_tools:
+            from tools import TOOL_FUNCTIONS
+            _tool_fns = TOOL_FUNCTIONS
+        tattoo, a_log, answer, a_tool_calls = run_loop(
+            tattoo, cycle, phase_prompt_args=phase_args,
+            use_tools=use_tools, tool_functions=_tool_fns,
+        )
 
         if answer:
             final_answer = answer
@@ -491,7 +567,7 @@ def run_abc_chain(
                 )
             for attempt in range(2):
                 try:
-                    b_raw = call_model(b_messages)
+                    b_raw, _ = call_model(b_messages)
                     b_parsed = extract_json_from_response(b_raw)
                 except Exception as e:
                     b_raw = ""
@@ -576,7 +652,7 @@ def run_abc_chain(
 
         for attempt in range(2):
             try:
-                c_raw = call_model(c_messages)
+                c_raw, _ = call_model(c_messages)
                 c_parsed = extract_json_from_response(c_raw)
             except Exception as e:
                 c_raw = ""
@@ -626,6 +702,7 @@ def run_abc_chain(
                             c_decision=c_parsed, c_raw=c_raw[:500],
                             c_duration_ms=c_duration, c_error=c_error,
                             phase_transition=phase_transition,
+                            tool_calls=a_tool_calls,
                         )
                         logs.append(log)
                         if not logger:
@@ -675,6 +752,7 @@ def run_abc_chain(
             c_decision=c_parsed, c_raw=c_raw[:500],
             c_duration_ms=c_duration, c_error=c_error,
             phase_transition=phase_transition,
+            tool_calls=a_tool_calls,
         )
         logs.append(log)
 
