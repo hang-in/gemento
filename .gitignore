@@ -13,3 +13,6 @@ __pycache__/
 
 # Claude
 .claude/
+
+# Personal session resume notes (local-only — do not commit)
+resume_gemini.md
