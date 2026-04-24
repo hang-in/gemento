@@ -73,6 +73,26 @@
          └─────────────────┘
 ```
 
+### Critic은 두 종류다
+
+| | Critic Tool | Critic Agent (Role) |
+|---|-------------|---------------------|
+| 판단 성격 | 결정론적 검증 | 비결정론적 비판 |
+| 예시 | JSON schema, `evidence_ref` 존재, citation resolve | 논리 모순, 근거 충분성, 의미적 일관성 |
+| 구현 | 순수 함수 (Python/Rust) | LLM + 역할 프롬프트 |
+
+제멘토에서 B(Critic Agent)는 Exp035에서 **자가 검증 0% → 교차 검증 80%** 회수를 증명했다. 결정론적 검증(Schema/Citation/AST)은 Critic Tool로 분리 — 두 경로는 병렬 사용 가능하며, 각자 다른 실패 유형을 잡는다.
+
+### Orchestrator도 두 종류다
+
+| | Python Orchestrator | Judge Role (C) |
+|---|---------------------|----------------|
+| 성격 | 결정론적 안전장치 | 비결정론적 메타 판단 |
+| 담당 | MAX_CYCLES 상한, phase fallback, tool loop, schema validation | 수렴 판단, phase 전이, accept / reject / retry |
+| Exp04 발동 빈도 | 0회 (안전망만 존재) | 30/30 (자율 결정) |
+
+**"Orchestrator를 완전히 LLM화할 수 있는가"는 틀린 질문**이다. 결정론적 안전망(Python)과 비결정론적 메타 판단(Judge Role)은 서로 **대체재가 아니라 보완재**. Exp02 v1(모델 자율 0%) → v2(외부 강제 94.4%)와 Exp04(C 자율 전이 100%)가 이 구분을 각각 반대 방향에서 증명했다.
+
 **자세한 프레임 정의**: [docs/reference/conceptFramework.md](docs/reference/conceptFramework.md) — 4축 구현 예시, Critic Tool vs Critic Agent 경계, Tattoo–Evidence 결합 쌍, Orchestrator 이중 구분(Python vs Judge Role), 실험별 축 매핑.
 
 ---
