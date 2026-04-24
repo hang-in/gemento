@@ -31,6 +31,7 @@ updated_at: 2026-04-24
 | H4 | A-B-C 역할 분리가 단일 에이전트 반복보다 우수하다 | **채택** (+22.6%p) | Exp06 |
 | H5 | MAX_CYCLES 상향이 정답률 향상에 기여한다 (루프 포화점 존재) | **부분 기각** (상한 확장 무효, actual_cycles≈7에서 포화) | Exp07 |
 | H6 | Phase별 특화 프롬프트가 baseline 대비 우수하다 | **조건부 채택** (장기 루프 15~20에서 +5~6%p) | Exp07 |
+| H7 | 외부 수학 도구(calculator/linalg/linprog)가 E4B의 계산 한계를 보완한다 | **채택** (+18.3%p, math-04 0→80%) | Exp08 |
 
 ---
 
@@ -396,7 +397,7 @@ updated_at: 2026-04-24
 1. **포화점은 MAX_CYCLES가 아니라 actual_cycles ≈ 7** — MAX_CYCLES 상한을 15, 20으로 올려도 실제 사용 cycle은 약 7에서 멈춤. 즉 C(판정자)의 수렴 판정이 "루프 예산 소진" 이전에 항상 선행됨.
 2. **H5 부분 기각** — "상한 확장 = 정답률 증가"는 성립하지 않음. MAX_CYCLES=11에서 baseline이 가장 좋고(86.6%), 15/20에서는 오히려 소폭 감소. 상한 자체는 정답률의 함수가 아니라 "안전장치" 역할.
 3. **H6 조건부 채택** — Phase 특화 프롬프트는 **장기 루프(15, 20)에서만** baseline 대비 +5~6%p 우위. 짧은 루프(11)에서는 오히려 −2.8%p. 해석: phase 가이드는 "짧은 추론에선 불필요, 긴 추론에선 drift 억제" 효과.
-4. **math-04 벽** — 수학적 다단계 추론(04급)은 루프·프롬프트 양쪽 어떤 조건으로도 50%를 넘지 못함. logic-04/synthesis-04는 모든 조건에서 100%. → 수학 추론 한계는 구조 개선으로 해소되지 않음.
+4. **math-04 벽** — 수학적 다단계 추론(04급)은 루프·프롬프트 양쪽 어떤 조건으로도 50%를 넘지 못함. logic-04/synthesis-04는 모든 조건에서 100%. → 수학 추론 한계는 구조 개선으로 해소되지 않음. **※ Exp08 정정**: 이 "50%"는 **채점 데이터 결함**에 따른 artifact였다. 당시 `taskset.json`의 `expected_answer="X=30,Y=30,Z=10,profit=$2800"`은 material 제약(3·30+2·30+1·10=160 > 150 kg)을 위반하는 비가능 해였으며, `scoring_keywords=[["30"],["2800"]]` 기준으로 우연히 "30"을 포함한 답변들이 부분점수를 받았다. 정답 보정(X=31, Y=10, Z=37, profit=$3060) 후 Exp08 baseline에서 math-04는 **0%**였다. 즉 E4B는 tool 없이 이 LP 문제를 실질적으로 풀지 못한다.
 5. **수렴률은 거의 무차별** — baseline_8만 91.7%, 나머지 7개 조건 100%. Q8_0 전환 + 루프 여유로 수렴 자체는 안정화됨.
 6. **인프라 전환 영향** — Q4_K_M(Ollama) → Q8_0(llama.cpp) 전환으로 모델 정밀도 2배. 이전 실험 대비 같은 태스크(math-01~03, logic-01~03, synthesis-01~03)의 기저 품질이 상승했을 가능성. **Exp05b와의 직접 비교는 주의.**
 
@@ -407,7 +408,65 @@ updated_at: 2026-04-24
 - 운영 기본값: `MAX_CYCLES=11, use_phase_prompt=True` 권장 (phase_11이 저비용·고안정).
 
 **알려진 이슈:**
-- `experiments/results/exp07_report.md`가 UTF-16 LE로 저장됨 (Windows PowerShell `>` 리다이렉트 기본 인코딩). `measure.py` 출력 경로 또는 run 스크립트에서 UTF-8 강제 필요 — 후속 정리 항목.
+- `experiments/results/exp07_report.md`가 UTF-16 LE로 저장됨 (Windows PowerShell `>` 리다이렉트 기본 인코딩). `measure.py` 출력 경로 또는 run 스크립트에서 UTF-8 강제 필요 — 후속 정리 항목. **Exp08에서 `--output` 옵션 도입으로 근본 해결.**
+
+---
+
+### Exp08: Math Tool-Use (calculator + linalg + linprog)
+
+| 항목 | 내용 |
+|------|------|
+| **누가** | Gemma 4 E4B × 3 (A-B-C) + 외부 수학 도구 3종을 A 경로에만 주입. B/C는 도구 없음. |
+| **언제** | 2026-04-24 (Gemini CLI / Windows에서 완주) |
+| **어디서** | Windows + 외부 llama.cpp GPU 서버 (`yongseek.iptime.org:8005`, OpenAI 호환 tool_calls 경로) |
+| **무엇을** | H7 검증 — "외부 수학 도구가 E4B의 계산 한계를 보완하는가". 그리고 Exp07 math-04 50% 정체의 진짜 원인 규명. |
+| **왜** | Exp07에서 math-04가 8개 조건 모두 50%로 완전 정체 → 루프·프롬프트로는 돌파되지 않는 구조적 벽 확인. llama.cpp 서버의 `supports_tools: true` 활용 가능성 + `scipy.linprog`으로 해당 LP 문제가 실제 정확히 풀림을 확인한 상태에서 실험 설계. |
+| **어떻게** | **부수적 발견**: 설계 과정에서 기존 `taskset.json`의 math-04 `expected_answer="X=30, Y=30, Z=10, profit=$2800"`이 material 제약 위반 (material 160 > 150)임을 발견. 올바른 최적해 X=31, Y=10, Z=37, profit=$3060으로 정정 (커밋 `6c6f198`). 이후 실험: 2 arm(baseline_phase15 / tooluse_phase15) × 4 math 태스크(math-01~04) × 5 trial = **40 runs**. MAX_CYCLES=15, use_phase_prompt=True 고정. 도구: `calculator`(AST 화이트리스트 eval), `solve_linear_system`(numpy), `linprog`(scipy HiGHS). |
+
+**결과 (v2 채점):**
+
+| Arm | Accuracy (v2) | Accuracy (v1) | Avg Cycles | Tool Calls / Errors |
+|-----|---------------|---------------|------------|---------------------|
+| baseline_phase15 | 0.72 | 0.64 | 7.8 | — |
+| **tooluse_phase15** | **0.90** | **0.75** | **7.2** | **18 / 4** |
+| **Δ (v2)** | **+0.183 (+18.3%p)** | +0.11 | −0.6 | — |
+
+**태스크별:**
+
+| 태스크 | Baseline | Tool-use | Δ | 평균 tool_calls |
+|--------|----------|----------|-----|-----------------|
+| math-01 | 1.00 | 1.00 | ±0 | 1.6 |
+| math-02 | 1.00 | 1.00 | ±0 | 0.8 |
+| math-03 | 0.87 | 0.80 | −0.07 (노이즈, 양쪽 모두 "inconsistent" 정답) |
+| **math-04** | **0.00** | **0.80** | **+0.80** | 1.0 |
+
+**도구별 성공률:**
+
+| Tool | Calls | Errors | 성공률 | 주요 에러 |
+|------|-------|--------|--------|-----------|
+| `linprog` | 5 | 0 | 100% | — |
+| `solve_linear_system` | 7 | 1 | 86% | `Singular matrix` 1건 (모델이 LP를 연립방정식으로 오해) |
+| `calculator` | 6 | 3 | 50% | `BitXor` 3건 (모델이 `^`를 거듭제곱으로 사용 — Python 의미는 XOR) |
+
+**핵심 발견:**
+1. **H7 채택** — 전체 정답률 +18.3%p, 특히 math-04에서 0% → 80% (+80%p)로 결정적 돌파.
+2. **Exp07 해석 전복** — math-04 baseline 5 trial을 전수 확인한 결과: 4건이 `final_answer=None` (10~11 cycle 돌고도 답 생성 실패), 1건은 `X=25, Y=10, Z=35, profit=2700` 오답. 즉 E4B는 tool 없이 이 LP 문제를 거의 풀지 못한다. Exp07의 50%는 잘못된 expected_answer(X=30,Y=30,Z=10,profit=2800)의 부분 substring 매칭으로 인한 채점 artifact.
+3. **제멘토 가설 재확인** — "소형 LLM + 외부 상태(문신)" 설계 패턴이 "소형 LLM + 외부 도구(tool_calls)" 방향으로 자연스럽게 확장됨. 내부 능력이 아닌 **외부 자원으로 구조적 한계를 뚫는다**는 설계 원칙이 두 차원 모두에서 성립.
+4. **Tool 부작용 1 — Tool neglect** — math-04 tooluse trial 2에서 도구가 주입되어도 모델이 한 번도 호출하지 않고(tc=0) 10 cycle 돌다 `None` 반환. 도구의 존재가 사용을 보장하지 않음 → 프롬프트 또는 `tool_choice` 전략 필요.
+5. **Tool 부작용 2 — Calculator `^` 혼동** — 모델이 Python `^`(XOR)를 수학적 거듭제곱으로 오인하여 `2^10` 같은 식을 생성. AST whitelist가 정확히 차단하지만 에러 메시지("Disallowed operator: BitXor")가 모델에게 친절하지 않음. 개선안: 힌트 추가 또는 `^`를 `**`로 전처리.
+6. **math-03 "하락"은 노이즈** — 답변 전수 확인 결과 baseline/tooluse 양쪽 모두 "문제가 모순이다"라는 올바른 결론. 차이는 표현상 keyword 매칭 변동(특히 한국어 답변 1건이 영향). 실질적 성능 차이 없음.
+7. **평균 cycle 감소** — Baseline 7.8 → Tooluse 7.2. 도구가 조기 수렴을 유도. 특히 math-04에서 baseline 10~11 cycle(모두 실패) vs tooluse 7~8 cycle(대부분 성공) 대비 뚜렷.
+
+**결론:**
+- **H7 완전 채택**. 외부 도구는 E4B의 **구조적 계산 한계**(특히 최적화)를 돌파한다.
+- 제멘토의 원래 설계 원칙("외부 자원으로 한계 보완")이 도구 차원에서도 유효함을 입증.
+- Exp07의 math-04 해석은 **채점 데이터 결함으로 인한 오류**였음 — 연구 파이프라인에서 expected_answer 검증 절차의 필요성 부각.
+
+**알려진 이슈 / 후속 과제:**
+- Calculator `^` BitXor 혼동 → 에러 메시지 개선 또는 전처리.
+- Tool neglect 패턴 → tool_choice 전략 또는 프롬프트 강화.
+- math-03 한국어 답변 + v2 scoring 매칭 확인 필요.
+- 본 실험은 **Exp07과 직접 비교 불가** (math-04 expected_answer 변경, Q8_0 환경 동일하나 태스크셋 수정).
 
 ---
 
@@ -465,16 +524,21 @@ Python          = 안전장치만 (safety net, 0회 발동)
 - [x] Exp045 v2 재채점 (2026-04-15)
 - [x] E4B API 전환: Ollama(`gemma4:e4b`, Q4_K_M) → llama.cpp(`gemma4-e4b`, Q8_0) (2026-04-21)
 - [x] Exp07 Loop Saturation + Phase Prompt (288 시행, 2026-04-24)
+- [x] Exp08 Math Tool-Use (40 시행, +18.3%p, math-04 0→80%, 2026-04-24)
+- [x] taskset math-04 expected_answer 데이터 결함 정정 (2026-04-24, 커밋 `6c6f198`)
+- [x] measure.py `--output` UTF-8 직접 기록 옵션 (Exp08 Task 01)
 
 ### 열린 질문
 1. **v2 역행 조사** — Exp04, Exp05a에서 v2가 v1보다 낮은 이유 분석 필요
 2. **Solo 표본 확대** — Exp06 Solo의 9개 표본으로는 통계적 신뢰도 부족
 3. **Backprop 개선** — 현재 4.2~9.5% → 목표 50%+
 4. **Mixed Intelligence** — E4B × 2 + 대형 모델(9B+) Judge 조합 테스트
-5. **math-04 벽 돌파** — Exp07에서 50%에 고정. 도메인 특화 프롬프트, tool-use(계산기), 또는 MoE 방식 후보
-6. **컨텍스트 한계 직접 검증** — 현재 태스크셋은 sliding_window(512)를 스트레스하지 않음. Long-context multi-hop QA 실험 설계 필요 (후보: Exp08)
-7. **문신 점유율 측정** — 루프 진행 시 문신이 context window를 차지하는 비율 추적 필요
-8. **Exp07 결과 보고 인코딩** — `experiments/results/exp07_report.md`가 UTF-16 LE. Windows 측 출력 경로 UTF-8 강제 필요
+5. **Tool neglect 패턴** — Exp08 math-04 tooluse trial 2처럼 도구가 있어도 사용 안 함. `tool_choice` 전략 또는 프롬프트 강화 필요 (Exp08b 후보)
+6. **Calculator `^` 혼동** — 모델이 XOR을 거듭제곱으로 사용. 에러 메시지 개선 또는 `^`→`**` 전처리 (Exp08b 후보)
+7. **컨텍스트 한계 직접 검증** — 현재 태스크셋은 sliding_window(512)를 스트레스하지 않음. Long-context multi-hop QA 실험 설계 필요 (후보: Exp09)
+8. **문신 점유율 측정** — 루프 진행 시 문신이 context window를 차지하는 비율 추적 필요
+9. **taskset expected_answer 전수 검증** — math-04 결함 사례를 볼 때 다른 태스크의 정답도 수학적으로 검증되어야 함
+10. **한국어 답변 v2 scoring** — Exp08 math-03에서 한국어 답변의 keyword 매칭 편차 관찰. 다국어 응답 채점 방침 결정 필요
 
 ---
 
