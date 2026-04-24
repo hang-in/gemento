@@ -30,6 +30,11 @@ def _eval(node):
     if isinstance(node, ast.BinOp):
         op_type = type(node.op)
         if op_type not in _ALLOWED_OPS:
+            if op_type is ast.BitXor:
+                raise ValueError(
+                    "Disallowed operator: BitXor "
+                    "(use '**' for power; Python '^' is bitwise XOR)"
+                )
             raise ValueError(f"Disallowed operator: {op_type.__name__}")
         return _ALLOWED_OPS[op_type](_eval(node.left), _eval(node.right))
     if isinstance(node, ast.UnaryOp):

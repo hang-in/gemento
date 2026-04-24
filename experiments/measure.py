@@ -298,6 +298,14 @@ def generate_markdown_report(analysis: dict) -> str:
                 errs = errs_by_fn.get(fn, 0)
                 sr = (calls - errs) / calls if calls else 0.0
                 lines.append(f"| {fn} | {calls} | {errs} | {sr:.2f} |")
+        neglect_rate = analysis.get("tool_neglect_rate", 0.0)
+        neglect_count = analysis.get("tool_neglect_count", 0)
+        neglect_total = analysis.get("tool_arm_total_trials", 0)
+        lines.append("")
+        lines.append(
+            f"**Tool Neglect Rate (tool arm)**: {neglect_rate:.2%} "
+            f"({neglect_count}/{neglect_total} trials — tool 주입됐으나 호출 0회이면서 final_answer 부재)"
+        )
         breakthrough = analysis.get("math04_breakthrough", False)
         lines.append("")
         lines.append(f"**math-04 breakthrough**: {'✅' if breakthrough else '❌'}  (target: tooluse accuracy ≥ 0.80)")
@@ -501,6 +509,27 @@ def analyze_tool_use(data: dict, task_map: dict = None) -> dict:
     math04_tooluse_acc = math04.get("tooluse", {}).get("accuracy_v2", 0.0)
     math04_breakthrough = math04_tooluse_acc >= 0.8
 
+    # tool_neglect_rate: tool 주입 arm에서 tool 미호출 + 답 없음 비율
+    tool_arm_label = None
+    for cond in data.get("conditions", []):
+        if cond.get("use_tools"):
+            tool_arm_label = cond["label"]
+            break
+
+    neglect_count = 0
+    tool_arm_total = 0
+    if tool_arm_label and tool_arm_label in data.get("results_by_condition", {}):
+        for task_block in data["results_by_condition"][tool_arm_label]:
+            for trial in task_block.get("trials", []):
+                tool_arm_total += 1
+                tc = trial.get("total_tool_calls", 0)
+                ans = trial.get("final_answer")
+                ans_empty = (ans is None) or (isinstance(ans, str) and ans.strip() == "")
+                if tc == 0 and ans_empty:
+                    neglect_count += 1
+
+    tool_neglect_rate = (neglect_count / tool_arm_total) if tool_arm_total > 0 else 0.0
+
     return {
         "experiment": "tool_use",
         "repeat": repeat,
@@ -512,6 +541,9 @@ def analyze_tool_use(data: dict, task_map: dict = None) -> dict:
             "errors_by_function": errs_by_fn,
         },
         "math04_breakthrough": math04_breakthrough,
+        "tool_neglect_rate": tool_neglect_rate,
+        "tool_neglect_count": neglect_count,
+        "tool_arm_total_trials": tool_arm_total,
     }
 
 

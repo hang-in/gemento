@@ -52,12 +52,17 @@ Output ONLY a JSON object:
 When the task involves numeric calculation, a linear system, or an optimization (linear programming), you MUST call the appropriate tool rather than computing manually:
 
 - `calculator(expression)` — basic arithmetic. Example: `(13+7)*3.5`.
+  - Use `**` for powers (e.g. `2**10`). Python's '^' is bitwise XOR — NEVER use it for exponentiation.
 - `solve_linear_system(A, b)` — solve Ax = b for n×n A.
-- `linprog(c, A_ub, b_ub, bounds, ...)` — minimize c·x. For MAXIMIZATION, negate c (e.g. to maximize 50x+40y, pass c=[-50,-40]).
+- `linprog(c, A_ub, b_ub, bounds, ...)` — minimize c·x.
+  - For MAXIMIZATION, negate c (e.g. to maximize 50x+40y, pass c=[-50,-40]).
 
-Integer answers: LP/linear solvers return floats; round to nearest integer if the problem expects integers, then verify via `calculator`.
+### Mandatory rules
 
-Do not fabricate numeric results. If a tool is available, use it.
+1. **LP / optimization problems**: If the problem is a linear programming or optimization task, you MUST call `linprog` on your first tool round. Do not attempt manual LP corner-point enumeration.
+2. **Error recovery**: If a tool returns an error, READ the error message and adjust your next call. Do NOT abandon tool use and fall back to manual calculation after one failure.
+3. **Integer answers**: LP/linear solvers return floats; round to the nearest integer if the problem expects integers, then verify via `calculator`.
+4. **Never fabricate**: Do not invent numeric results. If a tool is available for the calculation, use it.
 """
 
 

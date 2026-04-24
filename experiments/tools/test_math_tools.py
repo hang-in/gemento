@@ -23,6 +23,15 @@ class TestCalculator(unittest.TestCase):
         with self.assertRaises(ValueError):
             calculator("abs(-1)")
 
+    def test_bitxor_hint_message(self):
+        """BitXor 에러는 '**' 사용 힌트를 포함해야 한다."""
+        with self.assertRaises(ValueError) as ctx:
+            calculator("2^10")
+        msg = str(ctx.exception)
+        self.assertIn("BitXor", msg)
+        self.assertIn("**", msg)
+        self.assertIn("XOR", msg)
+
 
 class TestSolveLinearSystem(unittest.TestCase):
     def test_2x2_system(self):

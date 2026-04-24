@@ -998,6 +998,16 @@ TOOL_USE_CONDITIONS = [
 ]
 TOOL_USE_TASK_IDS = ["math-01", "math-02", "math-03", "math-04"]
 
+# ── Exp08b (tool-use refined) ──
+TOOL_USE_REFINED_REPEAT = TOOL_USE_REPEAT
+TOOL_USE_REFINED_MAX_CYCLES = TOOL_USE_MAX_CYCLES
+TOOL_USE_REFINED_PHASE_PROMPT = TOOL_USE_PHASE_PROMPT
+TOOL_USE_REFINED_CONDITIONS = [
+    {"label": "baseline_refined", "use_tools": False},
+    {"label": "tooluse_refined", "use_tools": True},
+]
+TOOL_USE_REFINED_TASK_IDS = TOOL_USE_TASK_IDS
+
 
 def run_tool_use():
     """실험 8: Math Tool-Use.
@@ -1113,6 +1123,120 @@ def run_tool_use():
         partial_path.unlink()
 
 
+def run_tool_use_refined():
+    """실험 8b: Tool-Use Refinement.
+
+    Exp08의 2개 부작용(calculator ^ 혼동, tool neglect)을 프롬프트·에러
+    메시지 개선으로 보완한 재측정. 태스크·파라미터는 Exp08과 동일.
+    """
+    all_tasks = load_tasks()
+    tasks = [t for t in all_tasks if t["id"] in TOOL_USE_REFINED_TASK_IDS]
+    assert len(tasks) == len(TOOL_USE_REFINED_TASK_IDS), \
+        f"missing tasks: expected {TOOL_USE_REFINED_TASK_IDS}"
+
+    partial_path = RESULTS_DIR / "partial_tool_use_refined.json"
+    results_by_condition: dict[str, list] = {}
+    finished: set[tuple[str, str]] = set()
+
+    if partial_path.exists():
+        try:
+            with open(partial_path) as f:
+                partial_data = json.load(f)
+                results_by_condition = partial_data.get("results_by_condition", {})
+                for label, task_list in results_by_condition.items():
+                    for tr in task_list:
+                        finished.add((label, tr["task_id"]))
+            print(f"  → Resuming from checkpoint: {len(finished)} (condition, task) pairs done.")
+        except Exception:
+            print("  ⚠ Checkpoint load failed, starting from scratch.")
+
+    for cond in TOOL_USE_REFINED_CONDITIONS:
+        label = cond["label"]
+        use_tools = cond["use_tools"]
+
+        for task in tasks:
+            if (label, task["id"]) in finished:
+                continue
+
+            print(f"\n[Tool Use Refined] arm={label} | task={task['id']}")
+            task_results = []
+
+            for trial_idx in range(TOOL_USE_REFINED_REPEAT):
+                print(f"  Trial {trial_idx + 1}/{TOOL_USE_REFINED_REPEAT}...")
+
+                tattoo, abc_logs, final_answer = run_abc_chain(
+                    task_id=f"{task['id']}_{label}_t{trial_idx}",
+                    objective=task["objective"],
+                    prompt=task["prompt"],
+                    constraints=task.get("constraints"),
+                    termination="모든 비판이 수렴하고 최종 답변이 확정되면 종료",
+                    max_cycles=TOOL_USE_REFINED_MAX_CYCLES,
+                    use_phase_prompt=TOOL_USE_REFINED_PHASE_PROMPT,
+                    use_tools=use_tools,
+                )
+
+                cycle_details = []
+                total_tool_calls = 0
+                tool_errors = 0
+                for cl in abc_logs:
+                    cd = {
+                        "cycle": cl.cycle,
+                        "phase": cl.phase,
+                        "a_error": cl.a_log.error if cl.a_log else None,
+                        "b_error": cl.b_error,
+                        "c_error": cl.c_error,
+                    }
+                    tc_list = getattr(cl, "tool_calls", []) or []
+                    total_tool_calls += len(tc_list)
+                    tool_errors += sum(1 for tc in tc_list if tc.get("error"))
+                    cd["tool_calls"] = tc_list
+                    cycle_details.append(cd)
+
+                task_results.append({
+                    "trial": trial_idx + 1,
+                    "max_cycles": TOOL_USE_REFINED_MAX_CYCLES,
+                    "use_phase_prompt": TOOL_USE_REFINED_PHASE_PROMPT,
+                    "use_tools": use_tools,
+                    "actual_cycles": len(abc_logs),
+                    "final_phase": tattoo.phase.value,
+                    "final_confidence": tattoo.confidence,
+                    "total_assertions": len(tattoo.assertions),
+                    "final_answer": final_answer,
+                    "total_tool_calls": total_tool_calls,
+                    "tool_errors": tool_errors,
+                    "cycle_details": cycle_details,
+                })
+
+            results_by_condition.setdefault(label, []).append({
+                "task_id": task["id"],
+                "objective": task["objective"],
+                "expected_answer": task.get("expected_answer"),
+                "trials": task_results,
+            })
+
+            with open(partial_path, "w", encoding="utf-8") as f:
+                json.dump({
+                    "experiment": "tool_use",
+                    "model": MODEL_NAME,
+                    "conditions": TOOL_USE_REFINED_CONDITIONS,
+                    "results_by_condition": results_by_condition,
+                }, f, ensure_ascii=False, indent=2)
+
+    result = {
+        "experiment": "tool_use",
+        "variant": "refined",
+        "model": MODEL_NAME,
+        "conditions": TOOL_USE_REFINED_CONDITIONS,
+        "task_ids": TOOL_USE_REFINED_TASK_IDS,
+        "repeat": TOOL_USE_REFINED_REPEAT,
+        "results_by_condition": results_by_condition,
+    }
+    save_result("exp08b_tool_use_refined", result)
+
+    if partial_path.exists():
+        partial_path.unlink()
+
+
 # ── CLI ──
 
 EXPERIMENTS = {
@@ -1128,6 +1252,7 @@ EXPERIMENTS = {
     "tool-separation": run_tool_separation,
     "loop-saturation": run_loop_saturation,
     "tool-use": run_tool_use,
+    "tool-use-refined": run_tool_use_refined,
 }
 
 
