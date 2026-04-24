@@ -14,26 +14,42 @@
 
 > 이 결과는 4.5~7.5B 소형 모델에서 달성한 것이며, 모든 실험은 단일 GPU로 로컬 재현 가능합니다.
 
-**👉 Join this open research** — 이 레포는 공개된 연구 질문들을 가지고 있으며, 다른 모델·태스크·환경에서의 재현·확장 기여를 환영합니다. [§ 5 "How to Contribute"](#8-how-to-contribute) 참조.
+이 레포는 **MIT 라이선스로 공개된 1인 연구 노트**입니다. 관심 있는 누구든 자유롭게 fork·재현·확장할 수 있습니다. 협업 창구는 프로젝트가 더 성숙한 시점에 열 예정입니다.
 
 ---
 
 ## 목차
 
-1. [The Core Idea — 외부화](#1-the-core-idea--외부화)
-2. [What We've Proven](#2-what-weve-proven)
-3. [What's Still Open — 열린 연구 질문](#3-whats-still-open--열린-연구-질문)
-4. [Who We're Looking For](#4-who-were-looking-for)
-5. [Quickstart (10 minutes)](#5-quickstart-10-minutes)
-6. [Reproduce / Extend](#6-reproduce--extend)
-7. [Roadmap](#7-roadmap)
-8. [How to Contribute](#8-how-to-contribute)
-9. [Docs Map](#9-docs-map)
-10. [License](#10-license)
+1. [Why Gemento — 설계 원칙](#1-why-gemento--설계-원칙)
+2. [The Core Idea — 외부화](#2-the-core-idea--외부화)
+3. [What We've Proven](#3-what-weve-proven)
+4. [What's Still Open — 열린 연구 질문](#4-whats-still-open--열린-연구-질문)
+5. [Who Might Find This Useful](#5-who-might-find-this-useful)
+6. [Quickstart (10 minutes)](#6-quickstart-10-minutes)
+7. [Reproduce / Extend](#7-reproduce--extend)
+8. [Roadmap](#8-roadmap)
+9. [How to Contribute](#9-how-to-contribute)
+10. [Docs Map](#10-docs-map)
+11. [License](#11-license)
 
 ---
 
-## 1. The Core Idea — 외부화
+## 1. Why Gemento — 설계 원칙
+
+제멘토는 소형 LLM을 대형 LLM의 "축소판"으로 보지 않습니다. 소형 모델에는 소형 모델이 잘하는 판단이, 대형 모델에는 대형 모델이 잘하는 판단이 있으며, 그 두 층위를 **크기가 아닌 역할로 배치**하는 것이 설계의 출발점입니다.
+
+요약하면 **쓸 땐 쓰고 새는 건 막는다** — 4가지 운영 원칙으로 구체화합니다:
+
+- **역할 기반 배치** — 크기가 아니라 태스크가 요구하는 판단 유형(결정론적 검증, 의미론적 비판, 메타 제어)에 맞춰 모델을 고른다.
+- **자원은 필요할 때 충분히** — Tool 호출, 루프 예산, 대형 모델 escalation은 품질이 요구할 때 아끼지 않는다. 맥락 없는 절약이 오히려 품질을 떨어뜨린다.
+- **중복·드리프트는 설계로 차단** — 같은 작업의 중복 호출, 근거 없는 재계산, 조건 없는 retry는 Tattoo와 Handoff Protocol이 구조적으로 막는다.
+- **측정은 있는 그대로** — 채점 오류(Exp07 math-04 `expected_answer` 결함)를 발견 즉시 정정하고, 유의미하지 않은 수치에 의미를 덧붙이지 않는다.
+
+모델 규모에 따라 자연스럽게 형성되는 불균형을 **설계 차원에서 완화**할 수 있다고 보는 실용 연구 노트입니다.
+
+---
+
+## 2. The Core Idea — 외부화
 
 소형 LLM은 모든 것을 기억할 수 없다. 제멘토는 **기억 대신 환경에 새기고**, **생각 대신 도구로 확인하고**, **자기 검증 대신 다른 역할에게 비판받는다**. 이 원리는 영화 *Memento*의 Leonard가 단기 기억상실과 함께 살아가는 방식과 정확히 닮았다 — 우연이 아니라 **설계의 근간**이다.
 
@@ -97,7 +113,7 @@
 
 ---
 
-## 2. What We've Proven
+## 3. What We've Proven
 
 지금까지 9차 실험(288 + 누적 150+ trials)에서 확인된 가설:
 
@@ -118,7 +134,7 @@
 
 ---
 
-## 3. What's Still Open — 열린 연구 질문
+## 4. What's Still Open — 열린 연구 질문
 
 검증 대기 중이거나 미외부화된 축들. 재현·확장 결과는 어떤 규모든 환영합니다.
 
@@ -147,19 +163,19 @@
 
 ---
 
-## 4. Who We're Looking For
+## 5. Who Might Find This Useful
 
-특정 배경이 없어도 됩니다. 흥미·시간·하드웨어 중 하나만 있어도 기여 가능:
+다음과 같은 분에게는 이 레포가 흥미로울 수 있습니다 (적극 모집이 아닌 초대입니다 — 원할 때 fork해서 돌려보시면 됩니다):
 
-- **🧪 다른 모델 보유자** — Qwen/Phi/Llama/Mistral 등 소형 모델을 돌려볼 수 있는 분. 재현 결과 자체가 논문 가치. *[난이도: 낮음]*
-- **🛠️ 프롬프트·툴 엔지니어** — 새 Tool(Search/Graph/Evidence) 또는 새 Role(Extractor/Reducer) 구현·평가. *[난이도: 중]*
-- **🌐 다국어·도메인 전문가** — 한국어·일본어·의료·법률 태스크로 확장. scoring 다국어 이슈 해결. *[난이도: 중]*
-- **📐 RAG/벡터DB 경험자** — Search Tool과 seCall 같은 4-layer 환경 통합 설계. *[난이도: 중~높음]*
-- **📊 ML 연구자** — 실패 모드 분석, 통계적 유의성 검증, ablation 설계. 논문 공동 저자 후보. *[난이도: 높음]*
+- **🧪 다른 모델 보유자** — Qwen/Phi/Llama/Mistral 등 소형 모델을 돌려볼 수 있는 분. 재현 결과 자체가 의미 있음. *[난이도: 낮음]*
+- **🛠️ 프롬프트·툴 엔지니어** — 새 Tool(Search/Graph/Evidence) 또는 새 Role(Extractor/Reducer) 구현·평가에 관심 있는 분. *[난이도: 중]*
+- **🌐 다국어·도메인 전문가** — 한국어·일본어·의료·법률 태스크로 확장, scoring 다국어 이슈 해결에 관심 있는 분. *[난이도: 중]*
+- **📐 RAG/벡터DB 경험자** — Search Tool이나 외부 지식 환경 통합 설계에 관심 있는 분. *[난이도: 중~높음]*
+- **📊 ML 연구자** — 실패 모드 분석, 통계적 유의성 검증, ablation 설계에 관심 있는 분. *[난이도: 높음]*
 
 ---
 
-## 5. Quickstart (10 minutes)
+## 6. Quickstart (10 minutes)
 
 ### 환경 준비
 ```bash
@@ -200,7 +216,7 @@ python measure.py "results/exp08_*.json" --markdown --output results/exp08_repor
 
 ---
 
-## 6. Reproduce / Extend
+## 7. Reproduce / Extend
 
 ### (a) 다른 모델로 실험
 `experiments/config.py`에서 2줄만 변경:
@@ -236,20 +252,20 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 
 ---
 
-## 7. Roadmap
+## 8. Roadmap
 
 | 시점 | 항목 |
 |------|------|
 | **단기 (대기)** | Exp08b Windows 실행 → H8 판정 |
 | **중기** | Exp09 후보 선정 — Extractor/Reducer Role, Search Tool, Long-context stress 중 택일 |
-| **중장기** | seCall 4-layer 환경 통합 실험 (벡터·그래프 사용) |
-| **장기** | 크로스 모델 재현 연구 (Qwen / Phi / Llama), 논문 preprint 가능성 타진 |
+| **중장기** | 외부 지식 환경 (4-layer) 통합 실험 (벡터·그래프 사용) |
+| **장기** | 크로스 모델 재현 (Qwen / Phi / Llama) · 체계적 ablation · 연구 결과 정리 (technical report / blog) |
 
 상세 이력·다음 질문: [docs/reference/researchNotebook.md](docs/reference/researchNotebook.md)의 "현재 상태 및 다음 단계" 섹션.
 
 ---
 
-## 8. How to Contribute
+## 9. How to Contribute
 
 ### Contribution ladder (쉬운 것부터)
 
@@ -259,7 +275,7 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 | ⭐⭐ 수 시간 | 기존 실험을 다른 모델로 재현 → 결과 공유 | Issue (Reproduction) |
 | ⭐⭐⭐ 수 일 | 새 Tool 1개 구현 + 단위 테스트 + 통합 실험 | PR + 결과 리포트 |
 | ⭐⭐⭐⭐ 수 주 | 새 Role(Extractor/Reducer) 설계·구현·평가 | PR + 연구 노트 섹션 |
-| ⭐⭐⭐⭐⭐ 수 개월 | Long-context stress / cross-model 체계적 ablation | 공동 저자 후보 |
+| ⭐⭐⭐⭐⭐ 수 개월 | Long-context stress / cross-model 체계적 ablation | Acknowledgements 상단 + research write-up 공동 저자(해당 시) |
 
 ### 기여 프로세스
 
@@ -269,15 +285,15 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 
 ### Credit 정책
 
-- **⭐⭐⭐⭐⭐ 기여** (새 축 외부화, 체계적 ablation, 논문화 기여) → **공동 저자 후보**
+- **⭐⭐⭐⭐⭐ 기여** (새 축 외부화, 체계적 ablation) → **Acknowledgements 상단 + research write-up 공동 저자 (해당 시)**
 - **⭐⭐⭐ 이상 기여** (Tool/Role 구현, cross-model 재현) → **Acknowledgements + CONTRIBUTORS.md 명단**
 - **⭐~⭐⭐ 기여** → **GitHub contributor 자동 반영**
 
-제멘토는 *현재까지 1인 연구*이지만, 기여자가 생기면 모든 실험 결과에 기여자 이름이 명시됩니다. 결과 수치에 이름이 남는 것이 원칙.
+제멘토는 *현재 1인 연구 노트*이며 체계적 연구 커뮤니티는 아닙니다. 어떤 기여가 들어오든 실험 결과·문서에 기여자 이름이 명시됩니다. 레포가 성숙하고 체계적 연구로 발전하면 그때 공동 저작 가능성도 열립니다.
 
 ---
 
-## 9. Docs Map
+## 10. Docs Map
 
 | 경로 | 내용 |
 |------|------|
@@ -295,7 +311,7 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 
 ---
 
-## 10. License
+## 11. License
 
 [MIT](./LICENSE) — 자유롭게 fork·수정·재배포·상업 사용 가능. 저작권 고지만 유지해주세요.
 
