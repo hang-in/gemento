@@ -4,6 +4,8 @@ status: in_progress
 updated_at: 2026-04-24
 ---
 
+> **개념 프레임 canonical 문서**: [conceptFramework.md](./conceptFramework.md) — 4축 외부화 원리, 용어 정의, 축 ↔ 실험 매핑.
+
 # 제멘토 연구 노트 (Research Notebook)
 
 > 이 문서는 제멘토 프로젝트의 모든 실험을 육하원칙(5W1H) 기반으로 기록하는 증분형 연구 노트입니다.
@@ -23,15 +25,36 @@ updated_at: 2026-04-24
 
 ### 핵심 가설
 
-| ID | 가설 | 최종 판정 | 판정 실험 |
-|----|------|----------|----------|
-| H1 | 다단계 루프가 단일 추론보다 품질이 높다 | **채택** | Exp02 |
-| H2 | 오류가 루프를 거치며 증폭된다 | **기각** (오류 무감지) | Exp03 |
-| H3 | 교차 검증(역할 분리)이 오류를 감지할 수 있다 | **채택** (80%) | Exp035 |
-| H4 | A-B-C 역할 분리가 단일 에이전트 반복보다 우수하다 | **채택** (+22.6%p) | Exp06 |
-| H5 | MAX_CYCLES 상향이 정답률 향상에 기여한다 (루프 포화점 존재) | **부분 기각** (상한 확장 무효, actual_cycles≈7에서 포화) | Exp07 |
-| H6 | Phase별 특화 프롬프트가 baseline 대비 우수하다 | **조건부 채택** (장기 루프 15~20에서 +5~6%p) | Exp07 |
-| H7 | 외부 수학 도구(calculator/linalg/linprog)가 E4B의 계산 한계를 보완한다 | **채택** (+18.3%p, math-04 0→80%) | Exp08 |
+| ID | 가설 (외부화 축) | 최종 판정 | 판정 실험 |
+|----|------------------|----------|----------|
+| H1 | **[Orchestrator 외부화]** 다단계 루프가 단일 추론보다 품질이 높다 | **채택** | Exp02 |
+| H2 | **[Role 외부화 필요성 반증]** 오류가 루프를 거치며 증폭된다 | **기각** (오류 무감지) | Exp03 |
+| H3 | **[Role 외부화]** 교차 검증(역할 분리)이 오류를 감지할 수 있다 | **채택** (80%) | Exp035 |
+| H4 | **[Role 외부화 시너지]** A-B-C 역할 분리가 단일 에이전트 반복보다 우수하다 | **채택** (+22.6%p) | Exp06 |
+| H5 | **[Orchestrator 외부화 상한]** MAX_CYCLES 상향이 정답률 향상에 기여한다 (루프 포화점 존재) | **부분 기각** (상한 확장 무효, actual_cycles≈7에서 포화) | Exp07 |
+| H6 | **[Role 외부화 정교화]** Phase별 특화 프롬프트가 baseline 대비 우수하다 | **조건부 채택** (장기 루프 15~20에서 +5~6%p) | Exp07 |
+| H7 | **[Tool 외부화]** 외부 수학 도구(calculator/linalg/linprog)가 E4B의 계산 한계를 보완한다 | **채택** (+18.3%p, math-04 0→80%) | Exp08 |
+
+#### 축 ↔ 실험 매트릭스
+
+각 실험이 4개 외부화 축 중 어느 축(들)을 검증했는지의 2D 매트릭스. ✅ = 주 검증, ▶ = 간접 관련, — = 해당 없음.
+
+| 실험 | Tattoo | Tool | Role Agent | Orchestrator |
+|------|:------:|:----:|:----------:|:------------:|
+| Exp00 (Baseline) | — | — | — | — |
+| Exp01 (Assertion Cap) | ✅ | — | — | — |
+| Exp02 v2 (Multiloop) | ▶ | — | — | ✅ |
+| Exp03 (Error Propagation) | — | — | ✅ (반증) | — |
+| Exp035 (Cross Validation) | — | — | ✅ | — |
+| Exp04 (A-B-C Pipeline) | ▶ | — | ✅ | ✅ (Judge Role) |
+| Exp045 (Handoff Protocol) | ✅ | — | ▶ | — |
+| Exp05b (Hard Tasks) | ✅ | — | ✅ | — |
+| Exp06 (Solo Budget) | — | — | ✅ | — |
+| Exp07 (Loop Saturation) | — | — | ▶ | ✅ |
+| Exp08 (Math Tool-Use) | — | ✅ | ▶ | — |
+| Exp08b (Tool Refinement) | — | ✅ | — | — |
+
+> 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조.
 
 ---
 
@@ -539,6 +562,7 @@ Python          = 안전장치만 (safety net, 0회 발동)
 8. **문신 점유율 측정** — 루프 진행 시 문신이 context window를 차지하는 비율 추적 필요
 9. **taskset expected_answer 전수 검증** — math-04 결함 사례를 볼 때 다른 태스크의 정답도 수학적으로 검증되어야 함
 10. **한국어 답변 v2 scoring** — Exp08 math-03에서 한국어 답변의 keyword 매칭 편차 관찰. 다국어 응답 채점 방침 결정 필요
+11. **미외부화 축 보강** — 현재 검증된 4축(Tattoo/Tool/Role/Orchestrator) 외 확장 후보: **Extractor**(원문→claim), **Reducer**(chunk→일일), **Search Tool**(BM25/vector), **Graph Tool**(relation traversal), **Evidence Tool**(evidence_ref resolve), **Critic Tool**(schema·citation 결정론적 검증). 자세한 목록은 [conceptFramework.md § 9](./conceptFramework.md) 참조.
 
 ---
 
