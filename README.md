@@ -1,226 +1,284 @@
 # gemento (제멘토)
 
-> **소형 LLM의 계산·추론 한계를, 외부 상태와 외부 도구로 뚫는다.**
+> **소형 LLM의 내부 한계를 체계적으로 외부화한다.** 기억은 환경에 새기고, 계산은 도구에 맡기고, 검증은 다른 역할에게 비판받는다.
 
-제멘토(gemento)는 **Gemma 4 E4B**(~4.5B) 같은 소형 언어모델이 단일 추론으로 해결할 수 없는 복잡한 태스크를, **외부 구조(문신/Tattoo) + 역할 분리(A-B-C) + 외부 도구(tool-use)**의 세 축으로 확장할 수 있는지 체계적으로 검증하는 연구 프로젝트입니다. 2026-04-08 착수, 현재 9차 실험(Exp08b)까지 완료.
+제멘토는 Gemma 4 E4B(7.5B, Q8_0) 같은 소형 언어모델이 단일 추론으로 해결하지 못하는 복잡한 태스크를, **외부 상태(문신) + 역할 분리(A-B-C) + 외부 도구(tool-use)**의 세 축으로 확장할 수 있는지 **체계적으로 증명하는 오픈 연구**입니다.
 
----
+**증명된 핵심 수치 (재현 가능)**
 
-## 핵심 가설과 판정
+| 실험 | Before | After | Δ | 외부화 축 |
+|------|--------|-------|------|----------|
+| Exp02 (다단계 루프) | 50% (1-shot) | **94.4%** (8 loops) | +44.4%p | Orchestrator |
+| Exp035 (교차 검증) | **0%** (자가) | **80%** (역할 분리) | +80%p | Role Agent |
+| Exp08 (Tool-use, math-04 LP) | 0% (tool 없음) | **80%** (linprog 주입) | +80%p | Tool |
 
-| ID | 가설 | 판정 | 판정 실험 |
-|----|------|------|----------|
-| **H1** | 다단계 루프가 단일 추론보다 품질이 높다 | ✅ 채택 | Exp02 v2 (50%→94.4%) |
-| **H2** | 오류가 루프를 거치며 증폭된다 | ❌ 기각 (대신 silent failure 발견) | Exp03 |
-| **H3** | 교차 검증(역할 분리)이 오류를 감지할 수 있다 | ✅ 채택 (자가 0% → 교차 80%) | Exp035 |
-| **H4** | A-B-C 역할 분리가 단일 에이전트 반복보다 우수하다 | ✅ 채택 (+22.6%p) | Exp06 |
-| **H5** | MAX_CYCLES 상향이 정답률 향상에 기여한다 | ⚠️ 부분 기각 (포화점은 상한이 아니라 actual_cycles≈7) | Exp07 |
-| **H6** | Phase별 특화 프롬프트가 baseline보다 우수하다 | ✅ 조건부 채택 (장기 루프에서 +5~6%p) | Exp07 |
-| **H7** | 외부 수학 도구가 E4B의 계산 한계를 보완한다 | ✅ 채택 (+18.3%p, math-04 0→80%) | Exp08 |
-| **H8** | 에러 피드백 + Prompt 강화로 tool neglect/오용이 감소한다 | 🔄 **Exp08b 실행 대기** | — |
+> 이 결과는 4.5~7.5B 소형 모델에서 달성한 것이며, 모든 실험은 단일 GPU로 로컬 재현 가능합니다.
+
+**👉 Join this open research** — 이 레포는 공개된 연구 질문들을 가지고 있으며, 다른 모델·태스크·환경에서의 재현·확장 기여를 환영합니다. [§ 5 "How to Contribute"](#8-how-to-contribute) 참조.
 
 ---
 
-## 핵심 개념 (3축)
+## 목차
 
-### 1. 문신(Tattoo) — 외부 상태
-
-소형 LLM은 컨텍스트·집중력 제약으로 다단계 추론을 한 번에 끝내지 못한다. **문신은 "다음 추론을 가능하게 하는 구조화된 외부 상태"**이다 (로그나 기억이 아님). 각 loop마다 모델은 fresh context로 호출되며, 이전 진행상황은 JSON 스키마로 보존된 문신을 통해서만 전달된다.
-
-핵심 필드:
-- `meta` — 태스크 식별자, 목표, 제약조건
-- `phase` — `DECOMPOSE → INVESTIGATE → SYNTHESIZE → VERIFY → CONVERGED`
-- `assertions` — 확정된 사실 (soft cap 8)
-- `handoff_a2b`, `handoff_b2c` — 에이전트 간 정보 전달 규약
-- `critique_log` — B의 판정 이력
-- `next_directive` — 다음 loop가 수행할 지시
-
-### 2. A-B-C 직렬 파이프라인 — 역할 분리
-
-같은 E4B 모델 3개가 **서로 다른 역할 프롬프트**로 직렬 연결된다. Python 오케스트레이터는 안전장치만 담당한다.
-
-| 역할 | 프롬프트 이름 | 기능 | 검증된 능력 |
-|------|---------------|------|-------------|
-| **A (Proposer)** | `SYSTEM_PROMPT` | 추론 실행, assertion 생성 | 단계적 추론 ✅ |
-| **B (Critic)** | `CRITIC_PROMPT` | A의 assertion을 단위별 검증 | 교차 검증 80% ✅ |
-| **C (Judge)** | `JUDGE_PROMPT` | B의 비판 수렴 여부 판단, phase 전이 결정 | 자율 phase 전이 100% ✅ |
-
-> **주의**: A-B-C는 제멘토 내부의 역할명이며, tunaFlow의 워크플로우 역할(Architect/Developer/Reviewer)과는 **별개의 개념**이다.
-
-**핵심 원칙**: "한 모델이 추론과 메타 판단(phase 전이, 자가 검증)을 동시에 수행하지 못한다. 역할 분리가 필수다." (Exp02 v1 → v2에서 입증)
-
-### 3. 외부 도구(Tool-use) — 계산 한계 보완
-
-구조적 계산 한계(LP 최적화, 선형계수 대수 등)는 루프 수나 프롬프트 강화로 돌파되지 않는다. OpenAI 호환 `tool_calls` 경로로 A에게 외부 도구를 제공한다.
-
-| 도구 | 구현 | 용도 |
-|------|------|------|
-| `calculator(expression)` | Python AST 화이트리스트 eval | 사칙연산·거듭제곱·괄호 |
-| `solve_linear_system(A, b)` | `numpy.linalg.solve` | n×n 연립방정식 |
-| `linprog(c, A_ub, b_ub, bounds, ...)` | `scipy.optimize.linprog(method='highs')` | 선형계획법 최적화 |
-
-도구는 **A에게만** 주입되어 역할 분리 원칙이 유지된다. B/C는 도구 없이 텍스트만으로 검증한다 (Exp08에서 +18.3%p, math-04 0→80% 돌파).
+1. [The Core Idea — 외부화](#1-the-core-idea--외부화)
+2. [What We've Proven](#2-what-weve-proven)
+3. [What's Still Open — 열린 연구 질문](#3-whats-still-open--열린-연구-질문)
+4. [Who We're Looking For](#4-who-were-looking-for)
+5. [Quickstart (10 minutes)](#5-quickstart-10-minutes)
+6. [Reproduce / Extend](#6-reproduce--extend)
+7. [Roadmap](#7-roadmap)
+8. [How to Contribute](#8-how-to-contribute)
+9. [Docs Map](#9-docs-map)
+10. [License](#10-license)
 
 ---
 
-## 실험 여정
+## 1. The Core Idea — 외부화
 
-| 실험 | 주제 | 핵심 결과 |
-|------|------|-----------|
-| **Exp00** | 단일 추론 Baseline | 9/18 (50%) — 구조적 지원 필요성 확인 |
-| **Exp01** | Assertion Cap | cap 12까지 JSON 파싱 100% — soft cap 8 타당성 |
-| **Exp02** | Multi-loop (H1) | v1(모델 자율) 0% → v2(오케스트레이터 강제) 94.4% |
-| **Exp03** | 오류 전파 (H2) | 자가 검증 0/15 — silent failure 발견 |
-| **Exp035** | 교차 검증 게이트 (H3) | 12/15 (80%) 감지 — A-B-C 진행 근거 확보 |
-| **Exp04** | A-B-C 파이프라인 (H4) | 수렴 100%, C 자율 phase 전이 30/30 |
-| **Exp045** | Handoff Protocol | `prioritized_focus + constraints`로 18/18 (100%) |
-| **Exp05b** | 고난도 태스크 확장 | 9 태스크 40/45 (88.9%), logic-02 유일 약점 |
-| **Exp06** | Solo-Budget 비교 | ABC vs Solo — Scoring V2 도입으로 재측정 필요성 발견 |
-| **Exp07** | Loop Saturation (H5, H6) | 288 trials, 포화점 actual_cycles≈7 (상한 아님) |
-| **Exp08** | **Math Tool-Use (H7)** | **+18.3%p, math-04 0→80% 돌파** |
-| **Exp08b** | Tool-Use Refinement (H8) | 🔄 실행 대기 — calculator `^` 혼동 + tool neglect 완화 |
+소형 LLM은 모든 것을 기억할 수 없다. 제멘토는 **기억 대신 환경에 새기고**, **생각 대신 도구로 확인하고**, **자기 검증 대신 다른 역할에게 비판받는다**. 이 원리는 영화 *Memento*의 Leonard가 단기 기억상실과 함께 살아가는 방식과 정확히 닮았다 — 우연이 아니라 **설계의 근간**이다.
 
-### 주요 발견
+### Memento ↔ 제멘토 매핑
 
-- **모델 vs 구조**: 실험 2에서 동일 E4B를 "자율 phase 전이"로 돌리면 0%, Python 오케스트레이터가 강제하면 94.4%. 모델 지능이 아닌 **구조 설계**가 성능을 결정한다.
-- **Silent failure**: 실험 3에서 corrupted assertion을 주입해도 모델이 confidence 1.0으로 무비판 수용. 자가 검증은 작동하지 않는다.
-- **역할 분리의 본질적 효과**: 같은 E4B라도 "비판자 역할 프롬프트"를 주면 80% 오류 감지. 자가 0% → 교차 80%.
-- **Exp07 포화점 재해석**: MAX_CYCLES를 8→20으로 올려도 실제 사용 cycle은 ~7에 고정. 포화는 상한이 아니라 C의 수렴 판정이 결정.
-- **Exp08 math-04 0→80%**: Exp07에서 "50% 정체"로 보였던 것은 실제로는 **채점 데이터 결함(제약 위반 expected_answer)**에 의한 artifact. 정정 후 baseline은 0%였고, `linprog` 도구 주입으로 80%까지 상승.
+| Memento 영화 요소 | 제멘토 대응 | 외부화 대상 |
+|-------------------|-------------|-------------|
+| 문신 (지워지지 않는 핵심) | **Tattoo** (Structured State Imprint, JSON 스키마) | 상태 (기억) |
+| 폴라로이드 사진 | `evidence_ref` (스냅샷 포인터) | 증거 |
+| 전화 (외부 정보 확인) | **Tool** (calculator / linprog / search) | 행동 |
+| 조연 인물 (다른 관점) | **Role Agent** (Proposer / Critic / Judge) | 관점 |
+| 반복 조사 (단서 재구성) | **Orchestrator loop** (A→B→C cycle) | 메타 제어 |
 
----
+영화와 달리 제멘토는 **각 요소를 명시적·구조화된 스키마**로 설계한다 — 종이 문신이 아니라 JSON, 우연한 만남이 아니라 A-B-C 직렬 호출.
 
-## 아키텍처 구조
+### 4축 구조
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│ Python Orchestrator (safety net only)                      │
-│  ├ MAX_CYCLES 상한                                          │
-│  ├ Phase 강제 전이 (fallback)                               │
-│  └ tool_calls loop (max_tool_rounds=5)                     │
-└─────────────────┬──────────────────────────────────────────┘
-                  │
-        ┌─────────▼─────────┐    ┌──────────┐    ┌──────────┐
-        │  A (Proposer)     │ ─→ │  B       │ ─→ │  C       │
-        │  E4B Q8_0         │    │ (Critic) │    │ (Judge)  │
-        │  + tools (math)   │    │  E4B     │    │  E4B     │
-        └─────────┬─────────┘    └────┬─────┘    └────┬─────┘
-                  │                   │                │
-                  └───────────┬───────┴────────────────┘
-                              ▼
-                    ┌──────────────────┐
-                    │  Tattoo (JSON)   │ ← 외부 상태 (fresh ctx 간 유일한 채널)
-                    └──────────────────┘
+            소형 LLM (Gemma 4 E4B)
+                    │
+          ┌─────────┴─────────┐
+          │    내부 한계        │
+          └─────────┬─────────┘
+      ┌────────┬───┴───┬───────┬───────┐
+      ▼        ▼       ▼       ▼
+  ┌────────┐┌──────┐┌──────┐┌─────────┐
+  │ Tattoo ││ Tools││ Role ││ Orches- │
+  │ (상태) ││(행동)││(관점)││ trator  │
+  │        ││      ││      ││  (메타) │
+  └────────┘└──────┘└──────┘└─────────┘
+      │        │       │       │
+      └────────┴───┬───┴───────┘
+                   ▼
+         ┌─────────────────┐
+         │   외부 환경       │
+         │ (FS/DB/API)     │
+         └─────────────────┘
 ```
 
----
-
-## 기술 스택
-
-- **모델**: Gemma 4 E4B (7.5B params, Q8_0 GGUF)
-- **추론 엔진**: llama.cpp server (OpenAI-compatible `/v1/chat/completions`, `tool_calls` 지원)
-- **서버 스펙**: n_ctx=8192×4 slots, flash-attn, 전체 GPU offload
-- **언어**: Python 3.14 (venv 필수 — PEP 668)
-- **런타임 의존성**: `httpx` (LLM 호출), `scipy`, `numpy` (Exp08+ 도구)
-
-### 인프라 이력
-
-| 시점 | 추론 엔진 | 양자화 | 실험 |
-|------|-----------|--------|------|
-| 2026-04-08 ~ 04-15 | Ollama `gemma4:e4b` | Q4_K_M (4.5GB) | Exp00 ~ Exp06 |
-| 2026-04-21 ~ 현재 | llama.cpp `gemma4-e4b` | **Q8_0 (8.0GB)** | Exp07 이후 |
-
-Q4_K_M → Q8_0 전환으로 정밀도 2배 향상. 과거 실험과의 **직접 비교 시 주의 필요**.
+**자세한 프레임 정의**: [docs/reference/conceptFramework.md](docs/reference/conceptFramework.md) — 4축 구현 예시, Critic Tool vs Critic Agent 경계, Tattoo–Evidence 결합 쌍, Orchestrator 이중 구분(Python vs Judge Role), 실험별 축 매핑.
 
 ---
 
-## 시작하기
+## 2. What We've Proven
 
-### 1. 환경 준비
+지금까지 9차 실험(288 + 누적 150+ trials)에서 확인된 가설:
 
+| ID | 가설 (외부화 축) | 판정 | 근거 실험 |
+|----|-----------------|------|----------|
+| **H1** | [Orchestrator 외부화] 다단계 루프가 단일 추론보다 품질이 높다 | ✅ 채택 (+44.4%p) | Exp02 v2 |
+| **H2** | [Role 외부화 필요성 반증] 자가 검증으로 오류를 감지할 수 있다 | ❌ 기각 (0/15 감지) | Exp03 |
+| **H3** | [Role 외부화] 교차 검증(역할 분리)이 오류를 감지할 수 있다 | ✅ 채택 (12/15, 80%) | Exp035 |
+| **H4** | [Role 외부화 시너지] A-B-C 역할 분리가 단일 에이전트 반복보다 우수하다 | ✅ 채택 (+22.6%p) | Exp06 |
+| **H5** | [Orchestrator 상한 효과] MAX_CYCLES 상향이 정답률 향상에 기여한다 | ⚠️ 부분 기각 — 포화점은 상한이 아니라 actual_cycles ≈ 7 | Exp07 |
+| **H6** | [Role 외부화 정교화] Phase별 특화 프롬프트가 baseline보다 우수하다 | ✅ 조건부 채택 (장기 루프 +5~6%p) | Exp07 |
+| **H7** | [Tool 외부화] 외부 수학 도구가 E4B의 계산 한계를 보완한다 | ✅ 채택 (+18.3%p, math-04 0→80%) | Exp08 |
+
+핵심 통찰:
+- **모델 능력이 아니라 구조가 성능을 결정한다** — 같은 E4B 모델이 Exp02 v1에서 자율 phase 전이 0%, v2에서 외부 강제 94.4%.
+- **자가 검증은 작동하지 않는다** (H2). 역할을 바꾼 비판자(B)가 같은 모델에서 80% 회수 (H3).
+- **"채점 데이터 결함"이 실험 결론을 뒤집을 수 있다** — Exp07의 math-04 "50% 정체"는 expected_answer 자체가 제약 위반이었음이 Exp08에서 판명.
+
+---
+
+## 3. What's Still Open — 열린 연구 질문
+
+검증 대기 중이거나 미외부화된 축들. 재현·확장 결과는 어떤 규모든 환영합니다.
+
+### 3.1 검증 대기 중인 가설
+
+- **H8 — Tool-use 안정성**: Exp08b(BitXor 힌트 + Mandatory tool rules)가 tool_neglect_rate를 0%까지 낮추는가? math 정답률 90%→95%+로 상승하는가? — **실행 대기 상태**.
+
+### 3.2 미외부화 축 (conceptFramework § 9)
+
+| 축 | 내용 | 기여 기회 |
+|----|------|-----------|
+| **Extractor Role** | 원문 chunk → claim·entity 추출. 장기 워크플로우의 진입점 | 구현 + 평가 |
+| **Reducer Role** | 다수 chunk Tattoo → 일일/프로젝트 단위 요약 통합 | 구현 + 평가 |
+| **Search Tool** | 과거 세션·문서 retrieval (BM25/vector/hybrid) | Tool 통합 + 측정 |
+| **Graph Tool** | entity/relation 다중 hop traversal | Tool 통합 + 측정 |
+| **Evidence Tool** | `evidence_ref` resolve API — Tattoo와 결합 쌍 | 스키마 + 구현 |
+| **Critic Tool** | JSON schema·citation 같은 결정론적 검증기 | 순수 함수 구현 |
+| **Large Model Tool** | Sonnet/Opus escalation 경로 — 비용-품질 트레이드오프 | 정책 + 실험 |
+
+### 3.3 확장 실험 질문
+
+- **다른 소형 모델에서도 4축 외부화가 같은 효과인가?** — Qwen 2.5 7B, Phi-4, Llama 3.2 3B 등에서 재현.
+- **Context limit 직접 돌파** — 현재 태스크셋은 sliding_window(512)를 스트레스하지 않음. Long-context multi-hop QA로 "외부 상태가 유효 attention을 확장하는가"를 직접 증명 (Exp09 후보).
+- **한국어·다국어 scoring 편차** — Exp08 math-03에서 한국어 답변의 v2 keyword 매칭 변동 관찰. 다국어 응답 채점 방침 미정.
+- **taskset expected_answer 수학적 검증** — math-04 결함 사례를 볼 때 다른 태스크 정답의 전수 검증 필요.
+
+---
+
+## 4. Who We're Looking For
+
+특정 배경이 없어도 됩니다. 흥미·시간·하드웨어 중 하나만 있어도 기여 가능:
+
+- **🧪 다른 모델 보유자** — Qwen/Phi/Llama/Mistral 등 소형 모델을 돌려볼 수 있는 분. 재현 결과 자체가 논문 가치. *[난이도: 낮음]*
+- **🛠️ 프롬프트·툴 엔지니어** — 새 Tool(Search/Graph/Evidence) 또는 새 Role(Extractor/Reducer) 구현·평가. *[난이도: 중]*
+- **🌐 다국어·도메인 전문가** — 한국어·일본어·의료·법률 태스크로 확장. scoring 다국어 이슈 해결. *[난이도: 중]*
+- **📐 RAG/벡터DB 경험자** — Search Tool과 seCall 같은 4-layer 환경 통합 설계. *[난이도: 중~높음]*
+- **📊 ML 연구자** — 실패 모드 분석, 통계적 유의성 검증, ablation 설계. 논문 공동 저자 후보. *[난이도: 높음]*
+
+---
+
+## 5. Quickstart (10 minutes)
+
+### 환경 준비
 ```bash
-# macOS/Linux
-python3 -m venv .venv
-source .venv/bin/activate
+git clone https://github.com/hang-in/gemento.git
+cd gemento
+python3.14 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\Activate.ps1
 pip install httpx scipy numpy
 ```
 
-```powershell
-# Windows PowerShell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install httpx scipy numpy
-```
-
-### 2. 추론 서버
-
-`experiments/config.py`의 `API_BASE_URL`을 llama.cpp 서버 주소로 설정. 로컬이면 `http://localhost:8080`, 원격이면 해당 endpoint.
+### 추론 서버 연결
+`experiments/config.py`의 `API_BASE_URL`을 llama.cpp 서버 주소로 설정(OpenAI 호환 `/v1/chat/completions` + `tool_calls` 지원 필요). 로컬이면 `http://localhost:8080`.
 
 ```bash
 # 서버 헬스 체크
-curl -s $API_BASE_URL/v1/models
-# 기대: {"object": "list", "data": [{"id": "gemma4-e4b", ...}]}
+curl -s $API_BASE_URL/v1/models | jq .data[].id
+# 기대: "gemma4-e4b" 또는 본인이 로드한 모델 id
 ```
 
-### 3. 실험 실행
-
-```bash
-cd experiments
-
-# 사용 가능한 실험 목록
-python run_experiment.py --help
-
-# 예: Exp08 Math Tool-Use 실행
-python run_experiment.py tool-use
-
-# 결과 분석 (UTF-8 권장)
-python measure.py "results/exp08_tool_use_*.json" --markdown --output results/exp08_report.md
-```
-
-모든 실험은 체크포인트 지원 — 중단 후 재실행 시 자동으로 이어간다 (`partial_*.json`).
-
-### 4. Smoke test (Exp08+ 필수)
-
+### Smoke test (실제 tool round-trip 검증)
 ```bash
 cd experiments
 python tools/smoke_test.py
-# 기대 종료: "SMOKE TEST PASSED: math-04 answer=..., tool_calls=..."
+# 기대: "SMOKE TEST PASSED: math-04 answer=..., tool_calls=..."
 ```
+
+### 첫 실험 실행
+```bash
+# 가장 짧은 실험 (baseline, 약 2-3분)
+python run_experiment.py baseline
+
+# 가장 흥미로운 실험 (tool-use, 약 1-2시간)
+python run_experiment.py tool-use
+python measure.py "results/exp08_*.json" --markdown --output results/exp08_report.md
+```
+
+모든 실험은 체크포인트 지원 — 중단 후 재실행 시 `partial_*.json`에서 자동으로 이어갑니다.
 
 ---
 
-## 문서 맵
+## 6. Reproduce / Extend
+
+### (a) 다른 모델로 실험
+`experiments/config.py`에서 2줄만 변경:
+```python
+MODEL_NAME = "qwen2.5-7b-instruct"  # 또는 phi-4, llama-3.2-3b, ...
+API_BASE_URL = "http://localhost:8080"
+```
+llama.cpp 서버가 tool_calls를 지원해야 함 (`/props` 응답의 `chat_template_caps.supports_tools: true` 확인). 같은 실험 명령 (`python run_experiment.py tool-use`)으로 비교 가능.
+
+### (b) 새 Tool 추가
+`experiments/tools/math_tools.py` 패턴을 따라 `experiments/tools/{your_tool}.py`에 순수 함수 + OpenAI schema 정의. `experiments/tools/__init__.py`의 `TOOL_FUNCTIONS`, `TOOL_SCHEMAS`에 등록. 예시:
+
+```python
+def search_tool(query: str, limit: int = 10) -> list[dict]:
+    """BM25/vector hybrid search over your knowledge base."""
+    ...
+
+TOOL_SCHEMAS.append({
+    "type": "function",
+    "function": {
+        "name": "search_tool",
+        "parameters": {...},
+    },
+})
+TOOL_FUNCTIONS["search_tool"] = search_tool
+```
+
+### (c) 새 Role 추가
+`experiments/system_prompt.py`의 `SYSTEM_PROMPT` / `CRITIC_PROMPT` / `JUDGE_PROMPT` 패턴을 따라 새 역할 프롬프트 추가. `experiments/orchestrator.py:run_abc_chain`을 참고해 호출 순서 확장.
+
+### (d) 새 태스크셋
+`experiments/tasks/taskset.json`에 항목 추가. 필수 필드: `id`, `category`, `difficulty`, `prompt`, `expected_answer`, `scoring_keywords`. **주의**: 수학 문제의 경우 expected_answer의 제약 조건 위반 여부를 직접 풀어 검증할 것 (math-04 결함 교훈).
+
+---
+
+## 7. Roadmap
+
+| 시점 | 항목 |
+|------|------|
+| **단기 (대기)** | Exp08b Windows 실행 → H8 판정 |
+| **중기** | Exp09 후보 선정 — Extractor/Reducer Role, Search Tool, Long-context stress 중 택일 |
+| **중장기** | seCall 4-layer 환경 통합 실험 (벡터·그래프 사용) |
+| **장기** | 크로스 모델 재현 연구 (Qwen / Phi / Llama), 논문 preprint 가능성 타진 |
+
+상세 이력·다음 질문: [docs/reference/researchNotebook.md](docs/reference/researchNotebook.md)의 "현재 상태 및 다음 단계" 섹션.
+
+---
+
+## 8. How to Contribute
+
+### Contribution ladder (쉬운 것부터)
+
+| 난이도 | 예시 | 기여 형태 |
+|--------|------|----------|
+| ⭐ 5분 | 오탈자·문서 개선 | PR |
+| ⭐⭐ 수 시간 | 기존 실험을 다른 모델로 재현 → 결과 공유 | Issue (Reproduction) |
+| ⭐⭐⭐ 수 일 | 새 Tool 1개 구현 + 단위 테스트 + 통합 실험 | PR + 결과 리포트 |
+| ⭐⭐⭐⭐ 수 주 | 새 Role(Extractor/Reducer) 설계·구현·평가 | PR + 연구 노트 섹션 |
+| ⭐⭐⭐⭐⭐ 수 개월 | Long-context stress / cross-model 체계적 ablation | 공동 저자 후보 |
+
+### 기여 프로세스
+
+1. **Issue로 의사 표시** — "I'll try reproducing Exp08 with Qwen 2.5 7B" 같은 한 줄이면 충분. 중복 방지용.
+2. **Fork & 실험** — 결과는 본인 fork의 `experiments/results/` 또는 별도 gist로 공유.
+3. **PR 또는 결과 공유** — 코드 기여면 PR, 재현 결과만이면 Issue 댓글도 OK.
+
+### Credit 정책
+
+- **⭐⭐⭐⭐⭐ 기여** (새 축 외부화, 체계적 ablation, 논문화 기여) → **공동 저자 후보**
+- **⭐⭐⭐ 이상 기여** (Tool/Role 구현, cross-model 재현) → **Acknowledgements + CONTRIBUTORS.md 명단**
+- **⭐~⭐⭐ 기여** → **GitHub contributor 자동 반영**
+
+제멘토는 *현재까지 1인 연구*이지만, 기여자가 생기면 모든 실험 결과에 기여자 이름이 명시됩니다. 결과 수치에 이름이 남는 것이 원칙.
+
+---
+
+## 9. Docs Map
 
 | 경로 | 내용 |
 |------|------|
-| `docs/reference/researchNotebook.md` | **메인 연구 노트** — 모든 실험의 6하원칙 기록 + 가설 판정 |
-| `docs/reference/experimentDesign.md` | 초기 실험 설계서 |
-| `docs/reference/experimentSummary.md` | 실험 서사적 요약 |
-| `docs/reference/handoff-to-gemini-exp*.md` | 각 실험의 Gemini 핸드오프 |
-| `docs/plans/` | 각 실험의 플랜·작업지시서·리뷰·결과 |
-| `docs/prompts/YYYY-MM-DD/` | 타 에이전트 전달용 단일 프롬프트 |
+| [docs/reference/conceptFramework.md](docs/reference/conceptFramework.md) | **4축 외부화 프레임** — canonical 개념 문서 |
+| [docs/reference/researchNotebook.md](docs/reference/researchNotebook.md) | **메인 연구 노트** — 모든 실험 6하원칙 기록 + 가설 판정 |
+| [docs/reference/experimentSummary.md](docs/reference/experimentSummary.md) | 실험 서사적 요약 |
+| [docs/reference/handoff-to-gemini-exp*.md](docs/reference/) | Gemini(Windows 실행자)에게 넘긴 각 실험 핸드오프 |
+| [docs/plans/](docs/plans/) | 각 실험의 플랜·작업지시서·리뷰·결과 |
 | `experiments/schema.py` | Tattoo 스키마 (Assertion, Phase, Handoff*) |
 | `experiments/system_prompt.py` | A / B / C 역할별 system prompt |
 | `experiments/orchestrator.py` | `call_model` (tool_calls loop), `run_abc_chain` |
-| `experiments/run_experiment.py` | 실험별 실행 함수 (`baseline`, `multiloop`, `abc-pipeline`, `handoff-protocol`, `loop-saturation`, `tool-use`, `tool-use-refined`) |
+| `experiments/run_experiment.py` | 실험별 실행 함수 |
 | `experiments/measure.py` | 채점(v1 substring, v2 keyword group) + 실험별 analyzer |
-| `experiments/tools/math_tools.py` | calculator / solve_linear_system / linprog + OpenAI schema |
+| `experiments/tools/math_tools.py` | calculator / solve_linear_system / linprog |
 
 ---
 
-## 다음 단계
+## 10. License
 
-현재 열린 후보:
-
-- **Exp08b** (대기): Tool-use 부작용 완화 (calculator `^` 혼동, tool neglect) — 40 runs 재측정, H8 판정 목표
-- **Exp08c** (검토): `tool_choice="required"` 전략 실험
-- **Exp09** (설계 필요): Long-context multi-hop QA — sliding_window(512)를 직접 스트레스하여 "외부 상태가 유효 attention을 확장하는가"를 직접 검증. 제멘토 원래 가설의 최종 증명.
-- **taskset 전수 검증**: math-04 expected_answer 결함 사례를 계기로 다른 태스크 정답의 수학적 검증 필요.
-
-자세한 로드맵은 `docs/reference/researchNotebook.md`의 "현재 상태 및 다음 단계" 참조.
+[MIT](./LICENSE) — 자유롭게 fork·수정·재배포·상업 사용 가능. 저작권 고지만 유지해주세요.
 
 ---
 
-## 라이선스 / 기여
-
-개인 연구 프로젝트. 외부 기여 체계 없음.
+**질문·제안·기여**: GitHub Issues 또는 Discussions(활성화 예정). 연구 결과 공유는 언제든 환영합니다.
