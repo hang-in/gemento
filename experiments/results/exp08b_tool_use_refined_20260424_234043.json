@@ -1,0 +1,3927 @@
+{
+  "experiment": "tool_use",
+  "variant": "refined",
+  "model": "gemma4-e4b",
+  "conditions": [
+    {
+      "label": "baseline_refined",
+      "use_tools": false
+    },
+    {
+      "label": "tooluse_refined",
+      "use_tools": true
+    }
+  ],
+  "task_ids": [
+    "math-01",
+    "math-02",
+    "math-03",
+    "math-04"
+  ],
+  "repeat": 5,
+  "results_by_condition": {
+    "baseline_refined": [
+      {
+        "task_id": "math-01",
+        "objective": "주어진 수학 문제를 단계적으로 풀어라.",
+        "expected_answer": "13 apples and 7 oranges",
+        "trials": [
+          {
+            "trial": 1,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 5,
+            "final_answer": "The customer bought 13 apples and 7 oranges.",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": "no assertions to critique",
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 6,
+            "final_answer": "The customer bought 13 apples and 7 oranges.",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": "no assertions to critique",
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 4,
+            "final_answer": "The customer bought 13 apples and 7 oranges.",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": "no assertions to critique",
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 4,
+            "final_answer": "The customer bought 13 apples and 7 oranges.",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 5,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 3,
+            "final_answer": "The customer bought 13 apples and 7 oranges.",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": "no assertions to critique",
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": "no assertions to critique",
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "math-02",
+        "objective": "여러 단계의 계산이 필요한 문제를 풀어라.",
+        "expected_answer": "192 square meters",
+        "trials": [
+          {
+            "trial": 1,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 7,
+            "final_answer": "192 square meters",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 3,
+            "final_answer": 192,
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 4,
+            "final_answer": "192 square meters",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 4,
+            "final_answer": 192,
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 5,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 4,
+            "final_answer": "192 square meters",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "math-03",
+        "objective": "연립방정식으로 풀어야 하는 문제를 단계적으로 풀어라.",
+        "expected_answer": "round=6, square=4, rectangular=5",
+        "trials": [
+          {
+            "trial": 1,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 6,
+            "final_answer": "The problem statement is mathematically inconsistent. Given the constraints (Total tables = 15, Rectangular tables = Round tables - 1), the total number of seats must be 88. This contradicts the stated total number of seats of 96, meaning no solution exists that satisfies all conditions.",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 6,
+            "final_answer": {
+              "corrected_problem": "A school has 3 types of tables: round (seats 4), square (seats 6), and rectangular (seats 8). The total number of tables is 15. The total number of seats is 88. The number of rectangular tables equals the number of round tables minus 1. How many of each type of table are there?",
+              "solution": {
+                "round_tables": 3,
+                "square_tables": 10,
+                "rectangular_tables": 2
+              },
+              "verification": {
+                "total_tables": 3,
+                "total_seats": 88,
+                "relationship_check": "2 = 3 - 1"
+              }
+            },
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 11,
+            "final_answer": "The original problem statement is mathematically inconsistent because the constraint 'The number of rectangular tables equals the number of round tables minus 1' (T = R - 1) contradicts the total table and total seat counts. If we rely only on the consistent constraints (Total Tables = 15, Total Seats = 96), the relationship between the tables must be T = R + 3. This system is underdetermined and has five possible positive integer solutions for (Round, Square, Rectangular) tables: (1, 10, 4), (2, 8, 5), (3, 6, 6), (4, 4, 7), and (5, 2, 8).",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 5,
+            "final_answer": "주어진 조건(총 테이블 수 15개, 총 좌석 수 96개, 직사각형 테이블 수 = 원형 테이블 수 - 1)을 모두 만족하는 테이블 조합은 존재하지 않습니다. 연립방정식을 풀었을 때 모순(96 = 104)이 발생하여 시스템이 불일치(inconsistent)하기 때문입니다.",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 5,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 7,
+            "final_answer": "The problem as stated (96 seats) is mathematically inconsistent. However, by prioritizing the total table count (15) and the relationship (T = R - 1), the unique integer solution is: Round tables (R) = 5, Square tables (S) = 6, and Rectangular tables (T) = 4. This configuration results in a total of 88 seats, indicating an error in the original problem's seat count.",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "math-04",
+        "objective": "제약 조건이 있는 최적화 문제를 단계적으로 풀어라.",
+        "expected_answer": "X=31, Y=10, Z=37, profit=$3060",
+        "trials": [
+          {
+            "trial": 1,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 12,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 6,
+            "final_answer": null,
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 8,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 9,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 10,
+                "phase": "VERIFY",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 11,
+                "phase": "VERIFY",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 12,
+                "phase": "VERIFY",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 10,
+            "final_phase": "CONVERGED",
+            "final_confidence": 0.95,
+            "total_assertions": 10,
+            "final_answer": null,
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": "JSON parse failed",
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": "JSON parse failed",
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 8,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 9,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 10,
+                "phase": "VERIFY",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 10,
+            "final_phase": "CONVERGED",
+            "final_confidence": 0.9,
+            "total_assertions": 5,
+            "final_answer": null,
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 8,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 9,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 10,
+                "phase": "VERIFY",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 10,
+            "final_phase": "CONVERGED",
+            "final_confidence": 0.95,
+            "total_assertions": 7,
+            "final_answer": null,
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 8,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 9,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 10,
+                "phase": "VERIFY",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 5,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": false,
+            "actual_cycles": 12,
+            "final_phase": "CONVERGED",
+            "final_confidence": 0.95,
+            "total_assertions": 8,
+            "final_answer": null,
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 8,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 9,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 10,
+                "phase": "VERIFY",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 11,
+                "phase": "VERIFY",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 12,
+                "phase": "VERIFY",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tooluse_refined": [
+      {
+        "task_id": "math-01",
+        "objective": "주어진 수학 문제를 단계적으로 풀어라.",
+        "expected_answer": "13 apples and 7 oranges",
+        "trials": [
+          {
+            "trial": 1,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 5,
+            "final_answer": "The customer bought 13 apples and 7 oranges.",
+            "total_tool_calls": 1,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {
+                      "A": [
+                        [
+                          1,
+                          1
+                        ],
+                        [
+                          2,
+                          3
+                        ]
+                      ],
+                      "b": [
+                        20,
+                        47
+                      ]
+                    },
+                    "result": [
+                      13.0,
+                      7.0
+                    ],
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 7,
+            "final_answer": "The customer bought 13 apples and 7 oranges.",
+            "total_tool_calls": 3,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {
+                      "A": [
+                        [
+                          1,
+                          1
+                        ],
+                        [
+                          2,
+                          3
+                        ]
+                      ],
+                      "b": [
+                        20,
+                        47
+                      ]
+                    },
+                    "result": [
+                      13.0,
+                      7.0
+                    ],
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {
+                      "A": [
+                        [
+                          1,
+                          1
+                        ],
+                        [
+                          2,
+                          3
+                        ]
+                      ],
+                      "b": [
+                        20,
+                        47
+                      ]
+                    },
+                    "result": [
+                      13.0,
+                      7.0
+                    ],
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {
+                      "A": [
+                        [
+                          1,
+                          1
+                        ],
+                        [
+                          2,
+                          3
+                        ]
+                      ],
+                      "b": [
+                        20,
+                        47
+                      ]
+                    },
+                    "result": [
+                      13.0,
+                      7.0
+                    ],
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 7,
+            "final_answer": "The customer bought 13 apples and 7 oranges.",
+            "total_tool_calls": 3,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": "no assertions to critique",
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {
+                      "A": [
+                        [
+                          1,
+                          1
+                        ],
+                        [
+                          2,
+                          3
+                        ]
+                      ],
+                      "b": [
+                        20,
+                        47
+                      ]
+                    },
+                    "result": [
+                      13.0,
+                      7.0
+                    ],
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "2*13 + 3*7"
+                    },
+                    "result": 47.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "2*13 + 3*7"
+                    },
+                    "result": 47.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 6,
+            "final_answer": "The customer bought 13 apples and 7 oranges.",
+            "total_tool_calls": 2,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {
+                      "A": [
+                        [
+                          1,
+                          1
+                        ],
+                        [
+                          2,
+                          3
+                        ]
+                      ],
+                      "b": [
+                        20,
+                        47
+                      ]
+                    },
+                    "result": [
+                      13.0,
+                      7.0
+                    ],
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "13 + 7"
+                    },
+                    "result": 20.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 5,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 5,
+            "final_answer": "The customer bought 13 apples and 7 oranges.",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "math-02",
+        "objective": "여러 단계의 계산이 필요한 문제를 풀어라.",
+        "expected_answer": "192 square meters",
+        "trials": [
+          {
+            "trial": 1,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 3,
+            "final_answer": "192 square meters",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": "no assertions to critique",
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 4,
+            "final_answer": 192,
+            "total_tool_calls": 2,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "28**2 - 4 * 192"
+                    },
+                    "result": 16.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "16 * 12"
+                    },
+                    "result": 192.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 3,
+            "final_answer": "192 square meters",
+            "total_tool_calls": 3,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "28**2 - 400"
+                    },
+                    "result": 384.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "28*28"
+                    },
+                    "result": 784.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "28**2"
+                    },
+                    "result": 784.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 4,
+            "final_answer": "192 square meters",
+            "total_tool_calls": 4,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "28**2"
+                    },
+                    "result": 784.0,
+                    "error": null
+                  },
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "784 - 400"
+                    },
+                    "result": 384.0,
+                    "error": null
+                  },
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "384 / 2"
+                    },
+                    "result": 192.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "(28**2 - 400) / 2"
+                    },
+                    "result": 192.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 5,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 4,
+            "final_answer": "192 square meters",
+            "total_tool_calls": 2,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "28**2"
+                    },
+                    "result": 784.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "28**2 - 400"
+                    },
+                    "result": 384.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "math-03",
+        "objective": "연립방정식으로 풀어야 하는 문제를 단계적으로 풀어라.",
+        "expected_answer": "round=6, square=4, rectangular=5",
+        "trials": [
+          {
+            "trial": 1,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 9,
+            "final_answer": "The problem statement is mathematically inconsistent. It is impossible to find a combination of round (4 seats), square (6 seats), and rectangular (8 seats) tables that simultaneously satisfies the conditions: total tables = 15, total seats = 96, and rectangular tables = round tables - 1.",
+            "total_tool_calls": 0,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 6,
+            "final_answer": "Based on the confirmed mathematical analysis, the system of equations derived from the problem (Total tables = 15, Total seats = 96, Rectangular tables = Round tables - 1) is inconsistent. Therefore, there is no combination of round, square, and rectangular tables that satisfies all the given conditions.",
+            "total_tool_calls": 1,
+            "tool_errors": 1,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {},
+                    "result": null,
+                    "error": "Singular matrix; no unique solution: Singular matrix"
+                  }
+                ]
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 12,
+            "final_answer": "The original problem statement (96 total seats) is mathematically inconsistent and has no solution. However, if the total number of seats is corrected to 88, the system is dependent and has multiple valid integer solutions. The possible combinations of (Round tables, Square tables, Rectangular tables) are: (2, 12, 1), (3, 10, 2), (4, 8, 3), (5, 6, 4), (6, 4, 5), and (7, 2, 6).",
+            "total_tool_calls": 1,
+            "tool_errors": 1,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {},
+                    "result": null,
+                    "error": "Singular matrix; no unique solution: Singular matrix"
+                  }
+                ]
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 9,
+            "final_answer": "The system of equations derived from the problem statement is mathematically inconsistent. Therefore, there is no combination of round, square, and rectangular tables that satisfies all the given conditions (15 total tables and 96 total seats, with the number of rectangular tables being one less than the number of round tables).",
+            "total_tool_calls": 3,
+            "tool_errors": 2,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {},
+                    "result": null,
+                    "error": "Singular matrix; no unique solution: Singular matrix"
+                  }
+                ]
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {},
+                    "result": null,
+                    "error": "Singular matrix; no unique solution: Singular matrix"
+                  }
+                ]
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "104 - 96"
+                    },
+                    "result": 8.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 5,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 5,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 7,
+            "final_answer": "The problem as stated is mathematically inconsistent. The system of equations (R + S + T = 15, 4R + 6S + 8T = 96, T = R - 1) leads to a contradiction (96 = 104). For a solution to exist while maintaining the total number of tables (15) and the relationship between rectangular and round tables (T = R - 1), the total number of seats must be 88, not 96. Even with this correction, the problem remains under-constrained, yielding multiple possible integer solutions.",
+            "total_tool_calls": 2,
+            "tool_errors": 2,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {},
+                    "result": null,
+                    "error": "Singular matrix; no unique solution: Singular matrix"
+                  }
+                ]
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "solve_linear_system",
+                    "arguments": {},
+                    "result": null,
+                    "error": "Singular matrix; no unique solution: Singular matrix"
+                  }
+                ]
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "task_id": "math-04",
+        "objective": "제약 조건이 있는 최적화 문제를 단계적으로 풀어라.",
+        "expected_answer": "X=31, Y=10, Z=37, profit=$3060",
+        "trials": [
+          {
+            "trial": 1,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 9,
+            "final_answer": "The production plan that maximizes weekly profit is to produce 31 units of product X, 10 units of product Y, and 37 units of product Z. This plan yields a maximum weekly profit of $3060.",
+            "total_tool_calls": 2,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "linprog",
+                    "arguments": {
+                      "A_ub": [
+                        [
+                          2,
+                          3,
+                          4
+                        ],
+                        [
+                          3,
+                          2,
+                          1
+                        ]
+                      ],
+                      "b_ub": [
+                        150,
+                        90
+                      ],
+                      "bounds": [
+                        [
+                          0,
+                          null
+                        ],
+                        [
+                          0,
+                          null
+                        ],
+                        [
+                          0,
+                          null
+                        ]
+                      ],
+                      "c": [
+                        -50,
+                        -40,
+                        -30
+                      ]
+                    },
+                    "result": {
+                      "x": [
+                        21.0,
+                        0.0,
+                        27.0
+                      ],
+                      "fun": -1860.0,
+                      "status": 0,
+                      "success": true,
+                      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+                    },
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "linprog",
+                    "arguments": {
+                      "A_ub": [
+                        [
+                          2,
+                          3,
+                          4
+                        ],
+                        [
+                          3,
+                          2,
+                          1
+                        ],
+                        [
+                          -1,
+                          0,
+                          0
+                        ],
+                        [
+                          0,
+                          -1,
+                          0
+                        ],
+                        [
+                          0,
+                          0,
+                          -1
+                        ]
+                      ],
+                      "b_ub": [
+                        240,
+                        150,
+                        -10,
+                        -10,
+                        -10
+                      ],
+                      "bounds": [
+                        [
+                          0,
+                          null
+                        ],
+                        [
+                          0,
+                          null
+                        ],
+                        [
+                          0,
+                          null
+                        ]
+                      ],
+                      "c": [
+                        -50,
+                        -40,
+                        -30
+                      ]
+                    },
+                    "result": {
+                      "x": [
+                        31.0,
+                        10.0,
+                        37.0
+                      ],
+                      "fun": -3060.0,
+                      "status": 0,
+                      "success": true,
+                      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+                    },
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 9,
+            "final_answer": {
+              "production_plan": {
+                "X": 31,
+                "Y": 10,
+                "Z": 37
+              },
+              "maximum_weekly_profit": 3060,
+              "summary": "The production plan that maximizes weekly profit while satisfying all labor, material, and minimum production constraints is X=31, Y=10, Z=37 units, resulting in a maximum profit of $3060."
+            },
+            "total_tool_calls": 2,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "linprog",
+                    "arguments": {
+                      "A_ub": [
+                        [
+                          2,
+                          3,
+                          4
+                        ],
+                        [
+                          3,
+                          2,
+                          1
+                        ]
+                      ],
+                      "b_ub": [
+                        240,
+                        150
+                      ],
+                      "bounds": [
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ]
+                      ],
+                      "c": [
+                        -50,
+                        -40,
+                        -30
+                      ]
+                    },
+                    "result": {
+                      "x": [
+                        31.0,
+                        10.0,
+                        37.0
+                      ],
+                      "fun": -3060.0,
+                      "status": 0,
+                      "success": true,
+                      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+                    },
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "linprog",
+                    "arguments": {
+                      "A_ub": [
+                        [
+                          2,
+                          3,
+                          4
+                        ],
+                        [
+                          3,
+                          2,
+                          1
+                        ]
+                      ],
+                      "b_ub": [
+                        240,
+                        150
+                      ],
+                      "bounds": [
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ]
+                      ],
+                      "c": [
+                        -50,
+                        -40,
+                        -30
+                      ]
+                    },
+                    "result": {
+                      "x": [
+                        31.0,
+                        10.0,
+                        37.0
+                      ],
+                      "fun": -3060.0,
+                      "status": 0,
+                      "success": true,
+                      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+                    },
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 7,
+            "final_answer": "The production plan that maximizes weekly profit is to produce 31 units of product X, 10 units of product Y, and 37 units of product Z. This plan results in a maximum weekly profit of $3060.",
+            "total_tool_calls": 2,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "linprog",
+                    "arguments": {
+                      "A_ub": [
+                        [
+                          2,
+                          3,
+                          4
+                        ],
+                        [
+                          3,
+                          2,
+                          1
+                        ]
+                      ],
+                      "b_ub": [
+                        240,
+                        150
+                      ],
+                      "bounds": [
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ]
+                      ],
+                      "c": [
+                        -50,
+                        -40,
+                        -30
+                      ]
+                    },
+                    "result": {
+                      "x": [
+                        31.0,
+                        10.0,
+                        37.0
+                      ],
+                      "fun": -3060.0,
+                      "status": 0,
+                      "success": true,
+                      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+                    },
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "calculator",
+                    "arguments": {
+                      "expression": "50*31 + 40*10 + 30*37"
+                    },
+                    "result": 3060.0,
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 10,
+            "final_answer": "The production plan that maximizes weekly profit is to produce 31 units of product X, 10 units of product Y, and 37 units of product Z. This plan results in a maximum weekly profit of $3060.",
+            "total_tool_calls": 1,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "linprog",
+                    "arguments": {
+                      "A_ub": [
+                        [
+                          2,
+                          3,
+                          4
+                        ],
+                        [
+                          3,
+                          2,
+                          1
+                        ]
+                      ],
+                      "b_ub": [
+                        240,
+                        150
+                      ],
+                      "bounds": [
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ]
+                      ],
+                      "c": [
+                        -50,
+                        -40,
+                        -30
+                      ]
+                    },
+                    "result": {
+                      "x": [
+                        31.0,
+                        10.0,
+                        37.0
+                      ],
+                      "fun": -3060.0,
+                      "status": 0,
+                      "success": true,
+                      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+                    },
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          },
+          {
+            "trial": 5,
+            "max_cycles": 15,
+            "use_phase_prompt": true,
+            "use_tools": true,
+            "actual_cycles": 7,
+            "final_phase": "CONVERGED",
+            "final_confidence": 1.0,
+            "total_assertions": 9,
+            "final_answer": "The production plan that maximizes weekly profit is to produce 31 units of product X, 10 units of product Y, and 37 units of product Z. This plan yields a maximum weekly profit of $3060.",
+            "total_tool_calls": 3,
+            "tool_errors": 0,
+            "cycle_details": [
+              {
+                "cycle": 1,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 2,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 3,
+                "phase": "DECOMPOSE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "linprog",
+                    "arguments": {
+                      "A_ub": [
+                        [
+                          2,
+                          3,
+                          4
+                        ],
+                        [
+                          3,
+                          2,
+                          1
+                        ]
+                      ],
+                      "b_ub": [
+                        240,
+                        150
+                      ],
+                      "bounds": [
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ]
+                      ],
+                      "c": [
+                        -50,
+                        -40,
+                        -30
+                      ]
+                    },
+                    "result": {
+                      "x": [
+                        31.0,
+                        10.0,
+                        37.0
+                      ],
+                      "fun": -3060.0,
+                      "status": 0,
+                      "success": true,
+                      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+                    },
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 4,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "linprog",
+                    "arguments": {
+                      "A_ub": [
+                        [
+                          2,
+                          3,
+                          4
+                        ],
+                        [
+                          3,
+                          2,
+                          1
+                        ]
+                      ],
+                      "b_ub": [
+                        240,
+                        150
+                      ],
+                      "bounds": [
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ]
+                      ],
+                      "c": [
+                        -50,
+                        -40,
+                        -30
+                      ]
+                    },
+                    "result": {
+                      "x": [
+                        31.0,
+                        10.0,
+                        37.0
+                      ],
+                      "fun": -3060.0,
+                      "status": 0,
+                      "success": true,
+                      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+                    },
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 5,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": [
+                  {
+                    "name": "linprog",
+                    "arguments": {
+                      "A_ub": [
+                        [
+                          2,
+                          3,
+                          4
+                        ],
+                        [
+                          3,
+                          2,
+                          1
+                        ],
+                        [
+                          -1,
+                          0,
+                          0
+                        ],
+                        [
+                          0,
+                          -1,
+                          0
+                        ],
+                        [
+                          0,
+                          0,
+                          -1
+                        ]
+                      ],
+                      "b_ub": [
+                        240,
+                        150,
+                        -10,
+                        -10,
+                        -10
+                      ],
+                      "bounds": [
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ],
+                        [
+                          10,
+                          null
+                        ]
+                      ],
+                      "c": [
+                        -50,
+                        -40,
+                        -30
+                      ]
+                    },
+                    "result": {
+                      "x": [
+                        31.0,
+                        10.0,
+                        37.0
+                      ],
+                      "fun": -3060.0,
+                      "status": 0,
+                      "success": true,
+                      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+                    },
+                    "error": null
+                  }
+                ]
+              },
+              {
+                "cycle": 6,
+                "phase": "INVESTIGATE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              },
+              {
+                "cycle": 7,
+                "phase": "SYNTHESIZE",
+                "a_error": null,
+                "b_error": null,
+                "c_error": null,
+                "tool_calls": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
