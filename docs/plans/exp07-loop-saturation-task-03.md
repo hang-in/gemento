@@ -1,12 +1,11 @@
 ---
 type: task
-status: pending
+status: abandoned
 plan: exp07-loop-saturation
 task: 3
 parallel_group: A
 depends_on: []
-updated_at: 2026-04-21
----
+updated_at: 2026-04-25---
 
 # Task 3: 오케스트레이터 max_cycles 파라미터화
 

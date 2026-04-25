@@ -1,6 +1,6 @@
 ---
 type: plan-task
-status: todo
+status: abandoned
 updated_at: 2026-04-25
 parent_plan: exp09-long-context-stress-test-abc-vs-solo-dump-vs-rag
 parallel_group: B

@@ -1,7 +1,7 @@
 ---
 type: task
-status: todo
-updated_at: 2026-04-15
+status: abandoned
+updated_at: 2026-04-25
 plan: exp045-v2
 ---
 

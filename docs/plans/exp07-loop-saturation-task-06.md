@@ -1,12 +1,11 @@
 ---
 type: task
-status: pending
+status: abandoned
 plan: exp07-loop-saturation
 task: 6
 parallel_group: C
 depends_on: [1, 2, 3, 4, 5]
-updated_at: 2026-04-21
----
+updated_at: 2026-04-25---
 
 # Task 6: 핸드오프 문서 작성
 

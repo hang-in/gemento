@@ -2,6 +2,7 @@
 type: reference
 status: in_progress
 updated_at: 2026-04-25
+parts: [closed, active]
 ---
 
 > **개념 프레임 canonical 문서**: [conceptFramework.md](./conceptFramework.md) — 4축 외부화 원리, 용어 정의, 축 ↔ 실험 매핑.
@@ -11,7 +12,16 @@ updated_at: 2026-04-25
 > 이 문서는 제멘토 프로젝트의 모든 실험을 육하원칙(5W1H) 기반으로 기록하는 증분형 연구 노트입니다.
 > 새 실험이 완료될 때마다 해당 섹션을 추가합니다.
 
+> **이 노트의 구조 (2026-04-25 분할 적용)**
+>
+> - **Part 1: Closed Findings** — 종결된 실험 결과(Exp00~09)와 가설 판정(H1~H9c). 추가 실험이 나오면 **항목을 append만 하고 기존 내용은 수정하지 않습니다**. 영문 미러: [`researchNotebook.en.md`](./researchNotebook.en.md).
+> - **Part 2: Active Research** — 진행 중 가설, 열린 질문, 다음 실험 후보. 계속 갱신됩니다. 영문 번역 없음(설계상).
+
 ---
+
+# Part 1 — Closed Findings
+
+> 이 파트는 종결된 실험 결과와 가설 판정만 포함합니다. 새 실험이 추가될 때 **항목을 append만 하고 기존 내용은 수정하지 않는다**는 원칙을 따릅니다. 영문 미러는 [`researchNotebook.en.md`](./researchNotebook.en.md)입니다.
 
 ## 프로젝트 개요
 
@@ -22,6 +32,8 @@ updated_at: 2026-04-25
 | 대상 모델 | Gemma 4 E4B (Exp00~06: Q4_K_M / Ollama, Exp07부터: Q8_0 / llama.cpp GPU 서버) |
 | 실행 환경 | Windows (Ollama 또는 llama.cpp) — 실험 실행 / macOS — 분석·문서화 |
 | 연구 기간 | 2026-04-08 ~ 진행 중 |
+
+> *H1–H9는 외부화 축에 대해 순차 번호를 매긴 가설들입니다 — 통계학의 H₀(영가설) / H₁(대립가설)과는 다른 의미입니다.*
 
 ### 핵심 가설
 
@@ -685,6 +697,10 @@ Python          = 안전장치만 (safety net, 0회 발동)
 ```
 
 ---
+
+# Part 2 — Active Research
+
+> 이 파트는 진행 중 가설, 열린 질문, 다음 실험 후보를 다룹니다. **계속 갱신됩니다**. 영문 번역은 설계상 두지 않습니다 — 종결되면 Part 1으로 이동합니다.
 
 ## 현재 상태 및 다음 단계
 

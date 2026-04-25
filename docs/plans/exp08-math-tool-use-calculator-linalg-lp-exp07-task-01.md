@@ -1,7 +1,7 @@
 ---
 type: plan-task
-status: todo
-updated_at: 2026-04-24
+status: abandoned
+updated_at: 2026-04-25
 parent_plan: exp08-math-tool-use-calculator-linalg-lp-exp07
 parallel_group: A
 depends_on: []

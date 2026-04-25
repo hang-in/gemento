@@ -1,7 +1,7 @@
 ---
 type: plan
-status: in_progress
-updated_at: 2026-04-24
+status: abandoned
+updated_at: 2026-04-25
 version: 1
 ---
 

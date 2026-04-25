@@ -1,12 +1,11 @@
 ---
 type: task
-status: pending
+status: abandoned
 plan: exp07-loop-saturation
 task: 4
 parallel_group: B
 depends_on: [1, 2, 3]
-updated_at: 2026-04-21
----
+updated_at: 2026-04-25---
 
 # Task 4: 실험 실행 함수 작성
 

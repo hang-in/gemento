@@ -1,12 +1,11 @@
 ---
 type: task
-status: pending
+status: abandoned
 plan: exp07-loop-saturation
 task: 2
 parallel_group: A
 depends_on: []
-updated_at: 2026-04-21
----
+updated_at: 2026-04-25---
 
 # Task 2: Loop-Phase 프롬프트 추가
 

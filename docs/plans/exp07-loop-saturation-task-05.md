@@ -1,12 +1,11 @@
 ---
 type: task
-status: pending
+status: abandoned
 plan: exp07-loop-saturation
 task: 5
 parallel_group: B
 depends_on: [4]
-updated_at: 2026-04-21
----
+updated_at: 2026-04-25---
 
 # Task 5: 분석 함수 작성
 

@@ -16,6 +16,10 @@
 
 이 레포는 **MIT 라이선스로 공개된 1인 연구 노트**입니다. 관심 있는 누구든 자유롭게 fork·재현·확장할 수 있습니다. 협업 창구는 프로젝트가 더 성숙한 시점에 열 예정입니다.
 
+> *Last updated: 2026-04-25*
+
+> 📚 English version: [README.en.md](./README.en.md)
+
 ---
 
 ## 목차
@@ -30,7 +34,8 @@
 8. [Roadmap](#8-roadmap)
 9. [How to Contribute](#9-how-to-contribute)
 10. [Docs Map](#10-docs-map)
-11. [License](#11-license)
+11. [Acknowledgements](#11-acknowledgements)
+12. [License](#12-license)
 
 ---
 
@@ -52,6 +57,8 @@
 ## 2. The Core Idea — 외부화
 
 소형 LLM은 모든 것을 기억할 수 없다. 제멘토는 **기억 대신 환경에 새기고**, **생각 대신 도구로 확인하고**, **자기 검증 대신 다른 역할에게 비판받는다**. 이 원리는 영화 *Memento*의 Leonard가 단기 기억상실과 함께 살아가는 방식과 정확히 닮았다 — 우연이 아니라 **설계의 근간**이다.
+
+제멘토의 출발점은 secall / tunaflow를 만들면서 마주친 실제 문제들이었다 — 장기 기억 보존·검색, 컨텍스트의 유연한 확장(무절제한 토큰 사용 지양), 멀티세션. 처음 가설은 단순했다: *"컨텍스트를 전부 비우고 DB 검색만 시키면, DB를 거의 무한한 컨텍스트로 쓸 수 있는 것 아닌가?"* 그 생각을 더듬어 가다 Memento의 Leonard가 떠올랐다 — 문신·폴라로이드·전화로 기억상실을 보완하는 방식이 정확히 같은 구조였다. 제멘토는 그 메타포를 4개 외부화 축으로 구체화한 **1인 사이드 트랙 연구 노트**다.
 
 ### Memento ↔ 제멘토 매핑
 
@@ -115,7 +122,7 @@
 
 ## 3. What We've Proven
 
-지금까지 9차 실험(288 + 누적 150+ trials)에서 확인된 가설:
+지금까지 14개 실험(총 600+ trials)에서 확인된 가설:
 
 | ID | 가설 (외부화 축) | 판정 | 근거 실험 |
 |----|-----------------|------|----------|
@@ -126,11 +133,16 @@
 | **H5** | [Orchestrator 상한 효과] MAX_CYCLES 상향이 정답률 향상에 기여한다 | ⚠️ 부분 기각 — 포화점은 상한이 아니라 actual_cycles ≈ 7 | Exp07 |
 | **H6** | [Role 외부화 정교화] Phase별 특화 프롬프트가 baseline보다 우수하다 | ✅ 조건부 채택 (장기 루프 +5~6%p) | Exp07 |
 | **H7** | [Tool 외부화] 외부 수학 도구가 E4B의 계산 한계를 보완한다 | ✅ 채택 (+18.3%p, math-04 0→80%) | Exp08 |
+| **H8** | [Tool 외부화 안정성] 에러 힌트 + Mandatory rules로 tool_neglect와 operator 혼동을 완화한다 | ✅ 채택 (neglect 0%, calculator 100%, math-04 0→100%, +23.3%p) | Exp08b |
+| **H9a** | [Tattoo 외부화 — 물리 한계 돌파] ABC+Tattoo(chunked)가 Solo-dump보다 long-context에서 우수하다 | ✅ 채택 (+68.3%p, Large 20K에서 Solo 0% → ABC 100%) | Exp09 |
+| **H9b** | [차별성] ABC+Tattoo가 RAG baseline 대비 고유 기여를 가진다 | ⚠️ 조건부 채택 (전체 +3.3%p; Large 3-hop에서 +33%p로 크게 우세, small에선 RAG 우세) | Exp09 |
+| **H9c** | [에러 모드 차이] ABC의 실패 패턴이 Solo·RAG와 질적으로 다르다 | ✅ 채택 (Solo: format_error 24, RAG: wrong_synthesis 6, ABC: evidence_miss 2 + wrong_synthesis 3) | Exp09 |
 
 핵심 통찰:
 - **모델 능력이 아니라 구조가 성능을 결정한다** — 같은 E4B 모델이 Exp02 v1에서 자율 phase 전이 0%, v2에서 외부 강제 94.4%.
 - **자가 검증은 작동하지 않는다** (H2). 역할을 바꾼 비판자(B)가 같은 모델에서 80% 회수 (H3).
 - **"채점 데이터 결함"이 실험 결론을 뒤집을 수 있다** — Exp07의 math-04 "50% 정체"는 expected_answer 자체가 제약 위반이었음이 Exp08에서 판명.
+- **외부 상태(Tattoo)가 유효 컨텍스트를 물리적으로 확장한다** — Exp09에서 Solo-dump는 Medium/Large에서 완전 전멸(0%), ABC+Tattoo는 Large 20K에서 100%. (H9a)
 
 ---
 
@@ -138,9 +150,11 @@
 
 검증 대기 중이거나 미외부화된 축들. 재현·확장 결과는 어떤 규모든 환영합니다.
 
-### 3.1 검증 대기 중인 가설
+### 3.1 열린 연구 질문 (Exp10+ 후보)
 
-- **H8 — Tool-use 안정성**: Exp08b(BitXor 힌트 + Mandatory tool rules)가 tool_neglect_rate를 0%까지 낮추는가? math 정답률 90%→95%+로 상승하는가? — **실행 대기 상태**.
+- **Exp09 통계 신뢰도 보강** — 현재 3 trial × 10 task. 5 trial + paired t-test로 H9b의 +3.3%p 유의성 검정 필요.
+- **Small Paradox 해결** — Exp09에서 ABC가 small 태스크에서 RAG보다 약함 (0.67 vs 1.00). chunk 수가 적을 때 cycle iteration이 오버킬 가능성. (Exp10 후보)
+- **병렬 chunk 순회** — 현재 직렬 chunk 처리를 병렬로 전환 + Tattoo merge 패턴 실험. ABC 시간 비용 절감. (Exp10 후보)
 
 ### 3.2 미외부화 축 (conceptFramework § 9)
 
@@ -157,7 +171,6 @@
 ### 3.3 확장 실험 질문
 
 - **다른 소형 모델에서도 4축 외부화가 같은 효과인가?** — Qwen 2.5 7B, Phi-4, Llama 3.2 3B 등에서 재현.
-- **Context limit 직접 돌파** — 현재 태스크셋은 sliding_window(512)를 스트레스하지 않음. Long-context multi-hop QA로 "외부 상태가 유효 attention을 확장하는가"를 직접 증명 (Exp09 후보).
 - **한국어·다국어 scoring 편차** — Exp08 math-03에서 한국어 답변의 v2 keyword 매칭 변동 관찰. 다국어 응답 채점 방침 미정.
 - **taskset expected_answer 수학적 검증** — math-04 결함 사례를 볼 때 다른 태스크 정답의 전수 검증 필요.
 
@@ -256,8 +269,8 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 
 | 시점 | 항목 |
 |------|------|
-| **단기 (대기)** | Exp08b Windows 실행 → H8 판정 |
-| **중기** | Exp09 후보 선정 — Extractor/Reducer Role, Search Tool, Long-context stress 중 택일 |
+| **단기 (대기)** | Exp10 후보 선정 — Small Paradox 해결, 병렬 chunk 순회, Exp09 통계 보강(5 trial) 중 택일 |
+| **중기** | 미외부화 축 보강 — Extractor/Reducer Role, Search Tool 통합 실험 |
 | **중장기** | 외부 지식 환경 (4-layer) 통합 실험 (벡터·그래프 사용) |
 | **장기** | 크로스 모델 재현 (Qwen / Phi / Llama) · 체계적 ablation · 연구 결과 정리 (technical report / blog) |
 
@@ -311,8 +324,14 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 
 ---
 
-## 11. License
+## Acknowledgements
 
+- *Memento* (Christopher Nolan, 2000) — 외부 메모 보조의 원형 메타포. 4축 외부화의 직관적 모델이 됨.
+- secall · tunaflow — 본 연구의 실제 출발점. 거기서 마주친 컨텍스트·기억 문제가 제멘토 설계의 토대가 됐다.
+
+---
+
+## 12. License
 [MIT](./LICENSE) — 자유롭게 fork·수정·재배포·상업 사용 가능. 저작권 고지만 유지해주세요.
 
 ---
