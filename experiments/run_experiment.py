@@ -1268,11 +1268,13 @@ def _run_longctx_trial(arm: dict, task: dict, trial_idx: int) -> dict:
     """단일 arm × task × trial 실행. arm label에 따라 분기."""
     from tools.chunker import chunk_document
     from tools.bm25_tool import bm25_retrieve
-    from orchestrator import run_abc_chunked, call_model
+    from orchestrator import run_abc_chunked, call_model, log_detail
 
     label = arm["label"]
     question = task["question"]
     document = task["_document"]
+    
+    log_detail(f"  > Trial {trial_idx + 1} START | Arm: {label}")
 
     if label == "solo_dump":
         messages = [
@@ -1283,9 +1285,12 @@ def _run_longctx_trial(arm: dict, task: dict, trial_idx: int) -> dict:
         error = None
         try:
             raw, _ = call_model(messages)
+            parsed = extract_json_from_response(raw)
             final_answer = _extract_answer(raw)
+            log_detail(f"    Solo-dump Response: {raw[:500]}...")
         except Exception as e:
             error = str(e)
+            log_detail(f"    ⚠ Solo-dump Error: {error}")
         return {
             "trial": trial_idx + 1,
             "arm": label,
@@ -1298,6 +1303,8 @@ def _run_longctx_trial(arm: dict, task: dict, trial_idx: int) -> dict:
         chunks = [c.to_dict() for c in chunk_document(document, size=LONGCTX_CHUNK_SIZE, overlap=LONGCTX_CHUNK_OVERLAP)]
         top = bm25_retrieve(question, chunks, top_k=LONGCTX_RAG_TOP_K)
         top_text = "\n\n---\n\n".join(f"[chunk {c['chunk_id']}]\n{c['content']}" for c in top)
+        log_detail(f"    RAG retrieved chunk IDs: {[c['chunk_id'] for c in top]}")
+        
         messages = [
             {"role": "system", "content": "You are a helpful assistant. Answer based on the retrieved chunks."},
             {"role": "user", "content": f"## Retrieved Chunks\n\n{top_text}\n\n## Question\n\n{question}\n\nProvide the answer as a JSON object: {{\"final_answer\": \"...\"}}."},
@@ -1307,8 +1314,10 @@ def _run_longctx_trial(arm: dict, task: dict, trial_idx: int) -> dict:
         try:
             raw, _ = call_model(messages)
             final_answer = _extract_answer(raw)
+            log_detail(f"    RAG Response: {raw[:500]}...")
         except Exception as e:
             error = str(e)
+            log_detail(f"    ⚠ RAG Error: {error}")
         return {
             "trial": trial_idx + 1,
             "arm": label,
@@ -1337,6 +1346,9 @@ def _run_longctx_trial(arm: dict, task: dict, trial_idx: int) -> dict:
             ]
         except Exception as e:
             error = str(e)
+            log_detail(f"    ⚠ ABC Error: {error}")
+        
+        log_detail(f"    ABC Result: Answer={str(final_answer)[:100]}..., Evidence Count={len(evidence_refs_used)}")
         return {
             "trial": trial_idx + 1,
             "arm": label,

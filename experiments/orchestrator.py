@@ -789,6 +789,13 @@ def run_abc_chain(
     return tattoo, logs, final_answer
 
 
+def log_detail(msg: str):
+    """상세 로그를 experiments/run.log에 기록한다."""
+    with open("run.log", "a", encoding="utf-8") as f:
+        f.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {msg}\n")
+        f.flush()
+
+
 def run_abc_chunked(
     task_id: str,
     question: str,
@@ -814,6 +821,10 @@ def run_abc_chunked(
 
     logs: list[ABCCycleLog] = []
     final_answer = None
+    
+    log_detail(f"=== [Long-Context ABC] Task: {task_id} ===")
+    log_detail(f"Objective: {question}")
+    log_detail(f"Total Chunks: {len(chunks)}")
 
     # Phase 1: chunk iteration — A per chunk, evidence 누적
     tattoo.phase = Phase.INVESTIGATE
@@ -869,14 +880,17 @@ def run_abc_chunked(
         duration_ms = int((time.time() - start) * 1000)
 
         if parsed:
+            log_detail(f"\n[Chunk {chunk_id}] Agent A Reasoning:\n{parsed.get('reasoning')}")
             tattoo, answer = apply_llm_response(tattoo, parsed, loop_index=chunk_id, hard_cap=ASSERTION_HARD_CAP * 20)
             if answer:
                 final_answer = answer
             new_count = len(parsed.get("new_assertions", []))
+            log_detail(f"[Chunk {chunk_id}] New Assertions: {new_count} (Total Active: {len(tattoo.active_assertions)})")
         else:
             new_count = 0
             if not error:
                 error = "JSON parse failed"
+            log_detail(f"[Chunk {chunk_id}] ⚠ Failed to parse: {error}")
 
         if logger:
             pass  # logger 확장은 향후 추가
@@ -906,6 +920,7 @@ def run_abc_chunked(
     # Phase 2: 최종 종합 — B→C 루프 (max_final_cycles)
     tattoo.phase = Phase.SYNTHESIZE
     previous_critique = None
+    log_detail("\n--- Phase 2: Final Synthesis (B+C) ---")
 
     for cycle in range(1, max_final_cycles + 1):
         print(f"  Final cycle {cycle}/{max_final_cycles} | assertions={len(tattoo.active_assertions)}")
@@ -943,9 +958,11 @@ def run_abc_chunked(
         if b_parsed and b_parsed.get("handoff_b2c"):
             tattoo.handoff_b2c = HandoffB2C.from_dict(b_parsed["handoff_b2c"])
         if b_parsed and "judgments" in b_parsed:
+            log_detail(f"[Final Cycle {cycle}] Agent B Judgments: {len(b_parsed['judgments'])} assertions.")
             for j in b_parsed["judgments"]:
                 if j.get("status") == "invalid":
                     tattoo.invalidate_assertion(j.get("assertion_id", ""), j.get("reason", "Critic invalidated"))
+                    log_detail(f"  - Invalidated {j.get('assertion_id')}: {j.get('reason')}")
         current_critique = b_parsed
 
         print(f"    B: {'⚠ ' + b_error if b_error else str(len(b_parsed.get('judgments', []))) + ' judged'} | {b_duration}ms")
@@ -979,11 +996,14 @@ def run_abc_chunked(
         c_duration = int((time.time() - c_start) * 1000)
 
         if c_parsed:
+            log_detail(f"[Final Cycle {cycle}] Agent C Reasoning:\n{c_parsed.get('reasoning')}")
             if c_parsed.get("final_answer"):
                 final_answer = c_parsed["final_answer"]
+                log_detail(f"[Final Cycle {cycle}] Agent C Answer: {final_answer[:200]}...")
             if c_parsed.get("converged"):
                 tattoo.phase = Phase.CONVERGED
                 print(f"    C: CONVERGED | {c_duration}ms")
+                log_detail(f"=== [Long-Context ABC] CONVERGED at Cycle {cycle} ===")
                 logs.append(ABCCycleLog(
                     cycle=total + cycle,
                     phase="SYNTHESIZE",
@@ -997,6 +1017,7 @@ def run_abc_chunked(
                 return tattoo, logs, final_answer
             else:
                 print(f"    C: not converged | {c_duration}ms")
+                log_detail(f"[Final Cycle {cycle}] C decision: NOT CONVERGED. Directive: {c_parsed.get('next_directive')}")
         else:
             print(f"    C: {'⚠ ' + c_error if c_error else 'no output'} | {c_duration}ms")
 
@@ -1013,4 +1034,5 @@ def run_abc_chunked(
         ))
 
     print(f"  ⚠ Max final cycles ({max_final_cycles}) reached without convergence")
+    log_detail("=== [Long-Context ABC] MAX CYCLES REACHED ===")
     return tattoo, logs, final_answer
