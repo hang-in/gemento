@@ -1,0 +1,102 @@
+{
+  "baseline_refined": {
+    "task_id": "math-04",
+    "expected_answer": "X=31, Y=10, Z=37, profit=$3060",
+    "trials": [
+      {
+        "trial": 1,
+        "final_answer": null,
+        "actual_cycles": 12,
+        "num_assertions": 6,
+        "total_tool_calls": 0,
+        "tool_errors": 0
+      },
+      {
+        "trial": 2,
+        "final_answer": null,
+        "actual_cycles": 10,
+        "num_assertions": 10,
+        "total_tool_calls": 0,
+        "tool_errors": 0
+      },
+      {
+        "trial": 3,
+        "final_answer": null,
+        "actual_cycles": 10,
+        "num_assertions": 5,
+        "total_tool_calls": 0,
+        "tool_errors": 0
+      },
+      {
+        "trial": 4,
+        "final_answer": null,
+        "actual_cycles": 10,
+        "num_assertions": 7,
+        "total_tool_calls": 0,
+        "tool_errors": 0
+      },
+      {
+        "trial": 5,
+        "final_answer": null,
+        "actual_cycles": 12,
+        "num_assertions": 8,
+        "total_tool_calls": 0,
+        "tool_errors": 0
+      }
+    ]
+  },
+  "tooluse_refined": {
+    "task_id": "math-04",
+    "expected_answer": "X=31, Y=10, Z=37, profit=$3060",
+    "trials": [
+      {
+        "trial": 1,
+        "final_answer": "The production plan that maximizes weekly profit is to produce 31 units of product X, 10 units of product Y, and 37 units of product Z. This plan yields a maximum weekly profit of $3060.",
+        "actual_cycles": 7,
+        "num_assertions": 9,
+        "total_tool_calls": 2,
+        "tool_errors": 0
+      },
+      {
+        "trial": 2,
+        "final_answer": {
+          "production_plan": {
+            "X": 31,
+            "Y": 10,
+            "Z": 37
+          },
+          "maximum_weekly_profit": 3060,
+          "summary": "The production plan that maximizes weekly profit while satisfying all labor, material, and minimum production constraints is X=31, Y=10, Z=37 units, resulting in a maximum profit of $3060."
+        },
+        "actual_cycles": 7,
+        "num_assertions": 9,
+        "total_tool_calls": 2,
+        "tool_errors": 0
+      },
+      {
+        "trial": 3,
+        "final_answer": "The production plan that maximizes weekly profit is to produce 31 units of product X, 10 units of product Y, and 37 units of product Z. This plan results in a maximum weekly profit of $3060.",
+        "actual_cycles": 7,
+        "num_assertions": 7,
+        "total_tool_calls": 2,
+        "tool_errors": 0
+      },
+      {
+        "trial": 4,
+        "final_answer": "The production plan that maximizes weekly profit is to produce 31 units of product X, 10 units of product Y, and 37 units of product Z. This plan results in a maximum weekly profit of $3060.",
+        "actual_cycles": 7,
+        "num_assertions": 10,
+        "total_tool_calls": 1,
+        "tool_errors": 0
+      },
+      {
+        "trial": 5,
+        "final_answer": "The production plan that maximizes weekly profit is to produce 31 units of product X, 10 units of product Y, and 37 units of product Z. This plan yields a maximum weekly profit of $3060.",
+        "actual_cycles": 7,
+        "num_assertions": 9,
+        "total_tool_calls": 3,
+        "tool_errors": 0
+      }
+    ]
+  }
+}

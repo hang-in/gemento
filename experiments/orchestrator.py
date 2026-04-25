@@ -498,7 +498,7 @@ def run_abc_chain(
     A (제안자) → B (비판자) → C (판정자) 사이클 반복.
     C가 phase 전이를 결정. Python은 안전장치(최대 사이클)만 강제.
     """
-    from system_prompt import build_critic_prompt, build_judge_prompt
+    from agents import CriticAgent, JudgeAgent
 
     tattoo = create_initial_tattoo(
         task_id=task_id,
@@ -547,46 +547,24 @@ def run_abc_chain(
             print(f"    A ⚠ {a_log.error}")
 
         # ── B: 비판자 ──
-        b_start = time.time()
-        b_error = None
-        b_parsed = None
-        b_raw = ""
-
         assertions_for_b = [a.to_dict() for a in tattoo.active_assertions]
         if assertions_for_b:
-            if use_phase_prompt:
-                from system_prompt import build_critic_prompt_with_phase
-                b_messages = build_critic_prompt_with_phase(
-                    prompt,
-                    assertions_for_b,
-                    handoff_a2b=tattoo.handoff_a2b.to_dict() if tattoo.handoff_a2b else None,
-                    cycle=cycle,
-                    max_cycles=max_cycles,
-                )
-            else:
-                b_messages = build_critic_prompt(
-                    prompt,
-                    assertions_for_b,
-                    handoff_a2b=tattoo.handoff_a2b.to_dict() if tattoo.handoff_a2b else None,
-                )
-            for attempt in range(2):
-                try:
-                    b_raw, _ = call_model(b_messages)
-                    b_parsed = extract_json_from_response(b_raw)
-                except Exception as e:
-                    b_raw = ""
-                    b_error = str(e)
-                if b_parsed:
-                    b_error = None
-                    break
-                if attempt == 0:
-                    print(f"    B ↻ retry")
-            if not b_parsed and not b_error:
-                b_error = "JSON parse failed"
+            b_result = CriticAgent().call(
+                problem=prompt,
+                assertions=assertions_for_b,
+                handoff_a2b=tattoo.handoff_a2b.to_dict() if tattoo.handoff_a2b else None,
+                phase_args=(cycle, max_cycles) if use_phase_prompt else None,
+                max_retries=1,
+            )
+            b_raw = b_result.raw
+            b_parsed = b_result.parsed
+            b_error = b_result.error
+            b_duration = b_result.duration_ms
         else:
+            b_raw = ""
+            b_parsed = None
             b_error = "no assertions to critique"
-
-        b_duration = int((time.time() - b_start) * 1000)
+            b_duration = 0
 
         # ── HandoffB2C 파싱 ──
         if b_parsed and b_parsed.get("handoff_b2c"):
@@ -627,49 +605,21 @@ def run_abc_chain(
             tattoo.critique_log = tattoo.critique_log[-3:]
 
         # ── C: 판정자 ──
-        c_start = time.time()
-        c_error = None
-        c_parsed = None
-        c_raw = ""
         phase_transition = None
-
-        if use_phase_prompt:
-            from system_prompt import build_judge_prompt_with_phase
-            c_messages = build_judge_prompt_with_phase(
-                problem=prompt,
-                current_phase=phase_str,
-                current_critique=current_critique,
-                previous_critique=previous_critique,
-                assertion_count=len(tattoo.active_assertions),
-                handoff_b2c=tattoo.handoff_b2c.to_dict() if tattoo.handoff_b2c else None,
-                cycle=cycle,
-                max_cycles=max_cycles,
-            )
-        else:
-            c_messages = build_judge_prompt(
-                problem=prompt,
-                current_phase=phase_str,
-                current_critique=current_critique,
-                previous_critique=previous_critique,
-                assertion_count=len(tattoo.active_assertions),
-            )
-
-        for attempt in range(2):
-            try:
-                c_raw, _ = call_model(c_messages)
-                c_parsed = extract_json_from_response(c_raw)
-            except Exception as e:
-                c_raw = ""
-                c_error = str(e)
-            if c_parsed:
-                c_error = None
-                break
-            if attempt == 0:
-                print(f"    C ↻ retry")
-        if not c_parsed and not c_error:
-            c_error = "JSON parse failed"
-
-        c_duration = int((time.time() - c_start) * 1000)
+        c_result = JudgeAgent().call(
+            problem=prompt,
+            current_phase=phase_str,
+            current_critique=current_critique,
+            previous_critique=previous_critique,
+            assertion_count=len(tattoo.active_assertions),
+            handoff_b2c=tattoo.handoff_b2c.to_dict() if tattoo.handoff_b2c else None,
+            phase_args=(cycle, max_cycles) if use_phase_prompt else None,
+            max_retries=1,
+        )
+        c_raw = c_result.raw
+        c_parsed = c_result.parsed
+        c_error = c_result.error
+        c_duration = c_result.duration_ms
 
         # C의 결정 처리
         if c_parsed:
@@ -810,7 +760,7 @@ def run_abc_chunked(
 
     반환: (tattoo, cycle_logs, final_answer) — run_abc_chain과 동일 인터페이스.
     """
-    from system_prompt import build_prompt_chunked, build_critic_prompt, build_judge_prompt
+    from agents import CriticAgent, JudgeAgent, ProposerAgent
 
     tattoo = create_initial_tattoo(
         task_id=task_id,
@@ -829,6 +779,7 @@ def run_abc_chunked(
     # Phase 1: chunk iteration — A per chunk, evidence 누적
     tattoo.phase = Phase.INVESTIGATE
     total = len(chunks)
+    proposer = ProposerAgent()
     for chunk in chunks:
         chunk_id = chunk["chunk_id"]
         tattoo.next_directive = (
@@ -855,29 +806,15 @@ def run_abc_chunked(
         )
         tattoo_json = display_tattoo.to_json()
 
-        messages = build_prompt_chunked(
+        a_result = proposer.call(
             tattoo_json=tattoo_json,
-            current_chunk=chunk["content"],
-            chunk_id=chunk_id,
+            chunked={"current_chunk": chunk["content"], "chunk_id": chunk_id},
+            max_retries=1,
         )
-
-        start = time.time()
-        raw = ""
-        parsed = None
-        error = None
-        for attempt in range(2):
-            try:
-                raw, _ = call_model(messages)
-                parsed = extract_json_from_response(raw)
-            except Exception as e:
-                raw = ""
-                error = str(e)
-            if parsed:
-                error = None
-                break
-            if attempt == 0:
-                print(f"    chunk {chunk_id} ↻ retry")
-        duration_ms = int((time.time() - start) * 1000)
+        raw = a_result.raw
+        parsed = a_result.parsed
+        error = a_result.error
+        duration_ms = a_result.duration_ms
 
         if parsed:
             log_detail(f"\n[Chunk {chunk_id}] Agent A Reasoning:\n{parsed.get('reasoning')}")
@@ -926,34 +863,23 @@ def run_abc_chunked(
         print(f"  Final cycle {cycle}/{max_final_cycles} | assertions={len(tattoo.active_assertions)}")
 
         # B (Critic)
-        b_start = time.time()
-        b_raw = ""
-        b_parsed = None
-        b_error = None
         assertions_for_b = [a.to_dict() for a in tattoo.active_assertions]
         if assertions_for_b:
-            b_messages = build_critic_prompt(
-                question,
-                assertions_for_b,
+            b_result = CriticAgent().call(
+                problem=question,
+                assertions=assertions_for_b,
                 handoff_a2b=tattoo.handoff_a2b.to_dict() if tattoo.handoff_a2b else None,
+                max_retries=1,
             )
-            for attempt in range(2):
-                try:
-                    b_raw, _ = call_model(b_messages)
-                    b_parsed = extract_json_from_response(b_raw)
-                except Exception as e:
-                    b_raw = ""
-                    b_error = str(e)
-                if b_parsed:
-                    b_error = None
-                    break
-                if attempt == 0:
-                    print(f"    B ↻ retry")
-            if not b_parsed and not b_error:
-                b_error = "JSON parse failed"
+            b_raw = b_result.raw
+            b_parsed = b_result.parsed
+            b_error = b_result.error
+            b_duration = b_result.duration_ms
         else:
+            b_raw = ""
+            b_parsed = None
             b_error = "no assertions to critique"
-        b_duration = int((time.time() - b_start) * 1000)
+            b_duration = 0
 
         if b_parsed and b_parsed.get("handoff_b2c"):
             tattoo.handoff_b2c = HandoffB2C.from_dict(b_parsed["handoff_b2c"])
@@ -968,32 +894,18 @@ def run_abc_chunked(
         print(f"    B: {'⚠ ' + b_error if b_error else str(len(b_parsed.get('judgments', []))) + ' judged'} | {b_duration}ms")
 
         # C (Judge)
-        c_start = time.time()
-        c_raw = ""
-        c_parsed = None
-        c_error = None
-        c_messages = build_judge_prompt(
+        c_result = JudgeAgent().call(
             problem=question,
             current_phase=tattoo.phase.value,
             current_critique=current_critique,
             previous_critique=previous_critique,
             assertion_count=len(tattoo.active_assertions),
+            max_retries=1,
         )
-        for attempt in range(2):
-            try:
-                c_raw, _ = call_model(c_messages)
-                c_parsed = extract_json_from_response(c_raw)
-            except Exception as e:
-                c_raw = ""
-                c_error = str(e)
-            if c_parsed:
-                c_error = None
-                break
-            if attempt == 0:
-                print(f"    C ↻ retry")
-        if not c_parsed and not c_error:
-            c_error = "JSON parse failed"
-        c_duration = int((time.time() - c_start) * 1000)
+        c_raw = c_result.raw
+        c_parsed = c_result.parsed
+        c_error = c_result.error
+        c_duration = c_result.duration_ms
 
         if c_parsed:
             log_detail(f"[Final Cycle {cycle}] Agent C Reasoning:\n{c_parsed.get('reasoning')}")
