@@ -6,7 +6,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent
 EXPERIMENTS_DIR = Path(__file__).parent
 TASKS_DIR = EXPERIMENTS_DIR / "tasks"
-RESULTS_DIR = EXPERIMENTS_DIR / "results"
+# RESULTS_DIR removed in experiments-task-07 rev — 각 expXX/run.py 가 자체 RESULTS_DIR 정의 사용
 LOGS_DIR = EXPERIMENTS_DIR / "logs"
 
 # ── 모델 ──
