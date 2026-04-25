@@ -4,7 +4,7 @@
 독립 디렉토리(`expXX_<slug>/`)로 구성되며 `run.py` (실행 함수), `results/`
 (결과 JSON·리포트), `INDEX.md` (개요) 를 보유한다.
 
-## 실험 목록 (13 active + 1 archived)
+## 실험 목록 (14 active + 1 archived)
 
 | # | 디렉토리 | dispatcher key | 핵심 가설/메모 | 결과 |
 |---|---------|---------------|----------------|------|
@@ -21,6 +21,7 @@
 | 08 | [exp08_tool_use](exp08_tool_use/INDEX.md) | `tool-use` | H7 — Calculator/Linalg/LP 도구 | 1 trial + report |
 | 08b | [exp08b_tool_use_refined](exp08b_tool_use_refined/INDEX.md) | `tool-use-refined` | H8 — 도구 에러+프롬프트 강화 | 1 trial + report (math-04 100%) |
 | 09 | [exp09_longctx](exp09_longctx/INDEX.md) | `longctx` | H9 — Long-Context Stress | 1 trial + report (3-hop 100%) |
+| 10 | [exp10_reproducibility_cost](exp10_reproducibility_cost/INDEX.md) | `reproducibility-cost` | Q1·Q2 — 재현성·비용 프로파일 | TBD (task-06 후) |
 | (deprecated) | [_archived/exp04_tool_separation_deprecated](_archived/exp04_tool_separation_deprecated/INDEX.md) | (제거됨) | 구 도구 분리 — abc-pipeline 으로 대체 | 0 trials |
 
 ## 디렉토리 구조 표준
@@ -57,7 +58,7 @@ cd experiments
 ../.venv/bin/python run_experiment.py <key>
 ```
 
-`<key>`는 위 표의 `dispatcher key` 컬럼 참조 (13 active).
+`<key>`는 위 표의 `dispatcher key` 컬럼 참조 (14 active).
 
 ## 참고
 

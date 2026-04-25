@@ -16,3 +16,7 @@ __pycache__/
 
 # Personal session resume notes (local-only — do not commit)
 resume_gemini.md
+
+# Environment / API keys (local-only — do not commit)
+.env
+.env.local

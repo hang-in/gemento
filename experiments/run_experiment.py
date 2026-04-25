@@ -46,6 +46,7 @@ from exp07_loop_saturation.run import run as run_loop_saturation
 from exp08_tool_use.run import run as run_tool_use
 from exp08b_tool_use_refined.run import run as run_tool_use_refined
 from exp09_longctx.run import run as run_longctx
+from exp10_reproducibility_cost.run import run as run_reproducibility_cost
 
 
 EXPERIMENTS = {
@@ -62,6 +63,7 @@ EXPERIMENTS = {
     "tool-use": run_tool_use,
     "tool-use-refined": run_tool_use_refined,
     "longctx": run_longctx,
+    "reproducibility-cost": run_reproducibility_cost,
 }
 # tool-separation: removed in experiments-task-05 (deprecated, see _archived/exp04_tool_separation_deprecated/)
 

@@ -39,10 +39,12 @@ class TestDispatcherIntegrity(unittest.TestCase):
 
     EXPECTED_KEYS_AFTER_TASK_05 = {
         # task-05 후: tool-separation 제거됨, 13개 active
+        # exp10-task-05 후: reproducibility-cost 추가, 14개 active
         "baseline", "assertion-cap", "multiloop", "error-propagation",
         "cross-validation", "abc-pipeline", "prompt-enhance",
         "handoff-protocol", "solo-budget", "loop-saturation",
         "tool-use", "tool-use-refined", "longctx",
+        "reproducibility-cost",
     }
 
     def test_dispatcher_keys_match_expected(self):
@@ -171,6 +173,7 @@ class TestPerExperimentImports(unittest.TestCase):
         ("exp08_tool_use", "run", "run"),
         ("exp08b_tool_use_refined", "run", "run"),
         ("exp09_longctx", "run", "run"),
+        ("exp10_reproducibility_cost", "run", "run"),
     )
 
     def test_each_split_experiment_imports(self):
