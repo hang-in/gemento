@@ -125,6 +125,9 @@ class Assertion:
     confidence: float = 0.0
     status: AssertionStatus = AssertionStatus.ACTIVE
     invalidated_by: Optional[str] = None
+    # Long-context 실험용 — Optional, 기본 None. 기존 실험 역호환 보장.
+    # dict 구조: {"chunk_id": int, "span": [int, int] | None}
+    evidence_ref: Optional[dict] = None
 
     def to_dict(self) -> dict:
         d = {
@@ -136,6 +139,8 @@ class Assertion:
         }
         if self.invalidated_by:
             d["invalidated_by"] = self.invalidated_by
+        if self.evidence_ref is not None:
+            d["evidence_ref"] = self.evidence_ref
         return d
 
     @classmethod
@@ -147,6 +152,7 @@ class Assertion:
             confidence=d["confidence"],
             status=AssertionStatus(d["status"]),
             invalidated_by=d.get("invalidated_by"),
+            evidence_ref=d.get("evidence_ref"),
         )
 
 

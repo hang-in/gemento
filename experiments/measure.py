@@ -310,6 +310,84 @@ def generate_markdown_report(analysis: dict) -> str:
         lines.append("")
         lines.append(f"**math-04 breakthrough**: {'✅' if breakthrough else '❌'}  (target: tooluse accuracy ≥ 0.80)")
 
+    elif exp == "longctx":
+        arm_sum = analysis.get("arm_summary", {})
+        lines.append(f"> N = 3 trials per (arm × task); arms = solo_dump / rag_baseline / abc_tattoo")
+        lines.append("")
+        lines.append("## Arm Summary")
+        lines.append("")
+        lines.append("| Arm | Accuracy (v2) | Accuracy (v1) | Trials | Errors |")
+        lines.append("|-----|---------------|---------------|--------|--------|")
+        for arm_label in ["solo_dump", "rag_baseline", "abc_tattoo"]:
+            arm = arm_sum.get(arm_label, {})
+            lines.append(
+                f"| {arm_label} | {arm.get('accuracy_v2', 0):.2f} | {arm.get('accuracy_v1', 0):.2f} "
+                f"| {arm.get('n_trials', 0)} | {arm.get('error_count', 0)} |"
+            )
+        lines.append("")
+        kd = analysis.get("key_deltas", {})
+        lines.append("**Key Deltas:**")
+        for k, v in kd.items():
+            sign = "+" if v >= 0 else ""
+            lines.append(f"- {k}: {sign}{v*100:.1f}%p")
+        lines.append("")
+        lines.append("## Arm × Size Class")
+        lines.append("")
+        lines.append("| Arm | Small (3K) | Medium (10K) | Large (20K) |")
+        lines.append("|-----|------------|--------------|-------------|")
+        arm_by_size = analysis.get("arm_by_size", {})
+        for arm_label in ["solo_dump", "rag_baseline", "abc_tattoo"]:
+            sz = arm_by_size.get(arm_label, {})
+            sm = f"{sz.get('small', 0):.2f}" if "small" in sz else "N/A"
+            md = f"{sz.get('medium', 0):.2f}" if "medium" in sz else "N/A"
+            lg = f"{sz.get('large', 0):.2f}" if "large" in sz else "N/A"
+            lines.append(f"| {arm_label} | {sm} | {md} | {lg} |")
+        lines.append("")
+        lines.append("## Arm × Hop Type")
+        lines.append("")
+        lines.append("| Arm | needle | 2-hop | 3-hop |")
+        lines.append("|-----|--------|-------|-------|")
+        arm_by_hop = analysis.get("arm_by_hop", {})
+        for arm_label in ["solo_dump", "rag_baseline", "abc_tattoo"]:
+            ht = arm_by_hop.get(arm_label, {})
+            nd = f"{ht.get('needle', 0):.2f}" if "needle" in ht else "N/A"
+            h2 = f"{ht.get('2-hop', 0):.2f}" if "2-hop" in ht else "N/A"
+            h3 = f"{ht.get('3-hop', 0):.2f}" if "3-hop" in ht else "N/A"
+            lines.append(f"| {arm_label} | {nd} | {h2} | {h3} |")
+        lines.append("")
+        ehr = analysis.get("evidence_hit_rate_abc", {})
+        lines.append("## Evidence Hit Rate (abc_tattoo)")
+        lines.append("")
+        lines.append(f"- Overall: {ehr.get('overall', 0):.2f}")
+        by_hop = ehr.get("by_hop", {})
+        for ht in ["needle", "2-hop", "3-hop"]:
+            lines.append(f"- {ht}: {by_hop.get(ht, 0):.2f}")
+        lines.append("")
+        lines.append("## Error Modes")
+        lines.append("")
+        em = analysis.get("error_modes", {})
+        for arm_label in ["solo_dump", "rag_baseline", "abc_tattoo"]:
+            lines.append(f"**{arm_label}**: {em.get(arm_label, {})}")
+        lines.append("")
+        lines.append("## Per-task Breakdown")
+        lines.append("")
+        lines.append("| Task | Size | Hop | solo_dump | rag_baseline | abc_tattoo |")
+        lines.append("|------|------|-----|-----------|--------------|------------|")
+        for tb in analysis.get("task_breakdown", []):
+            tid = tb.get("task_id", "")
+            sz = tb.get("size_class", "")
+            ht = tb.get("hop_type", "")
+            s = f"{tb.get('solo_dump', {}).get('accuracy_v2', 0):.2f}"
+            r = f"{tb.get('rag_baseline', {}).get('accuracy_v2', 0):.2f}"
+            a = f"{tb.get('abc_tattoo', {}).get('accuracy_v2', 0):.2f}"
+            lines.append(f"| {tid} | {sz} | {ht} | {s} | {r} | {a} |")
+        lines.append("")
+        kd = analysis.get("key_deltas", {})
+        h9a = kd.get("H9a (abc - solo)", 0)
+        h9b = kd.get("H9b (abc - rag)", 0)
+        lines.append(f"**H9a breakthrough**: {'✅' if h9a > 0 else '❌'} (abc > solo, Δ={h9a*100:+.1f}%p)")
+        lines.append(f"**H9b differentiation**: {'✅' if h9b >= 0 else '❌'} (abc ≥ rag, Δ={h9b*100:+.1f}%p)")
+
     return "\n".join(lines)
 
 def analyze_loop_saturation(data: dict, task_map: dict = None) -> dict:
@@ -547,6 +625,192 @@ def analyze_tool_use(data: dict, task_map: dict = None) -> dict:
     }
 
 
+def analyze_longctx(data: dict, task_map: dict = None) -> dict:
+    """실험 9: Long-Context Stress Test 분석."""
+    results_by_arm = data.get("results_by_arm", {})
+    arm_labels = ["solo_dump", "rag_baseline", "abc_tattoo"]
+
+    # task_map: task_id → task entry (scoring_keywords, gold_evidence_chunks 포함)
+    # results_by_arm의 task 블록 자체에도 이 정보가 포함되어 있으므로 우선 그걸 사용
+    def get_task_entry(arm_label: str, task_id: str) -> dict:
+        for tb in results_by_arm.get(arm_label, []):
+            if tb.get("task_id") == task_id:
+                return tb
+        return {}
+
+    arm_summary: dict = {}
+    arm_by_size: dict = {}
+    arm_by_hop: dict = {}
+    error_modes: dict = {}
+
+    for arm_label in arm_labels:
+        task_blocks = results_by_arm.get(arm_label, [])
+        all_v2: list[float] = []
+        all_v1: list[float] = []
+        err_count = 0
+
+        size_scores: dict[str, list[float]] = {}
+        hop_scores: dict[str, list[float]] = {}
+        em: dict[str, int] = {"context_overflow": 0, "retrieval_miss": 0,
+                               "evidence_miss": 0, "format_error": 0,
+                               "wrong_synthesis": 0, "other": 0}
+
+        for tb in task_blocks:
+            task_id = tb["task_id"]
+            size_class = tb.get("size_class", "unknown")
+            hop_type = tb.get("hop_type", "unknown")
+            expected = tb.get("expected_answer", "")
+            scoring_kws = tb.get("scoring_keywords", [])
+            gold_chunks = set(tb.get("gold_evidence_chunks", []))
+            task_entry = {"expected_answer": expected, "scoring_keywords": scoring_kws}
+
+            size_scores.setdefault(size_class, [])
+            hop_scores.setdefault(hop_type, [])
+
+            for trial in tb.get("trials", []):
+                fa = str(trial.get("final_answer") or "")
+                sv2 = score_answer_v2(fa, task_entry)
+                sv1 = score_answer(fa, expected)
+                all_v2.append(sv2)
+                all_v1.append(sv1)
+                size_scores[size_class].append(sv2)
+                hop_scores[hop_type].append(sv2)
+
+                trial_error = trial.get("error")
+                if trial_error:
+                    err_count += 1
+
+                if sv2 < 1.0:
+                    # error mode 분류
+                    if arm_label == "solo_dump" and trial_error and any(
+                        kw in str(trial_error).lower()
+                        for kw in ("context", "overflow", "length", "n_ctx", "truncat")
+                    ):
+                        em["context_overflow"] += 1
+                    elif arm_label == "rag_baseline":
+                        retrieved = set(trial.get("retrieved_chunk_ids", []))
+                        if gold_chunks and not (retrieved & gold_chunks):
+                            em["retrieval_miss"] += 1
+                        elif not fa or fa.strip() == "None":
+                            em["format_error"] += 1
+                        else:
+                            em["wrong_synthesis"] += 1
+                    elif arm_label == "abc_tattoo":
+                        refs = {r.get("chunk_id") for r in trial.get("evidence_refs_used", []) if r}
+                        if gold_chunks and not (refs & gold_chunks):
+                            em["evidence_miss"] += 1
+                        elif not fa or fa.strip() == "None":
+                            em["format_error"] += 1
+                        else:
+                            em["wrong_synthesis"] += 1
+                    else:
+                        if not fa or fa.strip() == "None":
+                            em["format_error"] += 1
+                        else:
+                            em["wrong_synthesis"] += 1
+
+        n = len(all_v2)
+        arm_summary[arm_label] = {
+            "accuracy_v2": sum(all_v2) / n if n else 0.0,
+            "accuracy_v1": sum(all_v1) / n if n else 0.0,
+            "n_trials": n,
+            "error_count": err_count,
+        }
+        arm_by_size[arm_label] = {
+            sz: (sum(scores) / len(scores) if scores else 0.0)
+            for sz, scores in size_scores.items()
+        }
+        arm_by_hop[arm_label] = {
+            ht: (sum(scores) / len(scores) if scores else 0.0)
+            for ht, scores in hop_scores.items()
+        }
+        error_modes[arm_label] = {k: v for k, v in em.items() if v > 0}
+
+    # key deltas
+    abc_acc = arm_summary.get("abc_tattoo", {}).get("accuracy_v2", 0.0)
+    solo_acc = arm_summary.get("solo_dump", {}).get("accuracy_v2", 0.0)
+    rag_acc = arm_summary.get("rag_baseline", {}).get("accuracy_v2", 0.0)
+    key_deltas = {
+        "H9a (abc - solo)": abc_acc - solo_acc,
+        "H9b (abc - rag)": abc_acc - rag_acc,
+    }
+
+    # evidence hit rate (ABC arm only)
+    hit_total_refs = 0
+    hit_matched_refs = 0
+    hop_hits: dict[str, list[float]] = {}
+    for tb in results_by_arm.get("abc_tattoo", []):
+        hop_type = tb.get("hop_type", "unknown")
+        gold_chunks = set(tb.get("gold_evidence_chunks", []))
+        for trial in tb.get("trials", []):
+            refs = [r.get("chunk_id") for r in trial.get("evidence_refs_used", []) if r]
+            if refs:
+                matched = sum(1 for cid in refs if cid in gold_chunks)
+                hit_total_refs += len(refs)
+                hit_matched_refs += matched
+                hop_hits.setdefault(hop_type, []).append(matched / len(refs))
+
+    overall_hit = hit_matched_refs / hit_total_refs if hit_total_refs else 0.0
+    evidence_hit_rate_abc = {
+        "overall": overall_hit,
+        "by_hop": {
+            ht: (sum(scores) / len(scores) if scores else 0.0)
+            for ht, scores in hop_hits.items()
+        },
+    }
+
+    # task breakdown
+    all_task_ids = list({
+        tb["task_id"]
+        for arm_label in arm_labels
+        for tb in results_by_arm.get(arm_label, [])
+    })
+    task_breakdown = []
+    for tid in sorted(all_task_ids):
+        entry: dict = {"task_id": tid}
+        for arm_label in arm_labels:
+            tb = get_task_entry(arm_label, tid)
+            if not tb:
+                continue
+            entry.setdefault("size_class", tb.get("size_class"))
+            entry.setdefault("hop_type", tb.get("hop_type"))
+            expected = tb.get("expected_answer", "")
+            scoring_kws = tb.get("scoring_keywords", [])
+            task_e = {"expected_answer": expected, "scoring_keywords": scoring_kws}
+            gold_chunks = set(tb.get("gold_evidence_chunks", []))
+            trials = tb.get("trials", [])
+            v2_scores = [score_answer_v2(str(t.get("final_answer") or ""), task_e) for t in trials]
+            acc_v2 = sum(v2_scores) / len(v2_scores) if v2_scores else 0.0
+            arm_entry: dict = {"accuracy_v2": acc_v2}
+            if arm_label == "rag_baseline":
+                retrieved_lists = [t.get("retrieved_chunk_ids", []) for t in trials]
+                avg_ret = sum(len(r) for r in retrieved_lists) / len(retrieved_lists) if retrieved_lists else 0.0
+                arm_entry["avg_retrieved_chunks"] = avg_ret
+            elif arm_label == "abc_tattoo":
+                arm_entry["avg_num_assertions"] = (
+                    sum(t.get("num_assertions", 0) for t in trials) / len(trials) if trials else 0.0
+                )
+                all_refs = [r for t in trials for r in t.get("evidence_refs_used", []) if r]
+                if all_refs:
+                    matched = sum(1 for r in all_refs if r.get("chunk_id") in gold_chunks)
+                    arm_entry["evidence_hit_rate"] = matched / len(all_refs)
+                else:
+                    arm_entry["evidence_hit_rate"] = 0.0
+            entry[arm_label] = arm_entry
+        task_breakdown.append(entry)
+
+    return {
+        "experiment": "longctx",
+        "arm_summary": arm_summary,
+        "arm_by_size": arm_by_size,
+        "arm_by_hop": arm_by_hop,
+        "task_breakdown": task_breakdown,
+        "key_deltas": key_deltas,
+        "evidence_hit_rate_abc": evidence_hit_rate_abc,
+        "error_modes": error_modes,
+    }
+
+
 ANALYZERS = {
     "baseline": analyze_baseline,
     "multiloop": analyze_multiloop,
@@ -555,6 +819,7 @@ ANALYZERS = {
     "solo_budget": analyze_solo_budget,
     "loop_saturation": analyze_loop_saturation,
     "tool_use": analyze_tool_use,
+    "longctx": analyze_longctx,
 }
 
 

@@ -18,6 +18,7 @@ Reference document index.
 - [handoff-to-gemini-exp7.md](handoff-to-gemini-exp7.md) — Gemini 인계: 실험 7 Loop Saturation + Loop-Phase
 - [handoff-to-gemini-exp8.md](handoff-to-gemini-exp8.md) — 실험 8 Gemini 핸드오프 (Math Tool-Use)
 - [handoff-to-gemini-exp8b.md](handoff-to-gemini-exp8b.md) — 실험 8b Gemini 핸드오프 (Tool-Use Refinement)
+- [handoff-to-gemini-exp9.md](handoff-to-gemini-exp9.md) — 실험 9 Gemini 핸드오프 (Long-Context Stress Test)
 
 ## 실험 결과
 

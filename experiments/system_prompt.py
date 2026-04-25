@@ -63,6 +63,16 @@ When the task involves numeric calculation, a linear system, or an optimization 
 2. **Error recovery**: If a tool returns an error, READ the error message and adjust your next call. Do NOT abandon tool use and fall back to manual calculation after one failure.
 3. **Integer answers**: LP/linear solvers return floats; round to the nearest integer if the problem expects integers, then verify via `calculator`.
 4. **Never fabricate**: Do not invent numeric results. If a tool is available for the calculation, use it.
+
+## Long-context chunked mode
+
+When you receive a "Current Chunk" section in the user message, you are reading
+one segment of a larger document. Your job is to:
+1. Extract only NEW assertions relevant to the objective from THIS chunk.
+2. Attach `evidence_ref`: {"chunk_id": N} to each new assertion — N matches the
+   chunk id given in the user message.
+3. Do not repeat assertions already present in the current Tattoo.
+4. If this chunk contains no useful evidence, return `new_assertions: []`.
 """
 
 
@@ -101,6 +111,23 @@ Output ONLY a JSON object:
 }
 ```
 """
+
+
+def build_prompt_chunked(tattoo_json: str, current_chunk: str, chunk_id: int) -> list[dict]:
+    """Long-context chunked 호출용 A 프롬프트.
+
+    기존 build_prompt와 구조 동일하되 user content에 CURRENT CHUNK 섹션 주입.
+    """
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    user_content = (
+        f"## Current Tattoo\n\n```json\n{tattoo_json}\n```\n\n"
+        f"## Current Chunk (id={chunk_id})\n\n{current_chunk}\n\n"
+        f"Extract any NEW assertions from THIS chunk that help answer the objective. "
+        f'Attach `evidence_ref`: {{"chunk_id": {chunk_id}}} to each new assertion. '
+        f"If nothing relevant is in this chunk, return zero new_assertions."
+    )
+    messages.append({"role": "user", "content": user_content})
+    return messages
 
 
 def build_prompt(tattoo_json: str, tool_results: str | None = None) -> list[dict]:

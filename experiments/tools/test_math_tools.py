@@ -1,7 +1,7 @@
 """Unit tests for math_tools (stdlib unittest, no external test runner required)."""
 import unittest
 
-from math_tools import calculator, solve_linear_system, linprog
+from tools.math_tools import calculator, solve_linear_system, linprog
 
 
 class TestCalculator(unittest.TestCase):

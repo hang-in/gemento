@@ -189,7 +189,7 @@ def decide_phase_transition(tattoo: Tattoo, loops_in_current_phase: int) -> Phas
     return None
 
 
-def apply_llm_response(tattoo: Tattoo, response: dict, loop_index: int) -> tuple[Tattoo, str | None]:
+def apply_llm_response(tattoo: Tattoo, response: dict, loop_index: int, hard_cap: int | None = None) -> tuple[Tattoo, str | None]:
     """LLM 응답을 기반으로 새 문신을 생성한다."""
     new_tattoo = Tattoo(
         task_id=tattoo.task_id,
@@ -226,13 +226,17 @@ def apply_llm_response(tattoo: Tattoo, response: dict, loop_index: int) -> tuple
             q = f"[low confidence] {new_a.get('content', '')}"
             new_tattoo.open_questions.append(q)
             continue
-        if len(new_tattoo.active_assertions) >= ASSERTION_HARD_CAP:
+        _cap = hard_cap if hard_cap is not None else ASSERTION_HARD_CAP
+        if len(new_tattoo.active_assertions) >= _cap:
             continue
-        new_tattoo.add_assertion(
+        assertion = new_tattoo.add_assertion(
             content=new_a.get("content", ""),
             confidence=conf,
             source_loop=loop_index,
         )
+        # Long-context chunked mode: evidence_ref 첨부 (기존 실험에선 None)
+        if new_a.get("evidence_ref") is not None:
+            assertion.evidence_ref = new_a["evidence_ref"]
 
     # 3. 질문 해결/추가 (방어 로직: 요소가 dict인 경우 대응)
     raw_resolved = response.get("resolved_questions", [])
@@ -782,4 +786,231 @@ def run_abc_chain(
             return tattoo, logs, final_answer
 
     print(f"  ⚠ Max cycles ({max_cycles}) reached without convergence")
+    return tattoo, logs, final_answer
+
+
+def run_abc_chunked(
+    task_id: str,
+    question: str,
+    chunks: list[dict],  # chunker.Chunk.to_dict() 리스트
+    constraints: list[str] | None = None,
+    termination: str = "모든 증거가 종합되고 최종 답변이 확정되면 종료",
+    logger=None,
+    max_final_cycles: int = 5,
+    assertion_soft_cap: int = 64,  # chunk iteration 단계에서는 크게 허용
+) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
+    """Long-context ABC: chunk별로 A 호출하며 증거 누적, 최종 B+C 수렴.
+
+    반환: (tattoo, cycle_logs, final_answer) — run_abc_chain과 동일 인터페이스.
+    """
+    from system_prompt import build_prompt_chunked, build_critic_prompt, build_judge_prompt
+
+    tattoo = create_initial_tattoo(
+        task_id=task_id,
+        objective=question,
+        constraints=constraints,
+        termination=termination,
+    )
+
+    logs: list[ABCCycleLog] = []
+    final_answer = None
+
+    # Phase 1: chunk iteration — A per chunk, evidence 누적
+    tattoo.phase = Phase.INVESTIGATE
+    total = len(chunks)
+    for chunk in chunks:
+        chunk_id = chunk["chunk_id"]
+        tattoo.next_directive = (
+            f"Read CURRENT CHUNK (id={chunk_id}/{total - 1}) and extract NEW assertions "
+            f"that help answer the question. Attach evidence_ref={{\"chunk_id\": {chunk_id}}} "
+            f"to each new assertion. If the chunk has no relevant evidence, return new_assertions: []."
+        )
+
+        # select only up to assertion_soft_cap assertions for the prompt (토큰 절약)
+        selected = select_assertions(tattoo, soft_cap=assertion_soft_cap)
+        display_tattoo = Tattoo(
+            tattoo_id=tattoo.tattoo_id,
+            task_id=tattoo.task_id,
+            loop_index=tattoo.loop_index,
+            parent_id=tattoo.parent_id,
+            created_at=tattoo.created_at,
+            objective=tattoo.objective,
+            constraints=tattoo.constraints,
+            termination=tattoo.termination,
+            phase=tattoo.phase,
+            assertions=selected,
+            open_questions=tattoo.open_questions,
+            next_directive=tattoo.next_directive,
+        )
+        tattoo_json = display_tattoo.to_json()
+
+        messages = build_prompt_chunked(
+            tattoo_json=tattoo_json,
+            current_chunk=chunk["content"],
+            chunk_id=chunk_id,
+        )
+
+        start = time.time()
+        raw = ""
+        parsed = None
+        error = None
+        for attempt in range(2):
+            try:
+                raw, _ = call_model(messages)
+                parsed = extract_json_from_response(raw)
+            except Exception as e:
+                raw = ""
+                error = str(e)
+            if parsed:
+                error = None
+                break
+            if attempt == 0:
+                print(f"    chunk {chunk_id} ↻ retry")
+        duration_ms = int((time.time() - start) * 1000)
+
+        if parsed:
+            tattoo, answer = apply_llm_response(tattoo, parsed, loop_index=chunk_id, hard_cap=ASSERTION_HARD_CAP * 20)
+            if answer:
+                final_answer = answer
+            new_count = len(parsed.get("new_assertions", []))
+        else:
+            new_count = 0
+            if not error:
+                error = "JSON parse failed"
+
+        if logger:
+            pass  # logger 확장은 향후 추가
+        else:
+            print(f"  Chunk {chunk_id}/{total - 1} | assertions={len(tattoo.active_assertions)} "
+                  f"new={new_count} | {duration_ms}ms{' ⚠ ' + error if error else ''}")
+
+        # 간이 log — LoopLog 재사용
+        chunk_loop_log = LoopLog(
+            loop_index=chunk_id,
+            tattoo_in={},
+            raw_response=raw,
+            parsed_response=parsed,
+            tattoo_out={},
+            duration_ms=duration_ms,
+            error=error,
+        )
+        logs.append(ABCCycleLog(
+            cycle=chunk_id,
+            phase="CHUNK_ITERATE",
+            a_log=chunk_loop_log,
+            b_judgments=None, b_raw="", b_duration_ms=0, b_error=None,
+            c_decision=None, c_raw="", c_duration_ms=0, c_error=None,
+            phase_transition=None,
+        ))
+
+    # Phase 2: 최종 종합 — B→C 루프 (max_final_cycles)
+    tattoo.phase = Phase.SYNTHESIZE
+    previous_critique = None
+
+    for cycle in range(1, max_final_cycles + 1):
+        print(f"  Final cycle {cycle}/{max_final_cycles} | assertions={len(tattoo.active_assertions)}")
+
+        # B (Critic)
+        b_start = time.time()
+        b_raw = ""
+        b_parsed = None
+        b_error = None
+        assertions_for_b = [a.to_dict() for a in tattoo.active_assertions]
+        if assertions_for_b:
+            b_messages = build_critic_prompt(
+                question,
+                assertions_for_b,
+                handoff_a2b=tattoo.handoff_a2b.to_dict() if tattoo.handoff_a2b else None,
+            )
+            for attempt in range(2):
+                try:
+                    b_raw, _ = call_model(b_messages)
+                    b_parsed = extract_json_from_response(b_raw)
+                except Exception as e:
+                    b_raw = ""
+                    b_error = str(e)
+                if b_parsed:
+                    b_error = None
+                    break
+                if attempt == 0:
+                    print(f"    B ↻ retry")
+            if not b_parsed and not b_error:
+                b_error = "JSON parse failed"
+        else:
+            b_error = "no assertions to critique"
+        b_duration = int((time.time() - b_start) * 1000)
+
+        if b_parsed and b_parsed.get("handoff_b2c"):
+            tattoo.handoff_b2c = HandoffB2C.from_dict(b_parsed["handoff_b2c"])
+        if b_parsed and "judgments" in b_parsed:
+            for j in b_parsed["judgments"]:
+                if j.get("status") == "invalid":
+                    tattoo.invalidate_assertion(j.get("assertion_id", ""), j.get("reason", "Critic invalidated"))
+        current_critique = b_parsed
+
+        print(f"    B: {'⚠ ' + b_error if b_error else str(len(b_parsed.get('judgments', []))) + ' judged'} | {b_duration}ms")
+
+        # C (Judge)
+        c_start = time.time()
+        c_raw = ""
+        c_parsed = None
+        c_error = None
+        c_messages = build_judge_prompt(
+            problem=question,
+            current_phase=tattoo.phase.value,
+            current_critique=current_critique,
+            previous_critique=previous_critique,
+            assertion_count=len(tattoo.active_assertions),
+        )
+        for attempt in range(2):
+            try:
+                c_raw, _ = call_model(c_messages)
+                c_parsed = extract_json_from_response(c_raw)
+            except Exception as e:
+                c_raw = ""
+                c_error = str(e)
+            if c_parsed:
+                c_error = None
+                break
+            if attempt == 0:
+                print(f"    C ↻ retry")
+        if not c_parsed and not c_error:
+            c_error = "JSON parse failed"
+        c_duration = int((time.time() - c_start) * 1000)
+
+        if c_parsed:
+            if c_parsed.get("final_answer"):
+                final_answer = c_parsed["final_answer"]
+            if c_parsed.get("converged"):
+                tattoo.phase = Phase.CONVERGED
+                print(f"    C: CONVERGED | {c_duration}ms")
+                logs.append(ABCCycleLog(
+                    cycle=total + cycle,
+                    phase="SYNTHESIZE",
+                    a_log=chunk_loop_log,
+                    b_judgments=b_parsed, b_raw=b_raw[:500],
+                    b_duration_ms=b_duration, b_error=b_error,
+                    c_decision=c_parsed, c_raw=c_raw[:500],
+                    c_duration_ms=c_duration, c_error=c_error,
+                    phase_transition="SYNTHESIZE→CONVERGED",
+                ))
+                return tattoo, logs, final_answer
+            else:
+                print(f"    C: not converged | {c_duration}ms")
+        else:
+            print(f"    C: {'⚠ ' + c_error if c_error else 'no output'} | {c_duration}ms")
+
+        previous_critique = current_critique
+        logs.append(ABCCycleLog(
+            cycle=total + cycle,
+            phase="SYNTHESIZE",
+            a_log=chunk_loop_log,
+            b_judgments=b_parsed, b_raw=b_raw[:500],
+            b_duration_ms=b_duration, b_error=b_error,
+            c_decision=c_parsed, c_raw=c_raw[:500],
+            c_duration_ms=c_duration, c_error=c_error,
+            phase_transition=None,
+        ))
+
+    print(f"  ⚠ Max final cycles ({max_final_cycles}) reached without convergence")
     return tattoo, logs, final_answer
