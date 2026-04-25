@@ -1,7 +1,7 @@
 ---
 type: reference
 status: in_progress
-updated_at: 2026-04-24
+updated_at: 2026-04-25
 ---
 
 > **개념 프레임 canonical 문서**: [conceptFramework.md](./conceptFramework.md) — 4축 외부화 원리, 용어 정의, 축 ↔ 실험 매핑.
@@ -35,6 +35,9 @@ updated_at: 2026-04-24
 | H6 | **[Role 외부화 정교화]** Phase별 특화 프롬프트가 baseline 대비 우수하다 | **조건부 채택** (장기 루프 15~20에서 +5~6%p) | Exp07 |
 | H7 | **[Tool 외부화]** 외부 수학 도구(calculator/linalg/linprog)가 E4B의 계산 한계를 보완한다 | **채택** (+18.3%p, math-04 0→80%) | Exp08 |
 | H8 | **[Tool 외부화 안정성]** 에러 힌트 + Mandatory tool rules로 tool_neglect와 operator 혼동을 완화한다 | **채택** (neglect 0%, calculator 100%, math-04 0→100%, 총 +23.3%p) | Exp08b |
+| H9a | **[Tattoo 외부화 — 물리 한계 돌파]** ABC+Tattoo(chunked)가 Solo-dump보다 long-context에서 우수하다 | **채택** (+68.3%p, Large 20K에서 Solo 0% → ABC 100%) | Exp09 |
+| H9b | **[차별성]** ABC+Tattoo가 RAG baseline 대비 고유 기여를 가진다 | **조건부 채택** (전체 +3.3%p; Large 3-hop에서 +33%p로 크게 우세, small에선 RAG 우세) | Exp09 |
+| H9c | **[에러 모드 차이]** ABC의 실패 패턴이 Solo·RAG와 질적으로 다르다 | **채택** (Solo: format_error 24, RAG: wrong_synthesis 6, ABC: evidence_miss 2 + wrong_synthesis 3) | Exp09 |
 
 #### 축 ↔ 실험 매트릭스
 
@@ -560,6 +563,82 @@ updated_at: 2026-04-24
 
 ---
 
+### Exp09: Long-Context Stress Test (ABC vs Solo-dump vs RAG)
+
+| 항목 | 내용 |
+|------|------|
+| **누가** | Gemma 4 E4B × 3 (A-B-C) + Tattoo evidence_ref + 신규 longctx 태스크셋 |
+| **언제** | 2026-04-25 (Gemini CLI / Windows에서 완주) |
+| **어디서** | Windows + 외부 llama.cpp GPU 서버 (n_ctx 8K × 4 slot) |
+| **무엇을** | H9 검증 — 제멘토의 **원래 핵심 가설**("외부 상태로 유효 컨텍스트 확장")의 정면 측정. 제멘토 ABC + Tattoo가 (a) Solo-dump보다 우수하고 (b) 표준 RAG baseline 대비 고유 기여를 보이는가 |
+| **왜** | 지금까지 H1·H4·H7·H8은 "계산·추론" 한계를 외부화 도구로 보완. 그러나 **컨텍스트 자체**의 한계는 직접 측정한 적 없음. Exp09는 sliding_window(512)의 20~40배 크기 문서로 이 가설을 정면 검증. RAG 대비 차별성도 함께 측정하여 "제멘토 = 그냥 RAG + loop" 반론 차단 |
+| **어떻게** | 신규 태스크셋 `experiments/tasks/longctx_taskset.json` (10 tasks, 3 size class × 3 hop type). 3 arm × 10 tasks × 3 trial = **90 runs**. Arm: (1) `solo_dump` — 문서 전체+질문 단일 호출, n_ctx 초과 시 truncation, (2) `rag_baseline` — `bm25s` top-K=5 chunks 단일 호출, (3) `abc_tattoo` — chunk 순회 + evidence_ref 누적 + 최종 B+C 수렴. 새 인프라: `tools/chunker.py`, `tools/bm25_tool.py`, `Assertion.evidence_ref` 필드, `run_abc_chunked()`, `analyze_longctx`+error mode taxonomy |
+
+**결과 (v2 채점, 90 runs):**
+
+| Arm | Accuracy v2 | Accuracy v1 | Errors |
+|-----|-------------|-------------|--------|
+| solo_dump | 0.20 | 0.20 | 24/30 (format_error) |
+| rag_baseline | 0.85 | 0.90 | 0 |
+| **abc_tattoo** | **0.88** | **0.93** | 0 |
+
+**Key Deltas (v2):**
+- **H9a (abc − solo)**: **+68.3%p** ✅ 압도적 채택
+- **H9b (abc − rag)**: **+3.3%p** ✅ 조건부 채택 (전체는 미세, 3-hop에서 +33%p로 차별성 명확)
+
+**Size class 분해 — 물리 한계 돌파 검증:**
+
+| Arm | Small 3K | Medium 10K | Large 20K |
+|-----|---------|-----------|----------|
+| solo_dump | 1.00 | **0.00** | **0.00** |
+| rag_baseline | 1.00 | 0.88 | 0.75 |
+| **abc_tattoo** | **0.67** | 0.88 | **1.00** |
+
+**Hop type 분해 — H9b 차별성의 origin:**
+
+| Arm | needle | 2-hop | 3-hop |
+|-----|--------|-------|-------|
+| solo_dump | 0.33 | 0.25 | 0.00 |
+| rag_baseline | 1.00 | 0.88 | 0.67 |
+| **abc_tattoo** | 0.78 | 0.88 | **1.00** |
+
+**Per-task 하이라이트:**
+
+- `longctx-large-3hop-01`: solo 0% / **rag 0%** / **abc 100%** — RAG의 정보 단절이 실측 데이터로 입증된 단일 태스크.
+- `longctx-small-needle-01`: solo 1.00 / rag 1.00 / **abc 0.33** — Small Paradox의 핵심 사례.
+
+**에러 모드 (H9c):**
+
+| Arm | 주요 실패 패턴 |
+|-----|--------------|
+| solo_dump | `format_error` 24건 — n_ctx 초과 truncation으로 인한 응답 불완전 |
+| rag_baseline | `wrong_synthesis` 6건 — 검색은 맞았지만 통합 실패 |
+| abc_tattoo | `evidence_miss` 2 + `wrong_synthesis` 3건 — 검증 경로 거쳤기에 다른 패턴 |
+
+**Evidence Hit Rate (ABC arm):**
+- Overall: 0.35
+- needle 0.33 / 2-hop 0.50 / **3-hop 0.23**
+- 흥미로운 비대칭: 3-hop은 hit rate가 가장 낮은데 정답률은 100%. "필요한 모든 증거를 찾는 것"보다 "검증 경로로 합리화하는 것"이 정답률에 더 영향이라는 가설.
+
+**핵심 발견:**
+1. **H9a 압도적 채택** — Solo는 Medium 이상에서 **완전 전멸 (0%)**, ABC는 Large 20K에서 **100%**. 제멘토 원래 가설 ("외부 상태가 유효 context 확장")의 가장 강력한 단일 증거.
+2. **H9b 조건부 채택 — 차별성은 3-hop에서 발생** — needle/2-hop은 RAG와 거의 동등(±0~12%p). **3-hop만 ABC 100% vs RAG 67% (+33%p)**. 즉 "제멘토 ≠ 그냥 RAG + loop"는 **다중 증거 통합 영역에서만** 성립.
+3. **H9c 채택** — 3개 arm의 실패 모드가 질적으로 다름 (truncation vs 정보 단절 vs 검증 후 잔여 오류).
+4. **Small Paradox 새 발견** — ABC가 small에서 RAG보다 약함(0.67 vs 1.00). 표본 노이즈일 수도, 실제 패러독스(chunk 적을 때 cycle iteration이 오버킬)일 수도. Gemini도 Exp10 후보로 명시.
+5. **Solo의 단조 붕괴** — 1.00 (small) → 0.00 (medium) → 0.00 (large). n_ctx 8K에 근접하는 시점부터 truncation이 즉시 실패로 이어짐. 모델이 chunk 잘린 응답을 정상화하지 못함.
+
+**결론:**
+- **제멘토 원래 핵심 가설(컨텍스트 한계 외부화) 정면 입증**. conceptFramework § 1의 4축 외부화 원리 중 **Tattoo(상태 외부화)**의 가장 강력한 단일 증거가 확보됨.
+- "제멘토 = RAG + loop"라는 단순화 반론 차단 — 단 차별성은 **다중 증거 통합 영역에 한정**. needle 같은 단순 retrieval에선 RAG로 충분.
+- **다음 후보 (Exp10+)**: Small Paradox 해결, 병렬 chunk 순회 (Gemini 핸드오프 제언), Stream Workflow (장기 처리).
+
+**알려진 이슈 / 후속 과제:**
+- **Small Paradox** — small needle 1개 태스크에서 ABC 0.33. 표본(small=2 tasks × 3 trial = 6 데이터포인트) 작아 노이즈 가능. 추가 trial 또는 small 태스크 확대로 검증 필요.
+- **Evidence Hit Rate ↔ 정답률 비대칭** — 3-hop hit 0.23 vs 정답률 100%. 모델이 정답 외 chunk도 evidence_ref에 첨부하는 경향. gold_evidence_chunks 라벨링이 너무 엄격할 가능성도.
+- **3 trial은 통계 신뢰도 부족** — Exp09b 후보로 5 trial 확대 + p-value 검정.
+
+---
+
 ## 채점 시스템 변천
 
 ### v1 → v2 전환 (2026-04-15)
@@ -618,6 +697,7 @@ Python          = 안전장치만 (safety net, 0회 발동)
 - [x] taskset math-04 expected_answer 데이터 결함 정정 (2026-04-24, 커밋 `6c6f198`)
 - [x] measure.py `--output` UTF-8 직접 기록 옵션 (Exp08 Task 01)
 - [x] Exp08b Tool-Use Refinement (40 시행, +23.3%p, math-04 0→100%, tool_neglect 0%, calculator 100%, 2026-04-24)
+- [x] Exp09 Long-Context Stress Test (90 시행, ABC 88% / RAG 85% / Solo 20%, Large 20K에서 ABC 100%, 2026-04-25)
 
 ### 열린 질문
 1. **v2 역행 조사** — Exp04, Exp05a에서 v2가 v1보다 낮은 이유 분석 필요
@@ -626,12 +706,16 @@ Python          = 안전장치만 (safety net, 0회 발동)
 4. **Mixed Intelligence** — E4B × 2 + 대형 모델(9B+) Judge 조합 테스트
 5. ~~**Tool neglect 패턴**~~ — **Exp08b에서 해결** (0% 달성). 닫힘.
 6. ~~**Calculator `^` 혼동**~~ — **Exp08b에서 해결** (100% 성공). 닫힘.
-7. **컨텍스트 한계 직접 검증** — 현재 태스크셋은 sliding_window(512)를 스트레스하지 않음. Long-context multi-hop QA 실험 설계 필요 (후보: Exp09)
-8. **문신 점유율 측정** — 루프 진행 시 문신이 context window를 차지하는 비율 추적 필요
-9. **taskset expected_answer 전수 검증** — math-04 결함 사례를 볼 때 다른 태스크의 정답도 수학적으로 검증되어야 함
-10. **한국어 답변 v2 scoring** — Exp08 math-03에서 한국어 답변의 keyword 매칭 편차 관찰. 다국어 응답 채점 방침 결정 필요
-11. **미외부화 축 보강** — 현재 검증된 4축(Tattoo/Tool/Role/Orchestrator) 외 확장 후보: **Extractor**(원문→claim), **Reducer**(chunk→일일), **Search Tool**(BM25/vector), **Graph Tool**(relation traversal), **Evidence Tool**(evidence_ref resolve), **Critic Tool**(schema·citation 결정론적 검증). 자세한 목록은 [conceptFramework.md § 9](./conceptFramework.md) 참조.
+7. ~~**컨텍스트 한계 직접 검증**~~ — **Exp09에서 정면 입증** (Solo 0% vs ABC 100% in Large 20K). 닫힘.
+8. **문신 점유율 측정** — 루프 진행 시 문신이 context window를 차지하는 비율 추적 필요. Exp09 데이터로 사후 분석 가능 (chunk count × 평균 assertion count).
+9. **taskset expected_answer 전수 검증** — math-04 결함 사례를 볼 때 다른 태스크의 정답도 수학적으로 검증되어야 함. Exp09 longctx 태스크셋도 이 검증 필요.
+10. **한국어 답변 v2 scoring** — Exp08 math-03에서 한국어 답변의 keyword 매칭 편차 관찰. 다국어 응답 채점 방침 결정 필요.
+11. **미외부화 축 보강** — 현재 검증된 4축(Tattoo/Tool/Role/Orchestrator) 외 확장 후보: **Extractor**(원문→claim), **Reducer**(chunk→일일), **Search Tool**(BM25/vector — Exp09에서 RAG arm 일부 검증), **Graph Tool**(relation traversal), **Evidence Tool**(evidence_ref resolve — Exp09에서 부분 구현), **Critic Tool**(schema·citation 결정론적 검증). 자세한 목록은 [conceptFramework.md § 9](./conceptFramework.md) 참조.
 12. **Exp08c 후보 — solve_linear_system Singular matrix 힌트** — Exp08b math-03에서 6회 관측. "데이터 inconsistent 가능성" 힌트를 에러 메시지에 추가하면 모델의 모순 판단을 가속할 수 있는지 실험.
+13. **Exp10 후보 — Small Paradox 해결** — Exp09에서 ABC가 small에서 RAG 대비 약함 관측 (longctx-small-needle-01: ABC 0.33 vs RAG 1.00). chunk가 너무 작거나 적을 때 cycle iteration이 오버킬 가능성. 추가 small 태스크 확대 또는 chunk-count threshold 기반 single-pass 분기 검증.
+14. **Exp10 후보 — 병렬 chunk 순회** — Gemini의 Exp09 핸드오프 제언. 현재 직렬 chunk 처리를 여러 어댑터 인스턴스가 병렬로 처리한 후 Tattoo merge하는 구조. ABC chunked의 시간 비용 절감 + multi-agent merge 패턴 실험.
+15. **Exp09 통계 신뢰도 보강** — 현재 3 trial × 10 task = 30 데이터포인트/arm. 5 trial로 확대 + paired t-test 또는 Wilcoxon으로 H9b의 +3.3%p가 유의한지 검정.
+16. **Evidence Hit Rate ↔ 정답률 비대칭** — Exp09 ABC 3-hop에서 hit 0.23인데 정답률 100%. gold_evidence_chunks 라벨링이 너무 엄격하거나, 모델이 검증 경로로 보완 추론 가능성. 별도 분석 필요.
 13. **크로스 모델 재현** — Qwen 2.5 7B / Phi-4 / Llama 3.2 3B에서 4축 외부화 효과 재현 여부. 일반화 검증.
 
 ---
