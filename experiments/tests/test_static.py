@@ -267,5 +267,52 @@ class TestRunExperimentSlim(unittest.TestCase):
                          "_template/ should be removed in task-07")
 
 
+class TestSamplingParamsCentralization(unittest.TestCase):
+    """sampling-params-config-exp10 plan — config.py SAMPLING_PARAMS 일원화 검증.
+
+    - SAMPLING_PARAMS 가 config.py 에 정의되고 4 필드 존재
+    - orchestrator.py·lmstudio_client.py 가 모두 SAMPLING_PARAMS 참조
+    - 두 파일 본문에 sampling literal 직접 하드코딩 0건
+    """
+
+    EXPECTED_FIELDS = {"temperature", "max_tokens", "top_p", "seed"}
+    EXPECTED_VALUES = {"temperature": 0.1, "max_tokens": 4096, "top_p": None, "seed": None}
+
+    def test_sampling_params_exists_with_expected_fields(self):
+        sys.path.insert(0, str(EXPERIMENTS_DIR))
+        try:
+            from config import SAMPLING_PARAMS
+            self.assertEqual(set(SAMPLING_PARAMS.keys()), self.EXPECTED_FIELDS)
+            for k, v in self.EXPECTED_VALUES.items():
+                self.assertEqual(SAMPLING_PARAMS[k], v,
+                                 f"SAMPLING_PARAMS[{k!r}] expected {v}, got {SAMPLING_PARAMS[k]}")
+        finally:
+            sys.path.remove(str(EXPERIMENTS_DIR))
+
+    def test_orchestrator_references_sampling_params(self):
+        text = (EXPERIMENTS_DIR / "orchestrator.py").read_text(encoding="utf-8")
+        self.assertIn("SAMPLING_PARAMS", text,
+                      "orchestrator.py must reference SAMPLING_PARAMS")
+
+    def test_lmstudio_client_references_sampling_params(self):
+        text = (EXPERIMENTS_DIR / "_external" / "lmstudio_client.py").read_text(encoding="utf-8")
+        self.assertIn("SAMPLING_PARAMS", text,
+                      "lmstudio_client.py must reference SAMPLING_PARAMS")
+
+    def test_no_hardcoded_sampling_literals(self):
+        """orchestrator.py·lmstudio_client.py 본문에 sampling 키:리터럴 직접 매핑 금지."""
+        targets = [
+            EXPERIMENTS_DIR / "orchestrator.py",
+            EXPERIMENTS_DIR / "_external" / "lmstudio_client.py",
+        ]
+        # "temperature": 0.1 또는 "max_tokens": 4096 같은 직접 매핑
+        pattern = re.compile(r'"(temperature|max_tokens|top_p|seed)"\s*:\s*[0-9]')
+        for path in targets:
+            text = path.read_text(encoding="utf-8")
+            matches = pattern.findall(text)
+            self.assertEqual(matches, [],
+                             f"{path.name} has hardcoded sampling literals: {matches}")
+
+
 if __name__ == "__main__":
     unittest.main()

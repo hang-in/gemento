@@ -36,6 +36,7 @@ language: en
 | Target model | Gemma 4 E4B (Exp00–06: Q4_K_M / Ollama, Exp07+: Q8_0 / llama.cpp GPU server) |
 | Execution environment | Windows (Ollama or llama.cpp) — experiment execution / macOS — analysis and documentation |
 | Research period | 2026-04-08 ~ ongoing |
+| Sampling | `temperature=0.1`, `max_tokens=4096`, `top_p`/`seed` unset (single source: `config.py:SAMPLING_PARAMS` — introduced 2026-04-26 via sampling-params-config-exp10 plan) |
 
 > *Note: H1–H9 below denote nine sequentially numbered hypotheses about externalization axes — they are **not** the statistical H₀ (null) / H₁ (alternative) pair.*
 
@@ -701,6 +702,10 @@ Python            = safety net only (0 triggers)
 ```
 
 ---
+
+## Change History
+
+- 2026-04-26: `config.py:SAMPLING_PARAMS` centralization — `lmstudio_client.py` now explicitly sends sampling params. Pre-centralization LM Studio default may have differed from `temperature=0.1`/`max_tokens=4096`, so Exp10 results may show micro-variance vs Exp00~09. Treat the introduction date as a baseline boundary.
 
 ## Acknowledgements
 

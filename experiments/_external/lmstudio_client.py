@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import httpx
 
-from config import API_CHAT_URL, API_TIMEOUT, MODEL_NAME
+from config import API_CHAT_URL, API_TIMEOUT, MODEL_NAME, SAMPLING_PARAMS
 
 
 @dataclass
@@ -35,9 +35,17 @@ def call_with_meter(
     model: str = MODEL_NAME,
     timeout: int = API_TIMEOUT,
     response_format: dict | None = None,
+    sampling_overrides: dict | None = None,
 ) -> LMStudioMeter:
     """LM Studio API 호출 + metering."""
+    sampling = dict(SAMPLING_PARAMS)
+    if sampling_overrides:
+        sampling.update(sampling_overrides)
+
     payload: dict = {"model": model, "messages": messages}
+    for k, v in sampling.items():
+        if v is not None:
+            payload[k] = v
     if response_format is not None:
         payload["response_format"] = response_format
 

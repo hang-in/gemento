@@ -27,7 +27,7 @@ from config import (
     MODEL_NAME, API_CHAT_URL, API_TIMEOUT,
     ASSERTION_SOFT_CAP, ASSERTION_HARD_CAP,
     CONFIDENCE_FLOOR, CONFIDENCE_PROMOTION_MIN, CONFIDENCE_CAP_NO_TOOL,
-    MAX_LOOPS,
+    MAX_LOOPS, SAMPLING_PARAMS,
 )
 
 # ── Phase별 next_directive 템플릿 ──
@@ -67,9 +67,11 @@ def call_model(
     payload: dict = {
         "model": model,
         "messages": list(messages),  # 복사본 — tool 메시지 append용
-        "max_tokens": 4096,
-        "temperature": 0.1,
     }
+    # SAMPLING_PARAMS 의 None 이 아닌 값만 spread (config.py:SAMPLING_PARAMS 단일 source)
+    for _k, _v in SAMPLING_PARAMS.items():
+        if _v is not None:
+            payload[_k] = _v
     if use_tools:
         payload["tools"] = tools
         payload["tool_choice"] = "auto"

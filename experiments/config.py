@@ -26,3 +26,16 @@ CONFIDENCE_CAP_NO_TOOL = 0.7  # 외부 도구 없이 도출된 주장의 confide
 # ── 실험 ──
 DEFAULT_REPEAT = 5  # 각 조건 반복 횟수 (3→5: 통계적 신뢰도 향상)
 MAX_LOOPS = 15  # 루프 상한 (12→15: 어려운 태스크 조기 종료 방지)
+
+
+# ── Sampling (LLM 추론 결정성 통제) ──
+# 본 dict 가 모든 LLM 호출의 sampling source-of-truth.
+# orchestrator.call_model() 와 _external/lmstudio_client.call_with_meter() 가 참조한다.
+# 값이 None 이면 payload 에 미포함 (LM Studio 기본 동작).
+# 결과 동일성 보장 — 기존 14 실험 재현성 유지를 위해 temperature/max_tokens 변경 금지.
+SAMPLING_PARAMS: dict = {
+    "temperature": 0.1,
+    "max_tokens": 4096,
+    "top_p": None,    # 미지정 — LM Studio 기본값 사용
+    "seed": None,     # 비결정성 유지 — Exp10 본격 실행 전 별도 결정
+}

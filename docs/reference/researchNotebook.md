@@ -32,6 +32,7 @@ parts: [closed, active]
 | 대상 모델 | Gemma 4 E4B (Exp00~06: Q4_K_M / Ollama, Exp07부터: Q8_0 / llama.cpp GPU 서버) |
 | 실행 환경 | Windows (Ollama 또는 llama.cpp) — 실험 실행 / macOS — 분석·문서화 |
 | 연구 기간 | 2026-04-08 ~ 진행 중 |
+| Sampling | `temperature=0.1`, `max_tokens=4096`, `top_p`/`seed` unset (`config.py:SAMPLING_PARAMS` 단일 source — 2026-04-26 도입, sampling-params-config-exp10 plan 결과) |
 
 > *H1–H9는 외부화 축에 대해 순차 번호를 매긴 가설들입니다 — 통계학의 H₀(영가설) / H₁(대립가설)과는 다른 의미입니다.*
 
@@ -714,6 +715,7 @@ Python          = 안전장치만 (safety net, 0회 발동)
 - [x] measure.py `--output` UTF-8 직접 기록 옵션 (Exp08 Task 01)
 - [x] Exp08b Tool-Use Refinement (40 시행, +23.3%p, math-04 0→100%, tool_neglect 0%, calculator 100%, 2026-04-24)
 - [x] Exp09 Long-Context Stress Test (90 시행, ABC 88% / RAG 85% / Solo 20%, Large 20K에서 ABC 100%, 2026-04-25)
+- [x] `config.py:SAMPLING_PARAMS` 일원화 (2026-04-26, sampling-params-config-exp10 plan). `lmstudio_client.py` 가 sampling 명시 시작. 도입 전 LM Studio 기본값과 본 명시값 (`temperature=0.1`, `max_tokens=4096`) 차이로 Exp10 결과가 Exp00~09 과 미세한 차이 가능 — baseline 비교 시 본 시점 이전·이후 분리.
 
 ### 열린 질문
 1. **v2 역행 조사** — Exp04, Exp05a에서 v2가 v1보다 낮은 이유 분석 필요
