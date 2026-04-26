@@ -19,7 +19,7 @@ Gemento treats four axes of LLM cognition as **externalizable** — moved out of
 | **Role** | Self-validation | A (Proposer) / B (Critic) / C (Judge) — separate prompts, same base model | Exp03, Exp035, Exp06 |
 | **Orchestrator** | Termination · phase transition · resource budget | Deterministic Python loop, not the model itself | Exp02, Exp07 |
 
-This is not about replacing a 70B model with a 4.5B one. It is about asking what **structure** can extract from a 4.5B model that single-pass inference does not surface.
+This is not about replacing a 70B model with a 4B one. It is about asking what **structure** can extract from a small model (Gemma 4 E4B, effective 4B parameters) that single-pass inference does not surface.
 
 ## What I measured
 
@@ -178,14 +178,14 @@ Contribution flow:
 
 The "externalize the LLM" framing is not unique to this project. Adjacent or overlapping ideas:
 
-- **Externalization frame** — A 2026-04 arXiv preprint¹ proposes a general framework for externalizing memory, reasoning, and verification away from the model. Gemento's four-axis split (Tattoo / Tools / Role / Orchestrator) is one concrete instantiation rather than a new theory.
+- **Externalization frame** — A 2026-04 arXiv preprint¹ proposes a general framework for externalizing memory, reasoning, and verification away from the model. Gemento was developed independently — out of practical context/memory problems hit while building secall and tunaFlow — and only later did the author become aware of this preprint. The four-axis split (Tattoo / Tools / Role / Orchestrator) is best read as **independent convergence** with that line of work, not as a derivation from it.
 - **LightMem**² — Long-term memory externalization for LLMs. Focused on retrieval and key-value memory; Gemento is closer to *working* state across loops, not retrieval against past sessions.
 - **ESAA (Externally Stateful Agentic Architectures)**³ — Treats the agent as a state machine with external state. Conceptually adjacent; Gemento adds explicit role separation (A/B/C) and tool integration on top of the same idea.
 - **Chain-of-Agents**⁴ — Sequentially passes a long input across multiple agents. Gemento's A→B→C pipeline shares this structure but uses *the same base model* for all roles, separated only by prompt and validation contract.
 
 What is contributed here, and what is **not**:
 
-- Contributed: a measured workbook of small-LLM (Gemma 4 E4B, 4.5B) behavior across the four axes, with reproducible numbers and sampling parameters.
+- Contributed: a measured workbook of small-LLM (Gemma 4 E4B, effective 4B parameters) behavior across the four axes, with reproducible numbers and sampling parameters.
 - Not contributed: a new architecture, a new training method, or a claim that small LLMs replace large ones. Gemento is a structural workflow harness on top of an unmodified open-weight model.
 
 ---
