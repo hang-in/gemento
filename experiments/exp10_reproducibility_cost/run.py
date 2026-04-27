@@ -37,6 +37,36 @@ DEFAULT_TRIALS = 20
 GEMMA_8LOOP_MAX_CYCLES = 15  # loop_saturation baseline_phase15 와 동등
 GEMMA_8LOOP_USE_PHASE_PROMPT = True
 
+# Debug logging — gemma_8loop A/B/C raw response 4KB truncate 정책
+DEBUG_RAW_TRUNCATE_LIMIT = 4096
+
+
+def _truncate_raw(text: str | None, limit: int = DEBUG_RAW_TRUNCATE_LIMIT) -> str:
+    """Raw response 를 limit char 까지 truncate. 끝에 메타 정보 표시."""
+    if not text:
+        return ""
+    if len(text) <= limit:
+        return text
+    return text[:limit] + f"... (truncated, original_len={len(text)})"
+
+
+def _serialize_abc_logs(logs) -> list[dict]:
+    """list[ABCCycleLog] → list[dict] (raw 필드 truncate 적용)."""
+    serialized = []
+    for log in logs:
+        serialized.append({
+            "cycle": log.cycle,
+            "phase": log.phase,
+            "a_raw": _truncate_raw(log.a_log.raw_response if log.a_log else ""),
+            "a_error": log.a_log.error if log.a_log else None,
+            "b_raw": _truncate_raw(log.b_raw),
+            "b_error": log.b_error,
+            "c_raw": _truncate_raw(log.c_raw),
+            "c_error": log.c_error,
+            "phase_transition": log.phase_transition,
+        })
+    return serialized
+
 CONDITIONS = (
     "gemma_8loop",
     "gemma_1loop",
@@ -65,6 +95,7 @@ def save_result(experiment_name: str, result: dict) -> Path:
 def trial_gemma_8loop(task: dict, trial_idx: int) -> dict:
     """gemma_8loop condition: ABC + 8루프 (loop_saturation baseline_phase15 동등)."""
     start = time.time()
+    abc_logs = []  # except 발생 시 빈 list 보장 (NameError 회피)
     try:
         tattoo, abc_logs, final_answer = run_abc_chain(
             task_id=f"{task['id']}_8loop_t{trial_idx}",
@@ -95,6 +126,9 @@ def trial_gemma_8loop(task: dict, trial_idx: int) -> dict:
         "output_tokens": 0,
         "cost_usd": 0.0,
         "error": error,
+        "_debug": {
+            "abc_logs": _serialize_abc_logs(abc_logs),
+        },
     }
 
 

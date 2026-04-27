@@ -314,5 +314,111 @@ class TestSamplingParamsCentralization(unittest.TestCase):
                              f"{path.name} has hardcoded sampling literals: {matches}")
 
 
+class TestExp10DebugLoggingSchema(unittest.TestCase):
+    """exp10-gemma-8loop-a-b-c-raw-response-debug-logging plan — _debug.abc_logs schema 검증.
+
+    - _truncate_raw: 4KB 정책, edge case (None, 빈 문자열, exact limit)
+    - _serialize_abc_logs: 9 필드 dict 반환, error 보존, 빈 list
+    """
+
+    EXPECTED_FIELDS = {
+        "cycle", "phase",
+        "a_raw", "a_error",
+        "b_raw", "b_error",
+        "c_raw", "c_error",
+        "phase_transition",
+    }
+
+    def _make_dummy_log(self, cycle: int = 1, b_error=None, c_error=None):
+        """dummy ABCCycleLog 생성 헬퍼."""
+        sys.path.insert(0, str(EXPERIMENTS_DIR))
+        try:
+            from orchestrator import ABCCycleLog, LoopLog
+        finally:
+            sys.path.remove(str(EXPERIMENTS_DIR))
+        a_log = LoopLog(
+            loop_index=cycle,
+            tattoo_in={},
+            raw_response="A" * 100,
+            parsed_response={"foo": "bar"},
+            tattoo_out={},
+            duration_ms=500,
+            error=None,
+        )
+        return ABCCycleLog(
+            cycle=cycle,
+            phase="DECOMPOSE",
+            a_log=a_log,
+            b_judgments={"verdict": "APPROVE"},
+            b_raw="B" * 100,
+            b_duration_ms=300,
+            b_error=b_error,
+            c_decision={"next_phase": "INVESTIGATE"},
+            c_raw="C" * 100,
+            c_duration_ms=200,
+            c_error=c_error,
+            phase_transition="DECOMPOSE→INVESTIGATE",
+        )
+
+    def test_truncate_limit_constant(self):
+        sys.path.insert(0, str(EXPERIMENTS_DIR))
+        try:
+            from exp10_reproducibility_cost.run import DEBUG_RAW_TRUNCATE_LIMIT
+            self.assertEqual(DEBUG_RAW_TRUNCATE_LIMIT, 4096)
+        finally:
+            sys.path.remove(str(EXPERIMENTS_DIR))
+
+    def test_truncate_raw_edge_cases(self):
+        sys.path.insert(0, str(EXPERIMENTS_DIR))
+        try:
+            from exp10_reproducibility_cost.run import _truncate_raw
+            self.assertEqual(_truncate_raw(""), "")
+            self.assertEqual(_truncate_raw(None), "")
+            self.assertEqual(_truncate_raw("short"), "short")
+            long_text = "A" * 5000
+            result = _truncate_raw(long_text)
+            self.assertTrue(result.startswith("A" * 4096))
+            self.assertIn("truncated", result)
+            self.assertIn("original_len=5000", result)
+        finally:
+            sys.path.remove(str(EXPERIMENTS_DIR))
+
+    def test_serialize_single_log_schema(self):
+        sys.path.insert(0, str(EXPERIMENTS_DIR))
+        try:
+            from exp10_reproducibility_cost.run import _serialize_abc_logs
+            log = self._make_dummy_log()
+            result = _serialize_abc_logs([log])
+            self.assertEqual(len(result), 1)
+            self.assertEqual(set(result[0].keys()), self.EXPECTED_FIELDS)
+            self.assertEqual(result[0]["cycle"], 1)
+            self.assertEqual(result[0]["phase"], "DECOMPOSE")
+            self.assertEqual(result[0]["a_raw"], "A" * 100)
+            self.assertEqual(result[0]["b_raw"], "B" * 100)
+            self.assertEqual(result[0]["c_raw"], "C" * 100)
+            self.assertEqual(result[0]["phase_transition"], "DECOMPOSE→INVESTIGATE")
+        finally:
+            sys.path.remove(str(EXPERIMENTS_DIR))
+
+    def test_serialize_error_preservation(self):
+        sys.path.insert(0, str(EXPERIMENTS_DIR))
+        try:
+            from exp10_reproducibility_cost.run import _serialize_abc_logs
+            log = self._make_dummy_log(b_error="json parse failed", c_error=None)
+            result = _serialize_abc_logs([log])
+            self.assertEqual(result[0]["b_error"], "json parse failed")
+            self.assertIsNone(result[0]["c_error"])
+        finally:
+            sys.path.remove(str(EXPERIMENTS_DIR))
+
+    def test_serialize_empty_list(self):
+        sys.path.insert(0, str(EXPERIMENTS_DIR))
+        try:
+            from exp10_reproducibility_cost.run import _serialize_abc_logs
+            self.assertEqual(_serialize_abc_logs([]), [])
+        finally:
+            sys.path.remove(str(EXPERIMENTS_DIR))
+
+
 if __name__ == "__main__":
     unittest.main()
