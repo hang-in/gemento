@@ -18,7 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config import MODEL_NAME
-from orchestrator import run_abc_chain
+from orchestrator import run_abc_chain, extract_json_from_response
 from _external.gemini_client import call_with_meter as gemini_call
 from _external.lmstudio_client import call_with_meter as lmstudio_call
 
@@ -67,6 +67,21 @@ def _serialize_abc_logs(logs) -> list[dict]:
         })
     return serialized
 
+
+def _summarize_abc_failure(logs) -> str | None:
+    """ABC cycle 로그에서 마지막 유의미 오류를 뽑아 trial error 로 승격."""
+    errors: list[str] = []
+    for log in logs:
+        if log.a_log and log.a_log.error:
+            errors.append(f"A: {log.a_log.error}")
+        if log.b_error and log.b_error != "no assertions to critique":
+            errors.append(f"B: {log.b_error}")
+        if log.c_error:
+            errors.append(f"C: {log.c_error}")
+    if errors:
+        return errors[-1]
+    return None
+
 CONDITIONS = (
     "gemma_8loop",
     "gemma_1loop",
@@ -107,7 +122,10 @@ def trial_gemma_8loop(task: dict, trial_idx: int) -> dict:
             use_phase_prompt=GEMMA_8LOOP_USE_PHASE_PROMPT,
         )
         actual_cycles = len(abc_logs)
-        error = None
+        if final_answer:
+            error = None
+        else:
+            error = _summarize_abc_failure(abc_logs) or "final_answer missing after ABC run"
     except Exception as e:
         final_answer = None
         actual_cycles = 0
@@ -138,14 +156,14 @@ def trial_gemma_1loop(task: dict, trial_idx: int) -> dict:
         {"role": "system", "content": "You are a helpful reasoning assistant. Think step by step and provide your final answer as JSON: {\"final_answer\": \"...\"}."},
         {"role": "user", "content": task["prompt"]},
     ]
-    meter = lmstudio_call(messages, response_format={"type": "json_object"})
+    meter = lmstudio_call(messages)
     # final_answer 파싱
     final_answer = None
     if meter.raw_response and not meter.error:
-        try:
-            parsed = json.loads(meter.raw_response)
-            final_answer = parsed.get("final_answer") if isinstance(parsed, dict) else None
-        except json.JSONDecodeError:
+        parsed = extract_json_from_response(meter.raw_response)
+        if isinstance(parsed, dict):
+            final_answer = parsed.get("final_answer")
+        if final_answer is None:
             final_answer = meter.raw_response.strip()[:200]
     accuracy = score_trial(final_answer, task)
     return {
@@ -172,10 +190,10 @@ def trial_gemini_flash(task: dict, trial_idx: int) -> dict:
     meter = gemini_call(messages, response_mime_type="application/json")
     final_answer = None
     if meter.raw_response and not meter.error:
-        try:
-            parsed = json.loads(meter.raw_response)
-            final_answer = parsed.get("final_answer") if isinstance(parsed, dict) else None
-        except json.JSONDecodeError:
+        parsed = extract_json_from_response(meter.raw_response)
+        if isinstance(parsed, dict):
+            final_answer = parsed.get("final_answer")
+        if final_answer is None:
             final_answer = meter.raw_response.strip()[:200]
     accuracy = score_trial(final_answer, task)
     # Rate limit 안전 마진 — Google AI Studio 무료 tier 보호

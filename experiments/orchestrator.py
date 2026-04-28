@@ -65,19 +65,20 @@ def call_model(
     """
     use_tools = bool(tools and tool_functions)
     payload: dict = {
-        "model": model,
+        "model": "",  # LM Studio가 로드된 모델을 자동 선택하도록 빈 값 전송
         "messages": list(messages),  # 복사본 — tool 메시지 append용
     }
-    # SAMPLING_PARAMS 의 None 이 아닌 값만 spread (config.py:SAMPLING_PARAMS 단일 source)
+    # SAMPLING_PARAMS 의 None 이 아닌 값만 spread
     for _k, _v in SAMPLING_PARAMS.items():
         if _v is not None:
-            payload[_k] = _v
+            # LM Studio 로컬 서버는 이 subset 조합이 가장 안정적임
+            if _k in ["temperature", "max_tokens", "top_p"]:
+                payload[_k] = _v
     if use_tools:
         payload["tools"] = tools
         payload["tool_choice"] = "auto"
-        # tools와 json_object response_format은 llama.cpp에서 충돌 가능 — 제거
-    else:
-        payload["response_format"] = {"type": "json_object"}
+        # tools와 json response_format은 LM Studio에서 충돌 가능 — 제거
+    # LM Studio는 response_format=json_object 를 400으로 거부할 수 있어 프롬프트만으로 JSON 유도
 
     tool_call_log: list[dict] = []
 
@@ -116,33 +117,76 @@ def call_model(
     return "", tool_call_log
 
 
+def _escape_control_chars_in_json_strings(candidate: str) -> str:
+    """Escape raw control chars inside quoted JSON strings.
+
+    Local models often emit Markdown/newlines inside a JSON string value. That is
+    invalid JSON, but the surrounding object is otherwise usable.
+    """
+    out: list[str] = []
+    in_string = False
+    escaped = False
+    for ch in candidate:
+        if in_string:
+            if escaped:
+                out.append(ch)
+                escaped = False
+            elif ch == "\\":
+                out.append(ch)
+                escaped = True
+            elif ch == '"':
+                out.append(ch)
+                in_string = False
+            elif ch == "\n":
+                out.append("\\n")
+            elif ch == "\r":
+                out.append("\\r")
+            elif ch == "\t":
+                out.append("\\t")
+            else:
+                out.append(ch)
+        else:
+            out.append(ch)
+            if ch == '"':
+                in_string = True
+    return "".join(out)
+
+
+def _loads_json_lenient(candidate: str) -> dict | None:
+    candidate = candidate.strip()
+    try:
+        parsed = json.loads(candidate)
+    except json.JSONDecodeError:
+        try:
+            parsed = json.loads(_escape_control_chars_in_json_strings(candidate))
+        except json.JSONDecodeError:
+            return None
+    return parsed if isinstance(parsed, dict) else None
+
+
 def extract_json_from_response(raw: str) -> dict | None:
     """LLM 응답에서 JSON 블록을 추출한다. (JSON Mode 대응)"""
     if not raw:
         return None
-    
+
     # 1. JSON Mode일 경우 응답 자체가 JSON 문자열일 가능성이 높음
-    try:
-        return json.loads(raw)
-    except json.JSONDecodeError:
-        pass
-        
-    # 2. 마크다운 블록이 포함된 경우 추출
-    match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", raw, re.DOTALL)
-    if match:
-        try:
-            return json.loads(match.group(1))
-        except json.JSONDecodeError:
-            pass
+    parsed = _loads_json_lenient(raw)
+    if parsed:
+        return parsed
+
+    # 2. 마크다운 블록이 포함된 경우 fence 내부 전체를 추출
+    for match in re.finditer(r"```(?:json)?\s*([\s\S]*?)\s*```", raw, re.IGNORECASE):
+        parsed = _loads_json_lenient(match.group(1))
+        if parsed:
+            return parsed
 
     # 3. 텍스트 중간에 JSON이 섞인 경우 (최후의 수단)
-    try:
-        start = raw.find('{')
-        end = raw.rfind('}')
-        if start != -1 and end != -1:
-            return json.loads(raw[start:end+1])
-    except Exception:
-        pass
+    start = raw.find('{')
+    end = raw.rfind('}')
+    if start != -1 and end != -1 and end > start:
+        parsed = _loads_json_lenient(raw[start:end + 1])
+        if parsed:
+            return parsed
 
     return None
 

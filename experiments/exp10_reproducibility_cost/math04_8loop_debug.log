@@ -1,0 +1,688 @@
+  [1/20] gemma_8loop | math-04 | trial 1
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+resource module not available on Windows
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9837ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9887ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9851ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    B: 3 judged, 0 invalid, 0 suspect | 47241ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 15200ms
+  Cycle 5 | phase=INVESTIGATE | assertions=3 | confidence=0.98
+    B: 3 judged, 0 invalid, 0 suspect | 46719ms
+    C: not converged | 16836ms
+  Cycle 6 | phase=INVESTIGATE | assertions=3 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    B: 3 judged, 0 invalid, 0 suspect | 51930ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 12805ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=3 | confidence=0.95
+    B: 3 judged, 0 invalid, 0 suspect | 27814ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 11804ms
+  ✓ Converged at cycle 7
+  [2/20] gemma_8loop | math-04 | trial 2
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 7983ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 11649ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8203ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9880ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=0.70
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 12505ms
+  Cycle 6 | phase=INVESTIGATE | assertions=0 | confidence=0.70
+    B: 3 judged, 0 invalid, 0 suspect | 19860ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 9926ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=3 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 19369ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 9957ms
+  ✓ Converged at cycle 7
+  [3/20] gemma_8loop | math-04 | trial 3
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 10198ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 12334ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9556ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: 2 judged, 0 invalid, 0 suspect | 17087ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 11551ms
+  Cycle 5 | phase=INVESTIGATE | assertions=2 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: 2 judged, 0 invalid, 0 suspect | 18976ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 9441ms
+  Cycle 6 | phase=INVESTIGATE | assertions=2 | confidence=1.00
+    B: 2 judged, 0 invalid, 0 suspect | 20607ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 11545ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=2 | confidence=1.00
+    B: 2 judged, 0 invalid, 0 suspect | 17393ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 9108ms
+  ✓ Converged at cycle 7
+  [4/20] gemma_8loop | math-04 | trial 4
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8199ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: 3 judged, 0 invalid, 0 suspect | 55018ms
+    C: converged but invalid next_phase=CONVERGED (expected INVESTIGATE) — ignored | 18364ms
+  Cycle 3 | phase=DECOMPOSE | assertions=3 | confidence=0.95
+    B: 6 judged, 0 invalid, 0 suspect | 47162ms
+    C: not converged | 16894ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=6 | confidence=0.95
+    B: 6 judged, 0 invalid, 0 suspect | 44389ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 10420ms
+  Cycle 5 | phase=INVESTIGATE | assertions=6 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    B ↻ retry
+    B: ⚠ JSON parse failed | 80844ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 24832ms
+  Cycle 6 | phase=INVESTIGATE | assertions=6 | confidence=0.95
+    B ↻ retry
+    B: 6 judged, 0 invalid, 0 suspect | 87312ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 16248ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=6 | confidence=0.90
+    B: 6 judged, 0 invalid, 0 suspect | 38327ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 10490ms
+  Cycle 8 | phase=SYNTHESIZE | assertions=6 | confidence=0.90
+    B: 8 judged, 0 invalid, 0 suspect | 29242ms
+    C: not converged | 18839ms
+  ✓ Converged at cycle 8
+  [5/20] gemma_8loop | math-04 | trial 5
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 10434ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8731ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=0.90
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9319ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 7059ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    B: 5 judged, 0 invalid, 0 suspect | 33363ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 9732ms
+  Cycle 6 | phase=INVESTIGATE | assertions=5 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: 5 judged, 0 invalid, 0 suspect | 45375ms
+    C: not converged | 13937ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=5 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    B ↻ retry
+    B: 5 judged, 0 invalid, 0 suspect | 86397ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 9438ms
+  Cycle 8 | phase=SYNTHESIZE | assertions=5 | confidence=1.00
+    B: 5 judged, 0 invalid, 0 suspect | 23888ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 11434ms
+  ✓ Converged at cycle 8
+  [6/20] gemma_8loop | math-04 | trial 6
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8423ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    B ↻ retry
+    B: 4 judged, 0 invalid, 0 suspect | 90230ms
+    C: converged but invalid next_phase=CONVERGED (expected INVESTIGATE) — ignored | 10033ms
+  Cycle 3 | phase=DECOMPOSE | assertions=4 | confidence=0.95
+    B: 4 judged, 0 invalid, 0 suspect | 38326ms
+    C: converged but invalid next_phase=CONVERGED (expected INVESTIGATE) — ignored | 12228ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=4 | confidence=0.95
+    B: 4 judged, 0 invalid, 0 suspect | 33097ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 9961ms
+  Cycle 5 | phase=INVESTIGATE | assertions=4 | confidence=1.00
+    B ↻ retry
+    B: 4 judged, 0 invalid, 0 suspect | 64959ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 12362ms
+  Cycle 6 | phase=INVESTIGATE | assertions=4 | confidence=1.00
+    B: 4 judged, 0 invalid, 0 suspect | 58062ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 17406ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=4 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: 4 judged, 0 invalid, 0 suspect | 41551ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 12185ms
+  Cycle 8 | phase=SYNTHESIZE | assertions=4 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B ↻ retry
+    B: 4 judged, 0 invalid, 0 suspect | 72836ms
+    C: not converged | 16995ms
+  Cycle 9 | phase=SYNTHESIZE | assertions=4 | confidence=0.95
+    B: 4 judged, 0 invalid, 0 suspect | 42768ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 12261ms
+    → Phase: SYNTHESIZE → VERIFY (safety limit)
+  Cycle 10 | phase=VERIFY | assertions=4 | confidence=1.00
+    B: 4 judged, 0 invalid, 0 suspect | 27382ms
+    C: CONVERGED → CONVERGED | 11814ms
+  ✓ Converged at cycle 10 (C decided)
+  [7/20] gemma_8loop | math-04 | trial 7
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8597ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8737ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 14747ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8965ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=0.90
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 12109ms
+  Cycle 6 | phase=INVESTIGATE | assertions=0 | confidence=0.70
+    B: 1 judged, 0 invalid, 0 suspect | 19167ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 10873ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=1 | confidence=1.00
+    B: 1 judged, 0 invalid, 0 suspect | 18855ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 9622ms
+  ✓ Converged at cycle 7
+  [8/20] gemma_8loop | math-04 | trial 8
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 7994ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8542ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9945ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: 3 judged, 0 invalid, 0 suspect | 21400ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 9128ms
+  Cycle 5 | phase=INVESTIGATE | assertions=3 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 31665ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 10272ms
+  Cycle 6 | phase=INVESTIGATE | assertions=3 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 21905ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 11450ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=3 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 21645ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 7249ms
+  ✓ Converged at cycle 7
+  [9/20] gemma_8loop | math-04 | trial 9
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 7355ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 13621ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8897ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 7923ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 14080ms
+  Cycle 6 | phase=INVESTIGATE | assertions=0 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 10868ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=0 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 11875ms
+  Cycle 8 | phase=SYNTHESIZE | assertions=0 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 14029ms
+  Cycle 9 | phase=SYNTHESIZE | assertions=0 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 13274ms
+    → Phase: SYNTHESIZE → VERIFY (safety limit)
+  Cycle 10 | phase=VERIFY | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 13271ms
+  Cycle 11 | phase=VERIFY | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 14487ms
+  Cycle 12 | phase=VERIFY | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: CONVERGED → CONVERGED | 16456ms
+  ✓ Converged at cycle 12 (C decided)
+  [10/20] gemma_8loop | math-04 | trial 10
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8941ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 10181ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 5919ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9872ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9075ms
+  Cycle 6 | phase=INVESTIGATE | assertions=0 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    B: 2 judged, 0 invalid, 0 suspect | 22465ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 9808ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=2 | confidence=1.00
+    B: 2 judged, 0 invalid, 0 suspect | 16784ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 15295ms
+  ✓ Converged at cycle 7
+  [11/20] gemma_8loop | math-04 | trial 11
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9540ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 10098ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9755ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 13200ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    B: 3 judged, 0 invalid, 0 suspect | 22645ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 15320ms
+  Cycle 6 | phase=INVESTIGATE | assertions=3 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 23314ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 9610ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=3 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 20965ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 22883ms
+  ✓ Converged at cycle 7
+  [12/20] gemma_8loop | math-04 | trial 12
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9872ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 10010ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 20723ms
+    C: converged but invalid next_phase=CONVERGED (expected INVESTIGATE) — ignored | 10111ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=3 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 22652ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 12515ms
+  Cycle 5 | phase=INVESTIGATE | assertions=3 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 25427ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 8655ms
+  Cycle 6 | phase=INVESTIGATE | assertions=3 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 23412ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 9288ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=3 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 23397ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 11162ms
+  ✓ Converged at cycle 7
+  [13/20] gemma_8loop | math-04 | trial 13
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9284ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8331ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9807ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 12112ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 7298ms
+  Cycle 6 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8722ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=0 | confidence=0.95
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 11387ms
+  ✓ Converged at cycle 7
+  [14/20] gemma_8loop | math-04 | trial 14
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8092ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9040ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8616ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: 4 judged, 0 invalid, 0 suspect | 29037ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 9819ms
+  Cycle 5 | phase=INVESTIGATE | assertions=4 | confidence=0.95
+    B: 6 judged, 0 invalid, 0 suspect | 24134ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 15128ms
+  Cycle 6 | phase=INVESTIGATE | assertions=6 | confidence=1.00
+    B: 6 judged, 0 invalid, 0 suspect | 23953ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 10663ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=6 | confidence=1.00
+    B: 6 judged, 0 invalid, 0 suspect | 23194ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 8935ms
+  ✓ Converged at cycle 7
+  [15/20] gemma_8loop | math-04 | trial 15
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8835ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8669ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 10764ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8880ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 12716ms
+  Cycle 6 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 11710ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=0 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 11637ms
+  ✓ Converged at cycle 7
+  [16/20] gemma_8loop | math-04 | trial 16
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8644ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9435ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9792ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 7657ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8615ms
+  Cycle 6 | phase=INVESTIGATE | assertions=0 | confidence=0.90
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 12200ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=0 | confidence=0.90
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9865ms
+  ✓ Converged at cycle 7
+  [17/20] gemma_8loop | math-04 | trial 17
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8901ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9884ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 7934ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9825ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 11456ms
+  Cycle 6 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: 3 judged, 0 invalid, 0 suspect | 21538ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 9263ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=3 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 18049ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 10038ms
+  ✓ Converged at cycle 7
+  [18/20] gemma_8loop | math-04 | trial 18
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9232ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 12342ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9853ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 12451ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: 1 judged, 0 invalid, 0 suspect | 16835ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 11550ms
+  Cycle 6 | phase=INVESTIGATE | assertions=1 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: 1 judged, 0 invalid, 0 suspect | 17068ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 8688ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=1 | confidence=1.00
+    B: 1 judged, 0 invalid, 0 suspect | 17016ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 13367ms
+  ✓ Converged at cycle 7
+  [19/20] gemma_8loop | math-04 | trial 19
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8338ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 8964ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 12359ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=0.95
+    ↻ JSON parse retry (attempt 1)
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 7579ms
+  Cycle 5 | phase=INVESTIGATE | assertions=0 | confidence=0.70
+    ↻ JSON parse retry (attempt 1)
+    B: 2 judged, 0 invalid, 0 suspect | 20749ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 11457ms
+  Cycle 6 | phase=INVESTIGATE | assertions=2 | confidence=1.00
+    B: 2 judged, 0 invalid, 0 suspect | 23481ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 8392ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=2 | confidence=0.95
+    B ↻ retry
+    B: 2 judged, 0 invalid, 0 suspect | 37335ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 9333ms
+  ✓ Converged at cycle 7
+  [20/20] gemma_8loop | math-04 | trial 20
+  Cycle 1 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 9286ms
+  Cycle 2 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 11483ms
+  Cycle 3 | phase=DECOMPOSE | assertions=0 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    A ⚠ JSON parse failed
+    B: ⚠ no assertions to critique | 0ms
+    C: not converged | 10409ms
+    → Phase: DECOMPOSE → INVESTIGATE (safety limit)
+  Cycle 4 | phase=INVESTIGATE | assertions=0 | confidence=1.00
+    B: 3 judged, 0 invalid, 0 suspect | 21734ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 8368ms
+  Cycle 5 | phase=INVESTIGATE | assertions=3 | confidence=1.00
+    ↻ JSON parse retry (attempt 1)
+    B: 5 judged, 0 invalid, 0 suspect | 22582ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 10629ms
+  Cycle 6 | phase=INVESTIGATE | assertions=5 | confidence=1.00
+    B: 5 judged, 0 invalid, 0 suspect | 22191ms
+    C: converged but invalid next_phase=CONVERGED (expected SYNTHESIZE) — ignored | 11396ms
+    → Phase: INVESTIGATE → SYNTHESIZE (safety limit)
+  Cycle 7 | phase=SYNTHESIZE | assertions=5 | confidence=1.00
+    B: 5 judged, 0 invalid, 0 suspect | 25660ms
+    C: converged but invalid next_phase=CONVERGED (expected VERIFY) — ignored | 9344ms
+  ✓ Converged at cycle 7
+  → Result saved: D:\privateProject\gemento_rerun_v2\experiments\exp10_reproducibility_cost\results\exp10_math04_8loop_debug_20260428_205650.json
+  -> Debug checkpoint cleared.
