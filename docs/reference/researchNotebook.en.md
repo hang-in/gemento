@@ -656,6 +656,53 @@ A 2D matrix showing which of the 4 externalization axes each experiment validate
 
 ---
 
+### Exp10: Reproducibility & Cost Profile (v2 final)
+
+| Item | Content |
+|------|---------|
+| **Who** | Gemma 4 E4B (LM Studio Q4_K_M) × ABC 8-loop vs Gemma 4 E4B single-pass vs Gemini 2.5 Flash 1-call |
+| **When** | 2026-04-28 (Windows main run) → 2026-04-29 (Mac retry/merge/finalize) |
+| **Where** | Windows + LM Studio (gemma_8loop, gemma_1loop) + Google AI Studio (gemini_flash_1call) |
+| **What** | Three-axis cost-aware comparison (accuracy + cost + latency). 3 conditions × 9 tasks × N=20 trials = **540 trials** |
+| **Why** | Direct measurement of "Does Gemento ABC surpass closed-source large 1-call?". Same-model 1-loop vs 8-loop comparison provides additional direct evidence for H1 (external state + iteration) |
+| **How** | gemma_8loop = ABC + max_cycles=15 + use_phase_prompt=True. gemma_1loop = single-pass. gemini_flash_1call = response_mime_type=application/json. Two artifact patches applied to v2 main result — `(gemma_8loop, math-04)` 20 trials substituted with use_tools=True debug rerun, `(gemini_flash, logic-04)` 4 timeout trials substituted with timeout=300s retry |
+
+**Results (strict scoring, 540 trials):**
+
+| condition | mean_acc | cost / 180 trials | avg_dur | err+null |
+|-----------|---------:|------------------:|--------:|---------:|
+| **gemma_8loop** | **0.781** | $0.0000 | 8 min | 8 |
+| gemini_flash_1call | 0.591 | $0.0143 | 24 s | 0 |
+| gemma_1loop | 0.413 | $0.0000 | 33 s | 11 |
+
+**Key Findings:**
+1. **H1 direct evidence — external state + iteration** — Same model 1-loop → 8-loop went 0.413 → 0.781 (**+37%p**). ABC chain nearly doubles model capability. Measured under identical weight, quantization, and sampling parameters, so the gain is attributable to inference structure alone, not model substitution.
+2. **Small local vs closed-source large** — gemma_8loop (4.5B) surpasses Gemini 2.5 Flash by **+19%p** in accuracy. Cost $0, but 1/20 the speed (8 min vs 24 s).
+3. **logic-04 false positive (scoring system limitation)** — v2 substring scoring gave 0.400 (gemma_8loop) / 0.250 (flash) but the body text was "no solution"/"contradiction" pattern, so strict acc was 0.050 / 0.000. 13/60 trials were false positives. Condition ranking unchanged, but scoring system reinforcement is a decisive follow-up.
+4. **Local model ceiling (logic-04)** — Strict acc ≤ 0.05 across all conditions. Even ABC 8-loop cannot crack 4-suspect proof-by-contradiction. Tooling or multi-stage prompting needed.
+5. **math-04 tool policy decisive** — use_tools=False yielded 0/20 (full failure), True yielded 20/20 (linprog call). Not a model capability limit but a system policy limit. Tool policy must be unified across the math category in future runs.
+6. **ABC infrastructure 4 fails** — gemma_8loop 4 trials hit JSON parse failures (math-03 t13, synthesis-01 t14, logic-04 t2/t6). Infrastructure stability issue, not model capability.
+
+**Detail report:** `docs/reference/results/exp-10-reproducibility-cost.md`
+**Data:** `experiments/exp10_reproducibility_cost/results/exp10_v2_final_20260429_033922.json`
+**Patch procedure:** `docs/reference/exp10-v2-finalize-2026-04-29.md`
+
+**v3 rescore note (2026-04-29):**
+
+After publishing the v2 final results above, a follow-up scorer (`score_answer_v3`) was introduced to address logic-04 false positives caused by substring-only matching. The v3 scorer adds optional `negative_patterns` per task to block "no solution / contradiction" type answers from being scored as correct. Re-scoring the same 540-trial v2 final dataset:
+
+| condition | v2 mean | v3 mean |
+|-----------|--------:|--------:|
+| gemma_8loop | 0.820 | 0.781 |
+| gemini_flash_1call | 0.619 | 0.591 |
+| gemma_1loop | 0.413 | 0.413 |
+
+Ranking unchanged. The v2 final dataset itself is preserved; only the scoring layer changed. ABC chain JSON parse stability also patched in `extract_json_from_response` (fence_unclosed fallback + partial JSON brace recovery), applied to future runs.
+
+Detail: `docs/reference/results/exp-10-reproducibility-cost.md` §6.
+
+---
+
 ## Scoring System History
 
 ### v1 → v2 Transition (2026-04-15)

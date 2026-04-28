@@ -250,6 +250,20 @@
       "prompt": "A crime was committed by exactly one of four suspects: Alex, Blake, Casey, Dana. Each makes two statements:\n\nAlex: 'I didn't do it.' 'Blake did it.'\nBlake: 'I didn't do it.' 'Casey did it.'\nCasey: 'I didn't do it.' 'I was at home all day.'\nDana: 'I didn't do it.' 'Alex is lying about Blake.'\n\nRules: The guilty person lies in BOTH statements. Each innocent person tells the truth in EXACTLY ONE of their two statements. Who committed the crime?",
       "expected_answer": "Casey committed the crime",
       "scoring_keywords": [["casey"]],
+      "negative_patterns": [
+        "no\\s+(\\w+\\s+)?(solution|answer|culprit)",
+        "no\\s+single\\s+(culprit|suspect|answer)",
+        "cannot\\s+be\\s+(identified|determined|solved)",
+        "puzzle\\s+is\\s+(flawed|inconsistent|ill-?posed)",
+        "puzzle.{0,40}is\\s+logically\\s+inconsistent",
+        "impossible\\s+to\\s+(definitively\\s+)?(identify|determine|solve)"
+      ],
+      "conclusion_required": [
+        "^\\s*casey\\b",
+        "casey\\s+(committed|killed|murdered|did\\s+it)",
+        "casey\\s+is\\s+(\\w+\\s+){0,3}(culprit|criminal|murderer|killer|guilty)",
+        "(culprit|criminal|murderer|killer)\\s+is\\s+casey"
+      ],
       "constraints": ["각 인물의 두 진술을 모두 분석해야 한다", "가정 후 모순 검증(귀류법)을 사용해야 한다", "모든 4명을 테스트해야 한다"],
       "prefab_assertions": [],
       "fault_injections": []

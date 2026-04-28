@@ -164,6 +164,63 @@ def _loads_json_lenient(candidate: str) -> dict | None:
     return parsed if isinstance(parsed, dict) else None
 
 
+def _recover_partial_json(candidate: str) -> dict | None:
+    """Brace 가 짝 안 맞는 partial JSON 을 복구 시도.
+
+    전략:
+    1. 첫 '{' 위치부터 brace count 추적, depth=0 으로 닫힌 마지막 위치까지 잘라 lenient 시도.
+    2. 그래도 안 되면 부족한 만큼 '}' 추가 + 미완성 string/콤마 정리 후 재시도.
+    """
+    if not candidate:
+        return None
+    start = candidate.find("{")
+    if start == -1:
+        return None
+    body = candidate[start:]
+    depth = 0
+    in_string = False
+    escaped = False
+    last_complete_close = -1
+    for i, ch in enumerate(body):
+        if in_string:
+            if escaped:
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                in_string = False
+        else:
+            if ch == '"':
+                in_string = True
+            elif ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    last_complete_close = i
+    # 1) depth=0 으로 닫힌 위치까지 자른 본을 lenient parse 시도
+    if last_complete_close != -1:
+        parsed = _loads_json_lenient(body[: last_complete_close + 1])
+        if parsed:
+            return parsed
+    # 2) depth > 0 이면 부족한 만큼 '}' 채워서 시도
+    if depth > 0:
+        trimmed = body.rstrip().rstrip(",")
+        # 미완성 string (홀수 따옴표) 안전 처리: 마지막 `"` 부터 잘라냄
+        if trimmed.count('"') % 2 == 1:
+            trimmed = trimmed[: trimmed.rfind('"')].rstrip()
+        # 끝이 `:` 또는 `,` 면 마지막 key:value pair 미완성 — 그 직전 `,` 까지 자름
+        while trimmed and trimmed[-1] in ":,":
+            last_comma = trimmed.rfind(",")
+            if last_comma == -1:
+                # 객체에 살릴 pair 없음 — 빈 객체로
+                return _loads_json_lenient("{}")
+            trimmed = trimmed[:last_comma].rstrip()
+        candidate2 = trimmed + ("}" * depth)
+        return _loads_json_lenient(candidate2)
+    return None
+
+
 def extract_json_from_response(raw: str) -> dict | None:
     """LLM 응답에서 JSON 블록을 추출한다. (JSON Mode 대응)"""
     if not raw:
@@ -180,13 +237,31 @@ def extract_json_from_response(raw: str) -> dict | None:
         if parsed:
             return parsed
 
-    # 3. 텍스트 중간에 JSON이 섞인 경우 (최후의 수단)
+    # 3. 텍스트 중간에 JSON이 섞인 경우
     start = raw.find('{')
     end = raw.rfind('}')
     if start != -1 and end != -1 and end > start:
         parsed = _loads_json_lenient(raw[start:end + 1])
         if parsed:
             return parsed
+
+    # --- v3 patch (exp10-v3-scorer-false-positive-abc-json-parse, 2026-04-29) ---
+    # 4. 시작 fence 만 있고 닫는 fence 없는 경우: 시작 fence 다음부터 raw 끝까지 lenient
+    fence_open = re.search(r"```(?:json)?\s*\n", raw, re.IGNORECASE)
+    if fence_open and "```" not in raw[fence_open.end():]:
+        partial = raw[fence_open.end():]
+        parsed = _loads_json_lenient(partial)
+        if parsed:
+            return parsed
+        # 5. partial JSON 복구 시도
+        parsed = _recover_partial_json(partial)
+        if parsed:
+            return parsed
+
+    # 6. 마지막 fallback — 전체 raw 를 partial JSON 복구
+    parsed = _recover_partial_json(raw)
+    if parsed:
+        return parsed
 
     return None
 

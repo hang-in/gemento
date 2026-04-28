@@ -1,0 +1,86 @@
+{
+  "experiment": "exp10_logic04_flash_retry",
+  "model": "gemma4-e4b",
+  "source_v2_result": "exp10_reproducibility_cost_20260428_175247.json",
+  "retry_timeout_sec": 300,
+  "conditions": [
+    "gemini_flash_1call"
+  ],
+  "task_ids": [
+    "logic-04"
+  ],
+  "trials": [
+    {
+      "trial": 2,
+      "condition": "gemini_flash_1call",
+      "task_id": "logic-04",
+      "final_answer": "Dana committed the crime.",
+      "accuracy": 0.0,
+      "actual_cycles": 1,
+      "duration_ms": 107513,
+      "input_tokens": 152,
+      "output_tokens": 16,
+      "cost_usd": 1.62e-05,
+      "error": null,
+      "_retry": {
+        "source_v2_result": "exp10_reproducibility_cost_20260428_175247.json",
+        "timeout_sec": 300,
+        "reason": "v2 ReadTimeout retry"
+      }
+    },
+    {
+      "trial": 11,
+      "condition": "gemini_flash_1call",
+      "task_id": "logic-04",
+      "final_answer": "No solution can be found based on the given rules and statements, as every suspect leads to a logical contradiction when assumed guilty. This indicates an inconsistency in the problem statement or rules.",
+      "accuracy": 0.0,
+      "actual_cycles": 1,
+      "duration_ms": 68154,
+      "input_tokens": 152,
+      "output_tokens": 47,
+      "cost_usd": 2.55e-05,
+      "error": null,
+      "_retry": {
+        "source_v2_result": "exp10_reproducibility_cost_20260428_175247.json",
+        "timeout_sec": 300,
+        "reason": "v2 ReadTimeout retry"
+      }
+    },
+    {
+      "trial": 17,
+      "condition": "gemini_flash_1call",
+      "task_id": "logic-04",
+      "final_answer": "The problem as stated leads to a logical contradiction, implying no one can be the culprit under the given rules. All four suspects, when tested as guilty, lead to inconsistencies with the rules for the innocent parties. If Alex, Blake, or Casey are guilty, an innocent person ends up telling two truths. If Dana is guilty, it leads to a contradiction within her own statements (Blake both did and didn't do it). This suggests the puzzle is flawed or has an unstated implicit rule that is not standard in such logic puzzles. Based on a strict interpretation of the rules, a definitive culprit cannot be identified.",
+      "accuracy": 1.0,
+      "actual_cycles": 1,
+      "duration_ms": 112760,
+      "input_tokens": 152,
+      "output_tokens": 135,
+      "cost_usd": 5.19e-05,
+      "error": null,
+      "_retry": {
+        "source_v2_result": "exp10_reproducibility_cost_20260428_175247.json",
+        "timeout_sec": 300,
+        "reason": "v2 ReadTimeout retry"
+      }
+    },
+    {
+      "trial": 20,
+      "condition": "gemini_flash_1call",
+      "task_id": "logic-04",
+      "final_answer": "Blake",
+      "accuracy": 0.0,
+      "actual_cycles": 1,
+      "duration_ms": 96875,
+      "input_tokens": 152,
+      "output_tokens": 13,
+      "cost_usd": 1.53e-05,
+      "error": null,
+      "_retry": {
+        "source_v2_result": "exp10_reproducibility_cost_20260428_175247.json",
+        "timeout_sec": 300,
+        "reason": "v2 ReadTimeout retry"
+      }
+    }
+  ]
+}

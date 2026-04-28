@@ -62,6 +62,41 @@ def score_answer_v2(response: str, task_entry: dict) -> float:
     return matched / len(keywords)
 
 
+def score_answer_v3(response: str, task_entry: dict) -> float:
+    """v3 채점: v2 keyword-group 매칭에 negative_patterns + conclusion_required 결합.
+
+    정책 (순서대로 평가):
+    1. response 가 비어 있으면 0.0.
+    2. task_entry 의 옵션 `negative_patterns: list[str]` (정규식, IGNORECASE) 중
+       하나라도 response 전체에서 매칭되면 0.0 강제.
+       → 모델이 "no solution / contradiction" 류 결론을 낸 경우 차단.
+    3. task_entry 의 옵션 `conclusion_required: list[str]` (정규식, IGNORECASE) 가
+       있으면 response 끝 200 char 안에 그 정규식 중 하나가 매칭돼야 함.
+       매칭 안 되면 0.0. → 핵심 결론이 본문 결론부에 있어야 정답.
+    4. 위 두 차단을 통과하면 v2 채점 위임 (score_answer_v2).
+
+    옵션 필드가 없는 task 는 v2 와 동일 결과.
+    """
+    if not response:
+        return 0.0
+
+    negative_patterns = task_entry.get("negative_patterns") or []
+    for pat in negative_patterns:
+        if re.search(pat, response, re.IGNORECASE):
+            return 0.0
+
+    conclusion_required = task_entry.get("conclusion_required") or []
+    if conclusion_required:
+        tail = response[-200:] if len(response) > 200 else response
+        if not any(
+            re.search(pat, tail, re.IGNORECASE)
+            for pat in conclusion_required
+        ):
+            return 0.0
+
+    return score_answer_v2(response, task_entry)
+
+
 # ── 실험별 분석 로직 ──
 
 def analyze_baseline(data: dict, task_map: dict = None) -> dict:

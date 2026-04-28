@@ -652,6 +652,48 @@ parts: [closed, active]
 
 ---
 
+### Exp10: Reproducibility & Cost Profile (v2 final)
+
+| 항목 | 내용 |
+|------|------|
+| **누가** | Gemma 4 E4B (LM Studio Q4_K_M) × ABC 8루프 vs Gemma 4 E4B 단발 vs Gemini 2.5 Flash 1-call |
+| **언제** | 2026-04-28 (Windows 본 run) → 2026-04-29 (Mac retry/merge/finalize) |
+| **어디서** | Windows + LM Studio (gemma_8loop, gemma_1loop) + Google AI Studio (gemini_flash_1call) |
+| **무엇을** | 정확도 + 비용 + 지연 3축 cost-aware 비교. 3 condition × 9 task × N=20 trial = **540 trial** |
+| **왜** | "제멘토 ABC 가 폐쇄형 대형 1-call 을 능가하는가"의 직접 측정. 동일 모델 1-loop vs 8-loop 비교로 H1(외부 상태+반복) 의 직접 증거 추가 확보 |
+| **어떻게** | gemma_8loop = ABC + max_cycles=15 + use_phase_prompt=True. gemma_1loop = 단발. gemini_flash_1call = response_mime_type=application/json. 본 v2 결과 두 artifact 패치 — `(gemma_8loop, math-04)` 20 trial 을 use_tools=True debug rerun 으로 substitute, `(gemini_flash, logic-04)` 4 timeout trial 을 timeout=300s 재시도로 substitute |
+
+**결과 (v3 채점, 540 trial):**
+
+| condition | mean_acc (v2) | **mean_acc (v3)** | cost / 180 trial | avg_dur | err+null |
+|-----------|--------------:|------------------:|----------------:|--------:|---------:|
+| **gemma_8loop** | 0.820 | **0.781** | $0.0000 | 8 min | 8 |
+| gemini_flash_1call | 0.619 | **0.591** | $0.0143 | 24 s | 0 |
+| gemma_1loop | 0.413 | **0.413** | $0.0000 | 33 s | 11 |
+
+> v3 채점 (2026-04-29 patch): `score_answer_v3` + `taskset.json` logic-04 의 `negative_patterns` 4개. v2 → v3 격차는 logic-04 한정 (false positive 12건 제거).
+
+**핵심 발견:**
+1. **H1 직접 증거 — 외부 상태 + 반복** — 같은 모델 1-loop → 8-loop 가 0.413 → 0.781 (**+37%p**). ABC chain 이 모델 능력을 거의 두 배 끌어올림. 동일 weight·quantization·sampling 조건에서의 측정이라 inference 구조 효과로만 해석 가능.
+2. **소형 로컬 vs 폐쇄형 대형** — gemma_8loop (4.5B) 가 Gemini 2.5 Flash 를 정확도에서 **+19%p** 능가. 비용 $0, 단 속도 1/20 (8 min vs 24 s).
+3. **logic-04 false positive 발견 (채점기 한계)** — substring 채점으로 v2 acc 0.400 (gemma_8loop) / 0.250 (flash) 이지만 본문은 "no solution"/"contradiction" 류라 strict acc 0.050 / 0.000. 13/60 trial 이 false positive. condition 순위는 동일하지만 v3 채점기 강화 결정적 후보.
+4. **로컬 모델 천장 (logic-04)** — strict acc 모든 condition ≤ 0.05. ABC 8루프도 4-suspect 귀류법은 못 뚫음. v3 에서 도구화 또는 multi-stage prompt 검토.
+5. **math-04 도구 정책 결정적** — use_tools=False 면 0/20 (전수 fail), True 면 20/20 (linprog 호출). 모델 능력의 한계가 아니라 시스템 정책의 한계. v3 에서 math 카테고리 use_tools 통일 필요.
+6. **ABC infrastructure 4 fail** — gemma_8loop 4건 JSON parse 실패 (math-03 t13, synthesis-01 t14, logic-04 t2/t6). 모델 능력이 아닌 인프라 안정성 이슈. v3 patch 후보.
+
+**상세 보고서:** `docs/reference/results/exp-10-reproducibility-cost.md`
+**데이터:** `experiments/exp10_reproducibility_cost/results/exp10_v2_final_20260429_033922.json`
+**패치 절차:** `docs/reference/exp10-v2-finalize-2026-04-29.md`
+
+**다음 단계 (v3 우선순위):**
+1. 채점기 강화 (substring → affirmative/negative 분류 또는 LLM-judge)
+2. ABC chain JSON parse 안정성 (raw_response 디버그 로그 분석 → 추출 정규식 보강)
+3. logic 카테고리 도구화/multi-stage 또는 외부 propositional logic 도구
+4. use_tools 정책 통일 (math 전체 True 강제 후 v3 재실행)
+5. 다른 task 의 strict 채점 전수 재산정
+
+---
+
 ## 채점 시스템 변천
 
 ### v1 → v2 전환 (2026-04-15)
@@ -672,6 +714,24 @@ parts: [closed, active]
 | Exp05a Prompt Enhance | 0.636 | 0.583 | -5.2% |
 | Exp045 Handoff | 0.649 | 0.900 | +25.1% |
 | Exp06 Solo Budget | 0.663 | 0.967 | +30.3% |
+
+### v2 → v3 전환 (2026-04-29)
+
+| 항목 | v2 (substring contains) | v3 (negative_patterns 보강) |
+|------|-------------------------|----------------------------|
+| 방식 | scoring_keywords 그룹 매칭 (substring) | v2 + task 별 `negative_patterns` 차단 + 옵션 `conclusion_required` |
+| 문제점 | "no solution / contradiction" 류 결론 답을 정답으로 잡음 (logic-04 13/60 false positive) | — |
+| 도입 동기 | — | Exp10 v2 final 의 logic-04 false positive 발견 |
+
+**Exp10 v2 final 재채점 결과:**
+
+| condition | v2 mean | v3 mean | Δ |
+|-----------|--------:|--------:|--:|
+| gemma_8loop | 0.820 | 0.781 | -0.039 |
+| gemini_flash_1call | 0.619 | 0.591 | -0.028 |
+| gemma_1loop | 0.413 | 0.413 | 0.000 |
+
+→ v2 → v3 격차는 logic-04 한정 (다른 8 task 는 v2 == v3). 본 v3 patch 는 Exp10 만 적용. 다른 실험 (Exp00~09) 적용은 별도 plan.
 
 ---
 

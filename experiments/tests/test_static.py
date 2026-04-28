@@ -420,5 +420,157 @@ class TestExp10DebugLoggingSchema(unittest.TestCase):
             sys.path.remove(str(EXPERIMENTS_DIR))
 
 
+class TestScoreAnswerV3(unittest.TestCase):
+    """exp10-v3-scorer plan — score_answer_v3 의 negative_patterns 차단 + conclusion_required 검증."""
+
+    def setUp(self):
+        self.task = {
+            "id": "logic-04-mock",
+            "scoring_keywords": [["casey"]],
+            "negative_patterns": [
+                r"no\s+(unique|definitive|clear)\s+(culprit|answer|solution)",
+                r"cannot\s+be\s+(identified|determined|solved)",
+                r"contradicts?|contradiction|contradictions",
+                r"puzzle\s+is\s+(flawed|inconsistent|ill-?posed)",
+            ],
+        }
+
+    def _import_v3(self):
+        sys.path.insert(0, str(EXPERIMENTS_DIR))
+        try:
+            from measure import score_answer_v3
+            return score_answer_v3
+        finally:
+            sys.path.remove(str(EXPERIMENTS_DIR))
+
+    def test_v2_match_no_negative(self):
+        score_answer_v3 = self._import_v3()
+        response = "Casey committed the crime. The other three are innocent."
+        self.assertEqual(score_answer_v3(response, self.task), 1.0)
+
+    def test_negative_pattern_blocks_substring_match(self):
+        score_answer_v3 = self._import_v3()
+        response = (
+            "Assuming Casey is guilty leads to a contradiction. "
+            "All four suspects lead to similar contradictions, so the puzzle is inconsistent."
+        )
+        self.assertEqual(score_answer_v3(response, self.task), 0.0)
+
+    def test_no_keyword_returns_zero(self):
+        score_answer_v3 = self._import_v3()
+        response = "Dana committed the crime."
+        self.assertEqual(score_answer_v3(response, self.task), 0.0)
+
+    def test_empty_response(self):
+        score_answer_v3 = self._import_v3()
+        self.assertEqual(score_answer_v3("", self.task), 0.0)
+        self.assertEqual(score_answer_v3(None, self.task), 0.0)
+
+    def test_no_negative_patterns_falls_back_to_v2(self):
+        score_answer_v3 = self._import_v3()
+        task = {"id": "x", "scoring_keywords": [["casey"]]}
+        response = "Casey did it."
+        self.assertEqual(score_answer_v3(response, task), 1.0)
+
+    def test_conclusion_required_match_at_tail(self):
+        score_answer_v3 = self._import_v3()
+        task = {
+            "id": "x",
+            "scoring_keywords": [["casey"]],
+            "conclusion_required": [r"casey\s+(committed|is\s+(the|guilty))"],
+        }
+        response = (
+            "After analysis of all suspects, the conclusion is that Casey committed the crime."
+        )
+        self.assertEqual(score_answer_v3(response, task), 1.0)
+
+    def test_conclusion_required_miss_at_tail(self):
+        score_answer_v3 = self._import_v3()
+        task = {
+            "id": "x",
+            "scoring_keywords": [["casey"]],
+            "conclusion_required": [r"casey\s+(committed|is\s+(the|guilty))"],
+        }
+        response = (
+            "Casey was one of the suspects. After analysis, no clear answer can be derived."
+            + (" filler." * 30)
+        )
+        self.assertEqual(score_answer_v3(response, task), 0.0)
+
+
+class TestExtractJsonFromResponseV3(unittest.TestCase):
+    """exp10-v3-scorer plan task-05 — fence 미닫힘 / partial JSON 복구 케이스 검증."""
+
+    def _import(self):
+        sys.path.insert(0, str(EXPERIMENTS_DIR))
+        try:
+            from orchestrator import extract_json_from_response
+            return extract_json_from_response
+        finally:
+            sys.path.remove(str(EXPERIMENTS_DIR))
+
+    def test_existing_fenced_json(self):
+        extract = self._import()
+        raw = '```json\n{"final_answer": "Casey"}\n```'
+        self.assertEqual(extract(raw), {"final_answer": "Casey"})
+
+    def test_unclosed_fence_lenient(self):
+        extract = self._import()
+        raw = '```json\n{"final_answer": "Casey", "reasoning": "complete"}'
+        self.assertEqual(
+            extract(raw),
+            {"final_answer": "Casey", "reasoning": "complete"},
+        )
+
+    def test_partial_json_brace_recovery(self):
+        extract = self._import()
+        # 응답 도중 짤린 partial JSON — last complete close 까지 복구
+        raw = (
+            '{"reasoning": "step 1", '
+            '"final_answer": "Casey"} extra trailing text "incomp'
+        )
+        result = extract(raw)
+        self.assertIsNotNone(result)
+        assert result is not None  # mypy hint
+        self.assertEqual(result.get("final_answer"), "Casey")
+
+    def test_partial_json_depth_close(self):
+        extract = self._import()
+        # depth > 0 으로 끝나는 partial JSON — 부족한 '}' 채움 + 미완성 string trim
+        raw = '{"final_answer": "Casey", "reasoning": "incomplete'
+        result = extract(raw)
+        self.assertIsNotNone(result)
+        assert result is not None
+        self.assertEqual(result.get("final_answer"), "Casey")
+
+    def test_no_json_returns_none(self):
+        extract = self._import()
+        raw = "This is plain text with no JSON."
+        self.assertIsNone(extract(raw))
+
+    def test_empty_returns_none(self):
+        extract = self._import()
+        self.assertIsNone(extract(""))
+        self.assertIsNone(extract(None))
+
+    def test_unclosed_fence_with_partial_brace(self):
+        """v2 final synthesis-01 t14 패턴 — fence 미닫힘 + brace 4/3."""
+        extract = self._import()
+        raw = (
+            '```json\n'
+            '{\n'
+            '  "verdict": "FAIL",\n'
+            '  "reason": "B critique partial",\n'
+            '  "details": {\n'
+            '    "step1": "ok",\n'
+            '    "step2": "the stated hourly cost for Provider B."\n'
+            '  },\n  '
+        )
+        result = extract(raw)
+        self.assertIsNotNone(result)
+        assert result is not None
+        self.assertEqual(result.get("verdict"), "FAIL")
+
+
 if __name__ == "__main__":
     unittest.main()
