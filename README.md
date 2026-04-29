@@ -8,6 +8,21 @@
 
 I started this while building secall and tunaFlow. The recurring problems were long-term memory, context over-spend, and work that had to survive across sessions. My first thought was simple: if I clear the prompt context and rely on database retrieval, can the database behave like near-infinite context? That line of thinking brought me back to *Memento* and Leonard's tattoos, polaroids, and phone calls. This repository is the side-track that grew out of that idea: not a new architecture, not a paper, but a measured notebook about whether small models improve when memory, action, critique, and control are externalized.
 
+## What this is / is not
+
+This is:
+
+- a reproducible experiment harness for small local LLM workflows
+- a measured notebook about externalized state, tools, roles, and control
+- a public baseline for reproduction and disagreement
+
+This is not:
+
+- a new model architecture
+- a training method
+- a claim that 4B models replace frontier models
+- a claim that ABC+Tattoo universally beats RAG
+
 ## Core idea
 
 Gemento treats four axes of LLM cognition as **externalizable** — moved out of model weights and into the workflow:
@@ -29,10 +44,10 @@ This repository tracks sequential hypothesis IDs `H1` to `H9c` across the four e
 
 | ID | Hypothesis (Axis) | Verdict | Evidence |
 |----|-------------------|---------|----------|
-| **H1** | [Orchestrator externalization] Multi-step loops outperform single-pass reasoning | ✅ Supported (+44.4pp) | Exp02 v2 |
+| **H1** | [Orchestrator externalization] Multi-step loops outperform single-pass reasoning | ✅ Supported (+44.4pp Exp02; +37pp Exp10) | Exp02 v2, Exp10 |
 | **H2** | [Role externalization necessity, falsification] Self-validation can detect its own errors | ❌ Rejected (0/15 detected) | Exp03 |
 | **H3** | [Role externalization] Cross-validation with separated roles can detect errors | ✅ Supported (12/15, 80%) | Exp035 |
-| **H4** | [Role externalization synergy] A-B-C role separation outperforms repeated single-agent iteration | ✅ Supported (+22.6pp) | Exp06 |
+| **H4** | [Role externalization synergy] A-B-C role separation may outperform repeated single-agent iteration under some scoring conditions | ⚠ Conditionally supported (Exp06 v1: +22.6pp ABC; v2: slightly favors Solo under asymmetric sample — needs balanced rerun) | Exp06 |
 | **H5** | [Orchestrator ceiling effect] Raising `MAX_CYCLES` improves accuracy | ⚠️ Partially rejected - the ceiling was not the limit; actual saturation appeared around `actual_cycles ≈ 7` | Exp07 |
 | **H6** | [Role externalization refinement] Phase-specialized prompts outperform the baseline | ✅ Conditionally supported (+5-6pp in long loops) | Exp07 |
 | **H7** | [Tool externalization] External math tools compensate for E4B's calculation limits | ✅ Supported (+18.3pp, math-04 0→80%) | Exp08 |
@@ -48,6 +63,7 @@ This repository tracks sequential hypothesis IDs `H1` to `H9c` across the four e
 - Exp035: role-separated cross-validation recovered to 80%.
 - Exp08b: math tool calls plus error-message hints moved math-04 from 0% to 100%.
 - Exp09: on Large 20K long-context tasks, Solo dump scored 0%, RAG scored 67%, and ABC+Tattoo scored 100%.
+- Exp10: same Gemma 4 E4B went from 41.3% (1-loop) to 78.1% (8-loop ABC) on a 9-task / 540-trial cost-aware comparison. The same ABC condition matched Gemini 2.5 Flash 1-call by +19pp (78.1% vs 59.1%) at zero per-trial API cost, trading off ~20× wall time. ABC infrastructure had 4 trial-level JSON parse fails (early-stop pattern, see `docs/reference/exp10-v3-abc-json-fail-diagnosis.md`).
 
 What clearly did **not** work was expecting the same model to notice its own failure mode without a role change. The most useful result in this repository is probably negative: the model does not reliably criticize itself, even when it can criticize the same reasoning from another role.
 
@@ -64,7 +80,7 @@ git clone https://github.com/hang-in/gemento.git
 cd gemento
 python3.14 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\Activate.ps1
-pip install httpx scipy numpy
+pip install -r requirements.txt
 ```
 
 ### Connect an inference server
@@ -151,7 +167,7 @@ Append entries to `experiments/tasks/taskset.json` with `id`, `category`, `diffi
 
 | Horizon | Item |
 |---------|------|
-| Short-term | Choose one Exp10 candidate: Small Paradox, parallel chunk traversal, or stronger statistics for Exp09 |
+| Short-term | Exp10 (cost-aware reproducibility) completed — see `docs/reference/results/exp-10-reproducibility-cost.md`. Next candidates: math-* `use_tools=True` policy unification + v3 re-run, logic category multi-stage / tooling, scorer extension to Exp00–09 (low priority — `logic-04` absent in those task subsets). |
 | Mid-term | Add missing axes: Extractor/Reducer roles and Search Tool integration |
 | Mid/long-term | Test the four-layer external knowledge environment |
 | Long-term | Cross-model reproduction on Qwen / Phi / Llama, structured ablations, and a public write-up |
@@ -189,10 +205,10 @@ What is contributed here, and what is **not**:
 - Not contributed: a new architecture, a new training method, or a claim that small LLMs replace large ones. Gemento is a structural workflow harness on top of an unmodified open-weight model.
 
 ---
-¹ arXiv 2026-04-09 (preprint, externalization framework). Cited by handoff notes; not a direct comparison run in this repository.
-² LightMem (long-term memory module for LLMs).
-³ ESAA — Externally Stateful Agentic Architectures.
-⁴ Chain-of-Agents — sequential multi-agent reading.
+¹ A 2026-04 arXiv preprint on externalization frame for LLM agents — *citation pending; the author has not directly verified the preprint, the reference is the GPT-discovered framing only*.
+² LightMem (long-term memory module for LLMs) — *citation pending; needs bibliographic verification*.
+³ ESAA — Externally Stateful Agentic Architectures — *citation pending; needs bibliographic verification*.
+⁴ Chain-of-Agents — sequential multi-agent reading — *citation pending; needs bibliographic verification*.
 
 ## Acknowledgements
 

@@ -120,3 +120,4 @@ condition mean 영향:
 3. **logic 카테고리 도구/구조 보강**: 단계별 가정-검증 sub-prompt 또는 외부 propositional logic 도구 — 별도 실험 후보
 4. **use_tools 정책 통일**: math-* 전체에 use_tools=True 강제 후 v3 재실행 (현 v2 는 math-04 만 패치라 strict 비교 깨짐) — 별도 plan 후보
 5. **다른 task 의 v3 채점 결과**: 본 plan 의 `rescore_v3.py` 가 540 trial 전수 재산정한 결과, logic-04 외 8 task 는 v2 == v3 — 추가 false positive 식별 0. 단, 다른 task 의 negative_patterns 미정의 상태이므로 향후 false positive 가 발견되면 task 별 보강 patch.
+   - **Exp00~09 적용 범위**: 본 plan (`exp10-readme-v2-abc-4-fail-v3-disclosure`) 정찰 결과 logic-04 task 는 Exp00~09 의 result JSON 에 미포함 (직접 grep 확인). 따라서 `score_answer_v3` 를 Exp00~09 에 적용해도 변동 0 예상 — 별도 재산정 plan 의 우선순위 낮음.

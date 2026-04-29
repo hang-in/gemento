@@ -1,0 +1,4 @@
+httpx
+numpy
+scipy
+bm25s

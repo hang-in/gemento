@@ -731,7 +731,7 @@ parts: [closed, active]
 | gemini_flash_1call | 0.619 | 0.591 | -0.028 |
 | gemma_1loop | 0.413 | 0.413 | 0.000 |
 
-→ v2 → v3 격차는 logic-04 한정 (다른 8 task 는 v2 == v3). 본 v3 patch 는 Exp10 만 적용. 다른 실험 (Exp00~09) 적용은 별도 plan.
+→ v2 → v3 격차는 logic-04 한정 (다른 8 task 는 v2 == v3). 본 v3 patch 는 Exp10 만 적용. 다른 실험 (Exp00~09) 의 result JSON 에 logic-04 task 가 포함되지 않음 (정찰 grep 확인) — `score_answer_v3` 적용 시 변동 0 예상. 다른 task 의 false positive 발견 시 task 별 negative_patterns 보강 별도 plan.
 
 ---
 

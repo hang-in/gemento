@@ -54,6 +54,23 @@
 
 ---
 
+## 1.5. What this is / is not — 본 repo 는 무엇이고 무엇이 아닌가
+
+이 repo 는:
+
+- 소형 로컬 LLM workflow 의 재현 가능한 실험 하네스
+- 외부화된 상태 / 도구 / 역할 / 제어를 측정한 연구 노트
+- 재현·반박을 위한 공개 baseline
+
+이 repo 는 아니다:
+
+- 새로운 모델 architecture
+- 학습 기법
+- 4B 모델이 frontier 모델을 대체한다는 주장
+- ABC+Tattoo 가 RAG 를 보편적으로 능가한다는 주장
+
+---
+
 ## 2. The Core Idea — 외부화
 
 소형 LLM은 모든 것을 기억할 수 없다. 제멘토는 **기억 대신 환경에 새기고**, **생각 대신 도구로 확인하고**, **자기 검증 대신 다른 역할에게 비판받는다**. 이 원리는 영화 *Memento*의 Leonard가 단기 기억상실과 함께 살아가는 방식과 정확히 닮았다 — 우연이 아니라 **설계의 근간**이다.
@@ -126,10 +143,10 @@
 
 | ID | 가설 (외부화 축) | 판정 | 근거 실험 |
 |----|-----------------|------|----------|
-| **H1** | [Orchestrator 외부화] 다단계 루프가 단일 추론보다 품질이 높다 | ✅ 채택 (+44.4%p) | Exp02 v2 |
+| **H1** | [Orchestrator 외부화] 다단계 루프가 단일 추론보다 품질이 높다 | ✅ 채택 (+44.4%p Exp02; +37%p Exp10) | Exp02 v2, Exp10 |
 | **H2** | [Role 외부화 필요성 반증] 자가 검증으로 오류를 감지할 수 있다 | ❌ 기각 (0/15 감지) | Exp03 |
 | **H3** | [Role 외부화] 교차 검증(역할 분리)이 오류를 감지할 수 있다 | ✅ 채택 (12/15, 80%) | Exp035 |
-| **H4** | [Role 외부화 시너지] A-B-C 역할 분리가 단일 에이전트 반복보다 우수하다 | ✅ 채택 (+22.6%p) | Exp06 |
+| **H4** | [Role 외부화 시너지] A-B-C 역할 분리가 단일 에이전트 반복보다 (일부 채점 조건에서) 우수할 수 있다 | ⚠ 조건부 채택 (Exp06 v1: +22.6%p ABC 우위; v2: 비대칭 표본 하에서 Solo 약간 우위 가능성 — balanced rerun 필요) | Exp06 |
 | **H5** | [Orchestrator 상한 효과] MAX_CYCLES 상향이 정답률 향상에 기여한다 | ⚠️ 부분 기각 — 포화점은 상한이 아니라 actual_cycles ≈ 7 | Exp07 |
 | **H6** | [Role 외부화 정교화] Phase별 특화 프롬프트가 baseline보다 우수하다 | ✅ 조건부 채택 (장기 루프 +5~6%p) | Exp07 |
 | **H7** | [Tool 외부화] 외부 수학 도구가 E4B의 계산 한계를 보완한다 | ✅ 채택 (+18.3%p, math-04 0→80%) | Exp08 |
@@ -143,6 +160,7 @@
 - **자가 검증은 작동하지 않는다** (H2). 역할을 바꾼 비판자(B)가 같은 모델에서 80% 회수 (H3).
 - **"채점 데이터 결함"이 실험 결론을 뒤집을 수 있다** — Exp07의 math-04 "50% 정체"는 expected_answer 자체가 제약 위반이었음이 Exp08에서 판명.
 - **외부 상태(Tattoo)가 유효 컨텍스트를 물리적으로 확장한다** — Exp09에서 Solo-dump는 Medium/Large에서 완전 전멸(0%), ABC+Tattoo는 Large 20K에서 100%. (H9a)
+- **소형 로컬 + ABC 가 폐쇄형 대형 1-call 을 능가한다** — Exp10 의 9-task / 540-trial cost-aware 비교에서 같은 Gemma 4 E4B 가 1-loop 41.3% → 8-loop ABC 78.1% (+37%p, H1 추가 evidence). 동일 ABC 조건이 Gemini 2.5 Flash 1-call 의 59.1% 를 +19%p 능가, 비용 \$0, 시간은 약 20× (8min vs 24s). ABC chain 인프라 4 trial 의 JSON parse fail (early-stop 패턴, 상세는 `docs/reference/exp10-v3-abc-json-fail-diagnosis.md`).
 
 ---
 
@@ -196,7 +214,7 @@ git clone https://github.com/hang-in/gemento.git
 cd gemento
 python3.14 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\Activate.ps1
-pip install httpx scipy numpy
+pip install -r requirements.txt
 ```
 
 ### 추론 서버 연결
@@ -269,7 +287,7 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 
 | 시점 | 항목 |
 |------|------|
-| **단기 (대기)** | Exp10 후보 선정 — Small Paradox 해결, 병렬 chunk 순회, Exp09 통계 보강(5 trial) 중 택일 |
+| **단기** | Exp10 (cost-aware reproducibility) 완료 — `docs/reference/results/exp-10-reproducibility-cost.md` 참조. 다음 후보: math-* `use_tools=True` 정책 통일 + v3 재실행, logic 카테고리 multi-stage / 도구화, 채점기 Exp00~09 확장 (낮은 우선순위 — `logic-04` 가 다른 실험 task subset 에 미포함) |
 | **중기** | 미외부화 축 보강 — Extractor/Reducer Role, Search Tool 통합 실험 |
 | **중장기** | 외부 지식 환경 (4-layer) 통합 실험 (벡터·그래프 사용) |
 | **장기** | 크로스 모델 재현 (Qwen / Phi / Llama) · 체계적 ablation · 연구 결과 정리 (technical report / blog) |
@@ -323,6 +341,26 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 | `experiments/tools/math_tools.py` | calculator / solve_linear_system / linprog |
 
 ---
+
+## 11. Related Work — 인접 흐름
+
+"LLM 의 인지를 외부화한다" 는 framing 자체는 본 프로젝트 고유가 아니다. 인접하거나 겹치는 아이디어:
+
+- **Externalization frame** — 2026-04 arXiv preprint¹ 가 모델 외부로 메모리/추론/검증을 옮기는 일반 framework 를 제시. 제멘토는 secall / tunaFlow 를 만들면서 마주친 실제 컨텍스트·기억 문제에서 출발해 독립적으로 개발됨 — 저자는 위 preprint 를 나중에 알게 됨. 4축 분리 (Tattoo / Tools / Role / Orchestrator) 는 그 흐름의 **independent convergence (독립적 수렴)** 으로 읽는 것이 정확하며, 그로부터 도출된 것이 아니다.
+- **LightMem**² — LLM 의 장기 기억 외부화. retrieval / key-value memory 중심. 제멘토는 loop 간 *working* state 에 가까우며, 과거 세션 retrieval 이 아니다.
+- **ESAA (Externally Stateful Agentic Architectures)**³ — agent 를 외부 state 를 가진 state machine 으로 처리. 개념적으로 인접; 제멘토는 그 위에 명시적 역할 분리 (A/B/C) + 도구 통합을 추가.
+- **Chain-of-Agents**⁴ — 긴 입력을 여러 agent 에 순차 전달. 제멘토의 A→B→C 파이프라인이 동일 구조를 공유하지만, *동일 base model* 을 모든 역할에 사용하고 prompt + validation contract 로만 분리.
+
+기여한 것 / **기여하지 않은** 것:
+
+- 기여: Gemma 4 E4B (실효 4B 파라미터) 의 4축에서의 행동을 측정한 workbook, 재현 가능한 수치와 sampling parameters 동반.
+- 비기여: 새로운 architecture, 새로운 학습 방법, 소형 LLM 이 대형을 대체한다는 주장. 제멘토는 unmodified open-weight 모델 위의 구조적 workflow 하네스.
+
+---
+¹ 2026-04 arXiv preprint (LLM agent 외부화 frame) — *서지 검증 미완 (citation pending); 저자가 preprint 를 직접 확인하지 않았으며, GPT 가 알려준 framing 만 참조함*.
+² LightMem (LLM 장기 기억 모듈) — *서지 검증 미완 (citation pending)*.
+³ ESAA — Externally Stateful Agentic Architectures — *서지 검증 미완 (citation pending)*.
+⁴ Chain-of-Agents — sequential multi-agent reading — *서지 검증 미완 (citation pending)*.
 
 ## Acknowledgements
 

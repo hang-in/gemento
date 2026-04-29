@@ -110,10 +110,82 @@ def diagnose(input_path: Path) -> list[dict]:
     return rows
 
 
+def diagnose_full_cycles(input_path: Path) -> list[dict]:
+    """모든 cycle × 모든 phase 의 raw 를 v3 patch 된 extract_json_from_response 통과.
+
+    각 trial 별로 살릴 수 있는 raw 를 수집 + final_answer 후보 식별.
+    """
+    from orchestrator import extract_json_from_response
+
+    with open(input_path, encoding="utf-8") as f:
+        d = json.load(f)
+    by_key = {(t["condition"], t["task_id"], t["trial"]): t for t in d["trials"]}
+    rows = []
+    for key in TARGETS:
+        t = by_key.get(key)
+        if t is None:
+            rows.append({"key": list(key), "missing": True})
+            continue
+        debug = t.get("_debug") or {}
+        logs = debug.get("abc_logs") or []
+        recoverable: list[dict] = []
+        for log in logs:
+            for phase in ("a", "b", "c"):
+                raw = log.get(f"{phase}_raw") or ""
+                if not raw:
+                    continue
+                # truncate 표시 제거
+                if "... (truncated" in raw:
+                    raw = raw.split("... (truncated")[0]
+                parsed = extract_json_from_response(raw)
+                if isinstance(parsed, dict):
+                    final_candidate = (
+                        parsed.get("final_answer")
+                        or parsed.get("answer")
+                        or parsed.get("conclusion")
+                    )
+                    recoverable.append({
+                        "cycle": log.get("cycle"),
+                        "phase_name": log.get("phase"),
+                        "phase_role": phase.upper(),
+                        "keys": list(parsed.keys())[:5],
+                        "final_candidate": str(final_candidate)[:120] if final_candidate else None,
+                    })
+        rows.append({
+            "key": list(key),
+            "trial_error": t.get("error"),
+            "total_cycles": len(logs),
+            "recoverable_count": len(recoverable),
+            "recoverable": recoverable,
+        })
+    return rows
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Diagnose ABC JSON parse 4 fail")
     parser.add_argument("--input", default=str(DEFAULT_INPUT))
+    parser.add_argument(
+        "--full-cycles",
+        action="store_true",
+        help="모든 cycle × 모든 phase (a/b/c) 의 raw 를 v3 patch 된 extract_json_from_response 에 통과 (기본은 마지막 cycle 의 fail phase 만)",
+    )
     args = parser.parse_args()
+    if args.full_cycles:
+        rows = diagnose_full_cycles(Path(args.input))
+        for r in rows:
+            print(json.dumps(r, ensure_ascii=False))
+        print("\n--- summary (full-cycles) ---")
+        for r in rows:
+            key = r.get("key")
+            if r.get("missing"):
+                print(f"  {key}: missing")
+                continue
+            print(
+                f"  {key}: total_cycles={r.get('total_cycles')}, "
+                f"recoverable={r.get('recoverable_count')}"
+            )
+        return 0
+
     rows = diagnose(Path(args.input))
     for r in rows:
         print(json.dumps(r, ensure_ascii=False))

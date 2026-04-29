@@ -1,5 +1,6 @@
 """제멘토 실험 설정."""
 
+import os
 from pathlib import Path
 
 # ── 경로 ──
@@ -11,7 +12,7 @@ LOGS_DIR = EXPERIMENTS_DIR / "logs"
 
 # ── 모델 ──
 MODEL_NAME = "gemma4-e4b"
-API_BASE_URL = "http://yongseek.iptime.org:8005"
+API_BASE_URL = os.getenv("GEMENTO_API_BASE_URL", "http://localhost:8080")
 API_CHAT_URL = f"{API_BASE_URL}/v1/chat/completions"
 API_TIMEOUT = 600
 

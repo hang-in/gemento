@@ -146,3 +146,41 @@ Task 05 의 patch 우선순위:
 - 새 결과 JSON: `experiments/exp10_reproducibility_cost/results/exp10_v3_rescored_20260429_053939.json` (rework r2 재산정)
 - condition aggregate: 변동 없음 (gemma_8loop 0.7815 / gemini_flash 0.5907 / gemma_1loop 0.4130)
 - r1 결과 JSON `exp10_v3_rescored_20260429_052748.json` 도 archive 유지
+
+---
+
+## v2 final 4 fail 사후 분석 (full cycles, 2026-04-29)
+
+직전 진단은 **마지막 cycle 의 fail phase raw** 만 점검 → 1/4 사후 복구 (synthesis-01 t14). 본 절은 plan `exp10-readme-v2-abc-4-fail-v3-disclosure` Task 01 의 결과로, **모든 cycle × 모든 phase (a/b/c)** 의 raw 를 v3 patch 된 `extract_json_from_response` 에 통과시킨 결과.
+
+진단 명령:
+
+```bash
+.venv/bin/python -m experiments.exp10_reproducibility_cost.diagnose_json_fails --full-cycles
+```
+
+### 결과 표
+
+| trial | total_cycles | recoverable_count | final_candidate 발견 | retry 권고 |
+|-------|-------------:|------------------:|---------------------:|-----------|
+| math-03 t13 | 10 | 13 | **0** | 윈도우 측 retry 만 (사후 복구 불가) |
+| synthesis-01 t14 | 10 | 15 | **0** | 윈도우 측 retry 만 (사후 복구 불가) |
+| logic-04 t2 | 12 | 17 | **0** | 윈도우 측 retry 만 (사후 복구 불가) |
+| logic-04 t6 | 11 | 5 | **0** | 윈도우 측 retry 만 (사후 복구 불가) |
+
+**총 50개 raw 가 lenient parse 통과** — 그러나 모두 ABC chain 의 중간 단계 (`DECOMPOSE`/`INVESTIGATE`/`SYNTHESIZE`/`VERIFY` phase 의 A/C raw, 또는 SYNTHESIZE-B 1건). 추출된 키는 `reasoning` / `handoff_a2b` / `new_assertions` / `invalidated_assertions` / `judgments` / `converged` / `next_phase` 등 — `final_answer` / `answer` / `conclusion` 키는 **0 hit**.
+
+### 함의
+
+1. **ABC 중간 단계는 안정적**: 4 trial 모두 cycle 1~12 동안 다수 raw 가 v3 patch 후 정상 parse. orchestrator 의 `_recover_partial_json` + fence_unclosed fallback 가 actual 데이터에서 동작 확인.
+2. **최종 답 (final_answer) 만 일관되게 fail**: VERIFY phase 의 마지막 cycle 의 fail phase raw 가 모델의 early-stop 으로 fence 미닫힘 + final_answer 키 미생성. 즉 **모델이 답을 결론낼 때마다 응답을 끝내는 LM Studio + Gemma 4 E4B 의 패턴**일 가능성.
+3. **사후 복구 불가**: 4 trial 모두 final_answer 단서 부재 → orchestrator patch 만으로는 복구 안 됨. 윈도우 측 retry 만 결정적 경로 (단, 같은 패턴이 재발할 위험 있음).
+
+### retry 결정
+
+본 plan (`exp10-readme-v2-abc-4-fail-v3-disclosure`) 의 success 기준 = **복구 가능 여부 판정** (Non-goals 에 retry 실행 제외 명시). 위 결과는:
+
+- **재실행 가치 vs 비용 trade-off**: 4 trial 재실행은 윈도우 측 ~30 min~1h. v3 mean 변동 영향: 4 trial 모두 정답이라도 `gemma_8loop` mean 0.7815 → 0.7926 (+0.011, 약 +1.1%p). 외부 보고에 의미 있는 차이는 아님.
+- **재발 위험**: VERIFY phase 의 early-stop 이 모델/환경 패턴이라면 재실행해도 같은 trial 들이 또 fail 할 가능성. 진정한 fix 는 ABC chain 의 prompt/sampling/max_tokens 조정 (별도 plan).
+
+→ **윈도우 측 retry 의 우선순위 낮음 권고**. result.md / README 에 "ABC infrastructure 4 fail 의 사후 복구 불가 — 모델 early-stop 패턴, 별도 plan 후보" disclosure 로 충분.
