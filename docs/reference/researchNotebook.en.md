@@ -47,7 +47,7 @@ language: en
 | H1 | **[Orchestrator externalization]** Multi-step loops produce higher quality than single-pass inference | **Supported** | Exp02 |
 | H2 | **[Role externalization necessity — falsification]** Errors are amplified through loops | **Rejected** (no error detection) | Exp03 |
 | H3 | **[Role externalization]** Cross-validation (role separation) can detect errors | **Supported** (80%) | Exp035 |
-| H4 | **[Role externalization synergy]** A-B-C role separation outperforms repeated single-agent inference | **Supported** (+22.6pp) | Exp06 |
+| H4 | **[Role externalization synergy]** A-B-C role separation outperforms repeated single-agent inference | ⚠ **Inconclusive** (Exp06 45 vs 45 reconciled: v1 +0.015 / v2 +0.067, both slightly favor Solo. Original "+22.6pp" not reproducible. Structural difference confirmed but accuracy Δ not observed — expanded task set needed) | Exp06 |
 | H5 | **[Orchestrator externalization ceiling]** Increasing MAX_CYCLES contributes to accuracy improvement (saturation point exists) | **Partially rejected** (ceiling expansion ineffective, saturation at actual_cycles≈7) | Exp07 |
 | H6 | **[Role externalization refinement]** Phase-specific prompts outperform baseline | **Partially supported** (long loops 15~20: +5~6pp) | Exp07 |
 | H7 | **[Tool externalization]** External math tools (calculator/linalg/linprog) compensate for E4B's computational limits | **Supported** (+18.3pp, math-04 0→80%) | Exp08 |
@@ -362,7 +362,7 @@ A 2D matrix showing which of the 4 externalization axes each experiment validate
 
 ---
 
-### Exp06: Solo-Budget Comparison (Synergy Measurement)
+### Exp06: Solo-Budget Comparison (Synergy Measurement) — Closed (reconciled 2026-04-29)
 
 | Item | Details |
 |------|---------|
@@ -371,28 +371,32 @@ A 2D matrix showing which of the 4 externalization axes each experiment validate
 | **Where** | Windows Ollama |
 | **What** | Performance comparison when giving a single agent the same compute budget as A-B-C |
 | **Why** | Distinguishing whether A-B-C's advantage is "role-separation synergy" or "simple repetition effect." Same budget → performance difference = structural synergy |
-| **How** | Solo: E4B × 1 given same loop budget as ABC. 9 tasks × 1 trial = 9 runs |
+| **How** | Solo: E4B × 1 given same loop budget as ABC. 9 tasks × 5 trials = **45 runs** (same as ABC) |
 
-**Results (v2 scoring):**
+**Results (v1/v2/v3 reconciled comparison, 45 vs 45):**
 
-| Experiment | v2 average | Sample |
-|------------|-----------|--------|
-| Exp06 Solo | 0.967 | 9 |
-| Exp045 ABC | 0.900 | 45 |
-| **Δ (Solo − ABC)** | **+0.067** | — |
+| Scorer | Solo (45 trials) | ABC (45 trials) | Δ (Solo−ABC) |
+|--------|------------------|-----------------|-------------|
+| v1 (partial score) | 0.663 | 0.649 | +0.015 |
+| v2 (keyword group) | 0.967 | 0.900 | +0.067 |
+| v3 (neg+keyword) | 0.967 | 0.900 | +0.067 |
 
-**Caveats:**
-- Solo sample (9) is 5× smaller than ABC (45), high variance
-- Under v1 scoring: ABC (88.9%) > Solo (66.3%), Δ = +22.6pp
-- v2 keyword matching may overestimate Solo's partial answers
+95% CI (bootstrap N=10,000): v1 Solo [0.573, 0.748] vs ABC [0.553, 0.737] — overlapping, difference not statistically significant.
 
-**Key Findings:**
-1. ABC structural advantage confirmed under v1 (+22.6pp)
-2. Under v2 Solo slightly ahead, but sample size asymmetry
-3. **Without external critique, premature convergence** — Solo terminates at 4~5 loops with undetected errors
-4. ABC maintains structure on complex tasks (synthesis-03), Solo collapses
+**Disclosure (2026-04-29 reconciliation):**
+- Prior record "Solo sample 9" was a **factual error** — Solo = 9 tasks × 5 trials = 45 trials, equal to ABC.
+- Prior comparison "ABC 88.9% > Solo 66.3%" (+22.6pp): exact origin unclear. Partial reproductions found:
+  - trial-level `v1 > 0.2` → ABC 40/45 = **88.9%** (Solo same threshold: 41/45 = 91.1%)
+  - task-level `v2 mean ≥ 0.75` → ABC **8/9 = 88.9%** (logic-02 only fails)
+- v2 keyword matching may overestimate Solo accuracy (checks keyword presence, not answer correctness)
 
-**Conclusion:** Role-separation synergy confirmed. ABC advantage especially clear on high-complexity tasks.
+**Key Findings (reconciled):**
+1. All reproducible scorers (v1/v2/v3) show Solo ≥ ABC — ABC accuracy advantage not confirmed
+2. **Solo premature convergence** — avg 4.5 loops vs ABC 21.6 calls. Converges quickly without external critique
+3. ABC scores perfect on logic-01 (5/5); Solo has 1 failure (4/5) — ABC robustness on complex reasoning
+4. CI overlap → difference may not be statistically significant on this task set
+
+**Conclusion:** H4 Inconclusive on this 9-task set. Structural difference between architectures is real (loop count, critique mechanism), but accuracy delta is not observed here. Expanded task set or harder task subset needed to re-assess H4.
 
 ---
 

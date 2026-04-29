@@ -1,0 +1,296 @@
+{
+  "generated_at": "20260429_132300",
+  "solo_json": "D:\\privateProject\\gemento\\experiments\\exp06_solo_budget\\results\\exp06_solo_budget_20260415_114625.json",
+  "abc_json": "D:\\privateProject\\gemento\\experiments\\exp045_handoff_protocol\\results\\exp045_handoff_protocol_20260414_135634.json",
+  "n_solo_trials": 45,
+  "n_abc_trials": 45,
+  "per_task": [
+    {
+      "task_id": "logic-01",
+      "solo": {
+        "v1": 0.8,
+        "v2": 0.8,
+        "v3": 0.8
+      },
+      "abc": {
+        "v1": 1.0,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "delta": {
+        "v1": -0.19999999999999996,
+        "v2": -0.19999999999999996,
+        "v3": -0.19999999999999996
+      },
+      "v2_winner": "ABC"
+    },
+    {
+      "task_id": "logic-02",
+      "solo": {
+        "v1": 0.3525,
+        "v2": 0.9,
+        "v3": 0.9
+      },
+      "abc": {
+        "v1": 0.20249999999999999,
+        "v2": 0.5,
+        "v3": 0.5
+      },
+      "delta": {
+        "v1": 0.15,
+        "v2": 0.4,
+        "v3": 0.4
+      },
+      "v2_winner": "SOLO"
+    },
+    {
+      "task_id": "logic-03",
+      "solo": {
+        "v1": 0.8,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "abc": {
+        "v1": 0.8,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "delta": {
+        "v1": 0.0,
+        "v2": 0.0,
+        "v3": 0.0
+      },
+      "v2_winner": "TIE"
+    },
+    {
+      "task_id": "math-01",
+      "solo": {
+        "v1": 1.0,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "abc": {
+        "v1": 1.0,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "delta": {
+        "v1": 0.0,
+        "v2": 0.0,
+        "v3": 0.0
+      },
+      "v2_winner": "TIE"
+    },
+    {
+      "task_id": "math-02",
+      "solo": {
+        "v1": 1.0,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "abc": {
+        "v1": 1.0,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "delta": {
+        "v1": 0.0,
+        "v2": 0.0,
+        "v3": 0.0
+      },
+      "v2_winner": "TIE"
+    },
+    {
+      "task_id": "math-03",
+      "solo": {
+        "v1": 0.4,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "abc": {
+        "v1": 0.54,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "delta": {
+        "v1": -0.14,
+        "v2": 0.0,
+        "v3": 0.0
+      },
+      "v2_winner": "TIE"
+    },
+    {
+      "task_id": "synthesis-01",
+      "solo": {
+        "v1": 0.6857142857142857,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "abc": {
+        "v1": 0.42857142857142855,
+        "v2": 0.8,
+        "v3": 0.8
+      },
+      "delta": {
+        "v1": 0.2571428571428572,
+        "v2": 0.19999999999999996,
+        "v3": 0.19999999999999996
+      },
+      "v2_winner": "SOLO"
+    },
+    {
+      "task_id": "synthesis-02",
+      "solo": {
+        "v1": 0.5142857142857142,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "abc": {
+        "v1": 0.39428571428571424,
+        "v2": 0.8,
+        "v3": 0.8
+      },
+      "delta": {
+        "v1": 0.12,
+        "v2": 0.19999999999999996,
+        "v3": 0.19999999999999996
+      },
+      "v2_winner": "SOLO"
+    },
+    {
+      "task_id": "synthesis-03",
+      "solo": {
+        "v1": 0.4176,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "abc": {
+        "v1": 0.46559999999999996,
+        "v2": 1.0,
+        "v3": 1.0
+      },
+      "delta": {
+        "v1": -0.04799999999999993,
+        "v2": 0.0,
+        "v3": 0.0
+      },
+      "v2_winner": "TIE"
+    }
+  ],
+  "overall": {
+    "v1": {
+      "solo": 0.6633444444444444,
+      "abc": 0.647884126984127,
+      "delta": 0.015460317460317397
+    },
+    "v2": {
+      "solo": 0.9666666666666667,
+      "abc": 0.9,
+      "delta": 0.06666666666666665
+    },
+    "v3": {
+      "solo": 0.9666666666666667,
+      "abc": 0.9,
+      "delta": 0.06666666666666665
+    }
+  },
+  "task_level_metrics": {
+    "any trial v1 ≥ 0.5": {
+      "solo": "9/9",
+      "abc": "7/9"
+    },
+    "any trial v2 ≥ 0.5": {
+      "solo": "9/9",
+      "abc": "9/9"
+    },
+    "v2 mean ≥ 0.75 ★": {
+      "solo": "9/9",
+      "abc": "8/9"
+    },
+    "v2 mean ≥ 0.50": {
+      "solo": "9/9",
+      "abc": "9/9"
+    }
+  },
+  "reproduce_889": {
+    "trial_level": {
+      "v1>0.0": {
+        "solo": 44,
+        "abc": 43
+      },
+      "v1>0.1": {
+        "solo": 41,
+        "abc": 41
+      },
+      "v1>0.2": {
+        "solo": 41,
+        "abc": 40
+      },
+      "v1>0.3": {
+        "solo": 40,
+        "abc": 38
+      },
+      "v1>0.4": {
+        "solo": 37,
+        "abc": 38
+      },
+      "v1>0.5": {
+        "solo": 33,
+        "abc": 28
+      }
+    },
+    "task_level": {
+      "any trial v1 ≥ 0.5": {
+        "abc": 7,
+        "match_889": false
+      },
+      "any trial v2 ≥ 0.5": {
+        "abc": 9,
+        "match_889": false
+      },
+      "v2 mean ≥ 0.75 ★": {
+        "abc": 8,
+        "match_889": true
+      },
+      "v2 mean ≥ 0.50": {
+        "abc": 9,
+        "match_889": false
+      }
+    }
+  },
+  "bootstrap_ci": {
+    "v1": {
+      "solo": {
+        "mean": 0.6633444444444444,
+        "ci_95": [
+          0.5733063492063492,
+          0.7480523809523809
+        ]
+      },
+      "abc": {
+        "mean": 0.647884126984127,
+        "ci_95": [
+          0.5527412698412698,
+          0.7369031746031746
+        ]
+      }
+    },
+    "v2": {
+      "solo": {
+        "mean": 0.9666666666666667,
+        "ci_95": [
+          0.9111111111111111,
+          1.0
+        ]
+      },
+      "abc": {
+        "mean": 0.9,
+        "ci_95": [
+          0.8111111111111111,
+          0.9666666666666667
+        ]
+      }
+    }
+  },
+  "verdict": "Inconclusive on this 9-task set. All reproducible scorers (v1/v2/v3) show Solo ≥ ABC by small margins. Original '88.9% vs 66.3%' not reproducible at trial level; task-level v2 mean≥0.75 recovers ABC 8/9=88.9%. Structural difference confirmed (Solo avg 4.5 loops vs ABC 21.6 calls), but accuracy delta is not observed on this task set."
+}

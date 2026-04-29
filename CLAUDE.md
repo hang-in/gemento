@@ -8,9 +8,11 @@
 ## 1. Project Overview
 
 - Name: gemento
-- Status: initial setup
+- Status: active
+- Language: Python
+- Stack: Python
 
-> Describe project purpose and tech stack here.
+> Auto-detected by tunaFlow. Verify and adjust if needed.
 
 ---
 
