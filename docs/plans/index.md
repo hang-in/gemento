@@ -4,7 +4,11 @@ Plan document index. Register new plans here.
 
 ## Active
 
-(none — workflow cleanup 2026-04-25 기준 모든 plan abandoned 처리)
+- [stabilization-healthcheck-abort-meta-pre-exp11.md](stabilization-healthcheck-abort-meta-pre-exp11.md) — Stage 2A: 작은 안정화 (healthcheck/abort + 결과 JSON meta 표준화). Exp11 진입 전 직전 사고 재발 방지. **사용자 결정 대기** (옵션 b/d + threshold + helper 위치)
+
+## Recently Done
+
+- [phase-1-taskset-3-fail-exp09-5-trial-exp10-v3.md](phase-1-taskset-3-fail-exp09-5-trial-exp10-v3.md) — Phase 1 후속 정리 (Taskset 3 FAIL fix + Exp09 5-trial drop 분석 + Exp10 v3 재산정 + 문서 갱신). 4 subtask 완료 (Mac 01/02 + Windows 03/04). 2026-04-30.
 
 ## Abandoned (2026-04-25 일괄 정리)
 
