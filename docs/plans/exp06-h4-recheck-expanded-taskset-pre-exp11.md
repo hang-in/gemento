@@ -1,12 +1,13 @@
 ---
 type: plan
-status: draft
+status: in_progress
 updated_at: 2026-04-30
 slug: exp06-h4-recheck-expanded-taskset-pre-exp11
 version: 1
 author: Architect (Windows)
 audience: Developer (Sonnet) + 사용자 검토 + 사용자 직접 실행 (Task 04)
 parent_strategy: handoff-to-windows-2026-04-30-followup-strategy.md (Stage 2C)
+progress: "Task 01/02/03 완료 (commit a6104d1). Task 04 사용자 직접 실행 대기. Task 05 분석/문서 갱신 대기."
 ---
 
 # Stage 2C — Exp06 H4 재검증 (확대 task set, Exp11 전 마감 의무)

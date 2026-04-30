@@ -12,10 +12,10 @@ Reference document index.
 - [experimentDesign.md](experimentDesign.md) — 제멘토 실험 설계서 (실험 0-4, 브랜치 전략, 인프라 정의)
 - [conceptFramework.md](conceptFramework.md) — **canonical 개념 프레임** (4축 외부화, Critic/Orchestrator 이중 구분, 용어집)
 - [namingConventions.md](namingConventions.md) — **canonical 표기/용어 규약** (Stage NX, task-NN, 옵션 (a)/(i)/1, 결정 N, condition slug, commit message)
-- [resultJsonSchema.md](resultJsonSchema.md) — 결과 JSON top-level schema v1.0 (Stage 2A 도입 예정)
-- [h4-metric-definitions.md](h4-metric-definitions.md) — H4 재검증 metric 정의 (Stage 2C 도입 예정)
-- [scoringHistory.md](scoringHistory.md) — 채점 시스템 변천 (v0/v2/v3 적용 범위) — Stage 2B
-- [failureLabels.md](failureLabels.md) — failure label 표준 reference (FailureLabel enum + 기존 매핑) — Stage 2B
+- [resultJsonSchema.md](resultJsonSchema.md) — 결과 JSON top-level schema v1.0 (Stage 2A 도입, `7d4ade9`)
+- [h4-metric-definitions.md](h4-metric-definitions.md) — H4 재검증 metric 정의 (Stage 2C 도입, `a6104d1`)
+- [scoringHistory.md](scoringHistory.md) — 채점 시스템 변천 (v0/v2/v3 적용 범위) — Stage 2B 도입 (`e84d943`)
+- [failureLabels.md](failureLabels.md) — failure label 표준 reference (FailureLabel enum + 기존 매핑) — Stage 2B 도입 (`e84d943`)
 
 ## 핸드오프
 

@@ -4,11 +4,11 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- [scorer-failure-label-reference.md](scorer-failure-label-reference.md) — **Stage 2B**: scorer/failure label reference 정리 (scoringHistory + FailureLabel enum + failureLabels 매핑). 결정 1-4 모두 Architect 확정 (사용자 위임)
-- [exp06-h4-recheck-expanded-taskset-pre-exp11.md](exp06-h4-recheck-expanded-taskset-pre-exp11.md) — **Stage 2C**: Exp06 H4 재검증 (확대 task set 12→15 + 3 condition ablation). 사용자 명시: Exp11 전 마감 의무. 결정 1-8 모두 Architect 확정 (사용자 위임). 신규 3 task 정답 Architect 검증 완료 (planning-01 재정의 + planning-02 12h 정정)
+- [exp06-h4-recheck-expanded-taskset-pre-exp11.md](exp06-h4-recheck-expanded-taskset-pre-exp11.md) — **Stage 2C** (in_progress): Exp06 H4 재검증. Task 01-03 완료 (commit `a6104d1`). **Task 04 사용자 직접 실행 대기** (15 task × 3 condition × 5 trial = 225 trial, 분할 권장). Task 05 분석/문서 갱신은 결과 받은 후
 
 ## Recently Done
 
+- [scorer-failure-label-reference.md](scorer-failure-label-reference.md) — Stage 2B: scorer/failure label reference. 4 subtask 완료 (commit `e84d943`). FailureLabel enum + scoringHistory.md + failureLabels.md + Stage 2C alias 통합. 2026-04-30.
 - [stabilization-healthcheck-abort-meta-pre-exp11.md](stabilization-healthcheck-abort-meta-pre-exp11.md) — Stage 2A: 작은 안정화. 5 subtask 완료, dry-run 통과, plan status: done. 2026-04-30.
 - [phase-1-taskset-3-fail-exp09-5-trial-exp10-v3.md](phase-1-taskset-3-fail-exp09-5-trial-exp10-v3.md) — Phase 1 후속 정리 (Taskset 3 FAIL fix + Exp09 5-trial drop 분석 + Exp10 v3 재산정 + 문서 갱신). 4 subtask 완료 (Mac 01/02 + Windows 03/04). 2026-04-30.
 

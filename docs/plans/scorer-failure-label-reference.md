@@ -1,12 +1,13 @@
 ---
 type: plan
-status: draft
+status: done
 updated_at: 2026-04-30
 slug: scorer-failure-label-reference
 version: 1
 author: Architect (Windows)
 audience: Developer (Sonnet) + 사용자 검토 (위임 시 Architect default)
 parent_strategy: handoff-to-windows-2026-04-30-followup-strategy.md (Stage 2B)
+completed_at: 2026-04-30 (commit e84d943)
 ---
 
 # Stage 2B — scorer / failure label reference 정리
