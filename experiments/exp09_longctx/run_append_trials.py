@@ -31,6 +31,12 @@ from run import (  # noqa: E402  (same directory import after path setup)
     RESULTS_DIR,
     save_result,
 )
+from experiments.run_helpers import (
+    TrialError,
+    classify_trial_error,
+    is_fatal_error,
+    check_error_rate,
+)
 
 # ── 설정 ──
 TARGET_TRIALS = 5                  # 최종 목표 trial 수
@@ -89,9 +95,14 @@ def run() -> None:
     task_map = _load_tasks_with_documents()
 
     total_added = 0
+    aborted = False
     for arm in LONGCTX_ARMS:
+        if aborted:
+            break
         label = arm["label"]
         for task_entry in results_by_arm[label]:
+            if aborted:
+                break
             tid = task_entry["task_id"]
             current_trials = len(task_entry["trials"])
 
@@ -111,6 +122,17 @@ def run() -> None:
                 task_entry["trials"].append(result)
                 total_added += 1
 
+                # 신규: fatal classify + abort
+                err_class = classify_trial_error(result.get("error"))
+                if is_fatal_error(err_class):
+                    print(
+                        f"[ABORT] arm={label} task={tid} trial={trial_idx} "
+                        f"fatal error={err_class.value}: {str(result.get('error'))[:200]}"
+                    )
+                    print("[ABORT] 부분 결과는 보존. 저장 직전 error 비율 검사 진행.")
+                    aborted = True
+                    break
+
             _save_partial({
                 "experiment": "longctx",
                 "model": base.get("model"),
@@ -129,6 +151,20 @@ def run() -> None:
         "rag_top_k": LONGCTX_RAG_TOP_K,
         "results_by_arm": results_by_arm,
     }
+
+    # 저장 직전 error 비율 검사
+    all_trials = [
+        t
+        for arm_data in final["results_by_arm"].values()
+        for task_entry in arm_data
+        for t in task_entry.get("trials", [])
+    ]
+    ok, rate = check_error_rate(all_trials, threshold=0.30)
+    if not ok:
+        print(f"[REJECT] error 비율 {rate:.1%} ≥ 30%. 저장 거부 + warning")
+        print("[REJECT] 부분 결과는 메모리에 유지 — 사용자가 별도 처리 권고")
+        raise SystemExit(1)
+
     out_path = save_result("exp09_longctx_5trial", final)
     print(f"\n  → 5-trial result saved: {out_path}")
 
