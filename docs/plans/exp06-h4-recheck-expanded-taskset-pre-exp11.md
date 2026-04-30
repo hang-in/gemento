@@ -116,42 +116,35 @@ ablation 결과 해석:
 
 3 축 모두 condition × task 별로 분석. 단일 정확도만 보면 직전 Exp06 정합 비교의 한계 (Solo +0.015 / +0.067 의 작은 격차) 그대로 — assertion turnover 가 Role 분리의 *질적* 차이를 잡아낼 가능성. error mode 는 H9c 패턴.
 
-## 추가 사용자 결정 의존 사항 (plan 작성 진행 시 사용자 호출)
+## 결정 5-8 (Architect 직접 결정, 2026-04-30)
 
-### 결정 5 — max_cycles N (Solo-budget + ABC 의 loop budget)
+사용자 위임 (2026-04-30): "결과는 어차피 수치로 나오니 사용자 검토 의미 없음. Architect 분석이 더 정확". 이에 따라 결정 5-8 은 Architect default 로 확정.
 
-| 후보 | 사유 |
-|------|------|
-| 8 | Exp06 의 Solo avg 4.5 loops × 1.8 = ABC 가 더 많은 loop 소비. Exp06 정합 패턴 |
-| 15 | Exp10 의 ABC 8-loop 결과 (78.3%) — 충분 budget 보장 |
-| **8 권장** | Exp06 정합 비교 우선 — 직전 결과와 직접 비교 가능 |
+### 결정 5 — max_cycles N (Solo-budget + ABC 의 loop budget) — **8 확정**
 
-Architect 추천: **8** (Exp06 정합).
+Exp06 정합 비교 우선 — 직전 결과 (Solo avg 4.5 loops, ABC 21.6 calls) 와 직접 비교 가능. Exp10 의 15 는 본 plan 영역 외 — Stage 4 Exp11 plan 에서 결정.
 
-### 결정 6 — 신규 1 추가 task 의 카테고리
+### 결정 6 — 신규 1 추가 task 의 카테고리 — **synthesis 확정**
 
-| 후보 | 사유 |
-|------|------|
-| math | 4 → 5. 검증 가능 (validate_taskset 의 _validate_math_xx) |
-| logic | 4 → 5. logic-04 천장 효과 확인된 영역 |
-| synthesis | 4 → 5. 본 plan 의 H4 (역할 분리) 효과가 가장 명료할 영역 (다관점 종합) |
-| **synthesis 권장** | H4 본질 — 역할 분리가 다관점 종합에서 가장 효과적 |
+H4 본질 (역할 분리) 가 다관점 종합에서 가장 명료. math/logic 추가는 본 plan 영역 외 (별도 plan 후보).
 
-Architect 추천: **synthesis** (Role 분리 효과 명료).
+### 결정 7 — task set 저장 위치 — **`taskset.json` append 확정** (12 → 15)
 
-### 결정 7 — task set 저장 위치
+신규 task 가 일반 task — Exp11 (Mixed Intelligence) / 후속 실험도 동일 task set 사용 정합. 별도 파일 회피.
 
-| 후보 | 사유 |
-|------|------|
-| 별도 파일 `h4_recheck_taskset.json` | 본 plan 한정 set 명시. 다른 실험에 영향 0 |
-| 기존 `taskset.json` 에 append | 단일 source. 다른 실험 (Exp11+) 도 사용 가능 |
-| **append 권장** | 신규 task 가 일반 task — 다른 실험 (Exp11 Mixed Intelligence) 도 동일 task set 사용 정합 |
+### 결정 8 — 영어 vs 한국어 task — **영어 통일 확정**
 
-Architect 추천: **기존 taskset.json 에 append** (12 → 15).
+현 12 task 영어. 한국어 답변 capability 측정은 본 plan 영역 외 (별도 plan 후보).
 
-### 결정 8 — 영어 vs 한국어 task
+### 신규 3 task 정답 검증 (Architect 직접 시뮬레이션, 2026-04-30)
 
-현 12 task 가 영어 (한국어 답변 capability 측정 안 함). 신규 3 task 도 영어 통일 권장. **Architect 추천: 영어 통일**.
+| task | 검증 결과 |
+|------|----------|
+| `planning-01` | sequential schedule (A→B→C, 9:00 시작) — unique 정답 (총 6h). Architect 가 직전 multi-solution 안 (5명 4작업) 폐기 후 재정의 |
+| `planning-02` | critical path A→B→D→F = 12h — Architect 가 직전 plan 의 "11h" 오답 (E=2h 만 고려, F=3h 누락) 정정. unique 정답 |
+| `synthesis-05` | A=9am, C 9-10am, B=10am, Source 1+3 corroborate, Source 2 contradicts — 직전 plan expected 와 일치. unique 정답 |
+
+→ Risk 1 (정답 검증 결함, Exp07 math-04 사례) **차단 완료**. validate_taskset 의 `_validate_planning_01` / `_validate_planning_02` 가 키워드 검증.
 
 ## Non-goals
 
@@ -164,7 +157,7 @@ Architect 추천: **기존 taskset.json 에 append** (12 → 15).
 
 ## Risks
 
-- **Risk 1 — 신규 3 task 의 정답 검증 결함** (Exp07 math-04 expected_answer 결함 사례). 대응: validate_taskset 의 _validate_xxx 추가 + 사용자 시각 검토 + planning task 의 정답은 외부 ground truth 또는 명시적 채점 기준
+- ~~**Risk 1 — 신규 3 task 의 정답 검증 결함**~~ — **차단 완료** (2026-04-30, Architect 시뮬레이션). planning-01 재정의 + planning-02 정답 정정 (11h → 12h) + synthesis-05 OK. validate_taskset 의 _validate_planning_01/02 가 keyword 검증.
 - **Risk 2 — Solo-budget 의 "자기 반복" 정의 모호성**: Solo 가 cycle 마다 자기 출력을 자기 입력으로 받는다 — 첫 cycle 의 단발 호출과 ABC 의 A 호출 차이 명료화 필요. Task 02 에서 명세
 - **Risk 3 — 225 trial 실행 시간**: ABC 의 max_cycles=8 × 평균 21.6 calls/trial × 5 trial × 15 task × 3 condition. ABC 만 ~1500 model call. Exp10 의 8-loop ABC trial 당 8 min — 본 실험 ABC condition ~10 시간 예상. Solo-budget 도 비슷. Solo-1call 은 짧음. **사용자 직접 실행 시 분할 권장**
 - **Risk 4 — assertion turnover metric 의 정의 모호성**: Tattoo 의 assertion list 가 cycle 별로 어떻게 변화하는지 (추가/수정/삭제) 의 분류 기준 명세 필요. Task 03 에서 정의
@@ -186,4 +179,5 @@ Architect 추천: **기존 taskset.json 에 append** (12 → 15).
 
 ## 변경 이력
 
-- 2026-04-30 v1: 초안. handoff-to-windows-2026-04-30-followup-strategy.md (Mac, `d61e8ef`) Stage 2C 의 Architect plan 화. 사용자 (b) 결정 (Exp11 전 마감 의무) + C1-C4 답변 반영. 결정 5-8 은 Architect default 로 진행 — 사용자 검토 시 변경 가능.
+- 2026-04-30 v1: 초안. handoff-to-windows-2026-04-30-followup-strategy.md (Mac, `d61e8ef`) Stage 2C 의 Architect plan 화. 사용자 (b) 결정 (Exp11 전 마감 의무) + 결정 1-4 답변 반영. 결정 5-8 은 Architect default 로 진행 — 사용자 검토 시 변경 가능.
+- 2026-04-30 v2: 사용자 위임 ("결과는 수치로 나오니 사용자 검토 의미 없음, Architect 분석이 더 정확") 에 따라 결정 5-8 Architect 확정. 신규 3 task 정답 Architect 직접 검증 — planning-01 multi-solution 안 폐기 후 sequential schedule 로 재정의 / planning-02 의 expected "11h" 오답 → 12h 정정 / synthesis-05 OK. Risk 1 차단 완료. namingConventions.md §3.2 위반 (C1~C4) 정정.

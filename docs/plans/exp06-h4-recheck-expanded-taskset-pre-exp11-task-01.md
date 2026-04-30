@@ -42,36 +42,38 @@ H4 재검증을 위해 task set 12 → 15 확대. 신규 3 task 의 카테고리
 }
 ```
 
-planning-01 후보 (예시):
+planning-01 (Architect 검증 완료, unique 정답):
+
 ```json
 {
   "id": "planning-01",
   "category": "planning",
-  "difficulty": "hard",
-  "objective": "5명이 4개 작업을 서로 다른 시간에 처리해야 하는 일정 분해.",
-  "prompt": "Five people (Alice, Bob, Carol, Dave, Eve) need to complete four tasks (T1, T2, T3, T4) in sequence. Each task takes 1 hour. Constraints: (a) Alice cannot do T1, (b) Bob must do T2 immediately before someone does T3, (c) Carol does either T1 or T4, (d) Dave does T3 only if Eve has done T2 first, (e) Each person does exactly one task except one person who does none. List a valid assignment + the order of tasks (1pm, 2pm, 3pm, 4pm).",
-  "expected_answer": "Schedule: 1pm Carol-T1, 2pm Eve-T2, 3pm Bob-T3 (depends on Eve's T2), 4pm Dave-T4 (or similar valid). Alice does none.",
-  "scoring_keywords": [["Carol", "T1"], ["Eve", "T2"], ["Bob", "T3"], ["Dave", "T4"]],
+  "difficulty": "medium",
+  "objective": "의존성 있는 다단계 task 의 sequential 일정 계산.",
+  "prompt": "Three tasks (A, B, C) must be completed in strict sequential order: A first, then B, then C (each task depends on the previous one finishing). Task durations: A = 2 hours, B = 3 hours, C = 1 hour. A single worker handles all tasks with no preemption. The worker starts at 9:00 AM. Compute: (1) the start and end time of each task, and (2) the total elapsed time from start to finish.",
+  "expected_answer": "A: 9:00 AM - 11:00 AM (2 hours). B: 11:00 AM - 2:00 PM (3 hours). C: 2:00 PM - 3:00 PM (1 hour). Total elapsed time: 6 hours.",
+  "scoring_keywords": [["9:00", "11:00"], ["2:00"], ["3:00"], ["6", "hours"]],
   "constraints": [
-    "Alice cannot do T1",
-    "Bob's T2 must precede T3",
-    "Carol does T1 or T4",
-    "Dave's T3 requires Eve's prior T2",
-    "Exactly one person does no task"
+    "Sequential order must be respected: A → B → C",
+    "Single worker, no preemption",
+    "Compute exact start/end times + total elapsed"
   ]
 }
 ```
 
-planning-02 후보 (다른 형식):
+**검증** (Architect): A(9-11) → B(11-14) → C(14-15). 총 6h. unique 정답.
+
+planning-02 (Architect 검증 완료, 정답 12h — 직전 plan 의 11h 는 오답이었음):
+
 ```json
 {
   "id": "planning-02",
   "category": "planning",
   "difficulty": "very_hard",
   "objective": "프로젝트 작업 그래프에서 critical path 식별 + 자원 충돌 해소.",
-  "prompt": "A project has 6 tasks: A(2h), B(3h), C(1h), D(4h), E(2h), F(3h). Dependencies: B requires A, C requires A, D requires B and C, E requires D, F requires D. Available workers: 2 (each can do one task at a time, no preemption). Minimize total project time. List the schedule (which worker does which task at which hour) and the total time.",
-  "expected_answer": "Total time: 11 hours. W1: A(0-2), B(2-5), D(6-10), E(10-12)... (or valid)",
-  "scoring_keywords": [["11", "hours"], ["A", "B", "C"], ["D"], ["E", "F"]],
+  "prompt": "A project has 6 tasks: A(2h), B(3h), C(1h), D(4h), E(2h), F(3h). Dependencies: B requires A, C requires A, D requires B and C, E requires D, F requires D. Available workers: 2 (each can do one task at a time, no preemption). Compute the minimum total project time. List the schedule (which worker does which task at which time) and identify the critical path.",
+  "expected_answer": "Total time: 12 hours. Critical path: A → B → D → F (2+3+4+3 = 12h). Schedule: W1 does A(0-2), B(2-5), D(5-9), E(9-11). W2 idle (0-2), C(2-3), idle (3-5), idle (5-9), F(9-12). E (9-11) finishes earlier than F (9-12), so total = 12h driven by F.",
+  "scoring_keywords": [["12", "hours"], ["A", "B", "D", "F"], ["critical path"]],
   "constraints": [
     "Dependencies must be respected",
     "Each worker does one task at a time",
@@ -80,7 +82,7 @@ planning-02 후보 (다른 형식):
 }
 ```
 
-**주의**: 위는 예시이며 정확한 정답 검증 + 사용자 검토 필수. Risk 1 (정답 검증 결함) 차단 — Step 4 의 validate_taskset 통과 + 사용자 시각 검토.
+**검증** (Architect): D 완료 = t=9 (A 2h + B 3h + D 4h, B/C 병렬 가능). D 후 E(2h)+F(3h) 병렬 시작. E 끝=11, F 끝=12. 따라서 총 12h. critical path = A→B→D→F. 직전 plan 의 expected "11h" 는 오답이었음 (E=2h 만 고려, F=3h 누락).
 
 ### Step 2 — synthesis 1 추가 task 후보
 
@@ -140,22 +142,29 @@ with open('experiments/tasks/taskset.json', 'w', encoding='utf-8') as f:
 ```python
 # 추가
 def _validate_planning_01(task: dict) -> tuple[str, str]:
-    """planning-01 의 일정 분해 정답 검증."""
-    # constraints 자동 검증 어려움 — 단순 keyword 일치만
+    """planning-01 의 sequential schedule 정답 검증.
+
+    A=9-11, B=11-14, C=14-15. 총 6h. 시각 + 총 시간 keyword 검증.
+    """
     ans = task.get("expected_answer", "").lower()
-    required_pairs = [("carol", "t1"), ("eve", "t2"), ("bob", "t3"), ("dave", "t4")]
-    for a, b in required_pairs:
-        if a not in ans or b not in ans:
-            return "FAIL", f"required pair ({a},{b}) missing"
-    return "PASS", "all pairs in expected_answer"
+    required = ["9:00", "11:00", "2:00", "3:00", "6"]
+    for kw in required:
+        if kw not in ans:
+            return "FAIL", f"required keyword '{kw}' missing"
+    return "PASS", "all keywords in expected_answer"
 
 
 def _validate_planning_02(task: dict) -> tuple[str, str]:
-    """planning-02 의 critical path 식별 검증."""
+    """planning-02 의 critical path 식별 검증.
+
+    정답: 12 hours, critical path A→B→D→F.
+    """
     ans = task.get("expected_answer", "").lower()
-    if "11" not in ans:
-        return "FAIL", "expected total time 11 hours missing"
-    return "PASS", "11 hours in expected_answer"
+    if "12" not in ans:
+        return "FAIL", "expected total time 12 hours missing"
+    if "critical path" not in ans:
+        return "FAIL", "critical path identification missing"
+    return "PASS", "12 hours + critical path in expected_answer"
 ```
 
 synthesis-05 는 기존 `_validate_synthesis_03` 같은 패턴 — keyword 존재 검증.
@@ -219,10 +228,10 @@ print('verification 3 ok: 신규 task schema 일관성')
 
 ## Risks
 
-- **Risk 1 — 신규 3 task 의 정답 검증 결함** (Exp07 math-04 expected_answer 결함 사례). **대응**:
-  - planning-01: 일정 제약 (a)~(e) 모두 만족하는 정답이 실제 존재 (외부 검증 필수). Architect 가 plan 작성 시 한 정답 후보 시뮬레이션 — 사용자 시각 검토
-  - planning-02: critical path 11h 가 실제 최소 — 외부 PERT 분석으로 검증
-  - synthesis-05: 출처 우선순위 판단이 모호 — 채점 keyword 가 명료한지 확인 필수
+- ~~**Risk 1 — 신규 3 task 의 정답 검증 결함**~~ — **차단 완료** (2026-04-30 Architect 시뮬레이션):
+  - planning-01: 직전 multi-solution 안 (5명 4작업) 폐기. sequential schedule (A→B→C, 9:00 시작, 총 6h) 으로 재정의 — unique 정답
+  - planning-02: 직전 plan 의 expected "11h" 오답. 실제 critical path A→B→D→F = 12h — Architect 정정 (E=2h 만 고려한 오류, F=3h 가 더 길어서 critical)
+  - synthesis-05: A=9am, C 9-10am, B=10am, Source 1+3 corroborate, Source 2 contradicts — 직전 plan expected 와 일치. OK
 - **Risk 2 — planning category 가 기존 4 카테고리와 호환 안 됨**: 결과 분석 helper / aggregation 코드가 카테고리 enum 으로 분기되어 있을 가능성. 정찰 필수 — `experiments/measure.py` 의 카테고리 처리 read.
 - **Risk 3 — Developer 가 임의로 task 정의 추가**: 본 task 의 3 task 후보는 Architect 예시. Developer 가 사용자 검토 없이 정정/대체 금지. 사용자 호출 후 진행
 - **Risk 4 — JSON 의 indent / key 순서 변경**: `json.dump` 의 default option 이 ascii 기본 / sort_keys 적용 — 기존 task 의 한국어 / 순서 보존 위해 `ensure_ascii=False` + key 순서 보존 필수

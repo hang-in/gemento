@@ -40,7 +40,6 @@ import argparse
 import json
 import sys
 from collections import defaultdict
-from enum import Enum
 from pathlib import Path
 from typing import Any
 
@@ -94,16 +93,10 @@ def count_assertion_turnover(tattoo_history: list[dict] | None) -> dict:
 # (iii) error mode classifier
 # ============================================================
 
-class ErrorMode(Enum):
-    NONE = "none"                       # 정답
-    FORMAT_ERROR = "format_error"       # JSON parse / schema 위반
-    WRONG_SYNTHESIS = "wrong_synthesis" # 답 형식은 OK 인데 내용 틀림
-    EVIDENCE_MISS = "evidence_miss"     # evidence_ref 누락 또는 잘못된 출처
-    NULL_ANSWER = "null_answer"         # final_answer 가 None / 빈 문자열
-    CONNECTION_ERROR = "connection_error"  # WinError 10061 등 (Stage 2A classify_trial_error 와 동기)
-    PARSE_ERROR = "parse_error"
-    TIMEOUT = "timeout"
-    OTHER = "other"
+# Stage 2B (`scorer-failure-label-reference`) 통합:
+# `experiments/schema.py:FailureLabel` 이 표준 enum.
+# 본 모듈의 ErrorMode 는 그 alias — 두 이름 모두 사용 가능.
+from experiments.schema import FailureLabel as ErrorMode
 
 
 def classify_error_mode(trial: dict, task: dict | None = None) -> ErrorMode:
