@@ -1,6 +1,6 @@
 ---
 type: plan
-status: draft
+status: done
 updated_at: 2026-04-30
 slug: stabilization-healthcheck-abort-meta-pre-exp11
 version: 1

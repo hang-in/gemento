@@ -9,9 +9,13 @@ canonical: true
 
 ## 의도
 
-향후 모든 신규 실험 (Exp11+) 의 결과 JSON top-level 에 본 schema 를 적용한다.
-기존 Exp00~10 결과 JSON 의 retroactive 보강은 명시 배제.
-analyze 스크립트는 `schema_version` 부재 시 v0 호환 처리 (subtask 04).
+**Stage 2A 마감 (2026-04-30) 후 신규 작성되는 도구** 의 결과 JSON top-level 에 본 schema 를 적용한다.
+- 적용 대상: Stage 2C 의 `experiments/exp_h4_recheck/run.py`, Stage 4 의 Exp11 도구, 그 이후 신규 도구
+- 적용 제외: 기존 도구 (`experiments/exp00_baseline/run.py` ~ `experiments/exp10_reproducibility_cost/run.py`) 의 신규 run — v0 (schema_version 부재) 유지
+- 명시 배제: 기존 Exp00~10 결과 JSON 의 retroactive 보강
+
+근거: 사용자 합의 "작은 B" 전략 — 기존 도구는 healthcheck/abort 만 patch (Stage 2A task-02 적용 완료), meta v1.0 retrofit 은 ROI 부족.
+analyze 스크립트는 `schema_version` 부재 시 v0 호환 처리 (`experiments/run_helpers.py:parse_result_meta` — Stage 2A task-04).
 
 ## 표준 필드
 
