@@ -53,7 +53,7 @@ language: en
 | H7 | **[Tool externalization]** External math tools (calculator/linalg/linprog) compensate for E4B's computational limits | **Supported** (+18.3pp, math-04 0→80%) | Exp08 |
 | H8 | **[Tool externalization stability]** Error hints + Mandatory tool rules mitigate tool_neglect and operator confusion | **Supported** (neglect 0%, calculator 100%, math-04 0→100%, total +23.3pp) | Exp08b |
 | H9a | **[Tattoo externalization — physical limit breakthrough]** ABC+Tattoo(chunked) outperforms Solo-dump in long-context settings | **Supported** (+68.3pp, Large 20K: Solo 0% → ABC 100%) | Exp09 |
-| H9b | **[Differentiation]** ABC+Tattoo has unique contribution over RAG baseline | **Partially supported** (overall +3.3pp; Large 3-hop: +33pp clearly superior, small: RAG superior) | Exp09 |
+| H9b | **[Differentiation]** ABC+Tattoo has unique contribution over RAG baseline | **⚠️ Inconclusive** (5-trial stats NOT SIGNIFICANT p=0.798; overall Δ=+2.0pp; 3-hop only +20.0pp differentiation; Small Paradox confirmed) | Exp09 |
 | H9c | **[Error mode differences]** ABC's failure patterns are qualitatively different from Solo and RAG | **Supported** (Solo: format_error 24, RAG: wrong_synthesis 6, ABC: evidence_miss 2 + wrong_synthesis 3) | Exp09 |
 
 #### Axis ↔ Experiment Matrix
@@ -656,7 +656,33 @@ A 2D matrix showing which of the 4 externalization axes each experiment validate
 **Known Issues / Follow-up:**
 - **Small Paradox** — ABC 0.33 in one small needle task. Small sample (small=2 tasks × 3 trials = 6 data points) may be noise. Additional trials or expanded small tasks needed for verification.
 - **Evidence Hit Rate ↔ Accuracy asymmetry** — 3-hop hit 0.23 but 100% accuracy. Model may tend to attach non-answer chunks to evidence_ref, or gold_evidence_chunks labeling may be too strict. Separate analysis needed.
-- **3 trials insufficient for statistical confidence** — Exp09b candidate: expand to 5 trials + p-value test.
+- **Statistical test completed (Phase 1, 5-trial)** — paired t-test p=0.7976, Wilcoxon p=1.000 → **NOT SIGNIFICANT**. H9b verdict changed from "Partially supported" to "Inconclusive".
+
+#### Statistical Final Results (Phase 1, 2026-04-30)
+
+Based on 5 trials × 10 tasks (50 data points/arm):
+
+| Test | Statistic | p-value | Verdict |
+|------|-----------|---------|---------|
+| Paired t-test (task mean, n=10) | t=0.264 | 0.7976 | NOT SIGNIFICANT |
+| Wilcoxon signed-rank | W=1.0 | 1.000 | NOT SIGNIFICANT |
+
+- Overall mean: abc=0.530, rag=0.510 (Δ=+0.020)
+- Cohen's d = 0.084 (negligible effect size)
+- Bootstrap 95% CI for Δ(abc−rag): [−0.170, 0.210] (includes zero)
+
+> **Interpretation**: n=10 tasks is underpowered. NOT SIGNIFICANT ≠ "no effect" — means "insufficient data to determine". Overall Δ=+2.0pp is not practically meaningful.
+
+Size class / Hop type breakdown (5-trial):
+- small tasks (n=2): abc=0.400 vs rag=0.600 (Δ=−0.200) ◄ **Small Paradox confirmed**
+- medium tasks (n=4): abc=0.525 vs rag=0.525 (Δ=0.000)
+- large tasks (n=4): abc=0.600 vs rag=0.450 (Δ=+0.150)
+- 3-hop tasks (n=3): abc=0.600 vs rag=0.400 (Δ=+0.200) ← differentiation persists
+- needle tasks (n=3): abc=0.467 vs rag=0.600 (Δ=−0.133)
+
+Small Paradox detail:
+- `longctx-small-needle-01`: abc=0.200 vs rag=0.600 (Δ=−0.400, trials=[0,0,1,0,0])
+- `longctx-small-2hop-01`: abc=0.600 vs rag=0.600 (Δ=0.000, trials=[1,1,1,0,0])
 
 ---
 

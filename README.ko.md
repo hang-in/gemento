@@ -152,7 +152,7 @@
 | **H7** | [Tool 외부화] 외부 수학 도구가 E4B의 계산 한계를 보완한다 | ✅ 채택 (+18.3%p, math-04 0→80%) | Exp08 |
 | **H8** | [Tool 외부화 안정성] 에러 힌트 + Mandatory rules로 tool_neglect와 operator 혼동을 완화한다 | ✅ 채택 (neglect 0%, calculator 100%, math-04 0→100%, +23.3%p) | Exp08b |
 | **H9a** | [Tattoo 외부화 — 물리 한계 돌파] ABC+Tattoo(chunked)가 Solo-dump보다 long-context에서 우수하다 | ✅ 채택 (+68.3%p, Large 20K에서 Solo 0% → ABC 100%) | Exp09 |
-| **H9b** | [차별성] ABC+Tattoo가 RAG baseline 대비 고유 기여를 가진다 | ⚠️ 조건부 채택 (전체 +3.3%p; Large 3-hop에서 +33%p로 크게 우세, small에선 RAG 우세) | Exp09 |
+| **H9b** | [차별성] ABC+Tattoo가 RAG baseline 대비 고유 기여를 가진다 | ⚠️ 미결 (5-trial 통계 검정 비유의 p=0.798; overall Δ=+2.0%p; 3-hop에서만 +20.0%p 차별성; Small Paradox 확인) | Exp09 |
 | **H9c** | [에러 모드 차이] ABC의 실패 패턴이 Solo·RAG와 질적으로 다르다 | ✅ 채택 (Solo: format_error 24, RAG: wrong_synthesis 6, ABC: evidence_miss 2 + wrong_synthesis 3) | Exp09 |
 
 핵심 통찰:
@@ -170,7 +170,7 @@
 
 ### 3.1 열린 연구 질문 (Exp10+ 후보)
 
-- **Exp09 통계 신뢰도 보강** — 현재 3 trial × 10 task. 5 trial + paired t-test로 H9b의 +3.3%p 유의성 검정 필요.
+- **Exp09 통계 신뢰도 보강** — 3-trial 사전 검정 완료 (p=0.7976, 비유의). 5 trial 실행 후 재검정 필요 (`run_append_trials.py` 준비 완료, Ollama 구동 필요).
 - **Small Paradox 해결** — Exp09에서 ABC가 small 태스크에서 RAG보다 약함 (0.67 vs 1.00). chunk 수가 적을 때 cycle iteration이 오버킬 가능성. (Exp10 후보)
 - **병렬 chunk 순회** — 현재 직렬 chunk 처리를 병렬로 전환 + Tattoo merge 패턴 실험. ABC 시간 비용 절감. (Exp10 후보)
 

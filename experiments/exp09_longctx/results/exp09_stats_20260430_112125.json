@@ -1,0 +1,113 @@
+{
+  "generated_at": "20260430_112125",
+  "result_file": "D:\\privateProject\\gemento\\experiments\\exp09_longctx\\results\\exp09_longctx_5trial_20260430_111330.json",
+  "n_tasks": 10,
+  "n_trials_per_task": 5,
+  "h9b_overall": {
+    "abc_mean": 0.53,
+    "rag_mean": 0.51,
+    "delta": 0.020000000000000018
+  },
+  "h9b_paired_ttest": {
+    "t": 0.26413527189768715,
+    "p_value": 0.7976245209721027,
+    "cohens_d": 0.08352690695845569,
+    "n": 10,
+    "mean_diff": 0.02
+  },
+  "h9b_wilcoxon": {
+    "W": 1.0,
+    "p_value": 1.0
+  },
+  "bootstrap_ci": {
+    "observed_delta": 0.020000000000000018,
+    "ci_95": [
+      -0.17000000000000004,
+      0.20999999999999996
+    ],
+    "includes_zero": true
+  },
+  "verdict": "NOT SIGNIFICANT — 미결 (검정력 부족 가능성)",
+  "size_class_breakdown": {
+    "large": {
+      "n_tasks": 4,
+      "abc_mean": 0.6,
+      "rag_mean": 0.44999999999999996,
+      "delta": 0.15000000000000002
+    },
+    "medium": {
+      "n_tasks": 4,
+      "abc_mean": 0.525,
+      "rag_mean": 0.525,
+      "delta": 0.0
+    },
+    "small": {
+      "n_tasks": 2,
+      "abc_mean": 0.4,
+      "rag_mean": 0.6,
+      "delta": -0.19999999999999996
+    }
+  },
+  "hop_type_breakdown": {
+    "2-hop": {
+      "n_tasks": 4,
+      "abc_mean": 0.525,
+      "rag_mean": 0.525,
+      "delta": 0.0
+    },
+    "3-hop": {
+      "n_tasks": 3,
+      "abc_mean": 0.6,
+      "rag_mean": 0.39999999999999997,
+      "delta": 0.2
+    },
+    "needle": {
+      "n_tasks": 3,
+      "abc_mean": 0.4666666666666666,
+      "rag_mean": 0.6,
+      "delta": -0.13333333333333336
+    }
+  },
+  "small_paradox": [
+    {
+      "task_id": "longctx-small-needle-01",
+      "abc_mean": 0.2,
+      "rag_mean": 0.6,
+      "delta": -0.39999999999999997,
+      "abc_trials": [
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "rag_trials": [
+        1.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "task_id": "longctx-small-2hop-01",
+      "abc_mean": 0.6,
+      "rag_mean": 0.6,
+      "delta": 0.0,
+      "abc_trials": [
+        1.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "rag_trials": [
+        1.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0
+      ]
+    }
+  ]
+}

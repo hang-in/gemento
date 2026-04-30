@@ -49,7 +49,7 @@ parts: [closed, active]
 | H7 | **[Tool 외부화]** 외부 수학 도구(calculator/linalg/linprog)가 E4B의 계산 한계를 보완한다 | **채택** (+18.3%p, math-04 0→80%) | Exp08 |
 | H8 | **[Tool 외부화 안정성]** 에러 힌트 + Mandatory tool rules로 tool_neglect와 operator 혼동을 완화한다 | **채택** (neglect 0%, calculator 100%, math-04 0→100%, 총 +23.3%p) | Exp08b |
 | H9a | **[Tattoo 외부화 — 물리 한계 돌파]** ABC+Tattoo(chunked)가 Solo-dump보다 long-context에서 우수하다 | **채택** (+68.3%p, Large 20K에서 Solo 0% → ABC 100%) | Exp09 |
-| H9b | **[차별성]** ABC+Tattoo가 RAG baseline 대비 고유 기여를 가진다 | **조건부 채택** (전체 +3.3%p; Large 3-hop에서 +33%p로 크게 우세, small에선 RAG 우세) | Exp09 |
+| H9b | **[차별성]** ABC+Tattoo가 RAG baseline 대비 고유 기여를 가진다 | **⚠️ 미결** (5-trial 통계 검정 비유의 p=0.798; overall Δ=+2.0%p; 3-hop에서만 +20.0%p 차별성; Small Paradox 확인) | Exp09 |
 | H9c | **[에러 모드 차이]** ABC의 실패 패턴이 Solo·RAG와 질적으로 다르다 | **채택** (Solo: format_error 24, RAG: wrong_synthesis 6, ABC: evidence_miss 2 + wrong_synthesis 3) | Exp09 |
 
 #### 축 ↔ 실험 매트릭스
@@ -655,7 +655,33 @@ parts: [closed, active]
 **알려진 이슈 / 후속 과제:**
 - **Small Paradox** — small needle 1개 태스크에서 ABC 0.33. 표본(small=2 tasks × 3 trial = 6 데이터포인트) 작아 노이즈 가능. 추가 trial 또는 small 태스크 확대로 검증 필요.
 - **Evidence Hit Rate ↔ 정답률 비대칭** — 3-hop hit 0.23 vs 정답률 100%. 모델이 정답 외 chunk도 evidence_ref에 첨부하는 경향. gold_evidence_chunks 라벨링이 너무 엄격할 가능성도.
-- **3 trial은 통계 신뢰도 부족** — Exp09b 후보로 5 trial 확대 + p-value 검정.
+- **통계 신뢰도 검정 완료 (Phase 1, 5-trial)** — paired t-test p=0.7976, Wilcoxon p=1.000 → **비유의**. H9b verdict "조건부 채택"→"미결"로 변경.
+
+#### 통계 검정 최종 결과 (Phase 1, 2026-04-30)
+
+5 trial × 10 task (50 데이터포인트/arm) 기반:
+
+| 검정 | 통계량 | p-value | 판정 |
+|------|--------|---------|------|
+| Paired t-test (task mean, n=10) | t=0.264 | 0.7976 | 비유의 |
+| Wilcoxon signed-rank | W=1.0 | 1.000 | 비유의 |
+
+- Overall mean: abc=0.530, rag=0.510 (Δ=+0.020)
+- Cohen's d = 0.084 (효과 크기 극히 작음)
+- Bootstrap 95% CI for Δ(abc−rag): [−0.170, 0.210] (포함 0)
+
+> **해석**: n=10 task로 검정력 부족. 비유의 = "효과 없음"이 아니라 "현재 데이터로 판단 불가". 전체 Δ=+2.0%p는 실질적 차이로 보기 어려움.
+
+Size class / Hop type 분해 (5-trial):
+- small tasks (n=2): abc=0.400 vs rag=0.600 (Δ=−0.200) ◄ **Small Paradox 확인**
+- medium tasks (n=4): abc=0.525 vs rag=0.525 (Δ=0.000)
+- large tasks (n=4): abc=0.600 vs rag=0.450 (Δ=+0.150)
+- 3-hop tasks (n=3): abc=0.600 vs rag=0.400 (Δ=+0.200) ← 차별성 잔존
+- needle tasks (n=3): abc=0.467 vs rag=0.600 (Δ=−0.133)
+
+Small Paradox 상세:
+- `longctx-small-needle-01`: abc=0.200 vs rag=0.600 (Δ=−0.400, trials=[0,0,1,0,0])
+- `longctx-small-2hop-01`: abc=0.600 vs rag=0.600 (Δ=0.000, trials=[1,1,1,0,0])
 
 ---
 
@@ -722,6 +748,15 @@ parts: [closed, active]
 | Exp045 Handoff | 0.649 | 0.900 | +25.1% |
 | Exp06 Solo Budget | 0.663 | 0.967 | +30.3% |
 
+#### v2 역행 근본 원인 (Phase 1 진단, 2026-04-30)
+
+`scoring_diagnostic.py` 분석 결과 (24 trial 전수 검사):
+- **역행 trial**: 6건, 전부 `synthesis-01` 태스크에 집중
+- **역행 유형**: TYPE_C (v1 partial_overlap > 0이지만 v2 keyword group = 0)
+- **원인**: `synthesis-01` keyword group `['provider a', 'only']`가 v1의 token-level partial 점수보다 엄격. 모델이 정답("Provider A가 기준 충족")을 내면서 "only" 없이 답하면 v2=0.0 but v1>0.
+- **일반 결함 아님**: Exp00/02/045/06에서 v2 ≥ v1이므로 v2 scoring 함수 자체 문제가 아닌 특정 keyword group 설계 문제.
+- **권고**: `synthesis-01` keyword를 `['provider a']`로 단순화하거나 `['only', 'provider a']`에서 'only' 제거 검토.
+
 ### v2 → v3 전환 (2026-04-29)
 
 | 항목 | v2 (substring contains) | v3 (negative_patterns 보강) |
@@ -785,7 +820,7 @@ Python          = 안전장치만 (safety net, 0회 발동)
 - [x] `config.py:SAMPLING_PARAMS` 일원화 (2026-04-26, sampling-params-config-exp10 plan). `lmstudio_client.py` 가 sampling 명시 시작. 도입 전 LM Studio 기본값과 본 명시값 (`temperature=0.1`, `max_tokens=4096`) 차이로 Exp10 결과가 Exp00~09 과 미세한 차이 가능 — baseline 비교 시 본 시점 이전·이후 분리.
 
 ### 열린 질문
-1. **v2 역행 조사** — Exp04, Exp05a에서 v2가 v1보다 낮은 이유 분석 필요
+1. ~~**v2 역행 조사**~~ — **Phase 1 진단 완료** (2026-04-30). 근본 원인: **synthesis-01 한 태스크에 국한된 TYPE_C 역행** (6건/24 trial). `['provider a', 'only']` keyword group이 v1 partial_overlap보다 엄격해 발생. v2 일반적 결함 아님. 정책 결정: keyword group 재설계 또는 v3 전면 전환 검토 권고. 닫힘.
 2. ~~**Solo 표본 확대**~~ — **Exp06 정합성 정리에서 해소** (2026-04-29). Solo = 45 trial (9 task × 5 trial), ABC와 동일. 표본 비대칭 아님. **H4 재검증은 확대 task set으로** — 현 9-task에서 Inconclusive. 닫힘.
 3. **Backprop 개선** — 현재 4.2~9.5% → 목표 50%+
 4. **Mixed Intelligence** — E4B × 2 + 대형 모델(9B+) Judge 조합 테스트
@@ -793,13 +828,13 @@ Python          = 안전장치만 (safety net, 0회 발동)
 6. ~~**Calculator `^` 혼동**~~ — **Exp08b에서 해결** (100% 성공). 닫힘.
 7. ~~**컨텍스트 한계 직접 검증**~~ — **Exp09에서 정면 입증** (Solo 0% vs ABC 100% in Large 20K). 닫힘.
 8. **문신 점유율 측정** — 루프 진행 시 문신이 context window를 차지하는 비율 추적 필요. Exp09 데이터로 사후 분석 가능 (chunk count × 평균 assertion count).
-9. **taskset expected_answer 전수 검증** — math-04 결함 사례를 볼 때 다른 태스크의 정답도 수학적으로 검증되어야 함. Exp09 longctx 태스크셋도 이 검증 필요.
+9. ~~**taskset expected_answer 전수 검증**~~ — **Phase 1 자동 검증 완료** (2026-04-30). `validate_taskset.py`로 12개 기본 + 10개 longctx = 22개 태스크 전수 검증. **19 PASS / 3 FAIL**: (1) math-03 총 좌석 수 불일치(기대 96, 답안 88) — 문제 텍스트 오류 가능성, (2) synthesis-04 keyword 'report 6'이 expected_answer의 복수형 "Reports 5 and 6"에 불포함, (3) longctx-medium-2hop-02 keyword '500 hp'이 expected_answer "500 horsepower"에 불포함. 3개 항목 별도 수정 필요. 닫힘.
 10. **한국어 답변 v2 scoring** — Exp08 math-03에서 한국어 답변의 keyword 매칭 편차 관찰. 다국어 응답 채점 방침 결정 필요.
 11. **미외부화 축 보강** — 현재 검증된 4축(Tattoo/Tool/Role/Orchestrator) 외 확장 후보: **Extractor**(원문→claim), **Reducer**(chunk→일일), **Search Tool**(BM25/vector — Exp09에서 RAG arm 일부 검증), **Graph Tool**(relation traversal), **Evidence Tool**(evidence_ref resolve — Exp09에서 부분 구현), **Critic Tool**(schema·citation 결정론적 검증). 자세한 목록은 [conceptFramework.md § 9](./conceptFramework.md) 참조.
 12. **Exp08c 후보 — solve_linear_system Singular matrix 힌트** — Exp08b math-03에서 6회 관측. "데이터 inconsistent 가능성" 힌트를 에러 메시지에 추가하면 모델의 모순 판단을 가속할 수 있는지 실험.
 13. **Exp10 후보 — Small Paradox 해결** — Exp09에서 ABC가 small에서 RAG 대비 약함 관측 (longctx-small-needle-01: ABC 0.33 vs RAG 1.00). chunk가 너무 작거나 적을 때 cycle iteration이 오버킬 가능성. 추가 small 태스크 확대 또는 chunk-count threshold 기반 single-pass 분기 검증.
 14. **Exp10 후보 — 병렬 chunk 순회** — Gemini의 Exp09 핸드오프 제언. 현재 직렬 chunk 처리를 여러 어댑터 인스턴스가 병렬로 처리한 후 Tattoo merge하는 구조. ABC chunked의 시간 비용 절감 + multi-agent merge 패턴 실험.
-15. **Exp09 통계 신뢰도 보강** — 현재 3 trial × 10 task = 30 데이터포인트/arm. 5 trial로 확대 + paired t-test 또는 Wilcoxon으로 H9b의 +3.3%p가 유의한지 검정.
+15. ~~**Exp09 통계 신뢰도 보강**~~ — **Phase 1 통계 검정 완료** (2026-04-30). 5 trial × 10 task = 50 데이터포인트/arm. Paired t-test p=0.7976, Wilcoxon p=1.000, Bootstrap CI [−0.170, 0.210] (포함 0). **비유의 — H9b verdict "조건부 채택"→"미결"로 변경**. 3-hop(+20.0%p)에서만 차별성 잔존, Small Paradox(abc 0.40 vs rag 0.60) 확인. 닫힘.
 16. **Evidence Hit Rate ↔ 정답률 비대칭** — Exp09 ABC 3-hop에서 hit 0.23인데 정답률 100%. gold_evidence_chunks 라벨링이 너무 엄격하거나, 모델이 검증 경로로 보완 추론 가능성. 별도 분석 필요.
 13. **크로스 모델 재현** — Qwen 2.5 7B / Phi-4 / Llama 3.2 3B에서 4축 외부화 효과 재현 여부. 일반화 검증.
 

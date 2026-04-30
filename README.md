@@ -53,7 +53,7 @@ This repository tracks sequential hypothesis IDs `H1` to `H9c` across the four e
 | **H7** | [Tool externalization] External math tools compensate for E4B's calculation limits | ✅ Supported (+18.3pp, math-04 0→80%) | Exp08 |
 | **H8** | [Tool externalization stability] Error hints and mandatory tool rules reduce tool neglect and operator confusion | ✅ Supported (neglect 0%, calculator 100%, math-04 0→100%, +23.3pp) | Exp08b |
 | **H9a** | [Tattoo externalization, physical limit] ABC+Tattoo (chunked) outperforms solo dump under long context | ✅ Supported (+68.3pp, Solo 0% → ABC 100% at Large 20K) | Exp09 |
-| **H9b** | [Distinctiveness] ABC+Tattoo contributes something beyond a RAG baseline | ⚠️ Conditionally supported (overall +3.3pp; strongly ahead on Large 3-hop, behind on small tasks) | Exp09 |
+| **H9b** | [Distinctiveness] ABC+Tattoo contributes something beyond a RAG baseline | ⚠️ Inconclusive (5-trial stats NOT SIGNIFICANT p=0.798; overall Δ=+2.0pp; 3-hop only +20.0pp differentiation; Small Paradox confirmed) | Exp09 |
 | **H9c** | [Error mode difference] ABC fails differently from Solo and RAG | ✅ Supported (Solo: `format_error`, RAG: `wrong_synthesis`, ABC: `evidence_miss` + `wrong_synthesis`) | Exp09 |
 
 ## What worked / What didn't

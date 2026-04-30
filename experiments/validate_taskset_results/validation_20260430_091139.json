@@ -1,0 +1,170 @@
+{
+  "generated_at": "20260430_091139",
+  "results": [
+    {
+      "task_id": "math-01",
+      "category": "math",
+      "source": "taskset.json",
+      "result": "PASS",
+      "detail": "arithmetic fallback: a=13,o=7, checks=True",
+      "keyword_consistency": "CONSISTENT"
+    },
+    {
+      "task_id": "logic-01",
+      "category": "logic",
+      "source": "taskset.json",
+      "result": "PASS",
+      "detail": "consistency OK. no conclusion_required field"
+    },
+    {
+      "task_id": "synthesis-01",
+      "category": "information_synthesis",
+      "source": "taskset.json",
+      "result": "PASS",
+      "detail": "consistency OK. no conclusion_required field"
+    },
+    {
+      "task_id": "math-02",
+      "category": "math",
+      "source": "taskset.json",
+      "result": "PASS",
+      "detail": "arithmetic: area=192 sq meters (l+w=28, l²+w²=400)",
+      "keyword_consistency": "CONSISTENT"
+    },
+    {
+      "task_id": "logic-02",
+      "category": "logic",
+      "source": "taskset.json",
+      "result": "PASS",
+      "detail": "consistency OK. no conclusion_required field"
+    },
+    {
+      "task_id": "synthesis-02",
+      "category": "information_synthesis",
+      "source": "taskset.json",
+      "result": "PASS",
+      "detail": "consistency OK. no conclusion_required field"
+    },
+    {
+      "task_id": "math-03",
+      "category": "math",
+      "source": "taskset.json",
+      "result": "FAIL",
+      "detail": "arithmetic fallback: r=6,s=4,rec=5, checks=False",
+      "keyword_consistency": "CONSISTENT"
+    },
+    {
+      "task_id": "logic-03",
+      "category": "logic",
+      "source": "taskset.json",
+      "result": "PASS",
+      "detail": "consistency OK. no conclusion_required field"
+    },
+    {
+      "task_id": "synthesis-03",
+      "category": "information_synthesis",
+      "source": "taskset.json",
+      "result": "PASS",
+      "detail": "consistency OK. no conclusion_required field"
+    },
+    {
+      "task_id": "math-04",
+      "category": "math",
+      "source": "taskset.json",
+      "result": "PASS",
+      "detail": "scipy: X=31,Y=10,Z=37,profit=$3060",
+      "keyword_consistency": "CONSISTENT"
+    },
+    {
+      "task_id": "logic-04",
+      "category": "logic",
+      "source": "taskset.json",
+      "result": "PASS",
+      "detail": "consistency OK. conclusion_required matched: '^\\s*casey\\b'"
+    },
+    {
+      "task_id": "synthesis-04",
+      "category": "information_synthesis",
+      "source": "taskset.json",
+      "result": "FAIL",
+      "detail": "token 'report 6' not found in expected_answer"
+    },
+    {
+      "task_id": "longctx-small-needle-01",
+      "category": "longctx",
+      "source": "longctx_taskset.json",
+      "result": "PASS",
+      "detail": "all keyword tokens found in expected_answer"
+    },
+    {
+      "task_id": "longctx-medium-needle-01",
+      "category": "longctx",
+      "source": "longctx_taskset.json",
+      "result": "PASS",
+      "detail": "all keyword tokens found in expected_answer"
+    },
+    {
+      "task_id": "longctx-large-needle-01",
+      "category": "longctx",
+      "source": "longctx_taskset.json",
+      "result": "PASS",
+      "detail": "all keyword tokens found in expected_answer"
+    },
+    {
+      "task_id": "longctx-small-2hop-01",
+      "category": "longctx",
+      "source": "longctx_taskset.json",
+      "result": "PASS",
+      "detail": "all keyword tokens found in expected_answer"
+    },
+    {
+      "task_id": "longctx-medium-2hop-01",
+      "category": "longctx",
+      "source": "longctx_taskset.json",
+      "result": "PASS",
+      "detail": "all keyword tokens found in expected_answer"
+    },
+    {
+      "task_id": "longctx-medium-2hop-02",
+      "category": "longctx",
+      "source": "longctx_taskset.json",
+      "result": "FAIL",
+      "detail": "token '500 hp' not found in expected_answer"
+    },
+    {
+      "task_id": "longctx-large-2hop-01",
+      "category": "longctx",
+      "source": "longctx_taskset.json",
+      "result": "PASS",
+      "detail": "all keyword tokens found in expected_answer"
+    },
+    {
+      "task_id": "longctx-medium-3hop-01",
+      "category": "longctx",
+      "source": "longctx_taskset.json",
+      "result": "PASS",
+      "detail": "all keyword tokens found in expected_answer"
+    },
+    {
+      "task_id": "longctx-large-3hop-01",
+      "category": "longctx",
+      "source": "longctx_taskset.json",
+      "result": "PASS",
+      "detail": "all keyword tokens found in expected_answer"
+    },
+    {
+      "task_id": "longctx-large-3hop-02",
+      "category": "longctx",
+      "source": "longctx_taskset.json",
+      "result": "PASS",
+      "detail": "all keyword tokens found in expected_answer"
+    }
+  ],
+  "summary": {
+    "total": 22,
+    "pass": 19,
+    "fail": 3,
+    "warn": 0,
+    "skip": 0
+  }
+}

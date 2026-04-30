@@ -1,0 +1,2720 @@
+{
+  "experiment": "longctx",
+  "model": "gemma4-e4b",
+  "arms": [
+    {
+      "label": "solo_dump",
+      "description": "document 전체를 A에 단일 투입"
+    },
+    {
+      "label": "rag_baseline",
+      "description": "BM25 top-K chunks만 A에 투입"
+    },
+    {
+      "label": "abc_tattoo",
+      "description": "ABC + Tattoo + chunk iteration"
+    }
+  ],
+  "trials_per_task": 5,
+  "chunk_size": 500,
+  "chunk_overlap": 50,
+  "rag_top_k": 5,
+  "results_by_arm": {
+    "solo_dump": [
+      {
+        "task_id": "longctx-small-needle-01",
+        "size_class": "small",
+        "hop_type": "needle",
+        "expected_answer": "Marcus Ellsworth",
+        "scoring_keywords": [
+          [
+            "Marcus Ellsworth"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          3
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "solo_dump",
+            "final_answer": "Marcus Ellsworth",
+            "error": null,
+            "doc_word_count": 2119
+          },
+          {
+            "trial": 2,
+            "arm": "solo_dump",
+            "final_answer": "Marcus Ellsworth",
+            "error": null,
+            "doc_word_count": 2119
+          },
+          {
+            "trial": 3,
+            "arm": "solo_dump",
+            "final_answer": "Marcus Ellsworth",
+            "error": null,
+            "doc_word_count": 2119
+          },
+          {
+            "trial": 4,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 2119
+          },
+          {
+            "trial": 5,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 2119
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-needle-01",
+        "size_class": "medium",
+        "hop_type": "needle",
+        "expected_answer": "PulseLink",
+        "scoring_keywords": [
+          [
+            "PulseLink"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          11,
+          12
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7295
+          },
+          {
+            "trial": 2,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7295
+          },
+          {
+            "trial": 3,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7295
+          },
+          {
+            "trial": 4,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 7295
+          },
+          {
+            "trial": 5,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 7295
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-needle-01",
+        "size_class": "large",
+        "hop_type": "needle",
+        "expected_answer": "March 14, 2031",
+        "scoring_keywords": [
+          [
+            "March 14",
+            "2031"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          18,
+          19
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13683
+          },
+          {
+            "trial": 2,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13683
+          },
+          {
+            "trial": 3,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13683
+          },
+          {
+            "trial": 4,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 13683
+          },
+          {
+            "trial": 5,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 13683
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-small-2hop-01",
+        "size_class": "small",
+        "hop_type": "2-hop",
+        "expected_answer": "titanium-ceramic alloy",
+        "scoring_keywords": [
+          [
+            "titanium-ceramic alloy"
+          ],
+          [
+            "titanium-ceramic"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          0,
+          3
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "solo_dump",
+            "final_answer": "titanium-ceramic alloy",
+            "error": null,
+            "doc_word_count": 2090
+          },
+          {
+            "trial": 2,
+            "arm": "solo_dump",
+            "final_answer": "titanium-ceramic alloy",
+            "error": null,
+            "doc_word_count": 2090
+          },
+          {
+            "trial": 3,
+            "arm": "solo_dump",
+            "final_answer": "titanium-ceramic alloy",
+            "error": null,
+            "doc_word_count": 2090
+          },
+          {
+            "trial": 4,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 2090
+          },
+          {
+            "trial": 5,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 2090
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-2hop-01",
+        "size_class": "medium",
+        "hop_type": "2-hop",
+        "expected_answer": "2008",
+        "scoring_keywords": [
+          [
+            "2008"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          3,
+          13
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7486
+          },
+          {
+            "trial": 2,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7486
+          },
+          {
+            "trial": 3,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7486
+          },
+          {
+            "trial": 4,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 7486
+          },
+          {
+            "trial": 5,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 7486
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-2hop-02",
+        "size_class": "medium",
+        "hop_type": "2-hop",
+        "expected_answer": "500 horsepower",
+        "scoring_keywords": [
+          [
+            "500 horsepower"
+          ],
+          [
+            "500 hp"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          4,
+          12
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7495
+          },
+          {
+            "trial": 2,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7495
+          },
+          {
+            "trial": 3,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7495
+          },
+          {
+            "trial": 4,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 7495
+          },
+          {
+            "trial": 5,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 7495
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-2hop-01",
+        "size_class": "large",
+        "hop_type": "2-hop",
+        "expected_answer": "347",
+        "scoring_keywords": [
+          [
+            "347"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          3,
+          27
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13603
+          },
+          {
+            "trial": 2,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13603
+          },
+          {
+            "trial": 3,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13603
+          },
+          {
+            "trial": 4,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 13603
+          },
+          {
+            "trial": 5,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 13603
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-3hop-01",
+        "size_class": "medium",
+        "hop_type": "3-hop",
+        "expected_answer": "Gaelic",
+        "scoring_keywords": [
+          [
+            "Gaelic"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          4,
+          9,
+          14
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7503
+          },
+          {
+            "trial": 2,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7503
+          },
+          {
+            "trial": 3,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 7503
+          },
+          {
+            "trial": 4,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 7503
+          },
+          {
+            "trial": 5,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 7503
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-3hop-01",
+        "size_class": "large",
+        "hop_type": "3-hop",
+        "expected_answer": "41,000 feet",
+        "scoring_keywords": [
+          [
+            "41,000 feet"
+          ],
+          [
+            "41,000"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          4,
+          15,
+          24
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13707
+          },
+          {
+            "trial": 2,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13707
+          },
+          {
+            "trial": 3,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13707
+          },
+          {
+            "trial": 4,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 13707
+          },
+          {
+            "trial": 5,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 13707
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-3hop-02",
+        "size_class": "large",
+        "hop_type": "3-hop",
+        "expected_answer": "1992",
+        "scoring_keywords": [
+          [
+            "1992"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          6,
+          16,
+          25
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13652
+          },
+          {
+            "trial": 2,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13652
+          },
+          {
+            "trial": 3,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "Client error '400 Bad Request' for url 'http://yongseek.iptime.org:8005/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+            "doc_word_count": 13652
+          },
+          {
+            "trial": 4,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 13652
+          },
+          {
+            "trial": 5,
+            "arm": "solo_dump",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "doc_word_count": 13652
+          }
+        ]
+      }
+    ],
+    "rag_baseline": [
+      {
+        "task_id": "longctx-small-needle-01",
+        "size_class": "small",
+        "hop_type": "needle",
+        "expected_answer": "Marcus Ellsworth",
+        "scoring_keywords": [
+          [
+            "Marcus Ellsworth"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          3
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "rag_baseline",
+            "final_answer": "Marcus Ellsworth",
+            "error": null,
+            "retrieved_chunk_ids": [
+              2,
+              3,
+              0,
+              1,
+              4
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 2,
+            "arm": "rag_baseline",
+            "final_answer": "Marcus Ellsworth",
+            "error": null,
+            "retrieved_chunk_ids": [
+              2,
+              3,
+              0,
+              1,
+              4
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 3,
+            "arm": "rag_baseline",
+            "final_answer": "Marcus Ellsworth",
+            "error": null,
+            "retrieved_chunk_ids": [
+              2,
+              3,
+              0,
+              1,
+              4
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 4,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              2,
+              3,
+              0,
+              1,
+              4
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 5,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              2,
+              3,
+              0,
+              1,
+              4
+            ],
+            "top_k": 5
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-needle-01",
+        "size_class": "medium",
+        "hop_type": "needle",
+        "expected_answer": "PulseLink",
+        "scoring_keywords": [
+          [
+            "PulseLink"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          11,
+          12
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "rag_baseline",
+            "final_answer": "PulseLink",
+            "error": null,
+            "retrieved_chunk_ids": [
+              11,
+              5,
+              0,
+              4,
+              14
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 2,
+            "arm": "rag_baseline",
+            "final_answer": "PulseLink",
+            "error": null,
+            "retrieved_chunk_ids": [
+              11,
+              5,
+              0,
+              4,
+              14
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 3,
+            "arm": "rag_baseline",
+            "final_answer": "PulseLink",
+            "error": null,
+            "retrieved_chunk_ids": [
+              11,
+              5,
+              0,
+              4,
+              14
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 4,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              11,
+              5,
+              0,
+              4,
+              14
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 5,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              11,
+              5,
+              0,
+              4,
+              14
+            ],
+            "top_k": 5
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-needle-01",
+        "size_class": "large",
+        "hop_type": "needle",
+        "expected_answer": "March 14, 2031",
+        "scoring_keywords": [
+          [
+            "March 14",
+            "2031"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          18,
+          19
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "rag_baseline",
+            "final_answer": "March 14, 2031",
+            "error": null,
+            "retrieved_chunk_ids": [
+              11,
+              16,
+              14,
+              10,
+              20
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 2,
+            "arm": "rag_baseline",
+            "final_answer": "March 14, 2031",
+            "error": null,
+            "retrieved_chunk_ids": [
+              11,
+              16,
+              14,
+              10,
+              20
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 3,
+            "arm": "rag_baseline",
+            "final_answer": "March 14, 2031",
+            "error": null,
+            "retrieved_chunk_ids": [
+              11,
+              16,
+              14,
+              10,
+              20
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 4,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              11,
+              16,
+              14,
+              10,
+              20
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 5,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              11,
+              16,
+              14,
+              10,
+              20
+            ],
+            "top_k": 5
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-small-2hop-01",
+        "size_class": "small",
+        "hop_type": "2-hop",
+        "expected_answer": "titanium-ceramic alloy",
+        "scoring_keywords": [
+          [
+            "titanium-ceramic alloy"
+          ],
+          [
+            "titanium-ceramic"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          0,
+          3
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "rag_baseline",
+            "final_answer": "Titanium-ceramic alloy (marketed under the trade name CrestAlloy)",
+            "error": null,
+            "retrieved_chunk_ids": [
+              1,
+              4,
+              0,
+              2,
+              3
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 2,
+            "arm": "rag_baseline",
+            "final_answer": "Titanium-ceramic alloy (marketed under the trade name CrestAlloy)",
+            "error": null,
+            "retrieved_chunk_ids": [
+              1,
+              4,
+              0,
+              2,
+              3
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 3,
+            "arm": "rag_baseline",
+            "final_answer": "Titanium-ceramic alloy (marketed under the trade name CrestAlloy)",
+            "error": null,
+            "retrieved_chunk_ids": [
+              1,
+              4,
+              0,
+              2,
+              3
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 4,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              1,
+              4,
+              0,
+              2,
+              3
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 5,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              1,
+              4,
+              0,
+              2,
+              3
+            ],
+            "top_k": 5
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-2hop-01",
+        "size_class": "medium",
+        "hop_type": "2-hop",
+        "expected_answer": "2008",
+        "scoring_keywords": [
+          [
+            "2008"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          3,
+          13
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "rag_baseline",
+            "final_answer": "2008",
+            "error": null,
+            "retrieved_chunk_ids": [
+              3,
+              12,
+              13,
+              5,
+              2
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 2,
+            "arm": "rag_baseline",
+            "final_answer": "2008",
+            "error": null,
+            "retrieved_chunk_ids": [
+              3,
+              12,
+              13,
+              5,
+              2
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 3,
+            "arm": "rag_baseline",
+            "final_answer": "2008",
+            "error": null,
+            "retrieved_chunk_ids": [
+              3,
+              12,
+              13,
+              5,
+              2
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 4,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              3,
+              12,
+              13,
+              5,
+              2
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 5,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              3,
+              12,
+              13,
+              5,
+              2
+            ],
+            "top_k": 5
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-2hop-02",
+        "size_class": "medium",
+        "hop_type": "2-hop",
+        "expected_answer": "500 horsepower",
+        "scoring_keywords": [
+          [
+            "500 horsepower"
+          ],
+          [
+            "500 hp"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          4,
+          12
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "rag_baseline",
+            "final_answer": "500 horsepower",
+            "error": null,
+            "retrieved_chunk_ids": [
+              12,
+              4,
+              11,
+              9,
+              0
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 2,
+            "arm": "rag_baseline",
+            "final_answer": "500 horsepower",
+            "error": null,
+            "retrieved_chunk_ids": [
+              12,
+              4,
+              11,
+              9,
+              0
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 3,
+            "arm": "rag_baseline",
+            "final_answer": "500 horsepower",
+            "error": null,
+            "retrieved_chunk_ids": [
+              12,
+              4,
+              11,
+              9,
+              0
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 4,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              12,
+              4,
+              11,
+              9,
+              0
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 5,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              12,
+              4,
+              11,
+              9,
+              0
+            ],
+            "top_k": 5
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-2hop-01",
+        "size_class": "large",
+        "hop_type": "2-hop",
+        "expected_answer": "347",
+        "scoring_keywords": [
+          [
+            "347"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          3,
+          27
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "rag_baseline",
+            "final_answer": "347",
+            "error": null,
+            "retrieved_chunk_ids": [
+              1,
+              6,
+              7,
+              11,
+              10
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 2,
+            "arm": "rag_baseline",
+            "final_answer": "347",
+            "error": null,
+            "retrieved_chunk_ids": [
+              1,
+              6,
+              7,
+              11,
+              10
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 3,
+            "arm": "rag_baseline",
+            "final_answer": "347",
+            "error": null,
+            "retrieved_chunk_ids": [
+              1,
+              6,
+              7,
+              11,
+              10
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 4,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              1,
+              6,
+              7,
+              11,
+              10
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 5,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              1,
+              6,
+              7,
+              11,
+              10
+            ],
+            "top_k": 5
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-3hop-01",
+        "size_class": "medium",
+        "hop_type": "3-hop",
+        "expected_answer": "Gaelic",
+        "scoring_keywords": [
+          [
+            "Gaelic"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          4,
+          9,
+          14
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "rag_baseline",
+            "final_answer": "Gaelic",
+            "error": null,
+            "retrieved_chunk_ids": [
+              14,
+              3,
+              1,
+              10,
+              11
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 2,
+            "arm": "rag_baseline",
+            "final_answer": "Gaelic",
+            "error": null,
+            "retrieved_chunk_ids": [
+              14,
+              3,
+              1,
+              10,
+              11
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 3,
+            "arm": "rag_baseline",
+            "final_answer": "Gaelic",
+            "error": null,
+            "retrieved_chunk_ids": [
+              14,
+              3,
+              1,
+              10,
+              11
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 4,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              14,
+              3,
+              1,
+              10,
+              11
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 5,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              14,
+              3,
+              1,
+              10,
+              11
+            ],
+            "top_k": 5
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-3hop-01",
+        "size_class": "large",
+        "hop_type": "3-hop",
+        "expected_answer": "41,000 feet",
+        "scoring_keywords": [
+          [
+            "41,000 feet"
+          ],
+          [
+            "41,000"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          4,
+          15,
+          24
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "rag_baseline",
+            "final_answer": "The maximum certified operating altitude for the Lancer-9, which uses the SG-7 turbofan engine, is not specified in the retrieved chunks.",
+            "error": null,
+            "retrieved_chunk_ids": [
+              2,
+              9,
+              4,
+              5,
+              7
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 2,
+            "arm": "rag_baseline",
+            "final_answer": "The retrieved chunks identify Stratos Industrial Group as the company that acquired Vertex Aerospace in 2019, and they state that Stratos's division developed the SG-7 turbofan engine for mid-size regional jets. However, the chunks do not specify the name of the aircraft that uses the SG-7 engine, nor do they provide its maximum certified operating altitude.",
+            "error": null,
+            "retrieved_chunk_ids": [
+              2,
+              9,
+              4,
+              5,
+              7
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 3,
+            "arm": "rag_baseline",
+            "final_answer": "The retrieved chunks identify the engine (SG-7 turbofan) developed by Stratos Industrial Group (which acquired Vertex Aerospace in 2019) as being designed for a mid-size regional jet. However, the specific aircraft model that uses the SG-7 engine is not named, and therefore its maximum certified operating altitude cannot be determined from the provided text.",
+            "error": null,
+            "retrieved_chunk_ids": [
+              2,
+              9,
+              4,
+              5,
+              7
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 4,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              2,
+              9,
+              4,
+              5,
+              7
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 5,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              2,
+              9,
+              4,
+              5,
+              7
+            ],
+            "top_k": 5
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-3hop-02",
+        "size_class": "large",
+        "hop_type": "3-hop",
+        "expected_answer": "1992",
+        "scoring_keywords": [
+          [
+            "1992"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          6,
+          16,
+          25
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "rag_baseline",
+            "final_answer": "1992",
+            "error": null,
+            "retrieved_chunk_ids": [
+              14,
+              8,
+              15,
+              4,
+              11
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 2,
+            "arm": "rag_baseline",
+            "final_answer": "1992",
+            "error": null,
+            "retrieved_chunk_ids": [
+              14,
+              8,
+              15,
+              4,
+              11
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 3,
+            "arm": "rag_baseline",
+            "final_answer": "1992",
+            "error": null,
+            "retrieved_chunk_ids": [
+              14,
+              8,
+              15,
+              4,
+              11
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 4,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              14,
+              8,
+              15,
+              4,
+              11
+            ],
+            "top_k": 5
+          },
+          {
+            "trial": 5,
+            "arm": "rag_baseline",
+            "final_answer": null,
+            "error": "[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다",
+            "retrieved_chunk_ids": [
+              14,
+              8,
+              15,
+              4,
+              11
+            ],
+            "top_k": 5
+          }
+        ]
+      }
+    ],
+    "abc_tattoo": [
+      {
+        "task_id": "longctx-small-needle-01",
+        "size_class": "small",
+        "hop_type": "needle",
+        "expected_answer": "Marcus Ellsworth",
+        "scoring_keywords": [
+          [
+            "Marcus Ellsworth"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          3
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 5,
+            "num_assertions": 11,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 0
+              },
+              {
+                "chunk_id": 0
+              },
+              {
+                "chunk_id": 0
+              },
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 2
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 5,
+            "num_assertions": 1,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 2
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "arm": "abc_tattoo",
+            "final_answer": "Marcus Ellsworth",
+            "error": null,
+            "num_chunks": 5,
+            "num_assertions": 5,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 2
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 5,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          },
+          {
+            "trial": 5,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 5,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-needle-01",
+        "size_class": "medium",
+        "hop_type": "needle",
+        "expected_answer": "PulseLink",
+        "scoring_keywords": [
+          [
+            "PulseLink"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          11,
+          12
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "abc_tattoo",
+            "final_answer": "PulseLink",
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 4,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "arm": "abc_tattoo",
+            "final_answer": "PulseLink",
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 4,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "arm": "abc_tattoo",
+            "final_answer": "PulseLink",
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 1,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 11
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          },
+          {
+            "trial": 5,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-needle-01",
+        "size_class": "large",
+        "hop_type": "needle",
+        "expected_answer": "March 14, 2031",
+        "scoring_keywords": [
+          [
+            "March 14",
+            "2031"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          18,
+          19
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "abc_tattoo",
+            "final_answer": "March 14, 2031",
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 9,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 16
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "arm": "abc_tattoo",
+            "final_answer": "March 14, 2031",
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 7,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "arm": "abc_tattoo",
+            "final_answer": "March 14, 2031",
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 10,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 11
+              },
+              {
+                "chunk_id": 16
+              },
+              {
+                "chunk_id": 17
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          },
+          {
+            "trial": 5,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-small-2hop-01",
+        "size_class": "small",
+        "hop_type": "2-hop",
+        "expected_answer": "titanium-ceramic alloy",
+        "scoring_keywords": [
+          [
+            "titanium-ceramic alloy"
+          ],
+          [
+            "titanium-ceramic"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          0,
+          3
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "abc_tattoo",
+            "final_answer": "The primary material used in products manufactured by the company that Dr. Amara Bello founded is a titanium-ceramic alloy (marketed as CrestAlloy).",
+            "error": null,
+            "num_chunks": 5,
+            "num_assertions": 9,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "arm": "abc_tattoo",
+            "final_answer": "The primary material used in products manufactured by Crestline Composites is a titanium-ceramic alloy.",
+            "error": null,
+            "num_chunks": 5,
+            "num_assertions": 8,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 0
+              },
+              {
+                "chunk_id": 0
+              },
+              {
+                "chunk_id": 0
+              },
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "arm": "abc_tattoo",
+            "final_answer": "Titanium-ceramic alloy",
+            "error": null,
+            "num_chunks": 5,
+            "num_assertions": 8,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 0
+              },
+              {
+                "chunk_id": 0
+              },
+              {
+                "chunk_id": 0
+              },
+              {
+                "chunk_id": 0
+              },
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 5,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          },
+          {
+            "trial": 5,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 5,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-2hop-01",
+        "size_class": "medium",
+        "hop_type": "2-hop",
+        "expected_answer": "2008",
+        "scoring_keywords": [
+          [
+            "2008"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          3,
+          13
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "abc_tattoo",
+            "final_answer": "2008",
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 10,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 7
+              },
+              {
+                "chunk_id": 7
+              },
+              {
+                "chunk_id": 7
+              },
+              {
+                "chunk_id": 12
+              },
+              {
+                "chunk_id": 12
+              },
+              {
+                "chunk_id": 12
+              },
+              {
+                "chunk_id": 13
+              },
+              {
+                "chunk_id": 13
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "arm": "abc_tattoo",
+            "final_answer": "2008",
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 11,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 7
+              },
+              {
+                "chunk_id": 7
+              },
+              {
+                "chunk_id": 7
+              },
+              {
+                "chunk_id": 12
+              },
+              {
+                "chunk_id": 13
+              },
+              {
+                "chunk_id": 13
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "arm": "abc_tattoo",
+            "final_answer": 2008,
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 9,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 7
+              },
+              {
+                "chunk_id": 12
+              },
+              {
+                "chunk_id": 13
+              },
+              {
+                "chunk_id": 13
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          },
+          {
+            "trial": 5,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-2hop-02",
+        "size_class": "medium",
+        "hop_type": "2-hop",
+        "expected_answer": "500 horsepower",
+        "scoring_keywords": [
+          [
+            "500 horsepower"
+          ],
+          [
+            "500 hp"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          4,
+          12
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "abc_tattoo",
+            "final_answer": "The power output of the engine installed in the vessel that won the 2019 Solent Classic race (Ariel's Wing) is 500 horsepower.",
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 5,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 12
+              },
+              {
+                "chunk_id": 12
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "arm": "abc_tattoo",
+            "final_answer": "500 horsepower",
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 3,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 12
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "arm": "abc_tattoo",
+            "final_answer": "500 horsepower",
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 6,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 5
+              },
+              {
+                "chunk_id": 5
+              },
+              {
+                "chunk_id": 5
+              },
+              {
+                "chunk_id": 12
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          },
+          {
+            "trial": 5,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-2hop-01",
+        "size_class": "large",
+        "hop_type": "2-hop",
+        "expected_answer": "347",
+        "scoring_keywords": [
+          [
+            "347"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          3,
+          27
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "abc_tattoo",
+            "final_answer": 347,
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 6,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 9
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 11
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "arm": "abc_tattoo",
+            "final_answer": 347,
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 4,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 9
+              },
+              {
+                "chunk_id": 11
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "arm": "abc_tattoo",
+            "final_answer": "347",
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 4,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 1
+              },
+              {
+                "chunk_id": 9
+              },
+              {
+                "chunk_id": 11
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          },
+          {
+            "trial": 5,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-medium-3hop-01",
+        "size_class": "medium",
+        "hop_type": "3-hop",
+        "expected_answer": "Gaelic",
+        "scoring_keywords": [
+          [
+            "Gaelic"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          4,
+          9,
+          14
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "abc_tattoo",
+            "final_answer": "Gaelic",
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 8,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 9
+              },
+              {
+                "chunk_id": 9
+              },
+              {
+                "chunk_id": 9
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 14
+              },
+              {
+                "chunk_id": 16
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "arm": "abc_tattoo",
+            "final_answer": "Gaelic",
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 11,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 5
+              },
+              {
+                "chunk_id": 5
+              },
+              {
+                "chunk_id": 5
+              },
+              {
+                "chunk_id": 9
+              },
+              {
+                "chunk_id": 9
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 14
+              },
+              {
+                "chunk_id": 14
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "arm": "abc_tattoo",
+            "final_answer": "The governing body that manages the river running through the city known as the 'Gateway to the Highlands' (the Strathmore River Authority) uses Gaelic for all official proceedings and formal documentation.",
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 10,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 10
+              },
+              {
+                "chunk_id": 14
+              },
+              {
+                "chunk_id": 14
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          },
+          {
+            "trial": 5,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 17,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-3hop-01",
+        "size_class": "large",
+        "hop_type": "3-hop",
+        "expected_answer": "41,000 feet",
+        "scoring_keywords": [
+          [
+            "41,000 feet"
+          ],
+          [
+            "41,000"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          4,
+          15,
+          24
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "abc_tattoo",
+            "final_answer": "41,000 feet",
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 14,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 5
+              },
+              {
+                "chunk_id": 5
+              },
+              {
+                "chunk_id": 5
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 12
+              },
+              {
+                "chunk_id": 12
+              },
+              {
+                "chunk_id": 21
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "arm": "abc_tattoo",
+            "final_answer": "41,000 feet",
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 19,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 12
+              },
+              {
+                "chunk_id": 13
+              },
+              {
+                "chunk_id": 13
+              },
+              {
+                "chunk_id": 21
+              },
+              {
+                "chunk_id": 22
+              },
+              {
+                "chunk_id": 22
+              },
+              {
+                "chunk_id": 24
+              },
+              {
+                "chunk_id": 24
+              },
+              {
+                "chunk_id": 24
+              }
+            ]
+          },
+          {
+            "trial": 3,
+            "arm": "abc_tattoo",
+            "final_answer": "41,000 feet",
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 14,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 2
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 3
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 4
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 6
+              },
+              {
+                "chunk_id": 12
+              },
+              {
+                "chunk_id": 21
+              },
+              {
+                "chunk_id": 22
+              },
+              {
+                "chunk_id": 22
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          },
+          {
+            "trial": 5,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          }
+        ]
+      },
+      {
+        "task_id": "longctx-large-3hop-02",
+        "size_class": "large",
+        "hop_type": "3-hop",
+        "expected_answer": "1992",
+        "scoring_keywords": [
+          [
+            "1992"
+          ]
+        ],
+        "gold_evidence_chunks": [
+          6,
+          16,
+          25
+        ],
+        "trials": [
+          {
+            "trial": 1,
+            "arm": "abc_tattoo",
+            "final_answer": "1992",
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 1,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 8
+              }
+            ]
+          },
+          {
+            "trial": 2,
+            "arm": "abc_tattoo",
+            "final_answer": "1992",
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 1,
+            "evidence_refs_used": []
+          },
+          {
+            "trial": 3,
+            "arm": "abc_tattoo",
+            "final_answer": 1992,
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 1,
+            "evidence_refs_used": [
+              {
+                "chunk_id": 8
+              }
+            ]
+          },
+          {
+            "trial": 4,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          },
+          {
+            "trial": 5,
+            "arm": "abc_tattoo",
+            "final_answer": null,
+            "error": null,
+            "num_chunks": 31,
+            "num_assertions": 0,
+            "evidence_refs_used": []
+          }
+        ]
+      }
+    ]
+  }
+}

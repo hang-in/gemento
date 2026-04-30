@@ -1,0 +1,664 @@
+[2026-04-30 09:58:44]   > Trial 4 START | Arm: solo_dump
+[2026-04-30 09:58:48]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:58:48]   > Trial 5 START | Arm: solo_dump
+[2026-04-30 09:58:53]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:58:53]   > Trial 4 START | Arm: solo_dump
+[2026-04-30 09:58:57]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:58:57]   > Trial 5 START | Arm: solo_dump
+[2026-04-30 09:59:01]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:01]   > Trial 4 START | Arm: solo_dump
+[2026-04-30 09:59:06]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:06]   > Trial 5 START | Arm: solo_dump
+[2026-04-30 09:59:10]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:10]   > Trial 4 START | Arm: solo_dump
+[2026-04-30 09:59:14]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:14]   > Trial 5 START | Arm: solo_dump
+[2026-04-30 09:59:19]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:19]   > Trial 4 START | Arm: solo_dump
+[2026-04-30 09:59:23]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:23]   > Trial 5 START | Arm: solo_dump
+[2026-04-30 09:59:27]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:27]   > Trial 4 START | Arm: solo_dump
+[2026-04-30 09:59:32]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:32]   > Trial 5 START | Arm: solo_dump
+[2026-04-30 09:59:36]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:36]   > Trial 4 START | Arm: solo_dump
+[2026-04-30 09:59:40]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:40]   > Trial 5 START | Arm: solo_dump
+[2026-04-30 09:59:44]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:44]   > Trial 4 START | Arm: solo_dump
+[2026-04-30 09:59:49]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:49]   > Trial 5 START | Arm: solo_dump
+[2026-04-30 09:59:53]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:53]   > Trial 4 START | Arm: solo_dump
+[2026-04-30 09:59:57]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 09:59:57]   > Trial 5 START | Arm: solo_dump
+[2026-04-30 10:00:02]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:02]   > Trial 4 START | Arm: solo_dump
+[2026-04-30 10:00:06]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:06]   > Trial 5 START | Arm: solo_dump
+[2026-04-30 10:00:10]     ⚠ Solo-dump Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:10]   > Trial 4 START | Arm: rag_baseline
+[2026-04-30 10:00:10]     RAG retrieved chunk IDs: [2, 3, 0, 1, 4]
+[2026-04-30 10:00:15]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:15]   > Trial 5 START | Arm: rag_baseline
+[2026-04-30 10:00:15]     RAG retrieved chunk IDs: [2, 3, 0, 1, 4]
+[2026-04-30 10:00:19]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:19]   > Trial 4 START | Arm: rag_baseline
+[2026-04-30 10:00:19]     RAG retrieved chunk IDs: [11, 5, 0, 4, 14]
+[2026-04-30 10:00:23]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:23]   > Trial 5 START | Arm: rag_baseline
+[2026-04-30 10:00:23]     RAG retrieved chunk IDs: [11, 5, 0, 4, 14]
+[2026-04-30 10:00:28]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:28]   > Trial 4 START | Arm: rag_baseline
+[2026-04-30 10:00:28]     RAG retrieved chunk IDs: [11, 16, 14, 10, 20]
+[2026-04-30 10:00:32]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:32]   > Trial 5 START | Arm: rag_baseline
+[2026-04-30 10:00:32]     RAG retrieved chunk IDs: [11, 16, 14, 10, 20]
+[2026-04-30 10:00:36]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:36]   > Trial 4 START | Arm: rag_baseline
+[2026-04-30 10:00:36]     RAG retrieved chunk IDs: [1, 4, 0, 2, 3]
+[2026-04-30 10:00:41]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:41]   > Trial 5 START | Arm: rag_baseline
+[2026-04-30 10:00:41]     RAG retrieved chunk IDs: [1, 4, 0, 2, 3]
+[2026-04-30 10:00:45]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:45]   > Trial 4 START | Arm: rag_baseline
+[2026-04-30 10:00:45]     RAG retrieved chunk IDs: [3, 12, 13, 5, 2]
+[2026-04-30 10:00:49]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:49]   > Trial 5 START | Arm: rag_baseline
+[2026-04-30 10:00:49]     RAG retrieved chunk IDs: [3, 12, 13, 5, 2]
+[2026-04-30 10:00:53]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:53]   > Trial 4 START | Arm: rag_baseline
+[2026-04-30 10:00:53]     RAG retrieved chunk IDs: [12, 4, 11, 9, 0]
+[2026-04-30 10:00:58]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:00:58]   > Trial 5 START | Arm: rag_baseline
+[2026-04-30 10:00:58]     RAG retrieved chunk IDs: [12, 4, 11, 9, 0]
+[2026-04-30 10:01:02]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:01:02]   > Trial 4 START | Arm: rag_baseline
+[2026-04-30 10:01:02]     RAG retrieved chunk IDs: [1, 6, 7, 11, 10]
+[2026-04-30 10:01:06]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:01:06]   > Trial 5 START | Arm: rag_baseline
+[2026-04-30 10:01:06]     RAG retrieved chunk IDs: [1, 6, 7, 11, 10]
+[2026-04-30 10:01:11]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:01:11]   > Trial 4 START | Arm: rag_baseline
+[2026-04-30 10:01:11]     RAG retrieved chunk IDs: [14, 3, 1, 10, 11]
+[2026-04-30 10:01:15]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:01:15]   > Trial 5 START | Arm: rag_baseline
+[2026-04-30 10:01:15]     RAG retrieved chunk IDs: [14, 3, 1, 10, 11]
+[2026-04-30 10:01:19]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:01:19]   > Trial 4 START | Arm: rag_baseline
+[2026-04-30 10:01:19]     RAG retrieved chunk IDs: [2, 9, 4, 5, 7]
+[2026-04-30 10:01:24]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:01:24]   > Trial 5 START | Arm: rag_baseline
+[2026-04-30 10:01:24]     RAG retrieved chunk IDs: [2, 9, 4, 5, 7]
+[2026-04-30 10:01:28]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:01:28]   > Trial 4 START | Arm: rag_baseline
+[2026-04-30 10:01:28]     RAG retrieved chunk IDs: [14, 8, 15, 4, 11]
+[2026-04-30 10:01:32]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:01:32]   > Trial 5 START | Arm: rag_baseline
+[2026-04-30 10:01:32]     RAG retrieved chunk IDs: [14, 8, 15, 4, 11]
+[2026-04-30 10:01:37]     ⚠ RAG Error: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:01:37]   > Trial 4 START | Arm: abc_tattoo
+[2026-04-30 10:01:37] === [Long-Context ABC] Task: longctx-small-needle-01_t3 ===
+[2026-04-30 10:01:37] Objective: Who is the CEO of NebulaCore Technologies?
+[2026-04-30 10:01:37] Total Chunks: 5
+[2026-04-30 10:01:45] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:01:54] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:02:02] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:02:11] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:02:20] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:02:20] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:03:03] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:03:03]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:03:03]   > Trial 5 START | Arm: abc_tattoo
+[2026-04-30 10:03:03] === [Long-Context ABC] Task: longctx-small-needle-01_t4 ===
+[2026-04-30 10:03:03] Objective: Who is the CEO of NebulaCore Technologies?
+[2026-04-30 10:03:03] Total Chunks: 5
+[2026-04-30 10:03:11] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:03:20] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:03:29] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:03:37] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:03:46] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:03:46] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:04:29] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:04:29]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:04:29]   > Trial 4 START | Arm: abc_tattoo
+[2026-04-30 10:04:29] === [Long-Context ABC] Task: longctx-medium-needle-01_t3 ===
+[2026-04-30 10:04:29] Objective: What is the name of the wireless mesh protocol developed by Orion Bridge Labs?
+[2026-04-30 10:04:29] Total Chunks: 17
+[2026-04-30 10:04:37] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:04:46] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:04:55] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:05:03] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:05:12] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:05:21] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:05:29] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:05:38] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:05:46] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:05:55] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:06:03] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:06:12] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:06:20] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:06:29] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:06:37] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:06:46] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:06:55] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:06:55] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:07:37] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:07:37]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:07:37]   > Trial 5 START | Arm: abc_tattoo
+[2026-04-30 10:07:37] === [Long-Context ABC] Task: longctx-medium-needle-01_t4 ===
+[2026-04-30 10:07:37] Objective: What is the name of the wireless mesh protocol developed by Orion Bridge Labs?
+[2026-04-30 10:07:37] Total Chunks: 17
+[2026-04-30 10:07:46] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:07:54] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:08:03] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:08:12] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:08:20] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:08:29] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:08:37] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:08:46] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:08:54] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:09:03] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:09:12] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:09:20] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:09:29] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:09:37] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:09:46] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:09:54] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:10:03] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:10:03] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:10:46] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:10:46]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:10:46]   > Trial 4 START | Arm: abc_tattoo
+[2026-04-30 10:10:46] === [Long-Context ABC] Task: longctx-large-needle-01_t3 ===
+[2026-04-30 10:10:46] Objective: On what date did the Arcturus-7 spacecraft depart from Earth orbit?
+[2026-04-30 10:10:46] Total Chunks: 31
+[2026-04-30 10:10:54] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:11:03] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:11:11] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:11:20] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:11:28] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:11:37] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:11:46] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:11:54] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:12:03] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:12:11] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:12:20] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:12:28] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:12:37] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:12:45] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:12:54] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:13:03] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:13:11] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:13:20] [Chunk 17] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:13:28] [Chunk 18] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:13:37] [Chunk 19] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:13:45] [Chunk 20] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:13:54] [Chunk 21] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:14:03] [Chunk 22] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:14:11] [Chunk 23] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:14:20] [Chunk 24] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:14:28] [Chunk 25] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:14:37] [Chunk 26] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:14:45] [Chunk 27] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:14:54] [Chunk 28] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:15:02] [Chunk 29] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:15:11] [Chunk 30] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:15:11] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:15:54] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:15:54]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:15:54]   > Trial 5 START | Arm: abc_tattoo
+[2026-04-30 10:15:54] === [Long-Context ABC] Task: longctx-large-needle-01_t4 ===
+[2026-04-30 10:15:54] Objective: On what date did the Arcturus-7 spacecraft depart from Earth orbit?
+[2026-04-30 10:15:54] Total Chunks: 31
+[2026-04-30 10:16:02] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:16:11] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:16:19] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:16:28] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:16:36] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:16:45] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:16:54] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:17:02] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:17:11] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:17:19] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:17:28] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:17:36] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:17:45] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:17:53] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:18:02] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:18:10] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:18:19] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:18:28] [Chunk 17] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:18:36] [Chunk 18] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:18:45] [Chunk 19] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:18:53] [Chunk 20] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:19:02] [Chunk 21] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:19:10] [Chunk 22] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:19:19] [Chunk 23] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:19:27] [Chunk 24] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:19:36] [Chunk 25] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:19:45] [Chunk 26] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:19:53] [Chunk 27] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:20:02] [Chunk 28] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:20:10] [Chunk 29] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:20:19] [Chunk 30] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:20:19] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:21:02] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:21:02]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:21:02]   > Trial 4 START | Arm: abc_tattoo
+[2026-04-30 10:21:02] === [Long-Context ABC] Task: longctx-small-2hop-01_t3 ===
+[2026-04-30 10:21:02] Objective: What is the primary material used in products manufactured by the company that Dr. Amara Bello founded?
+[2026-04-30 10:21:02] Total Chunks: 5
+[2026-04-30 10:21:10] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:21:19] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:21:27] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:21:36] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:21:44] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:21:44] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:22:27] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:22:27]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:22:27]   > Trial 5 START | Arm: abc_tattoo
+[2026-04-30 10:22:27] === [Long-Context ABC] Task: longctx-small-2hop-01_t4 ===
+[2026-04-30 10:22:27] Objective: What is the primary material used in products manufactured by the company that Dr. Amara Bello founded?
+[2026-04-30 10:22:27] Total Chunks: 5
+[2026-04-30 10:22:36] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:22:44] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:22:53] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:23:01] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:23:10] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:23:10] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:23:53] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:23:53]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:23:53]   > Trial 4 START | Arm: abc_tattoo
+[2026-04-30 10:23:53] === [Long-Context ABC] Task: longctx-medium-2hop-01_t3 ===
+[2026-04-30 10:23:53] Objective: In what year was the building that serves as the headquarters of Thornfield Publishing acquired by its current owner?
+[2026-04-30 10:23:53] Total Chunks: 17
+[2026-04-30 10:24:01] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:24:10] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:24:18] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:24:27] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:24:36] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:24:44] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:24:53] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:25:01] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:25:10] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:25:18] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:25:27] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:25:36] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:25:44] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:25:53] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:26:01] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:26:10] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:26:18] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:26:18] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:27:01] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:27:01]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:27:01]   > Trial 5 START | Arm: abc_tattoo
+[2026-04-30 10:27:01] === [Long-Context ABC] Task: longctx-medium-2hop-01_t4 ===
+[2026-04-30 10:27:01] Objective: In what year was the building that serves as the headquarters of Thornfield Publishing acquired by its current owner?
+[2026-04-30 10:27:01] Total Chunks: 17
+[2026-04-30 10:27:10] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:27:18] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:27:27] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:27:35] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:27:44] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:27:52] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:28:01] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:28:10] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:28:18] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:28:27] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:28:35] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:28:44] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:28:52] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:29:01] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:29:09] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:29:18] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:29:26] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:29:26] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:30:09] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:30:09]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:30:09]   > Trial 4 START | Arm: abc_tattoo
+[2026-04-30 10:30:09] === [Long-Context ABC] Task: longctx-medium-2hop-02_t3 ===
+[2026-04-30 10:30:09] Objective: What is the power output of the engine installed in the vessel that won the 2019 Solent Classic race?
+[2026-04-30 10:30:09] Total Chunks: 17
+[2026-04-30 10:30:18] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:30:26] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:30:35] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:30:43] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:30:52] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:31:01] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:31:09] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:31:18] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:31:26] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:31:35] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:31:43] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:31:52] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:32:00] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:32:09] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:32:18] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:32:26] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:32:35] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:32:35] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:33:18] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:33:18]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:33:18]   > Trial 5 START | Arm: abc_tattoo
+[2026-04-30 10:33:18] === [Long-Context ABC] Task: longctx-medium-2hop-02_t4 ===
+[2026-04-30 10:33:18] Objective: What is the power output of the engine installed in the vessel that won the 2019 Solent Classic race?
+[2026-04-30 10:33:18] Total Chunks: 17
+[2026-04-30 10:33:26] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:33:35] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:33:43] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:33:52] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:34:00] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:34:09] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:34:17] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:34:26] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:34:34] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:34:43] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:34:52] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:35:00] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:35:09] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:35:17] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:35:26] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:35:34] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:35:43] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:35:43] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:36:26] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:36:26]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:36:26]   > Trial 4 START | Arm: abc_tattoo
+[2026-04-30 10:36:26] === [Long-Context ABC] Task: longctx-large-2hop-01_t3 ===
+[2026-04-30 10:36:26] Objective: What is the total number of patents held by the research institute that trained Dr. Chen Wei?
+[2026-04-30 10:36:26] Total Chunks: 31
+[2026-04-30 10:36:34] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:36:43] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:36:51] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:37:00] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:37:08] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:37:17] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:37:26] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:37:34] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:37:43] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:37:51] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:38:00] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:38:08] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:38:17] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:38:25] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:38:34] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:38:42] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:38:51] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:39:00] [Chunk 17] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:39:08] [Chunk 18] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:39:17] [Chunk 19] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:39:25] [Chunk 20] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:39:34] [Chunk 21] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:39:42] [Chunk 22] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:39:51] [Chunk 23] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:39:59] [Chunk 24] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:40:08] [Chunk 25] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:40:17] [Chunk 26] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:40:25] [Chunk 27] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:40:34] [Chunk 28] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:40:42] [Chunk 29] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:40:51] [Chunk 30] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:40:51] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:41:34] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:41:34]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:41:34]   > Trial 5 START | Arm: abc_tattoo
+[2026-04-30 10:41:34] === [Long-Context ABC] Task: longctx-large-2hop-01_t4 ===
+[2026-04-30 10:41:34] Objective: What is the total number of patents held by the research institute that trained Dr. Chen Wei?
+[2026-04-30 10:41:34] Total Chunks: 31
+[2026-04-30 10:41:42] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:41:51] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:41:59] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:42:08] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:42:16] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:42:25] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:42:34] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:42:42] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:42:51] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:42:59] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:43:08] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:43:16] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:43:25] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:43:33] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:43:42] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:43:50] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:43:59] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:44:07] [Chunk 17] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:44:16] [Chunk 18] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:44:25] [Chunk 19] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:44:33] [Chunk 20] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:44:42] [Chunk 21] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:44:50] [Chunk 22] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:44:59] [Chunk 23] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:45:07] [Chunk 24] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:45:16] [Chunk 25] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:45:24] [Chunk 26] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:45:33] [Chunk 27] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:45:42] [Chunk 28] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:45:50] [Chunk 29] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:45:59] [Chunk 30] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:45:59] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:46:41] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:46:41]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:46:41]   > Trial 4 START | Arm: abc_tattoo
+[2026-04-30 10:46:41] === [Long-Context ABC] Task: longctx-medium-3hop-01_t3 ===
+[2026-04-30 10:46:41] Objective: What language does the governing body that manages the river running through the city known as the 'Gateway to the Highlands' use for official proceedings?
+[2026-04-30 10:46:41] Total Chunks: 17
+[2026-04-30 10:46:50] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:46:59] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:47:07] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:47:16] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:47:24] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:47:33] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:47:41] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:47:50] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:47:58] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:48:07] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:48:16] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:48:24] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:48:33] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:48:41] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:48:50] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:48:58] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:49:07] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:49:07] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:49:50] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:49:50]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:49:50]   > Trial 5 START | Arm: abc_tattoo
+[2026-04-30 10:49:50] === [Long-Context ABC] Task: longctx-medium-3hop-01_t4 ===
+[2026-04-30 10:49:50] Objective: What language does the governing body that manages the river running through the city known as the 'Gateway to the Highlands' use for official proceedings?
+[2026-04-30 10:49:50] Total Chunks: 17
+[2026-04-30 10:49:58] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:50:07] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:50:15] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:50:24] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:50:33] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:50:41] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:50:50] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:50:58] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:51:07] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:51:15] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:51:24] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:51:32] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:51:41] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:51:50] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:51:58] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:52:07] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:52:15] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:52:15] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:52:58] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:52:58]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:52:58]   > Trial 4 START | Arm: abc_tattoo
+[2026-04-30 10:52:58] === [Long-Context ABC] Task: longctx-large-3hop-01_t3 ===
+[2026-04-30 10:52:58] Objective: What is the maximum certified operating altitude of the aircraft that uses the engine manufactured by the company that acquired Vertex Aerospace in 2019?
+[2026-04-30 10:52:58] Total Chunks: 31
+[2026-04-30 10:53:06] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:53:15] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:53:23] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:53:32] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:53:41] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:53:49] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:53:58] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:54:06] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:54:15] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:54:23] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:54:32] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:54:41] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:54:49] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:54:58] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:55:06] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:55:15] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:55:23] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:55:32] [Chunk 17] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:55:41] [Chunk 18] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:55:49] [Chunk 19] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:55:58] [Chunk 20] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:56:06] [Chunk 21] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:56:15] [Chunk 22] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:56:23] [Chunk 23] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:56:32] [Chunk 24] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:56:40] [Chunk 25] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:56:49] [Chunk 26] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:56:58] [Chunk 27] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:57:06] [Chunk 28] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:57:15] [Chunk 29] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:57:23] [Chunk 30] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:57:23] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 10:58:06] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 10:58:06]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 10:58:06]   > Trial 5 START | Arm: abc_tattoo
+[2026-04-30 10:58:06] === [Long-Context ABC] Task: longctx-large-3hop-01_t4 ===
+[2026-04-30 10:58:06] Objective: What is the maximum certified operating altitude of the aircraft that uses the engine manufactured by the company that acquired Vertex Aerospace in 2019?
+[2026-04-30 10:58:06] Total Chunks: 31
+[2026-04-30 10:58:14] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:58:23] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:58:32] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:58:40] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:58:49] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:58:57] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:59:06] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:59:14] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:59:23] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:59:31] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:59:40] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:59:49] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 10:59:57] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:00:06] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:00:14] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:00:23] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:00:31] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:00:40] [Chunk 17] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:00:48] [Chunk 18] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:00:57] [Chunk 19] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:01:05] [Chunk 20] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:01:14] [Chunk 21] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:01:22] [Chunk 22] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:01:31] [Chunk 23] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:01:40] [Chunk 24] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:01:48] [Chunk 25] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:01:57] [Chunk 26] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:02:05] [Chunk 27] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:02:14] [Chunk 28] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:02:22] [Chunk 29] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:02:31] [Chunk 30] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:02:31] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 11:03:14] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 11:03:14]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 11:03:14]   > Trial 4 START | Arm: abc_tattoo
+[2026-04-30 11:03:14] === [Long-Context ABC] Task: longctx-large-3hop-02_t3 ===
+[2026-04-30 11:03:14] Objective: What year did Professor Helena Dantzer complete her undergraduate studies?
+[2026-04-30 11:03:14] Total Chunks: 31
+[2026-04-30 11:03:22] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:03:31] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:03:39] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:03:48] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:03:56] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:04:05] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:04:13] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:04:22] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:04:31] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:04:39] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:04:48] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:04:56] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:05:05] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:05:13] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:05:22] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:05:30] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:05:39] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:05:48] [Chunk 17] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:05:56] [Chunk 18] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:06:05] [Chunk 19] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:06:13] [Chunk 20] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:06:22] [Chunk 21] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:06:30] [Chunk 22] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:06:39] [Chunk 23] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:06:47] [Chunk 24] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:06:56] [Chunk 25] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:07:05] [Chunk 26] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:07:13] [Chunk 27] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:07:22] [Chunk 28] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:07:30] [Chunk 29] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:07:39] [Chunk 30] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:07:39] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 11:08:22] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 11:08:22]     ABC Result: Answer=None..., Evidence Count=0
+[2026-04-30 11:08:22]   > Trial 5 START | Arm: abc_tattoo
+[2026-04-30 11:08:22] === [Long-Context ABC] Task: longctx-large-3hop-02_t4 ===
+[2026-04-30 11:08:22] Objective: What year did Professor Helena Dantzer complete her undergraduate studies?
+[2026-04-30 11:08:22] Total Chunks: 31
+[2026-04-30 11:08:30] [Chunk 0] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:08:39] [Chunk 1] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:08:47] [Chunk 2] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:08:56] [Chunk 3] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:09:04] [Chunk 4] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:09:13] [Chunk 5] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:09:21] [Chunk 6] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:09:30] [Chunk 7] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:09:39] [Chunk 8] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:09:47] [Chunk 9] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:09:56] [Chunk 10] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:10:04] [Chunk 11] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:10:13] [Chunk 12] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:10:21] [Chunk 13] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:10:30] [Chunk 14] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:10:39] [Chunk 15] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:10:47] [Chunk 16] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:10:56] [Chunk 17] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:11:04] [Chunk 18] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:11:13] [Chunk 19] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:11:21] [Chunk 20] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:11:30] [Chunk 21] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:11:38] [Chunk 22] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:11:47] [Chunk 23] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:11:56] [Chunk 24] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:12:04] [Chunk 25] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:12:13] [Chunk 26] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:12:21] [Chunk 27] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:12:30] [Chunk 28] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:12:38] [Chunk 29] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:12:47] [Chunk 30] ⚠ Failed to parse: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+[2026-04-30 11:12:47] 
+--- Phase 2: Final Synthesis (B+C) ---
+[2026-04-30 11:13:30] === [Long-Context ABC] MAX CYCLES REACHED ===
+[2026-04-30 11:13:30]     ABC Result: Answer=None..., Evidence Count=0
