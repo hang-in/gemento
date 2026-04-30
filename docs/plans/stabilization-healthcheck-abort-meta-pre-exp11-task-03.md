@@ -244,8 +244,7 @@ print('verification 3 ok: schema 문서')
 
 - **Risk 1 — `get_taskset_version` 의 git 호출 비용**: subprocess 호출이 5s timeout. 대량 trial 환경에서 병목 가능성. 대응: 도구가 한 번 호출 후 변수에 캐시.
 - **Risk 2 — 도구별 sampling_params 표현 차이**: `lmstudio_client.py` 가 `SAMPLING_PARAMS` 를 그대로 forward 하지만, `gemini_client.py` 는 `generation_config` 형태일 가능성. `normalize_sampling_params` 로 1차 흡수 — 부족하면 client 별 분기.
-- **Risk 3 — `model_endpoint` 의 PII 위험**: 사용자 사설 endpoint (`http://yongseek.iptime.org:8005`) 가 결과 JSON 에 노출되면 README 외부 공개 시 부주의 노출 가능. 대응: endpoint 는 host 부분만 (e.g. `lmstudio_local` 또는 `<masked>`) — 기본 동작은 raw URL 그대로 + Risk 항목으로 disclosure. 사용자 결정 의존 (parent plan §사용자 결정 의존 사항 의 결정 4 후보 — 현재 plan 에서는 raw URL 기본).
-- **Risk 4 — schema_version 의 도구간 불일치**: 일부 도구만 v1.0 적용하면 mixed 상태. 대응: subtask 02 와 병렬 진행 + subtask 05 의 dry-run 검증에서 모든 도구의 신규 출력이 v1.0 인지 확인.
+- **Risk 3 — schema_version 의 도구간 불일치**: 일부 도구만 v1.0 적용하면 mixed 상태. 대응: subtask 02 와 병렬 진행 + subtask 05 의 dry-run 검증에서 모든 도구의 신규 출력이 v1.0 인지 확인.
 
 ## Scope boundary
 
@@ -260,10 +259,6 @@ print('verification 3 ok: schema 문서')
 - README / researchNotebook
 - docs/reference 의 다른 reference 문서 (resultJsonSchema.md 만 신규)
 
-## Risk 4 사용자 결정 호출 필요 여부
+## model_endpoint 정책 (확정)
 
-`model_endpoint` 의 raw URL 노출 정책은 **사용자 결정**:
-- 옵션 A: raw URL 그대로 (기본). 향후 README 공개 commit 시 별도 마스킹 절차
-- 옵션 B: helper 가 자동 마스킹 (`http://localhost:*`/`http://127.0.0.1:*` 외는 host 만 남김)
-
-본 task 의 default 는 **옵션 A**. 사용자가 옵션 B 결정 시 helper 보강 추가 (Architect 가 plan 수정 후 진행).
+현재 로컬 lmstudio (`http://localhost:1234/v1` 등) 만 사용. 사설 endpoint 미사용. raw URL 그대로 저장 (마스킹 helper 도입 안 함). 향후 사설 endpoint 도입 시 별도 plan.
