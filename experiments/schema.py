@@ -327,6 +327,35 @@ class Tattoo:
         return cls.from_dict(json.loads(s))
 
 
+class FailureLabel(Enum):
+    """trial result 의 failure / success 분류.
+
+    namingConventions.md §9.3 와 Stage 2C `ErrorMode` 의 표준 정의.
+    Stage 2C 의 `experiments/exp_h4_recheck/analyze.py:ErrorMode` 는 본 enum 의 alias.
+
+    분류 의미:
+    - NONE: 정답 (acc_v3 ≥ 0.5 등 task 별 기준)
+    - FORMAT_ERROR: JSON parse / schema 위반 (final_answer 없음 또는 malformed)
+    - WRONG_SYNTHESIS: 형식은 OK 인데 내용 틀림 (acc < 0.5, len > 10)
+    - EVIDENCE_MISS: evidence_ref 누락 또는 잘못된 출처 (heuristic, Stage 2C+)
+    - NULL_ANSWER: final_answer 가 None / 빈 문자열
+    - CONNECTION_ERROR: WinError 10061 등 (Stage 2A `TrialError.CONNECTION_ERROR` 와 동기)
+    - PARSE_ERROR: Stage 2A `TrialError.PARSE_ERROR` 와 동기
+    - TIMEOUT: Stage 2A `TrialError.TIMEOUT` 와 동기
+    - OTHER: 미분류
+    """
+
+    NONE = "none"
+    FORMAT_ERROR = "format_error"
+    WRONG_SYNTHESIS = "wrong_synthesis"
+    EVIDENCE_MISS = "evidence_miss"
+    NULL_ANSWER = "null_answer"
+    CONNECTION_ERROR = "connection_error"
+    PARSE_ERROR = "parse_error"
+    TIMEOUT = "timeout"
+    OTHER = "other"
+
+
 def create_initial_tattoo(
     task_id: str,
     objective: str,

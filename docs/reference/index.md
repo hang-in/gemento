@@ -14,6 +14,8 @@ Reference document index.
 - [namingConventions.md](namingConventions.md) — **canonical 표기/용어 규약** (Stage NX, task-NN, 옵션 (a)/(i)/1, 결정 N, condition slug, commit message)
 - [resultJsonSchema.md](resultJsonSchema.md) — 결과 JSON top-level schema v1.0 (Stage 2A 도입 예정)
 - [h4-metric-definitions.md](h4-metric-definitions.md) — H4 재검증 metric 정의 (Stage 2C 도입 예정)
+- [scoringHistory.md](scoringHistory.md) — 채점 시스템 변천 (v0/v2/v3 적용 범위) — Stage 2B
+- [failureLabels.md](failureLabels.md) — failure label 표준 reference (FailureLabel enum + 기존 매핑) — Stage 2B
 
 ## 핸드오프
 
