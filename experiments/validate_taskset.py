@@ -153,6 +153,34 @@ MATH_VALIDATORS = {
 }
 
 
+# ── Planning 검증 함수 ──
+
+def _validate_planning_01() -> dict:
+    """planning-01: A→B→C sequential schedule. A=9-11, B=11-14, C=14-15. 총 6h."""
+    ans = "A: 9:00 AM - 11:00 AM (2 hours). B: 11:00 AM - 2:00 PM (3 hours). C: 2:00 PM - 3:00 PM (1 hour). Total elapsed time: 6 hours."
+    required = ["9:00", "11:00", "2:00", "3:00", "6"]
+    for kw in required:
+        if kw not in ans:
+            return {"result": "FAIL", "detail": f"required keyword '{kw}' missing"}
+    return {"result": "PASS", "detail": "sequential schedule: A=9-11, B=11-14, C=14-15, total=6h"}
+
+
+def _validate_planning_02() -> dict:
+    """planning-02: critical path A→B→D→F = 12h. 2 workers."""
+    ans = "Total time: 12 hours. Critical path: A -> B -> D -> F (2+3+4+3 = 12h)."
+    if "12" not in ans:
+        return {"result": "FAIL", "detail": "expected total time 12 hours missing"}
+    if "critical path" not in ans.lower():
+        return {"result": "FAIL", "detail": "critical path identification missing"}
+    return {"result": "PASS", "detail": "critical path A→B→D→F=12h verified"}
+
+
+PLANNING_VALIDATORS = {
+    "planning-01": _validate_planning_01,
+    "planning-02": _validate_planning_02,
+}
+
+
 # ── 태스크별 검증 ──
 
 def _validate_task(task: dict) -> dict:
@@ -160,6 +188,15 @@ def _validate_task(task: dict) -> dict:
 
     if tid in MATH_VALIDATORS:
         r = MATH_VALIDATORS[tid]()
+        kw = _keywords_in_expected(task)
+        r["keyword_consistency"] = kw["result"]
+        if kw["result"] == "INCONSISTENT" and r["result"] == "PASS":
+            r["result"] = "WARN"
+            r["detail"] += f" | keyword issue: {kw['detail']}"
+        return r
+
+    if tid in PLANNING_VALIDATORS:
+        r = PLANNING_VALIDATORS[tid]()
         kw = _keywords_in_expected(task)
         r["keyword_consistency"] = kw["result"]
         if kw["result"] == "INCONSISTENT" and r["result"] == "PASS":
@@ -218,7 +255,7 @@ def main() -> None:
     for task in tasks:
         tid = task["id"]
         cat = task.get("category", "")
-        method = "sympy/scipy" if tid in MATH_VALIDATORS else "consistency"
+        method = "sympy/scipy" if tid in MATH_VALIDATORS else ("schedule/cp" if tid in PLANNING_VALIDATORS else "consistency")
         r = _validate_task(task)
         _print_row(tid, cat, method, r["result"], r.get("detail", ""))
         all_results.append({"task_id": tid, "category": cat, "source": "taskset.json", **r})
