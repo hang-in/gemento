@@ -1,10 +1,11 @@
 ---
 type: plan-task
-status: todo
+status: done
 updated_at: 2026-04-30
 parent_plan: phase-1-taskset-3-fail-exp09-5-trial-exp10-v3
 parallel_group: B
 depends_on: []
+conclusion: "(c) 시스템 결함 단독 — trial 4-5 가 WinError 10061 인프라 결함으로 무효"
 ---
 
 # Task 02 — Exp09 5-trial 점수 하락 원인 분석

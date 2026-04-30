@@ -1,10 +1,11 @@
 ---
 type: plan-task
-status: todo
+status: done
 updated_at: 2026-04-30
 parent_plan: phase-1-taskset-3-fail-exp09-5-trial-exp10-v3
 parallel_group: A
 depends_on: []
+verification: "validate_taskset 22 PASS / 0 FAIL / 0 WARN / 0 SKIP"
 ---
 
 # Task 01 — Taskset 3 FAIL 수정

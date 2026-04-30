@@ -1,10 +1,12 @@
 ---
 type: plan-task
-status: todo
+status: done
 updated_at: 2026-04-30
 parent_plan: phase-1-taskset-3-fail-exp09-5-trial-exp10-v3
 parallel_group: A
 depends_on: [01]
+result_file: experiments/exp10_reproducibility_cost/results/exp10_v3_rescored_20260430_152306.json
+delta_summary: "condition mean Δ=+0.0019 (3 condition 동일), task-level synthesis-04 단독 +0.017"
 ---
 
 # Task 03 — Exp10 v3 재산정 (Taskset 정정 반영)

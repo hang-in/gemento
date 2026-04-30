@@ -684,6 +684,16 @@ Small Paradox detail:
 - `longctx-small-needle-01`: abc=0.200 vs rag=0.600 (Δ=−0.400, trials=[0,0,1,0,0])
 - `longctx-small-2hop-01`: abc=0.600 vs rag=0.600 (Δ=0.000, trials=[1,1,1,0,0])
 
+**5-trial drop analysis note (2026-04-30):**
+
+Follow-up analysis after the Phase 1 5-trial publication revealed that trials 4-5 are infrastructure-invalid, not statistically meaningful additional samples. On the Windows execution environment, the model server (`http://yongseek.iptime.org:8005`) returned `WinError 10061` (connection refused) for all rag/solo trials 4-5 (20/20 each), and ABC trials 4-5 returned `num_assertions=0, final_answer=null` (20/20) because the ABC orchestrator's try/except swallowed the connection failure into an empty result.
+
+Validation: `3-trial mean × 3/5` matches the 5-trial mean exactly — `0.883 × 0.6 = 0.530` (abc), `0.850 × 0.6 = 0.510` (rag). No new sampling variance or model nondeterminism. Trial 1-3 answers are 10/10 task-identical between the 3-trial and 5-trial JSON (append consistency 100%).
+
+**Implication for H9b**: the 5-trial NOT SIGNIFICANT verdict (paired t-test p=0.7976, Wilcoxon p=1.000) is dilution by invalid trials, not evidence of no effect. The 3-trial result (Δ=+0.033) remains the most accurate H9b data point. Verdict reversion is a follow-up architectural decision; this note disclosures the data flaw only.
+
+Detail: `docs/reference/exp09-5trial-drop-analysis-2026-04-30.md`. Analysis script: `experiments/exp09_longctx/analyze_5trial_drop.py`. `run_append_trials.py` retry / pre-flight healthcheck reinforcement is a separate plan candidate.
+
 ---
 
 ### Exp10: Reproducibility & Cost Profile (v2 final)
@@ -730,6 +740,22 @@ After publishing the v2 final results above, a follow-up scorer (`score_answer_v
 Ranking unchanged. The v2 final dataset itself is preserved; only the scoring layer changed. ABC chain JSON parse stability also patched in `extract_json_from_response` (fence_unclosed fallback + partial JSON brace recovery), applied to future runs.
 
 Detail: `docs/reference/results/exp-10-reproducibility-cost.md` §6.
+
+**v3 rescore note 2 (2026-04-30, taskset patched):**
+
+A subsequent Phase 1 follow-up plan (`phase-1-taskset-3-fail-exp09-5-trial-exp10-v3`) repaired three FAIL items flagged by `validate_taskset` (math-03 prompt unsolvable system → 96→88 + "round = square + 2" constraint, synthesis-04 keyword groups → `[["reports"],["5"],["6"]]`, longctx-medium-2hop-02 expected → `"500 horsepower (500 hp)"`), then re-ran `rescore_v3.py` against the same v2 final dataset. New output: `exp10_v3_rescored_20260430_152306.json`.
+
+Comparing against the prior canonical (`053939`):
+
+| condition | prev v3 (053939) | curr v3 (152306) | Δ |
+|-----------|----------------:|-----------------:|--:|
+| gemma_8loop | 0.7815 | 0.7833 | +0.0019 |
+| gemini_flash_1call | 0.5907 | 0.5926 | +0.0019 |
+| gemma_1loop | 0.4130 | 0.4148 | +0.0019 |
+
+Task-level Δ is **synthesis-04 alone** (+0.017 across all three conditions, from the keyword-group simplification). math-03 unchanged at the rescore level — the v3 trials' final_answer text was generated under the unsolvable 96 prompt and does not match the corrected gold either, so the Δ is zero. logic-04 also unchanged (negative_patterns preserved). Other 7 tasks preserved.
+
+Condition-mean |Δ| < 0.01 — no README headline / H1 evidence text update required (rounded ratios identical: gemma_1loop→8loop ≈ +37pp, gemma_8loop−gemini_flash ≈ +19pp). The 053939 file is retained as untracked archive (consistent with the prior plan's policy). Detail: `docs/reference/results/exp-10-reproducibility-cost.md` §8.
 
 ---
 

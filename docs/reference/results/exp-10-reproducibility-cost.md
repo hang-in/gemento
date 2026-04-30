@@ -1,7 +1,7 @@
 ---
 type: result
 status: done
-updated_at: 2026-04-29
+updated_at: 2026-04-30
 experiment: 실험 10 — Reproducibility & Cost Profile (v2 final)
 ---
 
@@ -18,13 +18,13 @@ experiment: 실험 10 — Reproducibility & Cost Profile (v2 final)
 
 ## 2. 핵심 메트릭
 
-> 채점 정책: **v3 채점기** (`score_answer_v3`). v2 keyword-group 매칭에 task 별 `negative_patterns` 차단 추가. logic-04 의 false positive 12건 제거. v3 rescore 결과: `experiments/exp10_reproducibility_cost/results/exp10_v3_rescored_20260429_045819.json` (각 trial dict 에 `accuracy_v2` + `accuracy_v3` 두 필드 보유).
+> 채점 정책: **v3 채점기** (`score_answer_v3`). v2 keyword-group 매칭에 task 별 `negative_patterns` 차단 추가. logic-04 의 false positive 12건 제거. 본 표는 **2026-04-30 Phase 1 후속 taskset 정정** (math-03 / synthesis-04 / longctx-medium-2hop-02) 후 재산정된 v3 결과 (`experiments/exp10_reproducibility_cost/results/exp10_v3_rescored_20260430_152306.json`). 각 trial dict 에 `accuracy_v2` + `accuracy_v3` 두 필드 보유. 직전 v3 (053939) 대비 모든 condition Δ +0.0019 — synthesis-04 keyword 정정 효과 (math-03 prompt 정정은 답변과 무관, Δ=0).
 
 | condition | mean_acc (v2) | **mean_acc (v3)** | cost_usd (180) | $/trial | avg_dur | err+null |
 |-----------|--------------:|------------------:|---------------:|--------:|--------:|---------:|
-| **gemma_8loop** (Gemma 4 E4B + ABC 8루프) | 0.820 | **0.781** | $0.0000 | $0.0000 | **8 min** | 8 |
-| gemini_flash_1call (Gemini 2.5 Flash 1-call) | 0.619 | **0.591** | $0.0143 | $0.0000793 | 24 s | 0 |
-| gemma_1loop (Gemma 4 E4B 단발) | 0.413 | **0.413** | $0.0000 | $0.0000 | 33 s | 11 |
+| **gemma_8loop** (Gemma 4 E4B + ABC 8루프) | 0.822 | **0.783** | $0.0000 | $0.0000 | **8 min** | 8 |
+| gemini_flash_1call (Gemini 2.5 Flash 1-call) | 0.620 | **0.593** | $0.0143 | $0.0000793 | 24 s | 0 |
+| gemma_1loop (Gemma 4 E4B 단발) | 0.415 | **0.415** | $0.0000 | $0.0000 | 33 s | 11 |
 
 ## 3. per-task 정답률 (v3)
 
@@ -36,7 +36,7 @@ experiment: 실험 10 — Reproducibility & Cost Profile (v2 final)
 | math-04 | 1.000 | 0.167 | 0.667 |
 | synthesis-01 | 0.700 | 0.000 | 0.550 |
 | synthesis-03 | 0.933 | 0.183 | 0.333 |
-| synthesis-04 | 0.800 | 0.117 | 0.383 |
+| synthesis-04 | 0.817 | 0.133 | 0.400 |
 | logic-03 | 1.000 | 1.000 | 1.000 |
 | **logic-04** (v3) | **0.050** | 0.000 | 0.000 |
 
@@ -45,12 +45,12 @@ experiment: 실험 10 — Reproducibility & Cost Profile (v2 final)
 ## 4. 분석
 
 ### 4.1 외부 상태 + 반복의 효과 (H1 재확인)
-같은 모델 1-loop → 8-loop: **0.413 → 0.781 (+37%p)**.
+같은 모델 1-loop → 8-loop: **0.415 → 0.783 (+37%p)**.
 
 ABC chain 이 단순 호출보다 모델의 표현된 능력을 거의 두 배 끌어올림. 제멘토 가설 ("소형 LLM + 외부 상태 + 반복으로 계산 깊이 확장") 의 직접 증거. 이 +37%p 는 동일 weight, 동일 quantization, 동일 sampling parameters 조건에서의 측정이라 모델 변경 효과가 아니라 inference 구조 효과로 해석 가능.
 
 ### 4.2 소형 로컬 vs 폐쇄형 대형
-- 정확도: gemma_8loop **0.781** > gemini_flash **0.591** (+19%p)
+- 정확도: gemma_8loop **0.783** > gemini_flash **0.593** (+19%p)
 - 비용: $0 vs $0.0000793/trial (Flash 가 trial 당 약 0.008 센트, 540 trial 총 1.4 센트)
 - 지연: 8 min vs 24 s (gemma_8loop 가 약 20× 느림)
 
@@ -121,3 +121,31 @@ condition mean 영향:
 4. **use_tools 정책 통일**: math-* 전체에 use_tools=True 강제 후 v3 재실행 (현 v2 는 math-04 만 패치라 strict 비교 깨짐) — 별도 plan 후보
 5. **다른 task 의 v3 채점 결과**: 본 plan 의 `rescore_v3.py` 가 540 trial 전수 재산정한 결과, logic-04 외 8 task 는 v2 == v3 — 추가 false positive 식별 0. 단, 다른 task 의 negative_patterns 미정의 상태이므로 향후 false positive 가 발견되면 task 별 보강 patch.
    - **Exp00~09 적용 범위**: 본 plan (`exp10-readme-v2-abc-4-fail-v3-disclosure`) 정찰 결과 logic-04 task 는 Exp00~09 의 result JSON 에 미포함 (직접 grep 확인). 따라서 `score_answer_v3` 를 Exp00~09 에 적용해도 변동 0 예상 — 별도 재산정 plan 의 우선순위 낮음.
+
+## 8. Phase 1 후속 taskset 정정 + v3 재산정 (2026-04-30)
+
+본 plan (`phase-1-taskset-3-fail-exp09-5-trial-exp10-v3`) 의 Task 00 에서 `validate_taskset` 22 task 중 3 FAIL 정정:
+
+| task | 정정 내용 |
+|------|-----------|
+| `math-03` | prompt 의 연립방정식 해 없음 → 96 → 88 + "round = square + 2" 제약 추가 |
+| `synthesis-04` | scoring_keywords `'report 5'`/`'report 6'` 가 expected `'Reports 5 and 6'` 에 매칭 실패 → `[['reports'],['5'],['6']]` |
+| `longctx-medium-2hop-02` | expected `'500 hp'` 가 답변 본문에 부재 → `'500 horsepower (500 hp)'` |
+
+`validate_taskset` 22 PASS / 0 FAIL 확인 후 `rescore_v3.py` 재실행 (`exp10_v3_rescored_20260430_152306.json` 신규 출력). 직전 canonical (`053939`) 과 비교:
+
+| condition | prev v3 (053939) | curr v3 (152306) | Δ |
+|-----------|----------------:|-----------------:|--:|
+| gemma_8loop | 0.7815 | 0.7833 | **+0.0019** |
+| gemini_flash_1call | 0.5907 | 0.5926 | **+0.0019** |
+| gemma_1loop | 0.4130 | 0.4148 | **+0.0019** |
+
+task-level Δ 는 **synthesis-04 단독** (3 condition 모두 +0.017):
+
+| condition | task | prev | curr | Δ |
+|-----------|------|-----:|-----:|--:|
+| gemini_flash_1call | synthesis-04 | 0.383 | 0.400 | +0.017 |
+| gemma_1loop | synthesis-04 | 0.117 | 0.133 | +0.017 |
+| gemma_8loop | synthesis-04 | 0.800 | 0.817 | +0.017 |
+
+→ **math-03 변동 0** (v3 trial 의 final_answer 가 새 정답 `round=6, square=4, rectangular=5` 와 매칭되지 않음 — 답변이 96 prompt 시점에 생성됐고 새 정답에도 못 미침). **logic-04 변동 0** (negative_patterns 보존). 다른 7 task 보존. condition mean |Δ| < 0.01 — README 본문 갱신 영향 없음 (사소). 직전 053939 결과 파일은 untracked archive 로 유지 (이전 plan 의 정책 일관성).

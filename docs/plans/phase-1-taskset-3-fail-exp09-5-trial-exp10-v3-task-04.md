@@ -1,10 +1,11 @@
 ---
 type: plan-task
-status: todo
+status: done
 updated_at: 2026-04-30
 parent_plan: phase-1-taskset-3-fail-exp09-5-trial-exp10-v3
 parallel_group: C
 depends_on: [02, 03]
+readme_branch: "|Δ| < 0.01 → README 본문 변경 0 (사소)"
 ---
 
 # Task 04 — 문서 갱신 통합

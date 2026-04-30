@@ -655,7 +655,8 @@ parts: [closed, active]
 **알려진 이슈 / 후속 과제:**
 - **Small Paradox** — small needle 1개 태스크에서 ABC 0.33. 표본(small=2 tasks × 3 trial = 6 데이터포인트) 작아 노이즈 가능. 추가 trial 또는 small 태스크 확대로 검증 필요.
 - **Evidence Hit Rate ↔ 정답률 비대칭** — 3-hop hit 0.23 vs 정답률 100%. 모델이 정답 외 chunk도 evidence_ref에 첨부하는 경향. gold_evidence_chunks 라벨링이 너무 엄격할 가능성도.
-- **통계 신뢰도 검정 완료 (Phase 1, 5-trial)** — paired t-test p=0.7976, Wilcoxon p=1.000 → **비유의**. H9b verdict "조건부 채택"→"미결"로 변경.
+- **통계 신뢰도 검정 완료 (Phase 1, 5-trial)** — paired t-test p=0.7976, Wilcoxon p=1.000 → **비유의**. H9b verdict "조건부 채택"→"미결"로 변경. **단, 2026-04-30 후속 분석에서 trial 4-5 무효 판정** — 아래 §5-trial 점수 하락 분석 참고.
+- **5-trial 점수 하락 분석 (2026-04-30 Phase 1 후속)** — trial 4-5 가 Windows 모델 서버 (`http://yongseek.iptime.org:8005`) connection refused (WinError 10061) 로 인한 무효 실행 (rag/solo 20/20 error, abc 20/20 `num_assertions=0`). 3-trial mean × 3/5 = 5-trial mean 정확 일치 (0.883×0.6=0.530, 0.850×0.6=0.510). 5-trial 통계 비유의는 부당한 강등 근거. 3-trial 결과 (Δ=+0.033) 가 여전히 H9b 의 가장 정확한 데이터. 상세: `docs/reference/exp09-5trial-drop-analysis-2026-04-30.md`. `run_append_trials.py` 의 retry / healthcheck 보강은 별도 plan 후보.
 
 #### 통계 검정 최종 결과 (Phase 1, 2026-04-30)
 
@@ -700,11 +701,12 @@ Small Paradox 상세:
 
 | condition | mean_acc (v2) | **mean_acc (v3)** | cost / 180 trial | avg_dur | err+null |
 |-----------|--------------:|------------------:|----------------:|--------:|---------:|
-| **gemma_8loop** | 0.820 | **0.781** | $0.0000 | 8 min | 8 |
-| gemini_flash_1call | 0.619 | **0.591** | $0.0143 | 24 s | 0 |
-| gemma_1loop | 0.413 | **0.413** | $0.0000 | 33 s | 11 |
+| **gemma_8loop** | 0.822 | **0.783** | $0.0000 | 8 min | 8 |
+| gemini_flash_1call | 0.620 | **0.593** | $0.0143 | 24 s | 0 |
+| gemma_1loop | 0.415 | **0.415** | $0.0000 | 33 s | 11 |
 
 > v3 채점 (2026-04-29 patch): `score_answer_v3` + `taskset.json` logic-04 의 `negative_patterns` 4개. v2 → v3 격차는 logic-04 한정 (false positive 12건 제거).
+> **2026-04-30 Phase 1 후속 v3 재산정**: Taskset 3 FAIL (math-03 prompt / synthesis-04 keyword / longctx-medium-2hop-02 expected) 정정 후 `rescore_v3` 재실행 (`exp10_v3_rescored_20260430_152306.json`). 직전 053939 대비 모든 condition Δ +0.0019 (synthesis-04 task 단독 +0.017, math-03 / logic-04 변동 0). condition mean |Δ| < 0.01 — README 본문 갱신 영향 없음 (사소). 상세: `docs/reference/results/exp-10-reproducibility-cost.md` §8.
 
 **핵심 발견:**
 1. **H1 직접 증거 — 외부 상태 + 반복** — 같은 모델 1-loop → 8-loop 가 0.413 → 0.781 (**+37%p**). ABC chain 이 모델 능력을 거의 두 배 끌어올림. 동일 weight·quantization·sampling 조건에서의 측정이라 inference 구조 효과로만 해석 가능.
@@ -765,7 +767,7 @@ Small Paradox 상세:
 | 문제점 | "no solution / contradiction" 류 결론 답을 정답으로 잡음 (logic-04 13/60 false positive) | — |
 | 도입 동기 | — | Exp10 v2 final 의 logic-04 false positive 발견 |
 
-**Exp10 v2 final 재채점 결과:**
+**Exp10 v2 final 재채점 결과 (053939, 직전 canonical):**
 
 | condition | v2 mean | v3 mean | Δ |
 |-----------|--------:|--------:|--:|
@@ -774,6 +776,8 @@ Small Paradox 상세:
 | gemma_1loop | 0.413 | 0.413 | 0.000 |
 
 → v2 → v3 격차는 logic-04 한정 (다른 8 task 는 v2 == v3). 본 v3 patch 는 Exp10 만 적용. 다른 실험 (Exp00~09) 의 result JSON 에 logic-04 task 가 포함되지 않음 (정찰 grep 확인) — `score_answer_v3` 적용 시 변동 0 예상. 다른 task 의 false positive 발견 시 task 별 negative_patterns 보강 별도 plan.
+
+**2026-04-30 Phase 1 후속 v3 재산정 (taskset patched):** Task 00 의 taskset 정정 (math-03 prompt 96→88 + r=s+2 / synthesis-04 keyword `[["reports"],["5"],["6"]]` / longctx-medium-2hop-02 expected `"500 horsepower (500 hp)"`) 후 `rescore_v3.py` 재실행 (`exp10_v3_rescored_20260430_152306.json`). 직전 canonical (053939) 대비 모든 condition Δ +0.0019, task-level 은 synthesis-04 단독 (3 condition × +0.017). math-03 변동 0 (v3 trial 답변이 새 정답에 매칭 안 됨), logic-04 변동 0 (negative_patterns 보존). condition mean |Δ| < 0.01 → README 본문 갱신 없음.
 
 ---
 
