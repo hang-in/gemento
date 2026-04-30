@@ -172,6 +172,10 @@ def run_experiment(
         if aborted:
             break
         dispatch = CONDITION_DISPATCH[cond]
+        print()
+        print("=" * 80)
+        print(f"  CONDITION: {cond}  (max_cycles={max_cycles}, trials_per_task={trials_per_condition})")
+        print("=" * 80)
         for task in tasks:
             if aborted:
                 break
@@ -180,11 +184,26 @@ def run_experiment(
                 if key in finished:
                     continue
                 counter += 1
-                print(f"  [{counter}/{total}] {cond} | {task['id']} | trial {trial_idx}")
+                prompt_preview = str(task.get("prompt", ""))[:120].replace("\n", " ")
+                print()
+                print(f"  [{counter}/{total}] {cond} | {task['id']} ({task.get('category','?')}/{task.get('difficulty','?')}) | trial {trial_idx}")
+                print(f"      prompt: {prompt_preview}{'...' if len(str(task.get('prompt',''))) > 120 else ''}")
 
                 result = dispatch(task, trial_idx, max_cycles) if cond != "solo_1call" else dispatch(task, trial_idx)
                 final = result.get("final_answer") or ""
                 acc = score_answer_v3(str(final), task)
+                ans_preview = str(final)[:120].replace("\n", " ") if final else "(null)"
+                dur = result.get("duration_ms")
+                cyc = result.get("cycles")
+                err = result.get("error")
+                verdict = "✓" if acc >= 0.5 else ("✗" if acc == 0 else "△")
+                print(
+                    f"      → {verdict} acc={acc:.2f}"
+                    + (f"  cycles={cyc}" if cyc is not None else "")
+                    + (f"  dur={dur}ms" if dur is not None else "")
+                    + (f"  err={str(err)[:60]}" if err else "")
+                )
+                print(f"      answer: {ans_preview}{'...' if len(str(final)) > 120 else ''}")
 
                 trial = {
                     "condition": cond,
