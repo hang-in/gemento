@@ -19,6 +19,7 @@ from config import MODEL_NAME
 
 # experiments-task-07 rev — 자체 디렉토리의 results/ 사용
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
+from experiments.run_helpers import classify_trial_error, is_fatal_error, check_error_rate
 
 
 _TASKS_DIR = Path(__file__).resolve().parent.parent / "tasks"
@@ -185,9 +186,14 @@ def run():
         except Exception:
             print("  ⚠ Checkpoint load failed; starting fresh.")
 
+    aborted = False
     for arm in LONGCTX_ARMS:
+        if aborted:
+            break
         label = arm["label"]
         for task in tasks:
+            if aborted:
+                break
             if (label, task["id"]) in finished:
                 print(f"  [skip] arm={label} task={task['id']}")
                 continue
@@ -197,6 +203,16 @@ def run():
                 print(f"  Trial {trial + 1}/{LONGCTX_TRIALS}...")
                 trial_result = _run_longctx_trial(arm, task, trial)
                 task_results.append(trial_result)
+
+                err_class = classify_trial_error(trial_result.get("error"))
+                if is_fatal_error(err_class):
+                    print(
+                        f"[ABORT] arm={label} task={task['id']} trial={trial} "
+                        f"fatal={err_class.value}: {str(trial_result.get('error'))[:200]}"
+                    )
+                    print("[ABORT] 부분 결과는 보존. 저장 직전 error 비율 검사 진행.")
+                    aborted = True
+                    break
 
             results.setdefault(label, []).append({
                 "task_id": task["id"],
@@ -225,6 +241,19 @@ def run():
         "rag_top_k": LONGCTX_RAG_TOP_K,
         "results_by_arm": results,
     }
+
+    all_trials = [
+        t
+        for arm_data in final["results_by_arm"].values()
+        for task_entry in arm_data
+        for t in task_entry.get("trials", [])
+    ]
+    ok, rate = check_error_rate(all_trials, threshold=0.30)
+    if not ok:
+        print(f"[REJECT] error 비율 {rate:.1%} ≥ 30%. 저장 거부 + warning")
+        print("[REJECT] 부분 결과는 메모리에 유지 — 사용자가 별도 처리 권고")
+        raise SystemExit(1)
+
     save_result("exp09_longctx", final)
     if partial_path.exists():
         partial_path.unlink()

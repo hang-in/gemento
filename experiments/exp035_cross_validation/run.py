@@ -45,12 +45,16 @@ def run():
     """
     from system_prompt import build_critic_prompt
     from orchestrator import call_ollama, extract_json_from_response
+    from experiments.run_helpers import classify_trial_error, is_fatal_error
 
     tasks = load_tasks()
     skip_tasks = {"logic-01", "logic-02"}
     results = []
 
+    aborted = False
     for task in tasks:
+        if aborted:
+            break
         if task["id"] in skip_tasks:
             print(f"\n[Cross-Validation] Task: {task['id']} — SKIPPED")
             continue
@@ -62,6 +66,8 @@ def run():
         print(f"\n[Cross-Validation] Task: {task['id']}")
 
         for fault in task["fault_injections"]:
+            if aborted:
+                break
             # prefab assertion 목록에서 결함 주입
             clean_assertions = []
             for i, a_text in enumerate(task["prefab_assertions"][:8]):
@@ -145,6 +151,13 @@ def run():
                     "error": error,
                 })
 
+                err_class = classify_trial_error(error)
+                if is_fatal_error(err_class):
+                    print(f"[ABORT] task={task['id']} fault={fault['type']} trial={trial} fatal={err_class.value}: {str(error)[:200]}")
+                    print("[ABORT] 부분 결과는 보존. 저장 직전 error 비율 검사 진행.")
+                    aborted = True
+                    break
+
             results.append({
                 "task_id": task["id"],
                 "fault": fault,
@@ -160,6 +173,14 @@ def run():
     print(f"\n{'═' * 50}")
     print(f"  교차 검증 감지율: {detected_count}/{total} = {detected_count/total:.1%}" if total else "  No data")
     print(f"{'═' * 50}")
+
+    all_trials = [t for r in results for t in r.get("trials", [])]
+    bad = sum(1 for t in all_trials if t.get("error") is not None)
+    rate = bad / len(all_trials) if all_trials else 0.0
+    if rate >= 0.30:
+        print(f"[REJECT] error 비율 {rate:.1%} ≥ 30%. 저장 거부 + warning")
+        print("[REJECT] 부분 결과는 메모리에 유지 — 사용자가 별도 처리 권고")
+        raise SystemExit(1)
 
     save_result("exp035_cross_validation", {
         "experiment": "cross_validation",

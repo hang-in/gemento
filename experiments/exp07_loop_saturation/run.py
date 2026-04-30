@@ -21,6 +21,7 @@ from config import MODEL_NAME
 # experiments-task-07 rev — 자체 디렉토리의 results/ 사용
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
 from orchestrator import run_abc_chain
+from experiments.run_helpers import classify_trial_error, is_fatal_error, check_error_rate
 
 
 LOOP_SAT_REPEAT = 3
@@ -78,10 +79,15 @@ def run():
         except Exception:
             print("  ⚠ Checkpoint load failed, starting from scratch.")
 
+    aborted = False
     for cond in CONDITIONS:
+        if aborted:
+            break
         label = cond["label"]
 
         for task in tasks:
+            if aborted:
+                break
             if (label, task["id"]) in finished:
                 continue
 
@@ -127,6 +133,13 @@ def run():
                 print(f"    {status} cycles={len(abc_logs)} phase={tattoo.phase.value} "
                       f"answer={'yes' if final_answer else 'no'}")
 
+                err_class = classify_trial_error(task_results[-1].get("error"))
+                if is_fatal_error(err_class):
+                    print(f"[ABORT] cond={label} task={task['id']} trial={trial_idx} fatal={err_class.value}")
+                    print("[ABORT] 부분 결과는 보존. 저장 직전 error 비율 검사 진행.")
+                    aborted = True
+                    break
+
             results_by_condition.setdefault(label, []).append({
                 "task_id": task["id"],
                 "objective": task["objective"],
@@ -143,6 +156,13 @@ def run():
                     "results_by_condition": results_by_condition,
                 }, f, indent=2, ensure_ascii=False)
             print(f"  ✓ Saved checkpoint: {label}/{task['id']}")
+
+    all_trials = [t for tl in results_by_condition.values() for r in tl for t in r.get("trials", [])]
+    ok, rate = check_error_rate(all_trials, threshold=0.30)
+    if not ok:
+        print(f"[REJECT] error 비율 {rate:.1%} ≥ 30%. 저장 거부 + warning")
+        print("[REJECT] 부분 결과는 메모리에 유지 — 사용자가 별도 처리 권고")
+        raise SystemExit(1)
 
     save_result("exp07_loop_saturation", {
         "experiment": "loop_saturation",

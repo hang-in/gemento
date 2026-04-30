@@ -22,6 +22,7 @@ from config import DEFAULT_REPEAT, MODEL_NAME
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
 from schema import Phase
 from orchestrator import run_abc_chain
+from experiments.run_helpers import classify_trial_error, is_fatal_error, check_error_rate
 
 
 def load_tasks() -> list[dict]:
@@ -49,7 +50,10 @@ def run():
     skip_tasks = {"logic-01", "logic-02"}
     results = []
 
+    aborted = False
     for task in tasks:
+        if aborted:
+            break
         if task["id"] in skip_tasks:
             print(f"\n[ABC Pipeline] Task: {task['id']} — SKIPPED")
             continue
@@ -122,6 +126,13 @@ def run():
                   f"assertions={len(final_tattoo.active_assertions)}, "
                   f"answer={'yes' if final_answer else 'no'}")
 
+            err_class = classify_trial_error(task_results[-1].get("error"))
+            if is_fatal_error(err_class):
+                print(f"[ABORT] task={task['id']} trial={trial} fatal={err_class.value}")
+                print("[ABORT] 부분 결과는 보존. 저장 직전 error 비율 검사 진행.")
+                aborted = True
+                break
+
         results.append({
             "task_id": task["id"],
             "expected_answer": task.get("expected_answer"),
@@ -137,6 +148,13 @@ def run():
     print(f"\n{'═' * 50}")
     print(f"  수렴률: {converged}/{total} = {converged/total:.1%}" if total else "  No data")
     print(f"{'═' * 50}")
+
+    all_trials = [t for r in results for t in r.get("trials", [])]
+    ok, rate = check_error_rate(all_trials, threshold=0.30)
+    if not ok:
+        print(f"[REJECT] error 비율 {rate:.1%} ≥ 30%. 저장 거부 + warning")
+        print("[REJECT] 부분 결과는 메모리에 유지 — 사용자가 별도 처리 권고")
+        raise SystemExit(1)
 
     save_result("exp04_abc_pipeline", {
         "experiment": "abc_pipeline",

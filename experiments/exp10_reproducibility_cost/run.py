@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config import MODEL_NAME
 from orchestrator import run_abc_chain, extract_json_from_response
+from experiments.run_helpers import classify_trial_error, is_fatal_error, check_error_rate
 from _external.gemini_client import call_with_meter as gemini_call
 from _external.lmstudio_client import call_with_meter as lmstudio_call
 
@@ -242,9 +243,14 @@ def run(trials: int = DEFAULT_TRIALS, dry_run: bool = False, conditions: tuple[s
 
     total = len(conditions) * len(tasks) * trials
     counter = len(finished)
+    aborted = False
     for cond in conditions:
+        if aborted:
+            break
         dispatch = CONDITION_DISPATCH[cond]
         for task in tasks:
+            if aborted:
+                break
             for trial_idx in range(trials):
                 key = (cond, task["id"], trial_idx + 1)
                 if key in finished:
@@ -256,6 +262,17 @@ def run(trials: int = DEFAULT_TRIALS, dry_run: bool = False, conditions: tuple[s
                     return None
                 result = dispatch(task, trial_idx)
                 all_results.append(result)
+
+                err_class = classify_trial_error(result.get("error"))
+                if is_fatal_error(err_class):
+                    print(
+                        f"[ABORT] cond={cond} task={task['id']} trial={trial_idx} "
+                        f"fatal={err_class.value}: {str(result.get('error'))[:200]}"
+                    )
+                    print("[ABORT] 부분 결과는 보존. 저장 직전 error 비율 검사 진행.")
+                    aborted = True
+                    break
+
                 # 매 trial 후 체크포인트
                 save_partial(partial_path, {
                     "experiment": "reproducibility_cost",
@@ -265,6 +282,12 @@ def run(trials: int = DEFAULT_TRIALS, dry_run: bool = False, conditions: tuple[s
                     "task_ids": list(EXP10_TASK_IDS),
                     "trials": all_results,
                 })
+
+    ok, rate = check_error_rate(all_results, threshold=0.30)
+    if not ok:
+        print(f"[REJECT] error 비율 {rate:.1%} ≥ 30%. 저장 거부 + warning")
+        print("[REJECT] 부분 결과는 메모리에 유지 — 사용자가 별도 처리 권고")
+        raise SystemExit(1)
 
     # 최종 결과 저장
     final_path = save_result("exp10_reproducibility_cost", {

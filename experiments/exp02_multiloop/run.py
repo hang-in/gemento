@@ -20,6 +20,7 @@ from config import DEFAULT_REPEAT, MODEL_NAME
 # experiments-task-07 rev — 자체 디렉토리의 results/ 사용
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
 from orchestrator import run_chain
+from experiments.run_helpers import classify_trial_error, is_fatal_error, check_error_rate
 
 
 def load_tasks() -> list[dict]:
@@ -44,10 +45,15 @@ def run():
     loop_counts = [1, 2, 4, 8]
     results = []
 
+    aborted = False
     for task in tasks:
+        if aborted:
+            break
         print(f"\n[Multiloop] Task: {task['id']}")
 
         for max_loops in loop_counts:
+            if aborted:
+                break
             task_results = []
 
             for trial in range(DEFAULT_REPEAT):
@@ -86,11 +92,25 @@ def run():
                       f"conf={final_tattoo.confidence:.2f}, "
                       f"assertions={len(final_tattoo.active_assertions)}")
 
+                err_class = classify_trial_error(task_results[-1].get("error"))
+                if is_fatal_error(err_class):
+                    print(f"[ABORT] task={task['id']} loops={max_loops} trial={trial} fatal={err_class.value}")
+                    print("[ABORT] 부분 결과는 보존. 저장 직전 error 비율 검사 진행.")
+                    aborted = True
+                    break
+
             results.append({
                 "task_id": task["id"],
                 "max_loops": max_loops,
                 "expected_answer": task.get("expected_answer"),
                 "trials": task_results,
             })
+
+    all_trials = [t for r in results for t in r.get("trials", [])]
+    ok, rate = check_error_rate(all_trials, threshold=0.30)
+    if not ok:
+        print(f"[REJECT] error 비율 {rate:.1%} ≥ 30%. 저장 거부 + warning")
+        print("[REJECT] 부분 결과는 메모리에 유지 — 사용자가 별도 처리 권고")
+        raise SystemExit(1)
 
     save_result("exp02_multiloop", {"experiment": "multiloop", "model": MODEL_NAME, "results": results})

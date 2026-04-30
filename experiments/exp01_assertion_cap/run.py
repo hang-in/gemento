@@ -20,6 +20,7 @@ from config import DEFAULT_REPEAT, MODEL_NAME
 # experiments-task-07 rev — 자체 디렉토리의 results/ 사용
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
 from schema import Phase, create_initial_tattoo
+from experiments.run_helpers import classify_trial_error, is_fatal_error
 
 
 def load_tasks() -> list[dict]:
@@ -44,12 +45,17 @@ def run():
     cap_values = [2, 4, 6, 8, 10, 12]
     results = []
 
+    aborted = False
     for task in tasks:
+        if aborted:
+            break
         if not task.get("prefab_assertions"):
             continue
         print(f"\n[Assertion Cap] Task: {task['id']}")
 
         for cap in cap_values:
+            if aborted:
+                break
             assertions_to_use = task["prefab_assertions"][:cap]
             task_results = []
 
@@ -79,6 +85,13 @@ def run():
                 })
                 print(f"  Cap {cap}, Trial {trial + 1}: {log.duration_ms}ms")
 
+                err_class = classify_trial_error(log.error)
+                if is_fatal_error(err_class):
+                    print(f"[ABORT] task={task['id']} cap={cap} trial={trial} fatal={err_class.value}: {str(log.error)[:200]}")
+                    print("[ABORT] 부분 결과는 보존. 저장 직전 error 비율 검사 진행.")
+                    aborted = True
+                    break
+
             results.append({
                 "task_id": task["id"],
                 "cap": cap,
@@ -87,5 +100,13 @@ def run():
 
         # 태스크 완료 후 중간 저장 (크래시 방어)
         save_result("exp01_assertion_cap_partial", {"experiment": "assertion_cap", "model": MODEL_NAME, "results": results})
+
+    all_trials = [t for r in results for t in r.get("trials", [])]
+    bad = sum(1 for t in all_trials if t.get("error") is not None)
+    rate = bad / len(all_trials) if all_trials else 0.0
+    if rate >= 0.30:
+        print(f"[REJECT] error 비율 {rate:.1%} ≥ 30%. 저장 거부 + warning")
+        print("[REJECT] 부분 결과는 메모리에 유지 — 사용자가 별도 처리 권고")
+        raise SystemExit(1)
 
     save_result("exp01_assertion_cap", {"experiment": "assertion_cap", "model": MODEL_NAME, "results": results})

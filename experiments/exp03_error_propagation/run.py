@@ -21,6 +21,7 @@ from config import DEFAULT_REPEAT, MODEL_NAME
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
 from schema import Phase
 from orchestrator import run_chain, LoopLog
+from experiments.run_helpers import classify_trial_error, is_fatal_error
 
 
 def load_tasks() -> list[dict]:
@@ -46,7 +47,10 @@ def run():
 
     # logic 태스크 제외 (JSON 파싱 불안정)
     skip_tasks = {"logic-01", "logic-02"}
+    aborted = False
     for task in tasks:
+        if aborted:
+            break
         if task["id"] in skip_tasks:
             print(f"\n[Error Propagation] Task: {task['id']} — SKIPPED (unstable JSON)")
             continue
@@ -56,6 +60,8 @@ def run():
             continue
 
         for fault in fault_types:
+            if aborted:
+                break
             task_results = []
             for trial in range(DEFAULT_REPEAT):
                 # 정상 체인 2루프 실행
@@ -120,10 +126,25 @@ def run():
                     ],
                 })
 
+                err_class = classify_trial_error(task_results[-1].get("error"))
+                if is_fatal_error(err_class):
+                    print(f"[ABORT] task={task['id']} fault={fault['type']} trial={trial} fatal={err_class.value}")
+                    print("[ABORT] 부분 결과는 보존. 저장 직전 error 비율 검사 진행.")
+                    aborted = True
+                    break
+
             results.append({
                 "task_id": task["id"],
                 "fault": fault,
                 "trials": task_results,
             })
+
+    all_trials = [t for r in results for t in r.get("trials", [])]
+    bad = sum(1 for t in all_trials if t.get("error") is not None)
+    rate = bad / len(all_trials) if all_trials else 0.0
+    if rate >= 0.30:
+        print(f"[REJECT] error 비율 {rate:.1%} ≥ 30%. 저장 거부 + warning")
+        print("[REJECT] 부분 결과는 메모리에 유지 — 사용자가 별도 처리 권고")
+        raise SystemExit(1)
 
     save_result("exp03_error_propagation", {"experiment": "error_propagation", "model": MODEL_NAME, "results": results})
