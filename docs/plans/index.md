@@ -4,7 +4,8 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- [stabilization-healthcheck-abort-meta-pre-exp11.md](stabilization-healthcheck-abort-meta-pre-exp11.md) — Stage 2A: 작은 안정화 (healthcheck/abort + 결과 JSON meta 표준화). Exp11 진입 전 직전 사고 재발 방지. **사용자 결정 대기** (옵션 b/d + threshold + helper 위치)
+- [stabilization-healthcheck-abort-meta-pre-exp11.md](stabilization-healthcheck-abort-meta-pre-exp11.md) — **Stage 2A**: 작은 안정화 (healthcheck/abort + 결과 JSON meta 표준화). 사용자 결정 1-4 + (a)~(d) 모두 확정. Sonnet (Developer) 작업 시작 대기 — 진행 프롬프트: `docs/prompts/2026-04-30/stabilization2aStart.md`
+- [exp06-h4-recheck-expanded-taskset-pre-exp11.md](exp06-h4-recheck-expanded-taskset-pre-exp11.md) — **Stage 2C**: Exp06 H4 재검증 (확대 task set 12→15 + 3 condition ablation). 사용자 명시: Exp11 전 마감 의무. 사용자 C1-C4 답변 반영. 결정 5-8 은 Architect default — 사용자 검토 시 변경 가능
 
 ## Recently Done
 

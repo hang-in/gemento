@@ -261,4 +261,4 @@ print('verification 3 ok: schema 문서')
 
 ## model_endpoint 정책 (확정)
 
-현재 로컬 lmstudio (`http://localhost:1234/v1` 등) 만 사용. 사설 endpoint 미사용. raw URL 그대로 저장 (마스킹 helper 도입 안 함). 향후 사설 endpoint 도입 시 별도 plan.
+현재 로컬/LAN lmstudio (`http://192.168.1.179:1234` — RFC1918 사설 IP, 또는 `http://localhost:1234`) 만 사용. 외부 endpoint 미사용. raw URL 그대로 저장 (마스킹 helper 도입 안 함). RFC1918 사설 IP 는 인터넷 라우팅 불가라 외부 노출 위험 0. 향후 외부 endpoint 도입 시 별도 plan.
