@@ -7,9 +7,13 @@ Reference document index.
 - [researchNotebook.md](researchNotebook.md) — **연구 노트** (육하원칙 기반, 증분형 — Exp00~06 + 채점 V2)
 - [experimentSummary.md](experimentSummary.md) — 실험 종합 보고서 (04-10 기준, `superseded_by: researchNotebook.md`)
 
-## 설계
+## 설계 / 규약
 
 - [experimentDesign.md](experimentDesign.md) — 제멘토 실험 설계서 (실험 0-4, 브랜치 전략, 인프라 정의)
+- [conceptFramework.md](conceptFramework.md) — **canonical 개념 프레임** (4축 외부화, Critic/Orchestrator 이중 구분, 용어집)
+- [namingConventions.md](namingConventions.md) — **canonical 표기/용어 규약** (Stage NX, task-NN, 옵션 (a)/(i)/1, 결정 N, condition slug, commit message)
+- [resultJsonSchema.md](resultJsonSchema.md) — 결과 JSON top-level schema v1.0 (Stage 2A 도입 예정)
+- [h4-metric-definitions.md](h4-metric-definitions.md) — H4 재검증 metric 정의 (Stage 2C 도입 예정)
 
 ## 핸드오프
 

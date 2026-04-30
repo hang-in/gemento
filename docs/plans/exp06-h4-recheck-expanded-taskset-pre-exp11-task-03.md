@@ -11,7 +11,7 @@ depends_on: []
 
 ## Changed files
 
-- `experiments/exp_h4_recheck/analyze.py` — **신규**. C4 의 (ii) assertion turnover + (iii) error mode classifier
+- `experiments/exp_h4_recheck/analyze.py` — **신규**. 결정 4 의 (ii) assertion turnover + (iii) error mode classifier
 - `docs/reference/h4-metric-definitions.md` — **신규**. 측정 metric 정의 reference
 
 신규 2 파일.
@@ -20,7 +20,7 @@ depends_on: []
 
 ### 배경
 
-C4 (사용자 결정 — iv 셋 다) 에 따라 분석 metric 3 축:
+결정 4 (사용자 — iv 셋 다) 에 따라 분석 metric 3 축:
 1. **정확도** — 기존 measure.py:score_answer_v3 (Task 02 에서 호출)
 2. **assertion turnover** — Tattoo 의 cycle 별 assertion 변화량 (신규)
 3. **error mode** — format_error / wrong_synthesis / evidence_miss / null_answer / connection_error 분류 (신규, Exp09 H9c 패턴)
@@ -254,7 +254,7 @@ canonical: true
 
 # H4 재검증 — Metric 정의
 
-## 1. 측정 3 축 (사용자 C4 결정 — iv 셋 다)
+## 1. 측정 3 축 (사용자 결정 4 — iv 셋 다)
 
 ### 1.1 정확도 (existing)
 

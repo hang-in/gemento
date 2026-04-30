@@ -77,21 +77,21 @@ Group A/B/C 모두 plan-side (Architect/Developer) 작업이라 병렬 가능. G
 - Stage 2A 마감 후 Task 04 진행 — 인프라 의존성. Stage 2A 의 healthcheck/abort + 결과 JSON meta v1.0 적용 후 실험 = 직전 Exp09 5-trial dilute 사고 재발 0
 - 영문 노트북 Closed 추가만 정책 — Task 05 결과 보고에서 새 단락 추가만 (기존 영문 수치 변경 0)
 
-## 사용자 결정 (확정, 2026-04-30 — C1~C4 사용자 답변)
+## 사용자 결정 (확정, 2026-04-30)
 
-본 plan 의 모든 결정 사항은 사용자 답변으로 확정 (이전 turn 의 C1~C4 응답).
+본 plan 의 모든 결정 사항은 사용자 답변으로 확정. Developer 는 임의 변경 금지.
 
-### C1 — task 수 확대 — **task 수 확대 (i) 확정**
+### 결정 1 — task 수 확대 — **task 수 확대 (i) 확정**
 
 12 → 15 task. 단순 trial 수 확대 (ii) 회피 (직전 Exp09 5-trial dilute 사고 학습).
 
-### C2 — 새 도메인 — **(d) 현 카테고리 + planning 1~2 추가 확정**
+### 결정 2 — 새 도메인 — **(d) 현 카테고리 + planning 1~2 추가 확정**
 
 신규 3 task 구성:
 - **planning task 2** — 다단계 분해/조정 task. Role 분리 (A 제안, B 비판, C 판정) 가 가장 명료하게 효과 보일 도메인
-- **현 카테고리 추가 task 1** — math / logic / synthesis 중 1 카테고리 1 task. **사용자 결정 의존** (정확히 어느 카테고리 — Architect 권장: math 또는 logic, synthesis 는 이미 균형)
+- **현 카테고리 추가 task 1** — math / logic / synthesis 중 1 카테고리 1 task. **사용자 결정 의존** (정확히 어느 카테고리 — 결정 6 참조)
 
-### C3 — Solo 정의 — **(iii) 둘 다 분리 측정 확정**
+### 결정 3 — Solo 정의 — **(iii) 둘 다 분리 측정 확정**
 
 3 condition:
 | condition | 정의 | loop budget | 비교 의미 |
@@ -105,7 +105,7 @@ ablation 결과 해석:
 - **역할 분리 단독 효과** = ABC − Solo-budget (H4 본 가설)
 - **합산 효과** = ABC − Solo-1call
 
-### C4 — 측정 metric — **(iv) 셋 다 확정**
+### 결정 4 — 측정 metric — **(iv) 셋 다 확정**
 
 3 축:
 | metric | 정의 | 분석 helper |
