@@ -530,7 +530,7 @@ def run_chain(
               f"questions={len(tattoo.open_questions)} | "
               f"confidence={tattoo.confidence:.2f}")
 
-        tattoo, log, answer = run_loop(tattoo, i)
+        tattoo, log, answer, *_ = run_loop(tattoo, i)
         logs.append(log)
 
         if answer:

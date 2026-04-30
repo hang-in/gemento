@@ -72,7 +72,7 @@ Group A/B/C 모두 plan-side (Architect/Developer) 작업이라 병렬 가능. G
 - 메인 단일 흐름 (브랜치 분기 금지)
 - Architect/Developer/Reviewer/사용자 분리 — Task 04 는 **사용자 직접 실행** (메모리 정책 `feedback_agent_no_experiment_run.md`)
 - `experiments/measure.py` / `score_answer_v0/v2/v3` 변경 0 (Stage 2B 영역, 본 plan 영역 외)
-- `experiments/orchestrator.py` 변경 0 — ABC chain 구조 보존
+- `experiments/orchestrator.py` 변경 0 — ABC chain 구조 보존 (단, 2026-04-30 Task 04 첫 실행 중 발견된 *기존 bug* 의 1라인 fix 는 예외 — `run_chain:533` 의 `tattoo, log, answer = run_loop(...)` 이 `run_loop` 의 4-tuple return (Exp08 commit `cb532b6` 에서 도입된 tool_call_log) 와 mismatch. starred unpacking `tattoo, log, answer, *_ = run_loop(...)` 로 fix. 의미 = 기존 의도 복구)
 - `experiments/schema.py` 변경 0 — Tattoo schema 보존 (assertion turnover 분석은 read-only)
 - `experiments/tasks/taskset.json` 변경 정책 — 새 task 는 **별도 파일** (`h4_recheck_taskset.json`) 또는 기존 파일에 append. **사용자 결정 의존** (parent plan §사용자 결정 절)
 - Stage 2A 마감 후 Task 04 진행 — 인프라 의존성. Stage 2A 의 healthcheck/abort + 결과 JSON meta v1.0 적용 후 실험 = 직전 Exp09 5-trial dilute 사고 재발 0
