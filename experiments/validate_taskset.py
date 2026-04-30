@@ -90,14 +90,19 @@ def _validate_math_02() -> dict:
 
 
 def _validate_math_03() -> dict:
-    """r+s+rect=15, 4r+6s+8rect=96, rect=r-1  →  r=6,s=4,rect=5."""
+    """r+s+rect=15, 4r+6s+8rect=88, rect=r-1, r=s+2  →  r=6,s=4,rect=5.
+
+    Phase 1 후속 (rev.1, 2026-04-30): seats 96→88 + r=s+2 constraint 추가로
+    선형 종속 해소, unique solution.
+    """
     try:
         from sympy import symbols, Eq, solve
         r, s, rec = symbols("r s rec", positive=True)
         sol = solve([
             Eq(r + s + rec, 15),
-            Eq(4 * r + 6 * s + 8 * rec, 96),
+            Eq(4 * r + 6 * s + 8 * rec, 88),
             Eq(rec, r - 1),
+            Eq(r, s + 2),
         ], [r, s, rec])
         if int(sol[r]) == 6 and int(sol[s]) == 4 and int(sol[rec]) == 5:
             return {"result": "PASS",
@@ -105,7 +110,7 @@ def _validate_math_03() -> dict:
         return {"result": "FAIL", "detail": f"sympy got {sol}, expected r=6,s=4,rec=5"}
     except ImportError:
         r, s, rec = 6, 4, 5
-        ok = (r + s + rec == 15) and (4*r + 6*s + 8*rec == 96) and (rec == r - 1)
+        ok = (r + s + rec == 15) and (4*r + 6*s + 8*rec == 88) and (rec == r - 1) and (r == s + 2)
         return {"result": "PASS" if ok else "FAIL",
                 "detail": f"arithmetic fallback: r={r},s={s},rec={rec}, checks={ok}"}
 

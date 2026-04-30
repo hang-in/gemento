@@ -199,7 +199,7 @@
       "category": "math",
       "difficulty": "hard",
       "objective": "연립방정식으로 풀어야 하는 문제를 단계적으로 풀어라.",
-      "prompt": "A school has 3 types of tables: round (seats 4), square (seats 6), and rectangular (seats 8). The total number of tables is 15. The total number of seats is 96. The number of rectangular tables equals the number of round tables minus 1. How many of each type of table are there?",
+      "prompt": "A school has 3 types of tables: round (seats 4), square (seats 6), and rectangular (seats 8). The total number of tables is 15. The total number of seats is 88. The number of rectangular tables equals the number of round tables minus 1. Also, the number of round tables is 2 more than the number of square tables. How many of each type of table are there?",
       "expected_answer": "round=6, square=4, rectangular=5",
       "scoring_keywords": [["6"], ["4"], ["5"]],
       "constraints": ["연립방정식을 세워야 한다", "모든 값은 양의 정수여야 한다", "검산 필수"],
@@ -275,7 +275,7 @@
       "objective": "6개의 데이터 소스를 교차 검증하여 모순을 식별하고 가장 신뢰할 수 있는 결론을 도출하라.",
       "prompt": "A research team is investigating the population of a rare bird species in a region. Six reports:\n\nReport 1 (2024 field survey): 'Counted 340 individuals in 5 zones. Zone A: 80, Zone B: 65, Zone C: 70, Zone D: 55, Zone E: 70.'\nReport 2 (satellite imagery, 2024): 'Estimated 400±50 individuals based on nest counts.'\nReport 3 (local ranger, 2024): 'Population has declined 20% since 2020 when it was 500.'\nReport 4 (university study, 2023): 'Population was 380 in 2023 with 5% annual growth expected.'\nReport 5 (conservation NGO, 2024): 'Zone C was destroyed by wildfire in early 2024. No birds remain in Zone C.'\nReport 6 (government census, 2024): 'Total population across all zones: 350. Zone C: 60 individuals.'\n\nIdentify all contradictions between reports. Which reports are most likely reliable? What is the best estimate of the current population?",
       "expected_answer": "Reports 5 and 6 contradict on Zone C (0 vs 60). Reports 1 and 6 conflict on total (340 vs 350). Report 3 implies 400 (500×0.8) which aligns with Report 2. Report 4 predicts 399 (380×1.05) for 2024. If Zone C is destroyed (Report 5), adjusted Report 1 total = 340-70 = 270. Best estimate: 270-280 (field survey minus destroyed zone).",
-      "scoring_keywords": [["270"], ["contradict", "zone c"], ["report 5", "report 6"]],
+      "scoring_keywords": [["270"], ["contradict", "zone c"], ["reports", "5", "6"]],
       "constraints": ["모든 6개 보고서를 분석해야 한다", "보고서 간 모순을 명시적으로 나열해야 한다", "신뢰도 판단 근거를 제시해야 한다", "최종 추정치에 계산 과정을 포함해야 한다"],
       "prefab_assertions": [],
       "fault_injections": []

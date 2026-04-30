@@ -76,7 +76,7 @@
       "document_path": "longctx_docs/doc_06_medium_2hop_02.md",
       "document_word_count": 7495,
       "question": "What is the power output of the engine installed in the vessel that won the 2019 Solent Classic race?",
-      "expected_answer": "500 horsepower",
+      "expected_answer": "500 horsepower (500 hp)",
       "scoring_keywords": [["500 horsepower"], ["500 hp"]],
       "gold_evidence_chunks": [4, 12],
       "gold_evidence_text": "Hop 1: The 2019 Solent Classic was won by Ariel's Wing. Hop 2: Ariel's Wing is powered by a Volvo D13 engine with a rated output of 500 horsepower."
