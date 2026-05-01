@@ -3,28 +3,31 @@ type: plan
 status: draft
 updated_at: 2026-05-02
 slug: exp11-mixed-intelligence-haiku-judge
-version: 1
+version: 2
 author: Architect (Windows)
 audience: Developer (Sonnet) + 사용자 검토 (위임 시 Architect default) + 사용자 직접 실행 (Task 04)
 parent_strategy: handoff-to-windows-2026-04-30-followup-strategy.md (Stage 4)
+note: "v2 (2026-05-02): Judge 모델 Haiku 4.5 → Gemini 2.5 Flash 변경. 사용자 명시 (이미 GEMINI_API_KEY 보유, 비용 1/30, 기존 _external/gemini_client.py 재사용). slug 보존 (history)."
 ---
 
-# Stage 4 — Exp11: Mixed Intelligence (Haiku Judge C)
+# Stage 4 — Exp11: Mixed Intelligence (Gemini Flash Judge C)
 
 ## Description
 
-Mac 핸드오프 Stage 5 + 사용자 의도 (Haiku Judge / 시간 vs 성능 trade-off / 양극 명료) 의 Architect plan 화.
+Mac 핸드오프 Stage 5 + 사용자 의도 (강한 Judge / 시간 vs 성능 trade-off / 양극 명료) 의 Architect plan 화.
 
 **가설 H10 후보**: 강한 Judge C 가 약한 Proposer/Critic (A/B) 의 한계를 보완한다 — Role 축 강화. Stage 2C 의 H4 ⚠ 조건부 채택 (synthesis +0.140 회복) 위에서 Mixed Intelligence 정밀 측정.
 
 **조건**:
 - baseline: A/B/C 모두 Gemma 4 E4B (Stage 2C abc 와 정합)
-- mixed: A/B = Gemma 4 E4B, **C = Claude Haiku 4.5** (`claude-haiku-4-5-20251001`)
+- mixed: A/B = Gemma 4 E4B, **C = Gemini 2.5 Flash** (`gemini-2.5-flash`)
 
 **사용자 의도 반영**:
-- Sonnet 회피 (reasoning 흡수 위험 + 비용 어중간) — Haiku 가 "약간 강한 Judge" 의 정확한 위치
+- Sonnet 회피 (reasoning 흡수 위험 + 비용 어중간) — Gemini Flash 가 "충분히 강한 Judge" 의 적정 위치
 - 시간 vs 성능 trade-off — Exp10 의 3축 (정확도 / 비용 / 지연) cost-aware 패턴 적용
-- 양극 명료 — Gemma E4B (소형 로컬) ↔ Haiku 4.5 (적정 강도 + API)
+- 양극 명료 — Gemma E4B (소형 로컬) ↔ Gemini Flash (적정 강도 + 매우 저렴 API)
+- 사용자 이미 GEMINI_API_KEY 보유 (Exp10 의 `gemini_flash_1call` condition 에서 사용)
+- Exp10 결과: Flash 1-call mean_acc=0.591 (8-loop ABC 0.781 보다 약함 — 단 본 plan 의 Judge 역할 = phase 전이 / 수렴 판단으로 충분)
 
 **Stage 2C 발견 반영**:
 - ✅ Stage 2C 의 abc tattoo_history 결함 (cycle-by-cycle 부재) — 본 plan 에서 fix 의무
@@ -33,17 +36,18 @@ Mac 핸드오프 Stage 5 + 사용자 의도 (Haiku Judge / 시간 vs 성능 trad
 
 ## Expected Outcome
 
-1. `experiments/anthropic_client.py` (신규) — Haiku API 호출 + 토큰 카운트 + 비용 계산
-2. `experiments/orchestrator.py` 의 `run_abc_chain` 에 `c_caller` 인자 추가 (1-2 라인, default=None=기존 동작)
-3. `experiments/exp11_mixed_intelligence/run.py` (신규) — 2 condition (baseline_abc, mixed_haiku_judge) + tattoo_history cycle-by-cycle 저장 (Stage 2C 결함 fix)
-4. `experiments/exp11_mixed_intelligence/results/exp11_baseline_abc.json` + `exp11_mixed_haiku_judge.json` (사용자 실행 출력)
-5. 분석 보고서 `docs/reference/exp11-mixed-intelligence-analysis-<TS>.md`
-6. H10 verdict + 문서 갱신 (researchNotebook 한·영 + 신규 result.md `exp-11-mixed-intelligence.md` + README 조건부)
+1. `experiments/_external/gemini_client.py` — **기존 재사용** (Exp10 영역, `call_with_meter` + `resolve_gemini_key`). 신규 코드 0
+2. `experiments/config.py` — Gemini Flash 관련 상수 추가 (작은 추가만, 또는 task-01 영역 외 — gemini_client 자체에 이미 정의)
+3. `experiments/orchestrator.py` 의 `run_abc_chain` 에 `c_caller` 인자 추가 (1-2 라인, default=None=기존 동작)
+4. `experiments/exp11_mixed_intelligence/run.py` (신규) — 2 condition (baseline_abc, mixed_flash_judge) + tattoo_history cycle-by-cycle 저장 (Stage 2C 결함 fix)
+5. `experiments/exp11_mixed_intelligence/results/exp11_baseline_abc.json` + `exp11_mixed_flash_judge.json` (사용자 실행 출력)
+6. 분석 보고서 `docs/reference/exp11-mixed-intelligence-analysis-<TS>.md`
+7. H10 verdict + 문서 갱신 (researchNotebook 한·영 + 신규 result.md `exp-11-mixed-intelligence.md` + README 조건부)
 
 ## Subtask Index
 
-1. [task-01](./exp11-mixed-intelligence-haiku-judge-task-01.md) — `anthropic_client.py` 신규 + cost meter (M, parallel_group A, depends_on: [])
-2. [task-02](./exp11-mixed-intelligence-haiku-judge-task-02.md) — `run_abc_chain` c_caller 인자 추가 + tattoo_history fix (S, parallel_group B, depends_on: [])
+1. [task-01](./exp11-mixed-intelligence-haiku-judge-task-01.md) — Gemini Flash client 재사용 검증 + config 보강 (S, parallel_group A, depends_on: [])
+2. [task-02](./exp11-mixed-intelligence-haiku-judge-task-02.md) — `run_abc_chain` c_caller 인자 추가 (S, parallel_group B, depends_on: [])
 3. [task-03](./exp11-mixed-intelligence-haiku-judge-task-03.md) — `exp11_mixed_intelligence/run.py` (M, parallel_group C, depends_on: [01, 02])
 4. [task-04](./exp11-mixed-intelligence-haiku-judge-task-04.md) — 실험 실행 (사용자 직접) — 15 task × 2 condition × 5 trial = 150 trial (L, parallel_group D, depends_on: [03])
 5. [task-05](./exp11-mixed-intelligence-haiku-judge-task-05.md) — 분석 + H10 verdict + 문서 갱신 (M, parallel_group E, depends_on: [04])
@@ -89,9 +93,16 @@ Stage 3 (분석):
 
 근거: 사용자 양극 명료성 (Gemma ↔ Haiku) + Stage 2C synthesis +0.140 회복 + Mac 핸드오프 §5 Architect 권장 + 사용자 명시 ("Sonnet 회피, Haiku 적정")
 
-### 결정 2 — Judge 모델 — **`claude-haiku-4-5-20251001` 확정**
+### 결정 2 — Judge 모델 — **Gemini 2.5 Flash (`gemini-2.5-flash`) 확정** (v2 변경)
 
-system instruction 의 model ID 명시. Sonnet (reasoning 흡수 위험) / Opus (비용 trivial) 회피.
+v1 의 Anthropic Haiku 4.5 → Gemini Flash 변경. 사유:
+- 사용자 이미 GEMINI_API_KEY 보유 (Exp10 의 `gemini_flash_1call` 에서 사용)
+- 비용 1/30 (~$0.18 vs Haiku $5) — 결정 9 한도 ($10) 의 1/55
+- 기존 `experiments/_external/gemini_client.py` 재사용 — 신규 코드 0
+- Judge 역할 (phase 전이 / 수렴 판단) 에 Flash 충분 (Exp10 결과: Flash 1-call 0.591 acc 으로 Gemma E4B 대비 명확히 강함)
+- `claude -p` 모드는 cache_creation 매 호출 부담 (~$42) 으로 부적합
+
+Sonnet (어중간) / Opus (trivial) 회피 의도는 그대로. Flash 가 양극 명료성의 적정 위치.
 
 ### 결정 3 — baseline 재실행 vs Stage 2C abc 재사용 — **재실행 확정**
 
@@ -115,15 +126,17 @@ Stage 2C 의 ABC max_cycles=8 그대로. Mixed condition 도 동일.
 
 Solo-1call / Solo-budget 은 본 plan 영역 외 (Stage 2C 에서 측정 완료). 본 plan = Mixed effect 단독 측정.
 
-### 결정 8 — API key 관리 — **환경 변수 `ANTHROPIC_API_KEY` 확정**
+### 결정 8 — API key 관리 — **`GEMINI_API_KEY` 환경 변수** (또는 `gemento/.env` 또는 `secall/.env`) 확정
 
-`.env` / config 파일 회피 — 환경 변수 그대로. 사용자 직접 실행 시 명시.
+기존 `experiments/_external/__init__.py:resolve_gemini_key()` 가 자동 탐색. 사용자 이미 보유.
 
-### 결정 9 — 비용 한계 — **추정 ~$10 미만 (Architect default)**
+### 결정 9 — 비용 한계 — **~$1 추정** (Gemini Flash 가격)
 
-Haiku 4.5 가격 추정: ~$1/MTok input + ~$5/MTok output. 75 trial × 8 cycles × 평균 (input 2K + output 500) 토큰 = 약 $5~10. 사용자 검토 시 변경 가능.
+Gemini 2.5 Flash 가격 (`experiments/_external/gemini_client.py`): input $0.075/MTok + output $0.30/MTok.
 
-**정확한 가격은 task-01 진행 시 Anthropic 공식 페이지 확인 의무**.
+75 trial × 8 cycles × 평균 (input 2K + output 500) 토큰 = 1.2M input + 0.3M output = **~$0.18**. 한도 여유 매우 큼 (1/55 of Haiku 추정 + 1/200 of `claude -p`).
+
+**정확한 가격 task-01 시 확인 — 단 기존 client 의 정의된 가격 그대로 사용**.
 
 ### 결정 10 — 측정 metric — **3축 (Stage 2C 정합) + cost-aware (Exp10 패턴)**
 
@@ -170,3 +183,12 @@ Haiku 4.5 가격 추정: ~$1/MTok input + ~$5/MTok output. 75 trial × 8 cycles 
 ## 변경 이력
 
 - 2026-05-02 v1: 초안. Stage 2 (2A/2B/2C) 마감 후 Stage 4 진입. 사용자 위임 ("Architect 권장대로 진행") — 모든 결정 1-10 Architect 확정.
+- 2026-05-02 v2: Judge 모델 변경 — Anthropic Haiku 4.5 → **Gemini 2.5 Flash**. 사유:
+  - 사용자 이미 GEMINI_API_KEY 보유 (Exp10 의 `gemini_flash_1call` 사용 이력)
+  - 비용 1/30 (~$0.18 vs Haiku ~$5)
+  - 기존 `experiments/_external/gemini_client.py` 재사용 (신규 코드 0)
+  - `claude -p` 모드 검토 결과 cache_creation 매 호출 부담 (~$42) 으로 부적합
+  - Architect 권장: SDK 신규 도입 회피 + 인프라 재사용 + 비용 절감 동시 달성
+  
+  영향: 결정 2 / 8 / 9 + Description + Expected Outcome + Subtask Index task-01 갱신.
+  Slug `exp11-mixed-intelligence-haiku-judge` 보존 (commit history). 본문은 "Flash Judge" 로 통일.

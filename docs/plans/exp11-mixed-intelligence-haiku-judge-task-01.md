@@ -7,246 +7,161 @@ parallel_group: A
 depends_on: []
 ---
 
-# Task 01 — `anthropic_client.py` 신규 + cost meter
+# Task 01 — Gemini Flash client 재사용 검증 + config 보강
 
 ## Changed files
 
-- `experiments/anthropic_client.py` — **신규**. Claude Haiku 4.5 호출 + 토큰 카운트 + 비용 계산
-- `experiments/config.py` — **수정 (추가만)**. `ANTHROPIC_API_KEY` env + Haiku model id + 가격 dict
+- `experiments/config.py` — **수정 (추가만)**. `GEMINI_FLASH_MODEL_ID` 상수 추가 (또는 gemini_client 의 `DEFAULT_MODEL` 재사용 — 본 task 결정)
+- (선택) `experiments/_external/__init__.py` — 변경 0 (read-only 검증만)
+- (선택) `experiments/_external/gemini_client.py` — 변경 0 (read-only 검증만)
 
-신규 1, 수정 1 (추가만).
+수정 1 또는 0 (검증만). 신규 0.
 
 ## Change description
 
 ### 배경
 
-Mixed Intelligence 의 Judge C 호출은 Claude Haiku 4.5 (`claude-haiku-4-5-20251001`). 기존 LM Studio (Gemma) 호출과 다른 client 필요. cost-aware 측정 위한 토큰 카운트 + 비용 계산 helper.
+v2 (2026-05-02) — Judge 모델 Haiku → Gemini Flash. 기존 `experiments/_external/gemini_client.py` (Exp10 영역) 재사용. 본 task = 재사용 가능성 검증 + 필요 시 작은 config 추가.
 
-### Step 1 — Anthropic SDK 또는 httpx 결정
-
-**결정**: `anthropic` Python SDK 사용 권장 (설치: `pip install anthropic`). httpx 직접도 가능하지만 SDK 의 retry / streaming / typing 이점.
+### Step 1 — 기존 gemini_client 정찰
 
 ```bash
-.venv/Scripts/pip install anthropic
+.venv/Scripts/python -c "
+from experiments._external import resolve_gemini_key
+from experiments._external.gemini_client import (
+    call_with_meter, CallMeter, DEFAULT_MODEL, DEFAULT_TIMEOUT,
+    GEMINI_25_FLASH_INPUT_COST_PER_1M, GEMINI_25_FLASH_OUTPUT_COST_PER_1M,
+)
+print(f'  DEFAULT_MODEL = {DEFAULT_MODEL}')
+print(f'  input cost = \${GEMINI_25_FLASH_INPUT_COST_PER_1M}/MTok')
+print(f'  output cost = \${GEMINI_25_FLASH_OUTPUT_COST_PER_1M}/MTok')
+print(f'  GEMINI_API_KEY 발견: {bool(resolve_gemini_key())}')
+"
 ```
 
-`anthropic` 패키지가 이미 설치되어 있는지 확인:
+기대:
+- `DEFAULT_MODEL = gemini-2.5-flash`
+- input $0.075 / output $0.30 / MTok
+- API key 발견 ✓ (사용자 이미 보유)
 
-```bash
-.venv/Scripts/python -c "import anthropic; print(anthropic.__version__)"
-```
+### Step 2 — `experiments/config.py` 보강 (선택)
 
-미설치 시 위 pip 명령 실행 후 다음 Step.
-
-### Step 2 — Haiku 4.5 가격 정확한 확인
-
-Anthropic 공식 페이지 (https://www.anthropic.com/pricing) 또는 SDK doc 에서 `claude-haiku-4-5-20251001` 의 정확한 가격 확인:
-
-- input: ? USD / 1M tokens
-- output: ? USD / 1M tokens
-
-**Architect default 추정** (정확한 값 task-01 진행 시 갱신):
-- input: $1 / MTok
-- output: $5 / MTok
-
-본 가격은 `experiments/config.py` 의 `HAIKU_PRICING` dict 에 명시 (Step 4).
-
-### Step 3 — `experiments/anthropic_client.py` 신규
+`config.py` 가 이미 `MODEL_NAME = "gemma4-e4b"` 등 정의. Mixed plan 의 신규 도구가 import 시 명시적 상수 있으면 가독성 ↑.
 
 ```python
-"""Anthropic Claude Haiku 4.5 client + cost meter.
-
-Mixed Intelligence (Exp11) 의 Judge C 호출용. 기존 LM Studio (Gemma) 와 별개.
-"""
-from __future__ import annotations
-
-import os
-import time
-from dataclasses import dataclass, field
-
-from anthropic import Anthropic
-from experiments.config import HAIKU_MODEL_ID, HAIKU_PRICING
-
-
-@dataclass
-class HaikuCallResult:
-    """Haiku 호출 결과 + 비용 메타."""
-
-    text: str
-    input_tokens: int
-    output_tokens: int
-    duration_ms: int
-    cost_usd: float
-    error: str | None = None
-
-
-def _calc_cost(input_tokens: int, output_tokens: int) -> float:
-    """Haiku 토큰 → USD."""
-    return (
-        input_tokens * HAIKU_PRICING["input_per_mtok"] / 1_000_000
-        + output_tokens * HAIKU_PRICING["output_per_mtok"] / 1_000_000
-    )
-
-
-def call_haiku(
-    messages: list[dict],
-    *,
-    system: str | None = None,
-    max_tokens: int = 4096,
-    temperature: float = 0.1,
-    timeout_s: int = 60,
-) -> HaikuCallResult:
-    """Claude Haiku 4.5 호출.
-
-    messages: [{"role": "user|assistant", "content": "..."}, ...]
-    system: optional system prompt
-    """
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        return HaikuCallResult(
-            text="", input_tokens=0, output_tokens=0,
-            duration_ms=0, cost_usd=0.0,
-            error="ANTHROPIC_API_KEY 환경 변수 미설정",
-        )
-
-    client = Anthropic(api_key=api_key, timeout=timeout_s)
-    start = time.time()
-    try:
-        kwargs = {
-            "model": HAIKU_MODEL_ID,
-            "max_tokens": max_tokens,
-            "temperature": temperature,
-            "messages": messages,
-        }
-        if system is not None:
-            kwargs["system"] = system
-        resp = client.messages.create(**kwargs)
-        text = "".join(block.text for block in resp.content if hasattr(block, "text"))
-        return HaikuCallResult(
-            text=text,
-            input_tokens=resp.usage.input_tokens,
-            output_tokens=resp.usage.output_tokens,
-            duration_ms=int((time.time() - start) * 1000),
-            cost_usd=_calc_cost(resp.usage.input_tokens, resp.usage.output_tokens),
-        )
-    except Exception as e:
-        return HaikuCallResult(
-            text="", input_tokens=0, output_tokens=0,
-            duration_ms=int((time.time() - start) * 1000),
-            cost_usd=0.0,
-            error=str(e),
-        )
-
-
-@dataclass
-class HaikuCostAccumulator:
-    """trial 단위 비용 누적."""
-
-    total_input_tokens: int = 0
-    total_output_tokens: int = 0
-    total_cost_usd: float = 0.0
-    call_count: int = 0
-    errors: list[str] = field(default_factory=list)
-
-    def add(self, result: HaikuCallResult) -> None:
-        self.total_input_tokens += result.input_tokens
-        self.total_output_tokens += result.output_tokens
-        self.total_cost_usd += result.cost_usd
-        self.call_count += 1
-        if result.error:
-            self.errors.append(result.error)
-
-    def to_dict(self) -> dict:
-        return {
-            "total_input_tokens": self.total_input_tokens,
-            "total_output_tokens": self.total_output_tokens,
-            "total_cost_usd": round(self.total_cost_usd, 6),
-            "call_count": self.call_count,
-            "errors": self.errors,
-        }
+# config.py 끝에 추가:
+# ── Mixed Intelligence (Exp11) ──
+GEMINI_FLASH_MODEL_ID = "gemini-2.5-flash"  # gemini_client 의 DEFAULT_MODEL 과 동일
 ```
 
-### Step 4 — `experiments/config.py` 추가
+또는 추가 안 함 — `gemini_client.DEFAULT_MODEL` 직접 import.
 
-config.py 의 끝에 추가:
+**Architect 결정**: 추가 안 함 (over-engineering). task-03 의 run.py 가 `from experiments._external.gemini_client import call_with_meter, DEFAULT_MODEL as GEMINI_FLASH_MODEL` 패턴.
+
+### Step 3 — system prompt 분리 검증
+
+기존 `gemini_client._convert_messages_to_gemini` 가 OpenAI 스타일 messages 의 system role 을 자동 분리하여 Gemini API 의 `systemInstruction` 필드로 전달 — 본 plan 의 c_caller 가 그대로 활용 가능.
 
 ```python
-# ── Anthropic (Exp11 Mixed Intelligence) ──
-HAIKU_MODEL_ID = "claude-haiku-4-5-20251001"
-HAIKU_PRICING = {
-    # 2026-05-02 시점 추정 — task-01 진행 시 정확한 가격으로 갱신
-    "input_per_mtok": 1.0,   # USD per 1M input tokens
-    "output_per_mtok": 5.0,  # USD per 1M output tokens
-}
+# 검증
+from experiments._external.gemini_client import _convert_messages_to_gemini
+sys_text, contents = _convert_messages_to_gemini([
+    {"role": "system", "content": "You are a Judge."},
+    {"role": "user", "content": "Approve or reject."},
+])
+assert sys_text == "You are a Judge."
+assert len(contents) == 1
+assert contents[0]["role"] == "user"
 ```
 
-**중요**: Step 2 의 정확한 가격 확인 후 `HAIKU_PRICING` 갱신. disclosure 주석 명시.
+### Step 4 — 짧은 호출 dry-run (사용자 직접, ~$0.0001)
+
+**사용자 실행 의무** (메모리 정책: Architect/Developer 가 모델 호출 금지):
+
+```powershell
+.\.venv\Scripts\python.exe -c "
+from experiments._external.gemini_client import call_with_meter
+result = call_with_meter([
+    {'role': 'system', 'content': 'You are a verdict judge. Reply with JSON only.'},
+    {'role': 'user', 'content': 'Should we accept the answer 13 apples and 7 oranges? Reply: {\"verdict\":\"accept\"|\"reject\"}'},
+], response_mime_type='application/json')
+print(f'  text={result.raw_response!r}')
+print(f'  tokens=in:{result.input_tokens} out:{result.output_tokens}')
+print(f'  cost=\${result.cost_usd:.6f}')
+print(f'  err={result.error}')
+"
+```
+
+기대:
+- text = `{"verdict":"accept"}` 또는 비슷한 JSON
+- tokens 적음 (~50 in + 30 out)
+- cost ~$0.00001
+- err = None
+
+→ 통과 시 본 task 마감. 실패 시 사용자 호출 (API key 확인 / 네트워크 / SDK 차이).
 
 ## Dependencies
 
-- 패키지: `anthropic` (Step 1 에서 설치 검증)
-- 다른 subtask: 없음 (parallel_group A, 첫 노드)
-- 환경 변수: `ANTHROPIC_API_KEY` (사용자 직접 설정 — Task 04 시점)
+- 패키지: 표준 + `httpx` (이미 설치)
+- 다른 subtask: 없음 (parallel_group A)
+- 기존 `experiments/_external/gemini_client.py` (Exp10 영역) — read-only
 
 ## Verification
 
 ```bash
-# 1) anthropic SDK 설치 확인
-.venv/Scripts/python -c "import anthropic; print(f'anthropic SDK: {anthropic.__version__}')"
-
-# 2) 신규 client import + 시그니처
+# 1) gemini_client import + DEFAULT_MODEL
 .venv/Scripts/python -c "
-from experiments.anthropic_client import call_haiku, HaikuCallResult, HaikuCostAccumulator, _calc_cost
-from experiments.config import HAIKU_MODEL_ID, HAIKU_PRICING
-assert HAIKU_MODEL_ID == 'claude-haiku-4-5-20251001'
-assert 'input_per_mtok' in HAIKU_PRICING
-print('verification 1 ok: import + config')
+from experiments._external.gemini_client import call_with_meter, DEFAULT_MODEL
+assert DEFAULT_MODEL == 'gemini-2.5-flash'
+print('verification 1 ok: gemini_client import')
 "
 
-# 3) cost 계산 단위 테스트
+# 2) resolve_gemini_key — API key 발견 (사용자 환경)
 .venv/Scripts/python -c "
-from experiments.anthropic_client import _calc_cost
-# 1000 input + 500 output: 1000/1M × 1 + 500/1M × 5 = 0.001 + 0.0025 = 0.0035
-cost = _calc_cost(1000, 500)
-assert abs(cost - 0.0035) < 1e-6, f'cost: {cost}'
-print(f'verification 2 ok: cost calc ({cost})')
+from experiments._external import resolve_gemini_key
+key = resolve_gemini_key()
+assert key, 'GEMINI_API_KEY not found in env / gemento/.env / secall/.env'
+print(f'verification 2 ok: API key 발견 (length={len(key)})')
 "
 
-# 4) API key 부재 시 graceful fallback (실제 호출 안 함)
+# 3) _convert_messages_to_gemini 동작
 .venv/Scripts/python -c "
-import os
-os.environ.pop('ANTHROPIC_API_KEY', None)
-from experiments.anthropic_client import call_haiku
-result = call_haiku([{'role':'user','content':'test'}])
-assert result.error and 'ANTHROPIC_API_KEY' in result.error
-print('verification 3 ok: graceful fallback')
+from experiments._external.gemini_client import _convert_messages_to_gemini
+sys_text, contents = _convert_messages_to_gemini([
+    {'role': 'system', 'content': 'sys'},
+    {'role': 'user', 'content': 'q'},
+])
+assert sys_text == 'sys'
+assert len(contents) == 1 and contents[0]['role'] == 'user'
+print('verification 3 ok: messages 변환')
 "
 
-# 5) (사용자 직접) 실제 API 호출 dry-run — 본 plan 의 Task 04 직전에 사용자 실행
-# .\.venv\Scripts\python.exe -c "
-# import os
-# # ANTHROPIC_API_KEY 사전 설정 가정
-# from experiments.anthropic_client import call_haiku
-# r = call_haiku([{'role':'user','content':'Say OK in one word.'}], max_tokens=10)
-# print(f'  text={r.text!r} tokens={r.input_tokens}/{r.output_tokens} cost=${r.cost_usd:.6f} err={r.error}')
-# "
+# 4) (사용자 직접) 짧은 dry-run — Step 4 의 명령
 ```
 
-5 명령 (1-4 본 task 검증, 5 는 Task 04 직전 사용자).
+3 명령 (1-3 본 task 검증) + 4 (사용자 dry-run).
 
 ## Risks
 
-- **Risk 1 — anthropic SDK 미설치**: `pip install anthropic` 가 실패 시 (네트워크 / 권한) 사용자 호출. fallback: httpx 직접 (별도 turn)
-- **Risk 2 — Haiku 가격 정확성**: Step 2 의 사용자 / Architect 확인 의무. 추정 가격으로 진행 시 비용 산정 ±2x 범위 변동 가능 — disclosure 명시
-- **Risk 3 — API key 없이 import 시도**: graceful fallback (Step 3 의 코드 — error message 반환). import 자체는 환경 변수 확인 안 함
-- **Risk 4 — Anthropic SDK 의 message format 변경**: SDK 의 `messages.create` API 안정 — 단 향후 SDK 업그레이드 시 호환성 검증
+- **Risk 1 — API key 부재**: `resolve_gemini_key()` 가 None 반환 시 사용자 호출 (env 또는 .env 확인)
+- **Risk 2 — Gemini API 가격 변동**: `GEMINI_25_FLASH_INPUT_COST_PER_1M` 의 정의된 값 (2025-04 시점) 이 2026-05 시점에 변동 가능. 단 큰 변동 안 — disclosure 만 (실험 시점 사용자 재확인 권고)
+- **Risk 3 — system prompt 분리 호환**: 기존 `_convert_messages_to_gemini` 가 OpenAI 호환. ABC chain 의 system prompt 가 잘 분리되는지 dry-run 검증
+- **Risk 4 — JSON mime type 응답이 Tattoo schema 와 호환 안 됨**: gemini_client 의 `response_mime_type='application/json'` 이 default. Judge 응답이 JSON 안 일 수도 — task-03 에서 mime type 결정 (text 또는 json)
 
 ## Scope boundary
 
 본 task 에서 **수정 금지** 파일:
+- `experiments/_external/gemini_client.py` — read-only (Exp10 영역, 기존 코드 보존)
+- `experiments/_external/__init__.py` — read-only
 - `experiments/orchestrator.py` (task-02 영역)
-- `experiments/measure.py` / `score_answer_v0/v2/v3` — 본 plan 영역 외
-- `experiments/run_helpers.py` (Stage 2A 영역)
+- `experiments/measure.py` / `score_answer_v*` — 본 plan 영역 외
+- `experiments/run_helpers.py` (Stage 2A) — 변경 금지
 - `experiments/schema.py` — 변경 금지
 - 모든 기존 `experiments/exp**/run.py` — 변경 금지
-- 결과 JSON / 분석 helper / docs/reference 의 다른 reference
+
+## 폐기 사항 (v1 → v2)
+
+- ❌ `experiments/anthropic_client.py` 신규 — 폐기 (gemini_client 재사용)
+- ❌ `experiments/config.py` 의 `HAIKU_MODEL_ID` / `HAIKU_PRICING` — 폐기 (gemini_client 의 DEFAULT_MODEL / cost 상수 재사용)
+- ❌ `anthropic` Python SDK 설치 — 폐기 (httpx 직접, gemini_client 가 내부 사용)
+- ❌ ANTHROPIC_API_KEY 환경 변수 — 폐기 (GEMINI_API_KEY 사용, 사용자 이미 보유)

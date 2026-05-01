@@ -12,9 +12,9 @@ depends_on: [03]
 ## Changed files
 
 - `experiments/exp11_mixed_intelligence/results/exp11_baseline_abc.json` — **신규 출력** (사용자 실행)
-- `experiments/exp11_mixed_intelligence/results/exp11_mixed_haiku_judge.json` — **신규 출력**
+- `experiments/exp11_mixed_intelligence/results/exp11_mixed_flash_judge.json` — **신규 출력**
 
-신규 2 파일 (사용자 실행 결과).
+신규 2 파일 (사용자 실행 결과). v2 (2026-05-02): condition 명 변경 (`mixed_haiku_judge` → `mixed_flash_judge`) — Anthropic Haiku 에서 Gemini Flash 로 전환.
 
 ## Change description
 
@@ -26,32 +26,35 @@ depends_on: [03]
 
 ```powershell
 $env:GEMENTO_API_BASE_URL = "http://192.168.1.179:1234"
-$env:ANTHROPIC_API_KEY = "<사용자 직접 설정 — Anthropic console 에서 발급>"
+# GEMINI_API_KEY 는 이미 사용자 환경 (env 또는 gemento/.env 또는 secall/.env) 보유
+# resolve_gemini_key() 가 자동 탐색
 
 # 1a) Stage 2A + 2B + task-01/02/03 마감 검증
 .\.venv\Scripts\python.exe -c "
 from experiments.run_helpers import classify_trial_error, build_result_meta, parse_result_meta
 from experiments.schema import FailureLabel
-from experiments.anthropic_client import call_haiku, HaikuCostAccumulator
-from experiments.config import HAIKU_MODEL_ID, HAIKU_PRICING
+from experiments._external import resolve_gemini_key
+from experiments._external.gemini_client import call_with_meter, DEFAULT_MODEL
 from experiments.orchestrator import run_abc_chain
 import inspect
 sig = inspect.signature(run_abc_chain)
 assert 'c_caller' in sig.parameters, 'c_caller 인자 부재 — task-02 미마감'
+assert resolve_gemini_key(), 'GEMINI_API_KEY 미발견'
 print('ok: 모든 prerequisite 마감')
-print(f'  HAIKU_MODEL_ID = {HAIKU_MODEL_ID}')
-print(f'  HAIKU_PRICING = {HAIKU_PRICING}')
+print(f'  GEMINI_FLASH_MODEL = {DEFAULT_MODEL}')
 "
 
 # 1b) lmstudio 서버 가용성
 curl -s http://192.168.1.179:1234/v1/models | head -3
 
-# 1c) Anthropic API key 가용성 (실제 호출, 짧은 prompt, ~$0.0001)
+# 1c) Gemini API 가용성 (실제 호출, 짧은 prompt, ~\$0.0001)
 .\.venv\Scripts\python.exe -c "
-from experiments.anthropic_client import call_haiku
-r = call_haiku([{'role':'user','content':'Reply with just OK.'}], max_tokens=10)
-print(f'  text={r.text!r} tokens={r.input_tokens}/{r.output_tokens} cost=\${r.cost_usd:.6f} err={r.error}')
-assert not r.error, f'Haiku API fail: {r.error}'
+from experiments._external.gemini_client import call_with_meter
+r = call_with_meter([{'role':'user','content':'Reply with just OK.'}], response_mime_type=None)
+print(f'  text={r.raw_response!r}')
+print(f'  tokens=in:{r.input_tokens} out:{r.output_tokens}')
+print(f'  cost=\${r.cost_usd:.6f} err={r.error}')
+assert not r.error, f'Gemini API fail: {r.error}'
 "
 ```
 
@@ -65,15 +68,15 @@ assert not r.error, f'Haiku API fail: {r.error}'
   --conditions baseline_abc --trials 1 --max-cycles 8 `
   --out-name dryrun_baseline.json
 
-# 2b) mixed_haiku_judge dry-run (Haiku 비용 ~$0.01~0.05 예상)
+# 2b) mixed_flash_judge dry-run (Gemini Flash 비용 ~\$0.001~0.003 예상)
 .\.venv\Scripts\python.exe -m experiments.exp11_mixed_intelligence.run `
-  --conditions mixed_haiku_judge --trials 1 --max-cycles 8 `
+  --conditions mixed_flash_judge --trials 1 --max-cycles 8 `
   --out-name dryrun_mixed.json
 ```
 
 기대:
-- 2a: cycles ≥ 1, tattoo_history len ≥ 2 (cycle-by-cycle 검증), Haiku 호출 0
-- 2b: cycles ≥ 1, tattoo_history len ≥ 2, Haiku 호출 ≥ 1, haiku_cost > 0
+- 2a: cycles ≥ 1, tattoo_history len ≥ 2 (cycle-by-cycle 검증), Gemini 호출 0
+- 2b: cycles ≥ 1, tattoo_history len ≥ 2, Gemini 호출 ≥ 1, flash_cost > 0
 
 dry-run 통과 시 폐기 후 Step 3.
 
@@ -87,7 +90,7 @@ Remove-Item experiments\exp11_mixed_intelligence\results\partial_*.json -ErrorAc
 
 **시간 예상**:
 - baseline_abc: 15 task × 5 trial × 8 cycles × 3 model call (Gemma) ≈ 1800 model call. ABC trial 당 ~12 min → ~15 시간
-- mixed_haiku_judge: 15 task × 5 trial × 8 cycles × (Gemma 2 + Haiku 1) ≈ 1800 call (Gemma 1200 + Haiku 600). Haiku API 빠름 (~수 초/call) → ~10 시간
+- mixed_flash_judge: 15 task × 5 trial × 8 cycles × (Gemma 2 + Flash 1) ≈ 1800 call (Gemma 1200 + Flash 600). Flash API 빠름 (~수 초/call) → ~10 시간
 
 총 ~25 시간. **분할 권장 (옵션 A)**:
 
@@ -97,27 +100,27 @@ Remove-Item experiments\exp11_mixed_intelligence\results\partial_*.json -ErrorAc
   --conditions baseline_abc --trials 5 --max-cycles 8 `
   --out-name exp11_baseline_abc.json
 
-# 2) mixed_haiku_judge (~10h, 다음 시점)
+# 2) mixed_flash_judge (~10h, 다음 시점)
 .\.venv\Scripts\python.exe -m experiments.exp11_mixed_intelligence.run `
-  --conditions mixed_haiku_judge --trials 5 --max-cycles 8 `
-  --out-name exp11_mixed_haiku_judge.json
+  --conditions mixed_flash_judge --trials 5 --max-cycles 8 `
+  --out-name exp11_mixed_flash_judge.json
 ```
 
-또는 통합 실행 (chain 스크립트 — 본 plan 의 task-04 영역에서는 작성 안 함, 사용자 결정 시 후속):
+또는 통합 실행:
 
 ```powershell
 .\.venv\Scripts\python.exe -m experiments.exp11_mixed_intelligence.run `
-  --conditions baseline_abc mixed_haiku_judge --trials 5 --max-cycles 8 `
+  --conditions baseline_abc mixed_flash_judge --trials 5 --max-cycles 8 `
   --out-name exp11_full.json
 ```
 
-### Step 4 — Haiku 비용 모니터링
+### Step 4 — Gemini Flash 비용 모니터링
 
 mixed condition 진행 중 누적 비용 stdout 확인:
-- run.py 가 trial 별 `haiku_cost` 출력 (Step 2 의 condition aggregate)
-- 임계 ($20+) 시 ctrl+C + 사용자 호출
+- run.py 가 trial 별 `flash_cost` 출력
+- 임계 (\$2+) 시 ctrl+C + 사용자 호출 — Architect 추정 (~\$0.18) 보다 10x 초과 시 비정상
 
-**Architect 추정 총 비용**: 75 mixed trial × 평균 8 cycle × Haiku call 1/cycle × 평균 (input 2K + output 500) tok = 75 × 8 × ($0.002 + $0.0025) ≈ **$2.7~5.4**. 한도 여유 있음.
+**Architect 추정 총 비용**: 75 mixed trial × 평균 8 cycle × Gemini call 1/cycle × 평균 (input 2K + output 500) tok = 1.2M in + 0.3M out × (\$0.075 + \$0.30) per MTok ≈ **\$0.18**. 한도 여유 매우 큼.
 
 ### Step 5 — 결과 검증
 
@@ -127,28 +130,28 @@ import json, glob
 for f in sorted(glob.glob('experiments/exp11_mixed_intelligence/results/exp11_*.json')):
     d = json.load(open(f, encoding='utf-8'))
     print(f'{f}: trials={len(d[\"trials\"])}, schema={d.get(\"schema_version\")}')
-    # haiku_cost 합산 (mixed condition)
-    haiku_cost = sum((t.get('haiku_cost') or {}).get('total_cost_usd', 0) for t in d['trials'])
-    if haiku_cost > 0:
-        print(f'  total Haiku cost: \${haiku_cost:.4f}')
+    # flash_cost 합산 (mixed condition)
+    flash_cost = sum((t.get('flash_cost') or {}).get('total_cost_usd', 0) for t in d['trials'])
+    if flash_cost > 0:
+        print(f'  total Flash cost: \${flash_cost:.4f}')
 "
 ```
 
-기대: 2 파일 (baseline 75 trial + mixed 75 trial), schema_version="1.0", mixed 의 총 Haiku 비용 < $20.
+기대: 2 파일 (baseline 75 trial + mixed 75 trial), schema_version="1.0", mixed 의 총 Flash 비용 < \$1.
 
 ## Dependencies
 
 - Stage 2A 마감 (helper)
 - Stage 2B 마감 (FailureLabel)
-- task-01 마감 (anthropic_client)
+- task-01 마감 (gemini_client 재사용 검증)
 - task-02 마감 (run_abc_chain c_caller)
 - task-03 마감 (run.py)
 - 사용자: ANTHROPIC_API_KEY 발급 + 환경 변수 설정
-- 모델 서버 (LM Studio + Anthropic) 가용성
+- 모델 서버 (LM Studio + Google Gemini API) 가용성
 
 ## Verification
 
-본 task 의 검증 = 결과 JSON schema + trial 수 + Haiku 비용 임계 + condition aggregate. Step 5 의 명령 + 추가:
+본 task 의 검증 = 결과 JSON schema + trial 수 + Flash 비용 임계 + condition aggregate. Step 5 의 명령 + 추가:
 
 ```powershell
 # 1) trial 수 = 150 (75 + 75)
@@ -187,9 +190,9 @@ for f in sorted(glob.glob('experiments/exp11_mixed_intelligence/results/exp11_*.
 
 ## Risks
 
-- **Risk 1 — Anthropic API 호출 fail (rate limit / network)**: Stage 2A healthcheck/abort 패턴 — fatal classify 후 abort. 부분 결과 보존
+- **Risk 1 — Gemini API 호출 fail (rate limit / network / quota)**: Stage 2A healthcheck/abort 패턴 — fatal classify 후 abort. 부분 결과 보존. Gemini Flash 의 free tier 또는 paid tier 한도 확인 권장
 - **Risk 2 — 비용 임계 초과**: Step 4 의 모니터링. ctrl+C + 사용자 호출
-- **Risk 3 — Haiku 응답 schema mismatch (A/B 의 Tattoo JSON 과 호환 안 됨)**: dry-run 시 발견 → 즉시 사용자 호출
+- **Risk 3 — Flash 응답 schema mismatch (A/B 의 Tattoo JSON 과 호환 안 됨)**: dry-run 시 발견 → 즉시 사용자 호출. gemini_client 가 OpenAI 스타일 system 자동 분리하므로 호환 가능성 높음
 - **Risk 4 — Sonnet 직접 실행 시도**: 본 task = 사용자 직접 실행. Sonnet 의 책임 = 명령 명세까지
 
 ## Scope boundary

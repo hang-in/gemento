@@ -33,7 +33,7 @@ import json
 from collections import defaultdict
 
 files = ['experiments/exp11_mixed_intelligence/results/exp11_baseline_abc.json',
-         'experiments/exp11_mixed_intelligence/results/exp11_mixed_haiku_judge.json']
+         'experiments/exp11_mixed_intelligence/results/exp11_mixed_flash_judge.json']
 all_trials = []
 for f in files:
     d = json.load(open(f, encoding='utf-8'))
@@ -45,7 +45,7 @@ for t in all_trials:
     cond = t['condition']; tid = t['task_id']
     agg[(cond, tid)]["n"] += 1
     agg[(cond, tid)]["acc"] += t.get('accuracy_v3', 0)
-    agg[(cond, tid)]["cost"] += (t.get('haiku_cost') or {}).get('total_cost_usd', 0)
+    agg[(cond, tid)]["cost"] += (t.get('flash_cost') or {}).get('total_cost_usd', 0)
     agg[(cond, tid)]["dur"] += t.get('duration_ms', 0)
     # turnover (Stage 2C analyze.py 의 count_assertion_turnover 재사용)
     from experiments.exp_h4_recheck.analyze import count_assertion_turnover, classify_error_mode
@@ -56,11 +56,11 @@ for t in all_trials:
 
 ### Step 2 — ablation 분석 (n=15 task paired)
 
-H10 본 가설 = `mixed_haiku_judge − baseline_abc`:
+H10 본 가설 = `mixed_flash_judge − baseline_abc`:
 
 ```
 abc_per[i]   = baseline_abc 의 task i mean acc
-mixed_per[i] = mixed_haiku_judge 의 task i mean acc
+mixed_per[i] = mixed_flash_judge 의 task i mean acc
 
 Δ = mixed_per[i] - abc_per[i]  (n=15)
 
@@ -81,7 +81,7 @@ Bootstrap 95% CI Δ
 | condition | mean_acc | total_cost | trial 당 cost | avg_dur | err+null |
 |-----------|---------:|-----------:|--------------:|--------:|---------:|
 | baseline_abc | 0.X | $0.0000 | $0.000 | Y min | Z |
-| mixed_haiku_judge | 0.X | $X.XX | $X.XX | Y min | Z |
+| mixed_flash_judge | 0.X | $X.XX | $X.XX | Y min | Z |
 
 cost-aware 비교:
 - Δ acc per $: mixed 의 추가 비용 ($X.XX) 대비 acc 증가 (Δ)
@@ -92,9 +92,9 @@ cost-aware 비교:
 | condition | added (mean) | modified (mean) | final_count (mean) |
 |-----------|-------------:|----------------:|-------------------:|
 | baseline_abc | X.XX | X.XX | X.XX |
-| mixed_haiku_judge | X.XX | X.XX | X.XX |
+| mixed_flash_judge | X.XX | X.XX | X.XX |
 
-Stage 2C 의 결함 (ABC turnover=0) 회복 — cycle-by-cycle 저장 확인. mixed 의 turnover_modified 가 baseline 보다 크면 "Haiku Judge 가 A 의 assertion 을 수정시킴" — H10 의 직접 증거.
+Stage 2C 의 결함 (ABC turnover=0) 회복 — cycle-by-cycle 저장 확인. mixed 의 turnover_modified 가 baseline 보다 크면 "Flash Judge 가 A 의 assertion 을 수정시킴" — H10 의 직접 증거.
 
 ### Step 5 — error mode (FailureLabel)
 
@@ -103,7 +103,7 @@ Stage 2B FailureLabel 분류:
 | condition | NONE | FORMAT | WRONG_SYN | NULL | OTHER | CONN | TIMEOUT |
 |-----------|----:|-------:|----------:|----:|------:|-----:|--------:|
 | baseline_abc | ... | ... | ... | ... | ... | ... | ... |
-| mixed_haiku_judge | ... | ... | ... | ... | ... | ... | ... |
+| mixed_flash_judge | ... | ... | ... | ... | ... | ... | ... |
 
 mixed 의 NONE 비율이 baseline 보다 크면 정답 안정성 우위 (질적 차이).
 
@@ -119,7 +119,7 @@ elif mixed - baseline_abc ≥ +0.05 AND p ≥ 0.05:
 elif |mixed - baseline_abc| < 0.05:
     verdict = "⚠ 미결" (격차 작음, sample 한계)
 elif mixed - baseline_abc < 0:
-    verdict = "❌ 기각" (Mixed 가 baseline 보다 약함 — Haiku 의 reasoning 흡수 또는 schema mismatch 가능)
+    verdict = "❌ 기각" (Mixed 가 baseline 보다 약함 — Flash 의 reasoning 흡수 또는 schema mismatch 가능)
 ```
 
 추가 검증:
@@ -155,7 +155,7 @@ elif mixed - baseline_abc < 0:
 type: result
 status: done
 updated_at: 2026-MM-DD
-experiment: 실험 11 — Mixed Intelligence (Haiku Judge)
+experiment: 실험 11 — Mixed Intelligence (Flash Judge)
 ---
 ```
 
@@ -173,7 +173,7 @@ experiment: 실험 11 — Mixed Intelligence (Haiku Judge)
 H 가설 표에 H10 신규 entry:
 
 ```markdown
-| **H10** | **[Role 외부화 강화 — Mixed Intelligence]** 강한 Judge C (Haiku 4.5) 가 약한 Proposer/Critic (A/B = Gemma E4B) 의 한계를 보완한다 | <NEW VERDICT> (Δ <FILL>, 통계 <FILL>, cost <FILL>) | Exp11 |
+| **H10** | **[Role 외부화 강화 — Mixed Intelligence]** 강한 Judge C (Gemini 2.5 Flash) 가 약한 Proposer/Critic (A/B = Gemma E4B) 의 한계를 보완한다 | <NEW VERDICT> (Δ <FILL>, 통계 <FILL>, cost <FILL>) | Exp11 |
 ```
 
 Exp11 섹션 신규 — 6하원칙 + 결과 + 다음 단계.
@@ -183,10 +183,10 @@ Exp11 섹션 신규 — 6하원칙 + 결과 + 다음 단계.
 기존 H 가설 표 / 영문 수치 변경 0. 신규 단락:
 
 ```markdown
-### Exp11 — Mixed Intelligence (Haiku Judge) note (2026-MM-DD)
+### Exp11 — Mixed Intelligence (Flash Judge) note (2026-MM-DD)
 
-A follow-up experiment (`exp11-mixed-intelligence-haiku-judge`) tested H10 — whether
-a stronger Judge C (Claude Haiku 4.5) compensates for weaker Proposer/Critic (Gemma 4 E4B).
+A follow-up experiment (`exp11-mixed-intelligence-haiku-judge` slug; Flash Judge after v2 plan revision) tested H10 — whether
+a stronger Judge C (Gemini 2.5 Flash) compensates for weaker Proposer/Critic (Gemma 4 E4B).
 ...
 [ablation, statistics, verdict, cost-aware]
 
@@ -199,7 +199,7 @@ Detail: `docs/reference/exp11-mixed-intelligence-analysis-<TS>.md`.
 
 | H10 verdict | README 영향 |
 |-------------|-----------|
-| ✅ 채택 (+0.10 이상) | H 표 추가 + Headline 갱신 ("Mixed Intelligence: +X%p with Haiku Judge") + Roadmap |
+| ✅ 채택 (+0.10 이상) | H 표 추가 + Headline 갱신 ("Mixed Intelligence: +X%p with Flash Judge") + Roadmap |
 | ✅/⚠ 조건부 채택 (+0.05~) | H 표 추가 |
 | ⚠ 미결 | H 표 추가 (verdict 명시) |
 | ❌ 기각 | H 표 추가 + 사용자 검토 (외부 노출 톤) |
@@ -254,9 +254,9 @@ print('verification 5 ok: banned tone 부재')
 
 ## Risks
 
-- **Risk 1 — H10 기각 결과 (mixed < baseline)**: Haiku 가 Tattoo schema 와 mismatch / reasoning 흡수 안 됨 / 다른 원인. disclosure 명시. Stage 5 (SQLite / Search) 동기 흔들림 — 사용자 호출
+- **Risk 1 — H10 기각 결과 (mixed < baseline)**: Flash 가 Tattoo schema 와 mismatch / reasoning 흡수 안 됨 / 다른 원인. disclosure 명시. Stage 5 (SQLite / Search) 동기 흔들림 — 사용자 호출
 - **Risk 2 — Mixed 의 turnover 측정 결함 재발**: task-03 의 cycle-by-cycle 저장 fix 가 정상 작동했는지 dry-run 시 검증. 미작동 시 사용자 호출
-- **Risk 3 — Haiku 비용 임계 초과**: task-04 의 Step 4 모니터링. 본 task 시점에 발견되면 disclosure
+- **Risk 3 — Flash 비용 임계 초과**: task-04 의 Step 4 모니터링 (~\$1+ 시 비정상). 본 task 시점에 발견되면 disclosure
 - **Risk 4 — 영문 노트북 정책 위반**: 기존 H 표 (H1~H9c) 변경 절대 금지. Verification 4 의 grep + Architect 시각 검토
 
 ## Scope boundary

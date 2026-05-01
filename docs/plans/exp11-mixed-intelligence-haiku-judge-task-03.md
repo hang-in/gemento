@@ -12,10 +12,10 @@ depends_on: [01, 02]
 ## Changed files
 
 - `experiments/exp11_mixed_intelligence/__init__.py` — **신규**
-- `experiments/exp11_mixed_intelligence/run.py` — **신규**. 2 condition (baseline_abc + mixed_haiku_judge) + cycle-by-cycle tattoo_history 저장
+- `experiments/exp11_mixed_intelligence/run.py` — **신규**. 2 condition (baseline_abc + **mixed_flash_judge**) + cycle-by-cycle tattoo_history 저장 + Gemini Flash c_caller
 - `experiments/exp11_mixed_intelligence/results/.gitkeep` — **신규**
 
-신규 3.
+신규 3. **v2 (2026-05-02)**: condition 명 `mixed_haiku_judge` → `mixed_flash_judge`. import 변경 (anthropic_client → `experiments._external.gemini_client`).
 
 ## Change description
 
@@ -48,6 +48,7 @@ import json
 import sys
 import time
 from collections import defaultdict
+from dataclasses import dataclass, field
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -56,10 +57,13 @@ from experiments.run_helpers import (
     classify_trial_error, is_fatal_error, check_error_rate,
     build_result_meta, get_taskset_version, normalize_sampling_params,
 )
-from experiments.config import SAMPLING_PARAMS, MODEL_NAME, API_BASE_URL, HAIKU_MODEL_ID
+from experiments.config import SAMPLING_PARAMS, MODEL_NAME, API_BASE_URL
 from experiments.measure import score_answer_v3
 from experiments.orchestrator import run_abc_chain
-from experiments.anthropic_client import call_haiku, HaikuCostAccumulator
+from experiments._external.gemini_client import (
+    call_with_meter as call_gemini,
+    DEFAULT_MODEL as GEMINI_FLASH_MODEL,
+)
 
 
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
@@ -67,40 +71,58 @@ DEFAULT_TRIALS = 5
 DEFAULT_MAX_CYCLES = 8
 
 
-def _haiku_c_caller(cost_acc: HaikuCostAccumulator):
-    """Haiku 호출 wrapper — orchestrator.run_abc_chain 의 c_caller 시그니처 호환.
+@dataclass
+class FlashCostAccumulator:
+    """trial 단위 비용 누적 (Gemini Flash)."""
+    total_input_tokens: int = 0
+    total_output_tokens: int = 0
+    total_cost_usd: float = 0.0
+    call_count: int = 0
+    errors: list[str] = field(default_factory=list)
+
+    def add_meter(self, meter) -> None:
+        """gemini_client.CallMeter 을 누적."""
+        self.total_input_tokens += meter.input_tokens
+        self.total_output_tokens += meter.output_tokens
+        self.total_cost_usd += meter.cost_usd
+        self.call_count += 1
+        if meter.error:
+            self.errors.append(meter.error)
+
+    def to_dict(self) -> dict:
+        return {
+            "total_input_tokens": self.total_input_tokens,
+            "total_output_tokens": self.total_output_tokens,
+            "total_cost_usd": round(self.total_cost_usd, 6),
+            "call_count": self.call_count,
+            "errors": self.errors,
+        }
+
+
+def _flash_c_caller(cost_acc: FlashCostAccumulator):
+    """Gemini Flash 호출 wrapper — run_abc_chain 의 c_caller 시그니처 호환.
 
     c_caller signature: (messages: list[dict]) -> tuple[str, dict]
-    cost_acc 는 trial 단위 누적 — closure 로 binding.
+    cost_acc = trial 단위 누적 (closure binding).
+    gemini_client.call_with_meter 가 OpenAI 스타일 messages 를 자동 변환 + system 분리.
     """
     def _caller(messages: list[dict]) -> tuple[str, dict]:
-        # Anthropic API 의 system message 분리
-        system_msg = None
-        non_system_msgs = []
-        for m in messages:
-            if m["role"] == "system":
-                system_msg = m["content"]
-            else:
-                non_system_msgs.append(m)
-
-        result = call_haiku(
-            non_system_msgs,
-            system=system_msg,
-            max_tokens=4096,
-            temperature=0.1,
+        meter = call_gemini(
+            messages,
+            model=GEMINI_FLASH_MODEL,
+            response_mime_type=None,  # Judge 응답은 자유 형식 (text), JSON 강제 안 함
         )
-        cost_acc.add(result)
-
+        cost_acc.add_meter(meter)
         # call_model 호환 meta dict
         meta = {
-            "model": HAIKU_MODEL_ID,
-            "duration_ms": result.duration_ms,
-            "input_tokens": result.input_tokens,
-            "output_tokens": result.output_tokens,
-            "cost_usd": result.cost_usd,
-            "error": result.error,
+            "model": meter.model,
+            "duration_ms": meter.duration_ms,
+            "input_tokens": meter.input_tokens,
+            "output_tokens": meter.output_tokens,
+            "cost_usd": meter.cost_usd,
+            "error": meter.error,
         }
-        return result.text, meta
+        return meter.raw_response, meta
     return _caller
 
 
@@ -150,16 +172,16 @@ def run_baseline_abc(task: dict, trial_idx: int, max_cycles: int = DEFAULT_MAX_C
     }
 
 
-def run_mixed_haiku_judge(task: dict, trial_idx: int, max_cycles: int = DEFAULT_MAX_CYCLES) -> dict:
-    """A/B = Gemma, C = Haiku 4.5. Mixed Intelligence."""
+def run_mixed_flash_judge(task: dict, trial_idx: int, max_cycles: int = DEFAULT_MAX_CYCLES) -> dict:
+    """A/B = Gemma, C = Gemini 2.5 Flash. Mixed Intelligence."""
     start = time.time()
     final_answer = None
     error = None
     actual_cycles = 0
     tattoo_history = []
-    cost_acc = HaikuCostAccumulator()
+    cost_acc = FlashCostAccumulator()
     try:
-        haiku_c = _haiku_c_caller(cost_acc)
+        flash_c = _flash_c_caller(cost_acc)
         tattoo, abc_logs, final_answer = run_abc_chain(
             task_id=f"{task['id']}_mixed_t{trial_idx}",
             objective=task["objective"],
@@ -168,7 +190,7 @@ def run_mixed_haiku_judge(task: dict, trial_idx: int, max_cycles: int = DEFAULT_
             termination="모든 비판이 수렴하고 최종 답변이 확정되면 종료",
             max_cycles=max_cycles,
             use_phase_prompt=True,
-            c_caller=haiku_c,  # ⭐ Mixed: Haiku C 주입
+            c_caller=flash_c,  # ⭐ Mixed: Gemini Flash C 주입
         )
         actual_cycles = len(abc_logs)
         # cycle-by-cycle tattoo (baseline 과 동일 추출 로직)
@@ -183,7 +205,7 @@ def run_mixed_haiku_judge(task: dict, trial_idx: int, max_cycles: int = DEFAULT_
             tattoo_history = [tattoo.to_dict()]
 
         if not final_answer:
-            error = f"mixed_haiku_judge: no final_answer after {actual_cycles} cycles"
+            error = f"mixed_flash_judge: no final_answer after {actual_cycles} cycles"
     except Exception as e:
         error = str(e)
     duration_ms = int((time.time() - start) * 1000)
@@ -193,13 +215,13 @@ def run_mixed_haiku_judge(task: dict, trial_idx: int, max_cycles: int = DEFAULT_
         "cycles": actual_cycles,
         "duration_ms": duration_ms,
         "tattoo_history": tattoo_history if tattoo_history else None,
-        "haiku_cost": cost_acc.to_dict(),  # Mixed 한정 — cost-aware 측정
+        "flash_cost": cost_acc.to_dict(),  # Mixed 한정 — cost-aware 측정
     }
 
 
 CONDITION_DISPATCH = {
     "baseline_abc": run_baseline_abc,
-    "mixed_haiku_judge": run_mixed_haiku_judge,
+    "mixed_flash_judge": run_mixed_flash_judge,
 }
 
 
@@ -227,7 +249,7 @@ def main() -> int:
     parser.add_argument("--trials", type=int, default=5)
     parser.add_argument("--max-cycles", type=int, default=8)
     parser.add_argument("--conditions", nargs="+",
-                        default=["baseline_abc", "mixed_haiku_judge"])
+                        default=["baseline_abc", "mixed_flash_judge"])
     parser.add_argument("--out-name", default=None)
     args = parser.parse_args()
     # ... (Stage 2C 의 main 패턴 그대로)
@@ -285,18 +307,17 @@ print(f'JUDGE_PROMPT length: {len(JUDGE_PROMPT)} chars')
 .venv/Scripts/python -c "
 from experiments.exp11_mixed_intelligence.run import CONDITION_DISPATCH
 assert 'baseline_abc' in CONDITION_DISPATCH
-assert 'mixed_haiku_judge' in CONDITION_DISPATCH
+assert 'mixed_flash_judge' in CONDITION_DISPATCH
 print('verification 2 ok: 2 condition dispatch')
 "
 
 # 3) c_caller 주입 검증 (실제 호출 안 함)
 .venv/Scripts/python -c "
-from experiments.exp11_mixed_intelligence.run import _haiku_c_caller
-from experiments.anthropic_client import HaikuCostAccumulator
-acc = HaikuCostAccumulator()
-caller = _haiku_c_caller(acc)
+from experiments.exp11_mixed_intelligence.run import _flash_c_caller, FlashCostAccumulator
+acc = FlashCostAccumulator()
+caller = _flash_c_caller(acc)
 assert callable(caller)
-print('verification 3 ok: haiku c_caller closure')
+print('verification 3 ok: flash c_caller closure')
 "
 
 # 4) tattoo_history cycle-by-cycle 저장 로직 — abc_logs schema 정찰

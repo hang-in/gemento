@@ -4,7 +4,7 @@ status: ready
 updated_at: 2026-05-02
 for: Sonnet (Developer)
 plan: exp11-mixed-intelligence-haiku-judge
-purpose: Stage 4 Exp11 진행 신호 — Mixed Intelligence (Haiku Judge C)
+purpose: Stage 4 Exp11 진행 신호 — Mixed Intelligence (Flash Judge C, v2)
 prerequisites: Stage 2A + 2B + 2C 모두 마감
 ---
 
@@ -63,22 +63,22 @@ docs/plans/exp11-mixed-intelligence-haiku-judge-task-05.md # group E, 분석 + v
 
 | 결정 | 값 |
 |------|---|
-| 1. Exp11 주제 | **Mixed Intelligence (Haiku Judge)** 확정 (Search Tool 보류) |
-| 2. Judge 모델 | `claude-haiku-4-5-20251001` (Sonnet/Opus 회피) |
+| 1. Exp11 주제 | **Mixed Intelligence (Flash Judge)** 확정 (Search Tool 보류) |
+| 2. Judge 모델 | **Gemini 2.5 Flash** (`gemini-2.5-flash`) — v2 변경 (Haiku → Flash, 비용 1/30) |
 | 3. baseline 재실행 vs 재사용 | **재실행** 확정 (Stage 2C abc 의 turnover 결함 회복) |
 | 4. task set | Stage 2C 의 15 task 정합 |
 | 5. trial 수 | 5 trial (Stage 2C 정합) |
 | 6. max_cycles | 8 (Stage 2C 정합) |
-| 7. condition 구성 | 2 condition (baseline_abc + mixed_haiku_judge) |
-| 8. API key 관리 | 환경 변수 `ANTHROPIC_API_KEY` |
-| 9. 비용 한계 | ~$10 미만 추정 (정확한 가격 task-01 에서 확인) |
+| 7. condition 구성 | 2 condition (baseline_abc + mixed_flash_judge) |
+| 8. API key 관리 | `GEMINI_API_KEY` 환경 변수 (또는 gemento/.env / secall/.env) — `resolve_gemini_key()` 자동 탐색. 사용자 이미 보유 (Exp10) |
+| 9. 비용 한계 | ~$1 미만 (Flash $0.075/$0.30 per MTok, 600 호출 추정 ~$0.18) |
 | 10. 측정 metric | 3축 (정확도 + turnover + error mode) + cost-aware (Exp10 패턴) |
 
 ## 4. 진행 순서
 
 ```
 Stage 1 (병렬, plan-side):
-  Group A: task-01 (anthropic_client + cost meter)
+  Group A: task-01 (gemini_client 재사용 검증 + config 보강)
   Group B: task-02 (run_abc_chain c_caller 인자 추가, 1-2 라인 patch)
        ↓        ↓
   Group C: task-03 (run.py — 01/02 의존 + Stage 2C tattoo_history 결함 fix)
@@ -105,7 +105,7 @@ Stage 3 (분석):
 - Verification 실패
 - Scope boundary 위반 직전
 - Risk 발견 (특히 Risk 2/5 — 비용 임계, cherry-pick 의심)
-- Anthropic 가격 정확한 값 확인 시 (task-01 Step 2)
+- Gemini Flash 가격 검증 시 (task-01 Step 2)
 - Task 04 진행 시점 (사용자 직접 실행 신호)
 - Step 11 README 갱신 결정 (task-05)
 
@@ -115,9 +115,9 @@ Stage 3 (분석):
 
 1. Task 04 plan 본문의 명령 명세 (Step 1-5) 정합성 확인
 2. 사용자에게 명령 제시 (분할 옵션 A 권장)
-3. 사용자가 환경 변수 (`ANTHROPIC_API_KEY` + `GEMENTO_API_BASE_URL`) 설정 + 실행
+3. 사용자가 환경 변수 (`GEMINI_API_KEY` 또는 .env 위치 + `GEMENTO_API_BASE_URL`) 설정 + 실행
 4. 결과 받으면 task-05 진행
-5. **Anthropic API 호출 / dry-run / 결과 JSON 생성 절대 금지**
+5. **Gemini API 호출 / dry-run / 결과 JSON 생성 절대 금지**
 
 ## 8. Task 05 특이사항
 
@@ -133,12 +133,13 @@ Stage 3 (분석):
 5 subtask 완료 + 검증:
 
 ```bash
-# 1) anthropic_client 동작
+# 1) gemini_client 재사용 동작
 .venv/Scripts/python -c "
-from experiments.anthropic_client import call_haiku, HaikuCostAccumulator, _calc_cost
-from experiments.config import HAIKU_MODEL_ID
-assert HAIKU_MODEL_ID == 'claude-haiku-4-5-20251001'
-print('ok: anthropic_client + config')
+from experiments._external.gemini_client import call_with_meter, DEFAULT_MODEL
+from experiments._external import resolve_gemini_key
+assert DEFAULT_MODEL == 'gemini-2.5-flash'
+assert resolve_gemini_key(), 'GEMINI_API_KEY 미발견'
+print('ok: gemini_client + API key 발견')
 "
 
 # 2) run_abc_chain c_caller 인자
@@ -152,10 +153,10 @@ print('ok: c_caller 인자')
 # 3) exp11 도구 import
 .venv/Scripts/python -c "
 from experiments.exp11_mixed_intelligence.run import (
-    run_baseline_abc, run_mixed_haiku_judge, CONDITION_DISPATCH,
+    run_baseline_abc, run_mixed_flash_judge, CONDITION_DISPATCH,
 )
 assert 'baseline_abc' in CONDITION_DISPATCH
-assert 'mixed_haiku_judge' in CONDITION_DISPATCH
+assert 'mixed_flash_judge' in CONDITION_DISPATCH
 print('ok: Exp11 도구')
 "
 
