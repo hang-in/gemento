@@ -13,6 +13,7 @@ import json
 import re
 import time
 from dataclasses import dataclass
+from typing import Callable
 
 import httpx
 
@@ -613,6 +614,7 @@ def run_abc_chain(
     max_cycles: int = MAX_TOTAL_CYCLES,
     use_phase_prompt: bool = False,
     use_tools: bool = False,
+    c_caller: Callable[[list[dict]], tuple[str, dict]] | None = None,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -777,7 +779,10 @@ def run_abc_chain(
 
         for attempt in range(2):
             try:
-                c_raw, _ = call_model(c_messages)
+                if c_caller is not None:
+                    c_raw, _ = c_caller(c_messages)
+                else:
+                    c_raw, _ = call_model(c_messages)
                 c_parsed = extract_json_from_response(c_raw)
             except Exception as e:
                 c_raw = ""
