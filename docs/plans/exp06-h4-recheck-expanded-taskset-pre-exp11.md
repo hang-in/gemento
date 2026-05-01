@@ -1,13 +1,15 @@
 ---
 type: plan
-status: in_progress
-updated_at: 2026-04-30
+status: done
+updated_at: 2026-05-02
 slug: exp06-h4-recheck-expanded-taskset-pre-exp11
 version: 1
 author: Architect (Windows)
 audience: Developer (Sonnet) + 사용자 검토 + 사용자 직접 실행 (Task 04)
 parent_strategy: handoff-to-windows-2026-04-30-followup-strategy.md (Stage 2C)
-progress: "Task 01/02/03 완료 (commit a6104d1). Task 04 사용자 직접 실행 대기. Task 05 분석/문서 갱신 대기."
+completed_at: 2026-05-02
+final_verdict: "H4 ⚠ 조건부 채택 (synthesis 카테고리 한정) — 15-task 확대 시 ABC +0.044 우위, synthesis +0.140 회복 핵심, 통계 비유의 (n=15 검정력), Cohen d=0.449 medium"
+analysis_doc: docs/reference/h4-recheck-analysis-2026-05-02.md
 ---
 
 # Stage 2C — Exp06 H4 재검증 (확대 task set, Exp11 전 마감 의무)

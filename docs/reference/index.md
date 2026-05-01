@@ -16,6 +16,7 @@ Reference document index.
 - [h4-metric-definitions.md](h4-metric-definitions.md) — H4 재검증 metric 정의 (Stage 2C 도입, `a6104d1`)
 - [scoringHistory.md](scoringHistory.md) — 채점 시스템 변천 (v0/v2/v3 적용 범위) — Stage 2B 도입 (`e84d943`)
 - [failureLabels.md](failureLabels.md) — failure label 표준 reference (FailureLabel enum + 기존 매핑) — Stage 2B 도입 (`e84d943`)
+- [h4-recheck-analysis-2026-05-02.md](h4-recheck-analysis-2026-05-02.md) — Stage 2C H4 재검증 분석 보고서 (15 task × 3 condition × 5 trial = 225 trial, ablation + 카테고리 + 통계). H4 verdict 미결 → 조건부 채택 (synthesis 한정).
 
 ## 핸드오프
 

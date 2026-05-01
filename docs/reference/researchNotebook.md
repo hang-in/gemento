@@ -43,7 +43,7 @@ parts: [closed, active]
 | H1 | **[Orchestrator 외부화]** 다단계 루프가 단일 추론보다 품질이 높다 | **채택** | Exp02 |
 | H2 | **[Role 외부화 필요성 반증]** 오류가 루프를 거치며 증폭된다 | **기각** (오류 무감지) | Exp03 |
 | H3 | **[Role 외부화]** 교차 검증(역할 분리)이 오류를 감지할 수 있다 | **채택** (80%) | Exp035 |
-| H4 | **[Role 외부화 시너지]** A-B-C 역할 분리가 단일 에이전트 반복보다 우수하다 | ⚠ **미결** (Exp06 45 vs 45 정합 비교: v1 +0.015 / v2 +0.067, 모두 Solo 소폭 우위. 원본 "+22.6%p" 재현 불가. 구조적 차이 확인되나 정확도 Δ 미확인 — 확대 task set 재검증 필요) | Exp06 |
+| H4 | **[Role 외부화 시너지]** A-B-C 역할 분리가 단일 에이전트 반복보다 우수하다 | ⚠ **조건부 채택 (synthesis 카테고리 한정)** — 2026-05-02 Stage 2C 재검증 결과: 15 task 확대 시 ABC +0.044 우위 (Exp06 9 task subset 의 Solo +0.067 우위와 방향 반전). synthesis 카테고리 +0.140 (명료), 통계 비유의 (n=15 검정력), Cohen d=0.449 medium | Exp06 + Stage 2C |
 | H5 | **[Orchestrator 외부화 상한]** MAX_CYCLES 상향이 정답률 향상에 기여한다 (루프 포화점 존재) | **부분 기각** (상한 확장 무효, actual_cycles≈7에서 포화) | Exp07 |
 | H6 | **[Role 외부화 정교화]** Phase별 특화 프롬프트가 baseline 대비 우수하다 | **조건부 채택** (장기 루프 15~20에서 +5~6%p) | Exp07 |
 | H7 | **[Tool 외부화]** 외부 수학 도구(calculator/linalg/linprog)가 E4B의 계산 한계를 보완한다 | **채택** (+18.3%p, math-04 0→80%) | Exp08 |
@@ -395,7 +395,33 @@ parts: [closed, active]
 
 **결론 (H4 재평가):** 이 9-task set에서 채점 정합 비교로는 ABC 구조적 우위를 확인할 수 없음.
 역할 분리의 구조적 차이(비판 루프 유무)는 실재하나, 이 task 난이도 범위에서 정확도 Δ로 나타나지 않음.
-확대 task set 또는 고난도 task 집중 검증이 H4 재확인의 다음 단계. → **H4: 미결**
+확대 task set 또는 고난도 task 집중 검증이 H4 재확인의 다음 단계. → **H4: 미결** (해소: 2026-05-02 Stage 2C — 아래 §"H4 재검증 (2026-05-02)" 참조)
+
+#### H4 재검증 (2026-05-02 Phase 2 Stage 2C)
+
+확대 task set (12 → 15: planning 2 + synthesis-05) + 3 condition (Solo-1call / Solo-budget / ABC) ablation 재검증. **plan**: `exp06-h4-recheck-expanded-taskset-pre-exp11`.
+
+| 비교 | Δ acc |
+|------|------:|
+| Solo-budget − Solo-1call (다단계 효과, H1 재확인) | +0.0700 |
+| **ABC − Solo-budget (역할 분리 단독 효과, H4 본 가설)** | **+0.0444** |
+| ABC − Solo-1call (합산) | +0.1144 |
+
+condition mean: Solo-1call 0.6444 / Solo-budget 0.7144 / **ABC 0.7589**. median per-task: 0.667 / 0.867 / **1.000**.
+
+**카테고리별 Δ(abc−sb)**: math +0.000 (saturation) / logic −0.025 (logic-04 v3 negative_patterns 효과) / **synthesis +0.140 (회복 핵심)** / planning +0.033 (신규 2 task).
+
+**통계** (n=15 paired): Wilcoxon p=0.16, t-test p=0.10 (NOT SIGNIFICANT — n=15 검정력 한계). Cohen's d = 0.449 (medium). Bootstrap 95% CI Δ(abc−sb): [−0.0044, +0.0911] (0 거의 포함, 임계).
+
+**verdict 변경**: ⚠ 미결 → **⚠ 조건부 채택 (synthesis 카테고리 한정)**. 9-task subset 의 Solo +0.067 우위 → 15-task 확대 시 ABC +0.044 우위로 방향 반전.
+
+**한계**:
+- assertion turnover ABC 측정 불가 (`run.py:115` 의 tattoo_history 저장 결함 — final tattoo 1 개만, cycle-by-cycle 부재). Stage 4 Exp11 plan 시 보강
+- logic-04 의 ABC −0.20: v3 negative_patterns 가 false positive 차단 효과. ABC 약함 vs 채점 정직성 분리 어려움
+
+상세: `docs/reference/h4-recheck-analysis-2026-05-02.md`. 결과 JSON: `experiments/exp_h4_recheck/results/h4_recheck_{solo_1call,solo_budget,abc}.json`.
+
+→ Stage 3 (Exp11 Mixed Intelligence) 함의: Role 축 강화 가설 정합성 부분 회복. synthesis 카테고리 강조 권장.
 
 ---
 

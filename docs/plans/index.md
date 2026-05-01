@@ -4,10 +4,11 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- [exp06-h4-recheck-expanded-taskset-pre-exp11.md](exp06-h4-recheck-expanded-taskset-pre-exp11.md) — **Stage 2C** (in_progress): Exp06 H4 재검증. Task 01-03 완료 (commit `a6104d1`). **Task 04 사용자 직접 실행 대기** (15 task × 3 condition × 5 trial = 225 trial, 분할 권장). Task 05 분석/문서 갱신은 결과 받은 후
+(없음 — Stage 2A/2B/2C 모두 마감. 다음 단계: Stage 3 Exp11 의제 — Mixed Intelligence Haiku Judge — 사용자 호출 대기)
 
 ## Recently Done
 
+- [exp06-h4-recheck-expanded-taskset-pre-exp11.md](exp06-h4-recheck-expanded-taskset-pre-exp11.md) — **Stage 2C**: Exp06 H4 재검증. 5 subtask 완료. **H4 verdict ⚠ 미결 → ⚠ 조건부 채택 (synthesis 카테고리 한정)**. Δ(abc−sb)=+0.044, synthesis +0.140 (회복 핵심), 통계 비유의, Cohen d=0.449. 분석: `docs/reference/h4-recheck-analysis-2026-05-02.md`. 2026-05-02.
 - [scorer-failure-label-reference.md](scorer-failure-label-reference.md) — Stage 2B: scorer/failure label reference. 4 subtask 완료 (commit `e84d943`). FailureLabel enum + scoringHistory.md + failureLabels.md + Stage 2C alias 통합. 2026-04-30.
 - [stabilization-healthcheck-abort-meta-pre-exp11.md](stabilization-healthcheck-abort-meta-pre-exp11.md) — Stage 2A: 작은 안정화. 5 subtask 완료, dry-run 통과, plan status: done. 2026-04-30.
 - [phase-1-taskset-3-fail-exp09-5-trial-exp10-v3.md](phase-1-taskset-3-fail-exp09-5-trial-exp10-v3.md) — Phase 1 후속 정리 (Taskset 3 FAIL fix + Exp09 5-trial drop 분석 + Exp10 v3 재산정 + 문서 갱신). 4 subtask 완료 (Mac 01/02 + Windows 03/04). 2026-04-30.

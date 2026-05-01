@@ -398,6 +398,29 @@ A 2D matrix showing which of the 4 externalization axes each experiment validate
 
 **Conclusion:** H4 Inconclusive on this 9-task set. Structural difference between architectures is real (loop count, critique mechanism), but accuracy delta is not observed here. Expanded task set or harder task subset needed to re-assess H4.
 
+**H4 recheck note (2026-05-02):**
+
+A follow-up plan (`exp06-h4-recheck-expanded-taskset-pre-exp11`) re-evaluated H4 with an expanded task set (12 → 15 tasks: planning-01, planning-02, synthesis-05 added) and a 3-condition ablation (Solo-1call / Solo-budget / ABC, max_cycles=8) — 225 trials total, executed 2026-05-01 ~ 2026-05-02 with Stage 2A healthcheck/abort and Stage 2B FailureLabel infrastructure.
+
+Ablation results (n=15 task paired):
+- Multi-loop effect (solo_budget − solo_1call): **+0.0700** (H1 reaffirmed)
+- Role-separation effect (abc − solo_budget): **+0.0444** (H4 main hypothesis)
+- Combined (abc − solo_1call): **+0.1144**
+
+Condition mean / median per-task: Solo-1call 0.6444 / 0.667, Solo-budget 0.7144 / 0.867, **ABC 0.7589 / 1.000**.
+
+Category-level Δ(abc−sb): math +0.000 (saturation) / logic −0.025 (logic-04 v3 negative_patterns effect) / **synthesis +0.140 (recovery driver)** / planning +0.033 (new 2 tasks).
+
+Statistics (n=15 paired): Wilcoxon p=0.16, paired t-test p=0.10 (NOT SIGNIFICANT — power-limited at n=15). Cohen's d = 0.449 (medium effect). Bootstrap 95% CI Δ(abc−sb): [−0.0044, +0.0911] (zero almost included, borderline).
+
+**H4 verdict (post-recheck): ⚠ Conditionally supported (synthesis category only).** The 9-task subset's Solo-favored direction (+0.067) reverses to ABC-favored (+0.044) when expanded to 15 tasks. The synthesis category (+0.140) is the recovery driver; logic shows a small ABC disadvantage tied to v3 negative_patterns false-positive blocking on logic-04 (ABC: "no unique solution" pattern → 0/20 strict).
+
+Limitations: ABC's assertion turnover unmeasurable (run.py:115 stores only the final Tattoo, not cycle-by-cycle history) — flagged as a fix for the Stage 4 Exp11 plan. Statistical power is bounded by n=15 task pairs; the medium effect size suggests a larger taskset would likely reach significance.
+
+Detail: `docs/reference/h4-recheck-analysis-2026-05-02.md`. Results: `experiments/exp_h4_recheck/results/h4_recheck_{solo_1call,solo_budget,abc}.json`.
+
+The original Exp06 H4 ⚠ Inconclusive entry above remains unchanged (Closed-append-only policy).
+
 ---
 
 ### Exp07: Loop Saturation + Loop-Phase Prompts
