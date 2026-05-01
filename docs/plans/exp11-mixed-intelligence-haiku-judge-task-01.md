@@ -1,6 +1,6 @@
 ---
 type: plan-task
-status: todo
+status: done
 updated_at: 2026-05-02
 parent_plan: exp11-mixed-intelligence-haiku-judge
 parallel_group: A
