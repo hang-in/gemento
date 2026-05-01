@@ -4,7 +4,7 @@ Plan document index. Register new plans here.
 
 ## Active
 
-(없음 — Stage 2A/2B/2C 모두 마감. 다음 단계: Stage 3 Exp11 의제 — Mixed Intelligence Haiku Judge — 사용자 호출 대기)
+- [exp11-mixed-intelligence-haiku-judge.md](exp11-mixed-intelligence-haiku-judge.md) — **Stage 4 (Exp11)**: Mixed Intelligence — A/B = Gemma 4 E4B + **C = Claude Haiku 4.5**. H10 후보 가설 (강한 Judge 가 약한 Proposer/Critic 보완). Stage 2C abc 재실행 + Mixed condition 신규. 결정 1-10 모두 Architect 확정 (사용자 위임 "Architect 권장대로 진행"). Sonnet 진행 프롬프트: `docs/prompts/2026-05-02/mixedIntelligenceStart.md`
 
 ## Recently Done
 
