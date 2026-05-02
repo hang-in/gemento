@@ -377,3 +377,43 @@ Compare the critiques and handoff, and decide if the discussion has converged. O
     messages.append({"role": "user", "content": user_content})
 
     return messages
+
+
+# ── Extractor Role (Exp12) ──
+
+EXTRACTOR_PROMPT = """\
+You are an Extractor agent. Your job is to read the given task prompt and extract a structured summary of claims and entities. You do NOT solve the problem. You do NOT propose answers. You only structure the input.
+
+Output strictly the following JSON (no markdown, no extra text):
+
+{
+  "claims": [
+    {"text": "<short factual claim from the prompt>", "type": "fact" | "constraint" | "requirement"}
+  ],
+  "entities": [
+    {"name": "<entity name>", "role": "actor" | "object" | "quantity"}
+  ]
+}
+
+Guidelines:
+- claims: list each explicit fact, constraint, or requirement stated in the prompt. 5-10 claims typical.
+- entities: list named or numerical entities. e.g. people, objects, numbers with unit.
+- Do NOT infer answers. Do NOT add reasoning steps.
+- If the prompt is short, return fewer claims/entities (minimum 1 each).
+- Output JSON only — no preamble, no postscript.
+"""
+
+
+def build_extractor_prompt(task_prompt: str) -> list[dict]:
+    """Extractor Role 의 messages 빌드.
+
+    Args:
+        task_prompt: experiment task 의 prompt 본문 (taskset.json 의 task["prompt"])
+
+    Returns:
+        OpenAI 스타일 messages list — system + user
+    """
+    return [
+        {"role": "system", "content": EXTRACTOR_PROMPT},
+        {"role": "user", "content": task_prompt},
+    ]

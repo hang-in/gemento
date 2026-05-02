@@ -615,6 +615,7 @@ def run_abc_chain(
     use_phase_prompt: bool = False,
     use_tools: bool = False,
     c_caller: Callable[[list[dict]], tuple[str, dict]] | None = None,
+    extractor_pre_stage: bool = False,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -622,6 +623,21 @@ def run_abc_chain(
     C가 phase 전이를 결정. Python은 안전장치(최대 사이클)만 강제.
     """
     from system_prompt import build_critic_prompt, build_judge_prompt
+
+    # ── Extractor pre-stage (trial 시작 시 1회) ──
+    if extractor_pre_stage:
+        from system_prompt import build_extractor_prompt
+        extractor_messages = build_extractor_prompt(prompt)
+        extractor_response, _emeta = call_model(extractor_messages)
+        extractor_result_text = extractor_response.strip()
+        if extractor_result_text:
+            prompt = (
+                "## Pre-extracted structure (from Extractor agent):\n"
+                f"{extractor_result_text}\n\n"
+                "## Original task prompt:\n"
+                f"{prompt}"
+            )
+        print(f"  [Extractor] result preview: {extractor_result_text[:200]}{'...' if len(extractor_result_text) > 200 else ''}")
 
     tattoo = create_initial_tattoo(
         task_id=task_id,
