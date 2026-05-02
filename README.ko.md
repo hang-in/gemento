@@ -146,7 +146,7 @@
 | **H1** | [Orchestrator 외부화] 다단계 루프가 단일 추론보다 품질이 높다 | ✅ 채택 (+44.4%p Exp02; +37%p Exp10) | Exp02 v2, Exp10 |
 | **H2** | [Role 외부화 필요성 반증] 자가 검증으로 오류를 감지할 수 있다 | ❌ 기각 (0/15 감지) | Exp03 |
 | **H3** | [Role 외부화] 교차 검증(역할 분리)이 오류를 감지할 수 있다 | ✅ 채택 (12/15, 80%) | Exp035 |
-| **H4** | [Role 외부화 시너지] A-B-C 역할 분리가 단일 에이전트 반복보다 우수하다 | ⚠ 미결 (Exp06 9-task × 45-trial 정합 비교: v1 +0.015 / v2 +0.067, 모두 Solo 소폭 우위. 원본 "+22.6%p" 재현 불가. 구조적 차이 확인되나 정확도 Δ는 미확인 — 확대 task set 재검증 필요) | Exp06 |
+| **H4** | [Role 외부화 시너지] A-B-C 역할 분리가 단일 에이전트 반복보다 우수하다 | ⚠ 조건부 채택 (synthesis 카테고리 한정, Stage 2C 2026-05-02) — 15-task 확대 ablation 결과 ABC > Solo-budget +0.0444 (Exp06 9-task subset 의 Solo +0.067 와 방향 반전), synthesis +0.140 (회복 핵심); n=15 검정력 미달, Cohen d=0.449 medium. 상세: `docs/reference/h4-recheck-analysis-2026-05-02.md` | Exp06 + Stage 2C |
 | **H5** | [Orchestrator 상한 효과] MAX_CYCLES 상향이 정답률 향상에 기여한다 | ⚠️ 부분 기각 — 포화점은 상한이 아니라 actual_cycles ≈ 7 | Exp07 |
 | **H6** | [Role 외부화 정교화] Phase별 특화 프롬프트가 baseline보다 우수하다 | ✅ 조건부 채택 (장기 루프 +5~6%p) | Exp07 |
 | **H7** | [Tool 외부화] 외부 수학 도구가 E4B의 계산 한계를 보완한다 | ✅ 채택 (+18.3%p, math-04 0→80%) | Exp08 |
@@ -154,6 +154,7 @@
 | **H9a** | [Tattoo 외부화 — 물리 한계 돌파] ABC+Tattoo(chunked)가 Solo-dump보다 long-context에서 우수하다 | ✅ 채택 (+68.3%p, Large 20K에서 Solo 0% → ABC 100%) | Exp09 |
 | **H9b** | [차별성] ABC+Tattoo가 RAG baseline 대비 고유 기여를 가진다 | ⚠️ 미결 (5-trial 통계 검정 비유의 p=0.798; overall Δ=+2.0%p; 3-hop에서만 +20.0%p 차별성; Small Paradox 확인) | Exp09 |
 | **H9c** | [에러 모드 차이] ABC의 실패 패턴이 Solo·RAG와 질적으로 다르다 | ✅ 채택 (Solo: format_error 24, RAG: wrong_synthesis 6, ABC: evidence_miss 2 + wrong_synthesis 3) | Exp09 |
+| **H10** | [Role 외부화 강화 — Mixed Intelligence] 강한 Judge C (Gemini 2.5 Flash) 가 약한 Proposer/Critic (A/B = Gemma 4 E4B) 의 한계를 보완한다 | ⚠ 미결 (실효적 기각, Exp11 2026-05-03). Δ(mixed − baseline) = −0.0811 (mixed 가 baseline-모두-Gemma 보다 *약함*); Cohen d = −0.316 (small, 음수); 통계 비유의 (n=15, p=0.293); logic 카테고리 catastrophic (−0.275). **정반대 메커니즘 발견**: 강한 Judge 가 약한 모델의 self-discovery chain 을 *방해* (logic-02 case study). 상세: `docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md` | Exp11 |
 
 핵심 통찰:
 - **모델 능력이 아니라 구조가 성능을 결정한다** — 같은 E4B 모델이 Exp02 v1에서 자율 phase 전이 0%, v2에서 외부 강제 94.4%.

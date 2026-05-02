@@ -47,7 +47,7 @@ This repository tracks sequential hypothesis IDs `H1` to `H9c` across the four e
 | **H1** | [Orchestrator externalization] Multi-step loops outperform single-pass reasoning | ✅ Supported (+44.4pp Exp02; +37pp Exp10) | Exp02 v2, Exp10 |
 | **H2** | [Role externalization necessity, falsification] Self-validation can detect its own errors | ❌ Rejected (0/15 detected) | Exp03 |
 | **H3** | [Role externalization] Cross-validation with separated roles can detect errors | ✅ Supported (12/15, 80%) | Exp035 |
-| **H4** | [Role externalization synergy] A-B-C role separation outperforms repeated single-agent iteration | ⚠ Inconclusive (Exp06 9-task × 45-trial reconciled comparison: v1 +0.015 / v2 +0.067, both slightly favor Solo. Original "+22.6pp" not reproducible. Structural difference confirmed but accuracy Δ not observed — needs expanded task set) | Exp06 |
+| **H4** | [Role externalization synergy] A-B-C role separation outperforms repeated single-agent iteration | ⚠ Conditionally supported (synthesis category only, Stage 2C 2026-05-02) — 15-task ablation: ABC > Solo-budget +0.0444 (reverses 9-task subset's Solo +0.067 direction), synthesis +0.140 (recovery driver); not significant at n=15, Cohen's d=0.449 medium. Detail: `docs/reference/h4-recheck-analysis-2026-05-02.md` | Exp06 + Stage 2C |
 | **H5** | [Orchestrator ceiling effect] Raising `MAX_CYCLES` improves accuracy | ⚠️ Partially rejected - the ceiling was not the limit; actual saturation appeared around `actual_cycles ≈ 7` | Exp07 |
 | **H6** | [Role externalization refinement] Phase-specialized prompts outperform the baseline | ✅ Conditionally supported (+5-6pp in long loops) | Exp07 |
 | **H7** | [Tool externalization] External math tools compensate for E4B's calculation limits | ✅ Supported (+18.3pp, math-04 0→80%) | Exp08 |
@@ -55,6 +55,7 @@ This repository tracks sequential hypothesis IDs `H1` to `H9c` across the four e
 | **H9a** | [Tattoo externalization, physical limit] ABC+Tattoo (chunked) outperforms solo dump under long context | ✅ Supported (+68.3pp, Solo 0% → ABC 100% at Large 20K) | Exp09 |
 | **H9b** | [Distinctiveness] ABC+Tattoo contributes something beyond a RAG baseline | ⚠️ Inconclusive (5-trial stats NOT SIGNIFICANT p=0.798; overall Δ=+2.0pp; 3-hop only +20.0pp differentiation; Small Paradox confirmed) | Exp09 |
 | **H9c** | [Error mode difference] ABC fails differently from Solo and RAG | ✅ Supported (Solo: `format_error`, RAG: `wrong_synthesis`, ABC: `evidence_miss` + `wrong_synthesis`) | Exp09 |
+| **H10** | [Role externalization — strong Judge / Mixed Intelligence] A stronger Judge C (Gemini 2.5 Flash) compensates for weaker Proposer/Critic (A/B = Gemma 4 E4B) | ⚠ Inconclusive — effectively rejected (Exp11 2026-05-03). Δ(mixed − baseline) = −0.0811 (mixed *underperforms* baseline-all-Gemma); Cohen's d = −0.316 (small, negative); not significant at n=15, p=0.293; logic category catastrophic (−0.275). **Inverse mechanism observed**: stronger Judge interferes with weaker model's self-discovery chain (logic-02 case study). Detail: `docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md` | Exp11 |
 
 ## What worked / What didn't
 
