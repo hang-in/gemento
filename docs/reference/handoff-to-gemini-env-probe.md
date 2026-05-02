@@ -1,6 +1,7 @@
 ---
 type: handoff
-status: in_progress
+status: archived
+archived_at: 2026-05-03  # auto-set stale cleanup
 direction: architect → executor
 updated_at: 2026-04-26
 parent_topic: 연구 인프라 보강 (lab notebook + 환경 스냅샷)

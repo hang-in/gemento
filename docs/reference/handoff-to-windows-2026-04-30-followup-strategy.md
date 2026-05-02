@@ -1,6 +1,7 @@
 ---
 type: handoff
-status: pending
+status: archived
+archived_at: 2026-05-03  # auto-set stale cleanup
 updated_at: 2026-04-30
 from: Mac (Architect Claude · Architect / Coder Claude · Implementer)
 to: Windows (Architect/Developer)

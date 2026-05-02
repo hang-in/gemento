@@ -1,10 +1,29 @@
 ---
 type: reference
-status: in_progress
-updated_at: 2026-04-08
+status: archived
+updated_at: 2026-05-03
+archived_at: 2026-05-03
+superseded_by: docs/reference/conceptFramework.md + docs/reference/researchNotebook.md
+canonical: false
 ---
 
-# 제멘토 실험 설계서
+# 제멘토 실험 설계서 (DEPRECATED)
+
+> ⚠ **DEPRECATED (2026-05-03)** — 본 문서는 **실험 0~4 시점 (2026-04-08)** 의 초기 설계서로,
+> 이후 framework 진화 (Exp00~Exp12, 4축 외부화, Stage 2C H4 재검증, Exp11 Mixed Intelligence,
+> Exp12 Extractor) 가 대규모로 진행되어 더 이상 framework 의 현재 상태를 반영하지 못합니다.
+>
+> **현재 framework 의 canonical reference**:
+> - **개념 프레임 + 4축 외부화**: [`docs/reference/conceptFramework.md`](./conceptFramework.md)
+> - **모든 실험 + 가설 판정**: [`docs/reference/researchNotebook.md`](./researchNotebook.md) (한국어)
+>   / [`docs/reference/researchNotebook.en.md`](./researchNotebook.en.md) (영문 mirror, Closed 추가만)
+> - **표기 / 용어 규약**: [`docs/reference/namingConventions.md`](./namingConventions.md)
+> - **각 실험 결과**: `docs/reference/results/exp-XX-*.md`
+>
+> 본 문서는 historical record 로 보존하며, 새 plan / 분석 작성 시 **참조 금지**.
+> 실험 0~4 의 *초기 의도* 만 review 시 참고 가능.
+
+---
 
 ## 1. 실험 목적
 

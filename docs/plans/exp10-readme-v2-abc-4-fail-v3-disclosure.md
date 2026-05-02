@@ -1,6 +1,7 @@
 ---
 type: plan
-status: in_progress
+status: done
+completed_at: 2026-04-29  # auto-set 2026-05-03 stale cleanup
 updated_at: 2026-04-29
 slug: exp10-readme-v2-abc-4-fail-v3-disclosure
 version: 1

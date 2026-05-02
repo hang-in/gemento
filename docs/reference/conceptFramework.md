@@ -1,7 +1,7 @@
 ---
 type: reference
 status: in_progress
-updated_at: 2026-04-24
+updated_at: 2026-05-03
 canonical: true
 ---
 
@@ -204,7 +204,7 @@ Evidence Tool은 `raw_key="cycle_3.tool_calls[0]"`을 resolve하여 원본 tool_
 
 ---
 
-## 8. 실험별 검증 축 매핑 (Exp00~Exp08b)
+## 8. 실험별 검증 축 매핑 (Exp00~Exp12)
 
 | 실험 | 검증된 축 | 결과 요약 |
 |------|-----------|-----------|
@@ -216,12 +216,17 @@ Evidence Tool은 `raw_key="cycle_3.tool_calls[0]"`을 resolve하여 원본 tool_
 | Exp04 | **Role 외부화 + Judge Role** | 100% 수렴, C 자율 phase 전이 30/30 |
 | Exp045 | Tattoo 정교화 (Handoff Protocol) | 18/18 (100%) — `prioritized_focus + constraints` 필드 |
 | Exp05b | Tattoo + Role (어려운 태스크) | synthesis-02 안정화 |
-| Exp06 | Role 외부화 (Solo 대비) | A-B-C +22.6%p vs Solo |
+| Exp06 | Role 외부화 (Solo 대비) | 9-task subset Solo 우위, **Stage 2C 재검증으로 H4 ⚠ 조건부 채택** (synthesis +0.140) |
 | Exp07 | Orchestrator 포화점 | actual_cycles ≈ 7 고정 (MAX_CYCLES 상한 ≠ 포화점) |
 | Exp08 | **Tool 외부화** | +18.3%p, math-04 0%→80% |
 | Exp08b | Tool 부작용 완화 | BitXor 힌트 + prompt 강화 — tool_neglect_rate 개선 |
+| Exp09 | **Tattoo 물리 한계 돌파** | H9a Solo 0% → ABC 100% (Large 20K). H9b ⚠ 미결 (RAG 차별성). H9c 에러 모드 차이 |
+| Exp10 | H1 추가 evidence + cost-aware | 1-loop 41.3% → 8-loop 78.3% (+37%p). Gemini Flash 1-call 대비 +19%p, 비용 $0 (4 fail JSON parse 등 인프라 이슈 disclosure) |
+| **Stage 2C** (H4 재검증) | **Role 외부화 시너지 정밀화** | 15-task ablation: ABC > Solo-budget +0.044, **synthesis +0.140 회복 핵심**, n=15 검정력 한계, Cohen d=0.449 medium |
+| **Exp11** (Mixed Intelligence) | **Role 강화 (H10)** | ⚠ 미결 (실효적 기각). Δ(Mixed Flash − baseline)=−0.081, Cohen d=−0.316 음수. **정반대 메커니즘 발견** — 강한 Judge 가 약한 모델 self-discovery 방해 (logic-02 case study) |
+| **Exp12** (Extractor Role) | **Role 분리/추가 (H11)** | 진행 중 (2026-05-03~). Extractor pre-stage hook 으로 task prompt → claims/entities 사전 추출. 같은 Gemma 모델 (Exp11 정반대 메커니즘 회피) |
 
-**관찰**: 4축 각각 최소 1개 실험으로 외부화 효과가 확인됨. Orchestrator·Role은 Exp02/Exp035부터, Tattoo는 Exp01/Exp045에서, Tool은 Exp08에서 독립적으로 검증.
+**관찰**: 4축 각각 최소 1개 실험으로 외부화 효과가 확인됨. Orchestrator·Role은 Exp02/Exp035부터, Tattoo는 Exp01/Exp045/Exp09 에서, Tool은 Exp08 에서 독립적으로 검증. **Role 축 정밀화** — Stage 2C (시너지 H4 ⚠ 조건부) → Exp11 (강화 H10 ⚠ 미결, 정반대 메커니즘) → Exp12 (분리/추가 H11 진행 중) 의 진화. **Mixed Intelligence 결과 (H10 미결) 가 framework 의 다음 방향을 결정** — Judge 강화 비추천, Role 분리 (Exp12 Extractor) 또는 다른 외부화 축 (Exp13 Search Tool) 우선.
 
 ---
 
@@ -231,15 +236,15 @@ Evidence Tool은 `raw_key="cycle_3.tool_calls[0]"`을 resolve하여 원본 tool_
 
 | 후보 | 현재 상태 | 필요한 실험/구현 |
 |------|-----------|------------------|
-| **Extractor Role** | 미구현 | 원문 chunk → claim·entity 추출. 장기 워크플로에서 원천 → Tattoo 변환 역할 |
-| **Reducer Role** | 미구현 | 다수 chunk-level Tattoo → 일일/프로젝트 단위 요약 |
-| **Search Tool** | 미구현 | 과거 세션·문서 retrieval (BM25/vector) |
-| **Graph Tool** | 미구현 | entity/relation 다중 hop traversal |
-| **Critic Tool** | 부분 (AST 화이트리스트만) | JSON schema 검증, citation resolve 같은 구조적 검증기 |
+| **Extractor Role** | **Exp12 진행 중** (2026-05-03~, Gemma E4B 동일 모델) | task prompt → claims/entities 사전 추출 → A→B→C chain 의 input prefix. H11 후보 |
+| **Reducer Role** | 미구현 | 다수 chunk-level Tattoo → 일일/프로젝트 단위 요약. Exp14+ 후보 |
+| **Search Tool** | 미구현 | 과거 세션·문서 retrieval (BM25/vector). Stage 5 의 SQLite ledger 와 직결 — **Exp13 후보 (Stage 5 다음)** |
+| **Graph Tool** | 미구현 | entity/relation 다중 hop traversal. Exp14+ 후보 |
+| **Critic Tool** | 부분 (AST 화이트리스트만) | JSON schema 검증, citation resolve 같은 구조적 검증기. Stage 2B FailureLabel enum 도입 (2026-04-30) — heuristic 분류만 |
 | **Evidence Tool** | 미구현 | evidence_ref 스키마 + resolve API (§ 5와 연계) |
-| **Large Model Tool** | 미구현 | Sonnet/Opus escalation 경로 |
+| **Large Model Tool** (Mixed Intelligence) | **Exp11 시도 → ⚠ 미결 (실효적 기각)**, 2026-05-03 | 강한 Judge C (Flash) 가 약한 A/B 보완 가설. 정반대 메커니즘 발견 — Judge 가 self-discovery 방해. **Sonnet/Opus escalation 경로 비추천** (Stage 5 의제 변경) |
 
-이 후보들은 Exp09+ 실험에서 개별 또는 조합으로 검증될 수 있다. 각각을 추가할 때마다 "해당 축의 외부화가 어떤 성능 축을 어떤 폭으로 회수하는가"를 측정한다.
+**관찰** (Exp11 결과 반영): "강한 모델 escalation" (Mixed Intelligence) 가 약한 모델의 self-discovery chain 을 *방해* 가능 — Role 축 *강화* 가 아니라 *분리/추가* (Extractor 같은 신규 Role) 가 framework 의 자연 진화 방향. Exp12 (Extractor) 결과로 Stage 5 다음 외부화 축 우선순위 재검토.
 
 ---
 

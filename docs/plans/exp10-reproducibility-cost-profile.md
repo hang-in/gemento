@@ -1,6 +1,7 @@
 ---
 type: plan
-status: in_progress
+status: done
+completed_at: 2026-04-29  # auto-set 2026-05-03 stale cleanup
 updated_at: 2026-04-26
 slug: exp10-reproducibility-cost-profile
 version: 1

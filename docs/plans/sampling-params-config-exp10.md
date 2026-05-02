@@ -1,6 +1,7 @@
 ---
 type: plan
-status: in_progress
+status: done
+completed_at: 2026-04-26  # auto-set 2026-05-03 stale cleanup
 updated_at: 2026-04-26
 slug: sampling-params-config-exp10
 version: 1

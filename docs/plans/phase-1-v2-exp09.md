@@ -1,6 +1,7 @@
 ---
 type: plan
-status: in_progress
+status: done
+completed_at: 2026-04-30  # auto-set 2026-05-03 stale cleanup
 updated_at: 2026-04-29
 title: "Phase 1 측정 기반 보강 — v2 역행 분석 + Exp09 통계 검정"
 slug: phase-1-v2-exp09

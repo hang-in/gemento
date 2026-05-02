@@ -1,6 +1,7 @@
 ---
 type: reference
-status: in_progress
+status: archived
+archived_at: 2026-05-03  # auto-set stale cleanup
 updated_at: 2026-04-15
 author: Claude Opus 4.6 (macOS)
 recipient: Gemini CLI (Windows)

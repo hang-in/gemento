@@ -1,6 +1,7 @@
 ---
 type: plan
-status: in_progress
+status: done
+completed_at: 2026-04-29  # auto-set 2026-05-03 stale cleanup
 updated_at: 2026-04-29
 slug: gemento-public-readiness-pass-config-readme
 version: 1

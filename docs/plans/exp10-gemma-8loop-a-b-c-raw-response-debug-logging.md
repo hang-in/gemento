@@ -1,6 +1,7 @@
 ---
 type: plan
-status: in_progress
+status: done
+completed_at: 2026-04-27  # auto-set 2026-05-03 stale cleanup
 updated_at: 2026-04-27
 slug: exp10-gemma-8loop-a-b-c-raw-response-debug-logging
 version: 1

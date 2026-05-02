@@ -1,6 +1,7 @@
 ---
 type: plan
-status: in_progress
+status: done
+completed_at: 2026-04-29  # auto-set 2026-05-03 stale cleanup
 updated_at: 2026-04-29
 plan_title: "Exp06 H4 Scoring Reconciliation — 채점 정합성 정리 + H4 verdict 갱신"
 version: 1
