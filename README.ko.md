@@ -16,7 +16,7 @@
 
 이 레포는 **MIT 라이선스로 공개된 1인 연구 노트**입니다. 관심 있는 누구든 자유롭게 fork·재현·확장할 수 있습니다. 협업 창구는 프로젝트가 더 성숙한 시점에 열 예정입니다.
 
-> *Last updated: 2026-04-25*
+> *Last updated: 2026-05-03*
 
 > 📚 English version: [README.md](./README.md)
 

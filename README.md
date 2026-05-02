@@ -4,6 +4,8 @@
 
 📚 Korean version: [README.ko.md](./README.ko.md)
 
+> *Last updated: 2026-05-03*
+
 ## Why I built this
 
 I started this while building secall and tunaFlow. The recurring problems were long-term memory, context over-spend, and work that had to survive across sessions. My first thought was simple: if I clear the prompt context and rely on database retrieval, can the database behave like near-infinite context? That line of thinking brought me back to *Memento* and Leonard's tattoos, polaroids, and phone calls. This repository is the side-track that grew out of that idea: not a new architecture, not a paper, but a measured notebook about whether small models improve when memory, action, critique, and control are externalized.
