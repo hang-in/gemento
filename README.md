@@ -67,6 +67,8 @@ This repository tracks sequential hypothesis IDs `H1` to `H9c` across the four e
 - Exp08b: math tool calls plus error-message hints moved math-04 from 0% to 100%.
 - Exp09: on Large 20K long-context tasks, Solo dump scored 0%, RAG scored 67%, and ABC+Tattoo scored 100%.
 - Exp10: same Gemma 4 E4B went from 41.3% (1-loop) to 78.1% (8-loop ABC) on a 9-task / 540-trial cost-aware comparison. The same ABC condition matched Gemini 2.5 Flash 1-call by +19pp (78.1% vs 59.1%) at zero per-trial API cost, trading off ~20× wall time. ABC infrastructure had 4 trial-level JSON parse fails (early-stop pattern, see `docs/reference/exp10-v3-abc-json-fail-diagnosis.md`).
+- Stage 2C (2026-05-02) re-evaluated H4 with an expanded 15-task ablation. ABC outperformed Solo-budget by +0.044 (reversing the 9-task subset's Solo +0.067 direction). **The synthesis category was the recovery driver (+0.140)**; statistically not significant at n=15 but Cohen's d=0.449 (medium). H4 verdict moved from Inconclusive to ⚠ Conditionally supported (synthesis only). See `docs/reference/h4-recheck-analysis-2026-05-02.md`.
+- Exp11 (2026-05-03) tested Mixed Intelligence (Judge C = Gemini 2.5 Flash, A/B = Gemma 4 E4B) and **the result was negative**: Δ(mixed − baseline) = −0.081, Cohen's d = −0.316 (small, negative). The logic-02 case study (Δ = −0.900) was decisive — baseline produced 4/5 correct answers explicitly stating "105 inconsistent" via the inclusion-exclusion principle, while mixed produced 5/5 nulls or keyword-missing answers. **Inverse mechanism observed**: a stronger Judge interferes with the weaker model's self-discovery chain via Tattoo-schema mismatch and premature convergence. H10 ⚠ Inconclusive — effectively rejected. The framework's next direction shifts from Role *strengthening* to Role *separation/addition* (e.g. Extractor as a new role, Exp12 in progress).
 
 What clearly did **not** work was expecting the same model to notice its own failure mode without a role change. The most useful result in this repository is probably negative: the model does not reliably criticize itself, even when it can criticize the same reasoning from another role.
 
@@ -121,10 +123,15 @@ If you want more than the README:
 
 - **[README.ko.md](./README.ko.md)** — Korean full README with the same hypothesis table, plus extra sections on open questions and Korean-language scoring caveats.
 - **[docs/reference/researchNotebook.md](./docs/reference/researchNotebook.md)** — Per-experiment notebook in 5W1H format (who / when / where / what / why / how). Korean.
-- **[docs/reference/researchNotebook.en.md](./docs/reference/researchNotebook.en.md)** — English mirror of the above (kept in sync).
-- **[docs/reference/conceptFramework.md](./docs/reference/conceptFramework.md)** — The four-axis externalization framework, including unverified candidate axes (Extractor, Reducer, Search Tool, Graph Tool, Evidence Tool, Critic Tool).
+- **[docs/reference/researchNotebook.en.md](./docs/reference/researchNotebook.en.md)** — English mirror of the above (kept in sync; Closed-append-only policy).
+- **[docs/reference/conceptFramework.md](./docs/reference/conceptFramework.md)** — The four-axis externalization framework, including unverified candidate axes (Extractor, Reducer, Search Tool, Graph Tool, Evidence Tool, Critic Tool, Large Model Tool / Mixed Intelligence — Exp11 effectively rejected).
+- **[docs/reference/namingConventions.md](./docs/reference/namingConventions.md)** — Notation and terminology rules (Stage NX, task-NN, condition slugs, etc.).
+- **[docs/reference/scoringHistory.md](./docs/reference/scoringHistory.md)** — Scorer evolution (v0/v2/v3).
+- **[docs/reference/failureLabels.md](./docs/reference/failureLabels.md)** — `FailureLabel` enum and failure classification standard.
+- **[docs/reference/resultJsonSchema.md](./docs/reference/resultJsonSchema.md)** — Result JSON top-level meta v1.0.
+- **Analysis reports** — [Stage 2C H4 recheck](./docs/reference/h4-recheck-analysis-2026-05-02.md) · [Exp11 Mixed Intelligence](./docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md) · [Exp09 5-trial drop](./docs/reference/exp09-5trial-drop-analysis-2026-04-30.md).
 
-Plan-level history (decisions and revisions) lives under `docs/plans/` — see `docs/plans/index.md` for the running list.
+Plan-level history (decisions and revisions) lives under `docs/plans/` — see `docs/plans/index.md` for the running list (Active + Recently Done).
 
 ## Reproduce / Extend
 
@@ -168,12 +175,17 @@ Append entries to `experiments/tasks/taskset.json` with `id`, `category`, `diffi
 
 ## Roadmap
 
-| Horizon | Item |
-|---------|------|
-| Short-term | Exp10 (cost-aware reproducibility) completed — see `docs/reference/results/exp-10-reproducibility-cost.md`. Next candidates: math-* `use_tools=True` policy unification + v3 re-run, logic category multi-stage / tooling, scorer extension to Exp00–09 (low priority — `logic-04` absent in those task subsets). |
-| Mid-term | Add missing axes: Extractor/Reducer roles and Search Tool integration |
-| Mid/long-term | Test the four-layer external knowledge environment |
-| Long-term | Cross-model reproduction on Qwen / Phi / Llama, structured ablations, and a public write-up |
+| Horizon | Item | Status |
+|---------|------|--------|
+| Phase 1 | Exp00~Exp10 — four-axis externalization baseline + cost-aware (Exp10) | ✅ |
+| Phase 1 follow-up (2026-04-30) | Taskset 3-FAIL fix + Exp09 5-trial drop analysis + Exp10 v3 rescore | ✅ |
+| Stage 2A/2B (2026-04-30) | Infra stabilization (healthcheck/abort + result JSON meta v1.0) + scorer/failure-label reference | ✅ |
+| Stage 2C (2026-05-02) | Exp06 H4 recheck on expanded 15-task set — H4 ⚠ Conditionally supported (synthesis +0.140) | ✅ |
+| Stage 4 (2026-05-03) | Exp11 Mixed Intelligence (Flash Judge) — H10 ⚠ Inconclusive, effectively rejected (inverse mechanism observed) | ✅ |
+| **Stage 5 in progress** | **Exp12 Extractor Role** (Role separation/addition, 2026-05-03~). Search Tool (Exp13) follow-up | 🔄 |
+| Mid-term | Remaining unexternalized axes — Reducer Role / Search Tool / Graph Tool / Evidence Tool. Priority informed by Exp12 (H11) verdict | |
+| Mid/long-term | Test the four-layer external knowledge environment (vector / graph). Stage 5 SQLite ledger after Exp13 | |
+| Long-term | Cross-model reproduction on Qwen / Phi / Llama, structured ablations, and a public write-up | |
 
 ## How to Contribute
 
