@@ -829,6 +829,52 @@ Python            = safety net only (0 triggers)
 
 ---
 
+## Exp11 — Mixed Intelligence (Flash Judge) note (2026-05-03)
+
+A follow-up experiment (`exp11-mixed-intelligence-haiku-judge` slug; Gemini 2.5 Flash Judge after v2 plan revision from Anthropic Haiku) tested **H10** — whether a stronger Judge C (Gemini 2.5 Flash) compensates for weaker Proposer/Critic (A/B = Gemma 4 E4B). Built on Stage 2C's H4 conditional support (synthesis +0.140 recovery), the experiment is the most direct test of the README's first operational principle: "role-based placement, not size-based".
+
+Conditions: baseline_abc (all Gemma) vs mixed_flash_judge (A/B Gemma + C Flash) × 15 tasks × 5 trials = 150 trials. Stage 2A healthcheck/abort + Stage 2B FailureLabel + Stage 2C tattoo_history cycle-by-cycle fix all applied. Architect-injected `c_caller` argument to `run_abc_chain` (1-2 line patch, default=None backward-compat).
+
+Results (v3 scoring, 150 trials):
+- baseline_abc: mean_acc=0.7778, median per-task=0.9333, err+null=14, avg cycles=7.2, avg dur=437s, cost=$0
+- **mixed_flash_judge**: mean_acc=**0.6967**, median per-task=0.8000, err+null=16, avg cycles=6.7, avg dur=377s, cost=**$0.0843**
+
+Δ(mixed − baseline) = **−0.0811** (negative — Mixed *underperforms* baseline). Statistics (n=15 paired): Wilcoxon p=0.293, paired t p=0.241 (NOT SIGNIFICANT — power-limited at n=15). Cohen's d = **−0.316** (small effect, negative direction). Bootstrap 95% CI Δ: [−0.220, +0.022] (zero almost included, but negative direction dominant).
+
+Category-level Δ(mixed−baseline):
+- math: −0.050
+- **logic: −0.275** (catastrophic, logic-02 0.9→0)
+- **synthesis: +0.030** (only positive — aligns with Stage 2C H4 recovery region)
+- planning: −0.033
+
+**H10 verdict (Architect)**: ⚠ **Inconclusive (effectively rejected)**. The negative Δ, negative Cohen's d, and absence of the H10 mechanism (turnover_modified) in the assertion turnover analysis (mixed=0.32 vs baseline=0.28, only +0.04 difference) all point to *no support* for H10 in this dataset.
+
+**Unexpected finding — Flash Judge *interferes with* the reasoning chain**:
+
+The logic-02 case study (Δ=−0.900) is decisive. logic-02 contains intentionally inconsistent set-cardinality data (inclusion-exclusion sum 105 > total 100). Required keywords: `[['105', 'inconsistent'], ['0']]`.
+
+- baseline (all Gemma): 4/5 trials produce answers explicitly stating "105" and "inconsistent" — Gemma's A/B/C self-discover the inclusion-exclusion contradiction across cycles.
+- mixed (Flash Judge): 5/5 trials produce either null final_answer (max cycles reached) or short answers like "-5" or "input data set is..." without the required keywords. Flash Judge shortens cycles (avg 6.7 vs 7.2) and disrupts Gemma's self-discovery chain.
+
+This is the *inverse* of H10's hypothesis: stronger Judge does not "compensate" weaker Proposer; instead, the Tattoo schema mismatch + premature convergence by the Judge *breaks* the weaker model's emergent reasoning. A new candidate hypothesis arises — "stronger Judge can interfere with weaker model's self-discovery when prompt schemas don't align".
+
+**Stage 5 implications**:
+- ❌ Mixed Intelligence (Role-strengthening) direction tentatively rejected — no follow-up plan recommended along this axis
+- 🎯 Search Tool / Extractor / Reducer (other unexternalized axes) prioritized as Exp12 candidates
+- Open follow-up: Judge prompt schema strengthening + Mixed re-validation (motivation weakened by inverse-mechanism finding)
+
+Limitations:
+- n=15 task paired — power-limited; "inconclusive" preferred over definitive rejection
+- 5 trials per (task, condition) — sample-limited
+- Tool axis not exercised (math-04 zero on both, use_tools=False)
+- Flash's reasoning capacity not utilized (JUDGE_PROMPT requires only verdict, not analytical response)
+
+Detail: `docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md`. Results: `experiments/exp11_mixed_intelligence/results/exp11_mixed_intelligence_20260502_143554.json` (baseline) + `exp11_mixed_flash_judge.json` (mixed).
+
+The hypothesis table above (H1~H9c) remains unchanged (Closed-append-only policy). H10's entry is a new addition only.
+
+---
+
 ## Change History
 
 - 2026-04-26: `config.py:SAMPLING_PARAMS` centralization — `lmstudio_client.py` now explicitly sends sampling params. Pre-centralization LM Studio default may have differed from `temperature=0.1`/`max_tokens=4096`, so Exp10 results may show micro-variance vs Exp00~09. Treat the introduction date as a baseline boundary.

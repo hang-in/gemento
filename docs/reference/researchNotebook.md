@@ -51,6 +51,7 @@ parts: [closed, active]
 | H9a | **[Tattoo 외부화 — 물리 한계 돌파]** ABC+Tattoo(chunked)가 Solo-dump보다 long-context에서 우수하다 | **채택** (+68.3%p, Large 20K에서 Solo 0% → ABC 100%) | Exp09 |
 | H9b | **[차별성]** ABC+Tattoo가 RAG baseline 대비 고유 기여를 가진다 | **⚠️ 미결** (5-trial 통계 검정 비유의 p=0.798; overall Δ=+2.0%p; 3-hop에서만 +20.0%p 차별성; Small Paradox 확인) | Exp09 |
 | H9c | **[에러 모드 차이]** ABC의 실패 패턴이 Solo·RAG와 질적으로 다르다 | **채택** (Solo: format_error 24, RAG: wrong_synthesis 6, ABC: evidence_miss 2 + wrong_synthesis 3) | Exp09 |
+| **H10** | **[Role 외부화 강화 — Mixed Intelligence]** 강한 Judge C (Gemini 2.5 Flash) 가 약한 Proposer/Critic (A/B = Gemma 4 E4B) 의 한계를 보완한다 | ⚠ **미결 (실효적 기각)** — 2026-05-03 Exp11: Δ(mixed−base)=−0.0811 (음수), Cohen d=−0.316 small, Wilcoxon p=0.293 비유의. logic 카테고리 catastrophic (−0.275), synthesis 만 양수 (+0.030). Flash Judge 가 약한 모델의 self-discovery chain 을 *방해* 하는 정반대 메커니즘 발견 | Exp11 |
 
 #### 축 ↔ 실험 매트릭스
 
@@ -70,6 +71,7 @@ parts: [closed, active]
 | Exp07 (Loop Saturation) | — | — | ▶ | ✅ |
 | Exp08 (Math Tool-Use) | — | ✅ | ▶ | — |
 | Exp08b (Tool Refinement) | — | ✅ | — | — |
+| Exp11 (Mixed Intelligence) | — | — | ✅ (Role 강화 — H10 미결) | — |
 
 > 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조.
 
@@ -752,6 +754,57 @@ Small Paradox 상세:
 3. logic 카테고리 도구화/multi-stage 또는 외부 propositional logic 도구
 4. use_tools 정책 통일 (math 전체 True 강제 후 v3 재실행)
 5. 다른 task 의 strict 채점 전수 재산정
+
+---
+
+### Exp11: Mixed Intelligence (Flash Judge)
+
+| 항목 | 내용 |
+|------|------|
+| **누가 (Who)** | A/B = Gemma 4 E4B (LM Studio Q8_0) + C = Gemini 2.5 Flash (`gemini-2.5-flash` API) — Mixed condition. baseline = A/B/C 모두 Gemma |
+| **언제 (When)** | 2026-05-02 ~ 2026-05-03 |
+| **어디서 (Where)** | Windows + LM Studio (`http://192.168.1.179:1234`) + Google AI Studio (Gemini API) |
+| **무엇을 (What)** | H10 후보 — "강한 Judge 가 약한 Proposer/Critic 의 한계를 보완". 2 condition × 15 task × 5 trial = **150 trial** |
+| **왜 (Why)** | Stage 2C 의 H4 ⚠ 조건부 채택 (synthesis +0.140 회복) 위에서 Role 축 강화 효과 정밀 측정. README §1 "역할 기반 배치 — 크기가 아니라 판단 유형" 운영 원칙의 가장 직접적 측정 |
+| **어떻게 (How)** | `experiments/orchestrator.py:run_abc_chain` 에 `c_caller` 인자 추가 (1-2라인 patch) + `experiments/exp11_mixed_intelligence/run.py` 의 Mixed condition 이 Gemini Flash c_caller 주입. Stage 2A healthcheck/abort + Stage 2B FailureLabel + Stage 2C tattoo_history cycle-by-cycle fix 모두 적용 |
+
+**결과 (v3 채점, 150 trial):**
+
+| condition | n | mean_acc | median per-task | err+null | avg_cycles | avg_dur | total cost |
+|-----------|--:|---------:|----------------:|--------:|-----------:|--------:|-----------:|
+| baseline_abc | 75 | **0.7778** | 0.9333 | 7+7 | 7.2 | 437s | $0.0000 |
+| mixed_flash_judge | 75 | **0.6967** | 0.8000 | 8+8 | 6.7 | 377s | **$0.0843** |
+
+**Δ(mixed − baseline) = −0.0811** (음수). 통계 (n=15 task paired): Wilcoxon p=0.293 / paired t p=0.241 (NOT SIGNIFICANT). Cohen's d = −0.316 (small effect 음수). Bootstrap 95% CI Δ: [−0.220, +0.022].
+
+**카테고리별 Δ(mixed−baseline)**:
+- math: −0.050 (math-01 saturation 깨짐)
+- **logic: −0.275** (catastrophic — logic-02 0.9→0)
+- **synthesis: +0.030** (유일한 양수 — Stage 2C H4 회복 영역 정합)
+- planning: −0.033
+
+**핵심 발견:**
+1. **H10 ⚠ 미결 (실효적 기각)** — Mixed (Flash Judge) 가 baseline (모두 Gemma) 대비 우위 부재
+2. **assertion turnover 의 H10 메커니즘 부재** — modified 차이 미미 (0.04). Flash Judge 의 "보완" 효과 직접 반증
+3. **logic-02 case study (Δ=−0.900)** — baseline 4/5 trial 이 "105 inconsistent" 명시 (inclusion-exclusion 자기 발견), mixed 5/5 trial 이 null 또는 keyword 부재. Flash Judge 가 cycle 단축 + 추론 chain 단절
+4. **의외 — Judge 강화의 정반대 메커니즘** — 강한 Judge 가 약한 모델의 self-discovery chain 을 *방해*. 새 가설 후보
+5. **synthesis 일부 양수** (+0.030) — Stage 2C H4 회복 영역과 정합. 단 logic catastrophic 가 종합 음수의 동력
+
+**Stage 5 의제 함의:**
+- ❌ Mixed Intelligence (Role 강화) 가설 잠정 기각 — 본 방향 후속 plan 비추천
+- 🎯 Search Tool / Extractor / Reducer (다른 미외부화 축) 우선 (Exp12 후보)
+- Judge prompt 강화 + Mixed 재검증 — 단 정반대 메커니즘 발견으로 동기 흔들림
+
+**상세 보고서:** `docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md`
+**결과 데이터:**
+- `experiments/exp11_mixed_intelligence/results/exp11_mixed_intelligence_20260502_143554.json` (baseline_abc)
+- `experiments/exp11_mixed_intelligence/results/exp11_mixed_flash_judge.json` (mixed)
+
+**한계:**
+- n=15 task paired — 통계 검정력 부족. 단정적 기각 어려움 (미결 결론)
+- 5 trial 한계
+- Tool 축 미검증 (math-04 양쪽 0)
+- Flash 의 reasoning 능력 활용 안 됨 (JUDGE_PROMPT 가 단순 verdict 요구)
 
 ---
 

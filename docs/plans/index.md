@@ -4,7 +4,11 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- [exp11-mixed-intelligence-haiku-judge.md](exp11-mixed-intelligence-haiku-judge.md) — **Stage 4 (Exp11)**: Mixed Intelligence — A/B = Gemma 4 E4B + **C = Claude Haiku 4.5**. H10 후보 가설 (강한 Judge 가 약한 Proposer/Critic 보완). Stage 2C abc 재실행 + Mixed condition 신규. 결정 1-10 모두 Architect 확정 (사용자 위임 "Architect 권장대로 진행"). Sonnet 진행 프롬프트: `docs/prompts/2026-05-02/mixedIntelligenceStart.md`
+(없음 — Stage 4 Exp11 마감. 다음 단계: Stage 5 의제 — Search Tool / Extractor / Reducer 등 다른 외부화 축 우선 검토)
+
+## Recently Done — Stage 4
+
+- [exp11-mixed-intelligence-haiku-judge.md](exp11-mixed-intelligence-haiku-judge.md) — **Stage 4 (Exp11)**: Mixed Intelligence (Flash Judge, v2 — Haiku→Flash). 5 subtask 완료 (commit 91d…). **H10 ⚠ 미결 (실효적 기각)** — Δ=−0.0811, Cohen d=−0.316 small 음수. Flash Judge 가 약한 모델의 self-discovery chain 을 *방해* 하는 정반대 메커니즘 발견 (logic-02 case study). Search Tool / 다른 미외부화 축 우선 권장. 2026-05-03.
 
 ## Recently Done
 

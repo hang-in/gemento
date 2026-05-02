@@ -1,13 +1,16 @@
 ---
 type: plan
-status: draft
-updated_at: 2026-05-02
+status: done
+updated_at: 2026-05-03
 slug: exp11-mixed-intelligence-haiku-judge
 version: 2
 author: Architect (Windows)
 audience: Developer (Sonnet) + 사용자 검토 (위임 시 Architect default) + 사용자 직접 실행 (Task 04)
 parent_strategy: handoff-to-windows-2026-04-30-followup-strategy.md (Stage 4)
 note: "v2 (2026-05-02): Judge 모델 Haiku 4.5 → Gemini 2.5 Flash 변경. 사용자 명시 (이미 GEMINI_API_KEY 보유, 비용 1/30, 기존 _external/gemini_client.py 재사용). slug 보존 (history)."
+completed_at: 2026-05-03
+final_verdict: "H10 ⚠ 미결 (실효적 기각) — Δ(mixed−base)=−0.0811, Cohen d=−0.316 small 음수, 통계 비유의. logic 카테고리 catastrophic (−0.275). Flash Judge 가 약한 모델의 self-discovery chain 을 *방해* 하는 정반대 메커니즘 발견 (logic-02 case study)."
+analysis_doc: docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md
 ---
 
 # Stage 4 — Exp11: Mixed Intelligence (Gemini Flash Judge C)
