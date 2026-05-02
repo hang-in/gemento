@@ -4,11 +4,11 @@ Plan document index. Register new plans here.
 
 ## Active
 
-(없음 — Stage 4 Exp11 마감. 다음 단계: Stage 5 의제 — Search Tool / Extractor / Reducer 등 다른 외부화 축 우선 검토)
+- [exp12-extractor-role-pre-search.md](exp12-extractor-role-pre-search.md) — **Stage 5 (Exp12)**: Extractor Role — 신규 Role 추가 (claim/entity 사전 추출). H11 후보 가설. Exp11 정반대 메커니즘 회피 (강화 → 분리/추가). 같은 모델 (Gemma E4B), 외부 API 0. 결정 1-7 모두 Architect 확정 (사용자 위임 "진행하자"). Sonnet 진행 프롬프트: `docs/prompts/2026-05-03/extractorRoleStart.md`
 
 ## Recently Done — Stage 4
 
-- [exp11-mixed-intelligence-haiku-judge.md](exp11-mixed-intelligence-haiku-judge.md) — **Stage 4 (Exp11)**: Mixed Intelligence (Flash Judge, v2 — Haiku→Flash). 5 subtask 완료 (commit 91d…). **H10 ⚠ 미결 (실효적 기각)** — Δ=−0.0811, Cohen d=−0.316 small 음수. Flash Judge 가 약한 모델의 self-discovery chain 을 *방해* 하는 정반대 메커니즘 발견 (logic-02 case study). Search Tool / 다른 미외부화 축 우선 권장. 2026-05-03.
+- [exp11-mixed-intelligence-haiku-judge.md](exp11-mixed-intelligence-haiku-judge.md) — **Stage 4 (Exp11)**: Mixed Intelligence (Flash Judge, v2 — Haiku→Flash). 5 subtask 완료 (commit `d5d4cd7`). **H10 ⚠ 미결 (실효적 기각)** — Δ=−0.0811, Cohen d=−0.316 small 음수. Flash Judge 가 약한 모델의 self-discovery chain 을 *방해* 하는 정반대 메커니즘 발견 (logic-02 case study). Search Tool / 다른 미외부화 축 우선 권장. 2026-05-03.
 
 ## Recently Done
 
