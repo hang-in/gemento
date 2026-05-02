@@ -1,6 +1,6 @@
 ---
 type: plan-task
-status: todo
+status: done
 updated_at: 2026-05-03
 parent_plan: exp12-extractor-role-pre-search
 parallel_group: A
