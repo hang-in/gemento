@@ -641,9 +641,12 @@ def run_abc_chain(
         print(f"  [Extractor] result preview: {extractor_result_text[:200]}{'...' if len(extractor_result_text) > 200 else ''}")
 
     # ── Reducer post-stage helper (trial 종료 시 1회) ──
-    def _apply_reducer(fa: str | None) -> str | None:
+    def _apply_reducer(fa) -> str | None:
         if not (reducer_post_stage and fa):
             return fa
+        # final_answer 가 int 등 비-str 으로 반환되는 경로 존재 (Exp13 math-02 trial 2/3 에서 관찰).
+        # build_reducer_prompt + len() 호환 위해 진입 시 str 강제.
+        fa = fa if isinstance(fa, str) else str(fa)
         from system_prompt import build_reducer_prompt as _brp
         _asns = [{"claim": a.content, "confidence": getattr(a, "confidence", None)}
                  for a in tattoo.active_assertions]
