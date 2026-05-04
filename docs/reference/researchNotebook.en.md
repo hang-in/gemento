@@ -875,6 +875,49 @@ The hypothesis table above (H1~H9c) remains unchanged (Closed-append-only policy
 
 ---
 
+## Exp12 — Extractor Role note (2026-05-04)
+
+A follow-up experiment (`exp12-extractor-role-pre-search`) tested **H11** — whether adding a new Role (Extractor, same Gemma 4 E4B model) that pre-extracts claims/entities from the task prompt and prefixes the result into the A→B→C chain's input reduces A's burden and improves accuracy. This is the Architect-recommended direction *after* Exp11's H10 was effectively rejected with the inverse mechanism finding (a stronger Judge interferes with the weaker model's self-discovery).
+
+Conditions: baseline_abc (all Gemma) vs extractor_abc (Extractor + ABC, all Gemma) × 15 tasks × 5 trials = 150 trials. Same model on all roles (Exp11's mismatch risk avoided). Stage 2A healthcheck/abort + Stage 2B FailureLabel + Stage 2C tattoo_history cycle-by-cycle fix + Exp11 c_caller preserved. Architect added `extractor_pre_stage` argument to `run_abc_chain` (1-2 line patch, default=False backward-compat) + new `EXTRACTOR_PROMPT` / `build_extractor_prompt()` in `system_prompt.py`.
+
+Results (v3 scoring, 150 trials):
+- baseline_abc: mean_acc=0.7500, median=1.0000, err+null=20, avg cycles=7.3, avg dur=412s
+- **extractor_abc**: mean_acc=**0.8000**, median=1.0000, err+null=10, avg cycles=7.1, avg dur=425s
+
+Δ(extractor − baseline) = **+0.0500** (positive — opposite sign from Exp11's −0.0811). Statistics (n=15 paired): Wilcoxon p=0.198, paired t p=0.231 (NOT SIGNIFICANT — power-limited). Cohen's d = **+0.323** (small effect, positive). Bootstrap 95% CI Δ: [−0.020, +0.133] (zero almost included, positive direction dominant).
+
+Category-level Δ(ext−base):
+- math: +0.000 (saturation)
+- **logic: +0.125** ⬆ (logic-02 recovery +0.30 — Stage 2C / Exp11 catastrophic region)
+- **synthesis: +0.050** (synthesis-05 recovery +0.45)
+- planning: +0.000 (saturation)
+
+**H11 verdict (Architect)**: ⚠ **Conditionally supported (positive direction, power-limited)**. The +0.05 threshold is met but n=15 limits significance. Cohen's d positive, all metrics consistently favor extractor (NONE 58→63, err rate 13%→7%), and the catastrophic-region recovery (logic-02 +0.30, synthesis-05 +0.45) is the most informative signal.
+
+**Decisive contrast with Exp11 (H10)**:
+
+| | Exp11 Mixed (H10) | Exp12 Extractor (H11) |
+|---|---|---|
+| Hypothesis | Strong Judge → compensates weak A/B | New Role (separation/addition), same model |
+| Model | A/B Gemma + **C Flash** | **All Gemma**, Extractor newly added |
+| Δ acc | **−0.0811** | **+0.0500** |
+| Cohen's d | −0.316 | **+0.323** |
+| logic-02 | base 0.9 → mixed 0.0 (catastrophic) | base 0.3 → ext 0.6 (recovery) |
+| Mechanism | Tattoo schema mismatch + premature convergence | Cycle-1 input organization + stabilization |
+| External API cost | $0.0843 (Flash) | $0 (local Gemma only) |
+| Verdict | ⚠ Inconclusive (effectively rejected) | **⚠ Conditionally supported** |
+
+The framework's Role-axis evolution direction is now clear: **strengthening (Mixed) ❌ vs separation/addition (Extractor) ✅**. The next stage candidates (Reducer Role / Search Tool) inherit this distinction — Role multiplication is preferred over model strengthening within ABC.
+
+Limitations: n=15 task paired (power-limited); 5 trials per (task, condition); the cycle-1 mechanism is measurable only indirectly (via accuracy and error mode, not via assertion turnover, since `tattoo_history[0]` captures the empty pre-cycle Tattoo); synthesis-02 saturation broke (−0.20, a single negative case); Tool axis not exercised (math-04 zero on both).
+
+Detail: `docs/reference/exp12-extractor-role-analysis-2026-05-04.md`. Results: `experiments/exp12_extractor_role/results/exp12_extractor_role_20260503_151724.json` (baseline) + `exp12_extractor_abc.json` (extractor).
+
+The hypothesis table above (H1~H10) remains unchanged (Closed-append-only policy). H11's entry is a new addition only.
+
+---
+
 ## Change History
 
 - 2026-04-26: `config.py:SAMPLING_PARAMS` centralization — `lmstudio_client.py` now explicitly sends sampling params. Pre-centralization LM Studio default may have differed from `temperature=0.1`/`max_tokens=4096`, so Exp10 results may show micro-variance vs Exp00~09. Treat the introduction date as a baseline boundary.

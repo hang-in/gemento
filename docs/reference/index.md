@@ -18,6 +18,7 @@ Reference document index.
 - [failureLabels.md](failureLabels.md) — failure label 표준 reference (FailureLabel enum + 기존 매핑) — Stage 2B 도입 (`e84d943`)
 - [h4-recheck-analysis-2026-05-02.md](h4-recheck-analysis-2026-05-02.md) — Stage 2C H4 재검증 분석 보고서 (15 task × 3 condition × 5 trial = 225 trial, ablation + 카테고리 + 통계). H4 verdict 미결 → 조건부 채택 (synthesis 한정).
 - [exp11-mixed-intelligence-analysis-2026-05-03.md](exp11-mixed-intelligence-analysis-2026-05-03.md) — Stage 4 Exp11 Mixed Intelligence 분석 보고서 (15 task × 2 condition × 5 trial = 150 trial). H10 verdict ⚠ 미결 (실효적 기각). Flash Judge 가 약한 모델의 self-discovery chain 을 방해하는 정반대 메커니즘 발견.
+- [exp12-extractor-role-analysis-2026-05-04.md](exp12-extractor-role-analysis-2026-05-04.md) — Stage 5 Exp12 Extractor Role 분석 보고서 (15 task × 2 condition × 5 trial = 150 trial). H11 verdict ⚠ 조건부 채택 (Δ=+0.05, Cohen d=+0.323 small 양수, logic +0.125 / synthesis +0.050). Exp11 의 정반대 메커니즘 — Role 분리/추가가 강화보다 안전한 진화 방향.
 
 ## 핸드오프
 
@@ -42,3 +43,4 @@ Reference document index.
 - [results/exp-09-longctx.md](results/exp-09-longctx.md) — 실험 9: Long-Context Stress Test (ABC vs Solo vs RAG) `done`
 - [results/exp-10-reproducibility-cost.md](results/exp-10-reproducibility-cost.md) — 실험 10: Reproducibility & Cost Profile `done`
 - [results/exp-11-mixed-intelligence.md](results/exp-11-mixed-intelligence.md) — 실험 11: Mixed Intelligence (Flash Judge) — H10 ⚠ 미결 (실효적 기각) `done`
+- [results/exp-12-extractor-role.md](results/exp-12-extractor-role.md) — 실험 12: Extractor Role — H11 ⚠ 조건부 채택 (양수 방향) `done`

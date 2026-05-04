@@ -52,6 +52,7 @@ parts: [closed, active]
 | H9b | **[차별성]** ABC+Tattoo가 RAG baseline 대비 고유 기여를 가진다 | **⚠️ 미결** (5-trial 통계 검정 비유의 p=0.798; overall Δ=+2.0%p; 3-hop에서만 +20.0%p 차별성; Small Paradox 확인) | Exp09 |
 | H9c | **[에러 모드 차이]** ABC의 실패 패턴이 Solo·RAG와 질적으로 다르다 | **채택** (Solo: format_error 24, RAG: wrong_synthesis 6, ABC: evidence_miss 2 + wrong_synthesis 3) | Exp09 |
 | **H10** | **[Role 외부화 강화 — Mixed Intelligence]** 강한 Judge C (Gemini 2.5 Flash) 가 약한 Proposer/Critic (A/B = Gemma 4 E4B) 의 한계를 보완한다 | ⚠ **미결 (실효적 기각)** — 2026-05-03 Exp11: Δ(mixed−base)=−0.0811 (음수), Cohen d=−0.316 small, Wilcoxon p=0.293 비유의. logic 카테고리 catastrophic (−0.275), synthesis 만 양수 (+0.030). Flash Judge 가 약한 모델의 self-discovery chain 을 *방해* 하는 정반대 메커니즘 발견 | Exp11 |
+| **H11** | **[Role 외부화 분리/추가 — Extractor Role]** 신규 Role (Extractor, 동일 Gemma 모델) 이 task prompt 의 claims/entities 를 사전 추출하여 A→B→C input 에 prefix 주입하면, A 부담 감소 + 정확도 향상 | ⚠ **조건부 채택 (양수 방향, 검정력 한계)** — 2026-05-04 Exp12: Δ(ext−base)=+0.0500 (양수, Exp11 정반대), Cohen d=+0.323 small 양수, Wilcoxon p=0.198 비유의 (n=15 한계). logic +0.125 / synthesis +0.050. logic-02 catastrophic 회복 (+0.30) + synthesis-05 (+0.45). Role 축 *분리/추가* 가 *강화* 보다 안전한 진화 방향 입증 | Exp12 |
 
 #### 축 ↔ 실험 매트릭스
 
@@ -72,6 +73,7 @@ parts: [closed, active]
 | Exp08 (Math Tool-Use) | — | ✅ | ▶ | — |
 | Exp08b (Tool Refinement) | — | ✅ | — | — |
 | Exp11 (Mixed Intelligence) | — | — | ✅ (Role 강화 — H10 미결) | — |
+| Exp12 (Extractor Role) | — | — | ✅ (Role 분리/추가 — H11 조건부 채택) | — |
 
 > 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조.
 
@@ -805,6 +807,67 @@ Small Paradox 상세:
 - 5 trial 한계
 - Tool 축 미검증 (math-04 양쪽 0)
 - Flash 의 reasoning 능력 활용 안 됨 (JUDGE_PROMPT 가 단순 verdict 요구)
+
+---
+
+### Exp12: Extractor Role (Role 분리/추가)
+
+| 항목 | 내용 |
+|------|------|
+| **누가 (Who)** | A/B/C 모두 Gemma 4 E4B (LM Studio Q8_0) + **Extractor 도 동일 Gemma**. 외부 API 0 |
+| **언제 (When)** | 2026-05-03 ~ 2026-05-04 |
+| **어디서 (Where)** | Windows + LM Studio (`http://192.168.1.179:1234`) |
+| **무엇을 (What)** | H11 후보 — "신규 Role (Extractor) 이 task prompt 의 claims/entities 를 사전 추출하여 A→B→C input 에 prefix 주입하면 A 부담 감소 + 정확도 향상". 2 condition × 15 task × 5 trial = **150 trial** |
+| **왜 (Why)** | Stage 4 Exp11 의 H10 ⚠ 미결 (실효적 기각, 정반대 메커니즘 — 강한 Judge 가 약한 모델 self-discovery 방해) 후 Architect 권장 방향. Role 축 *강화* 가 아니라 *분리/추가* 가 framework 의 자연 진화인지 검증. README §1 "역할 기반 배치" 운영 원칙의 다양화 측정 |
+| **어떻게 (How)** | `experiments/system_prompt.py` 에 `EXTRACTOR_PROMPT` + `build_extractor_prompt()` 추가 (claims/entities JSON schema, "do NOT solve / propose" 강제). `experiments/orchestrator.py:run_abc_chain` 에 `extractor_pre_stage: bool = False` 옵션 추가 (1-2 라인 patch, default backward compat). `experiments/exp12_extractor_role/run.py` 신규 (baseline_abc + extractor_abc). Stage 2A healthcheck/abort + Stage 2B FailureLabel + Stage 2C tattoo_history cycle-by-cycle fix + Exp11 c_caller 보존 모두 적용 |
+
+**결과 (v3 채점, 150 trial):**
+
+| condition | n | mean_acc | median per-task | err+null | avg_cycles | avg_dur |
+|-----------|--:|---------:|----------------:|--------:|-----------:|--------:|
+| baseline_abc | 75 | 0.7500 | 1.0000 | 10+10 | 7.3 | 412s |
+| **extractor_abc** | 75 | **0.8000** | 1.0000 | 5+5 | 7.1 | 425s |
+
+**Δ(extractor − baseline) = +0.0500** (양수, Exp11 의 −0.0811 정반대). 통계 (n=15 paired): Wilcoxon p=0.198 / paired t p=0.231 (NOT SIGNIFICANT). Cohen's d = +0.323 (small effect 양수). Bootstrap 95% CI Δ: [−0.020, +0.133].
+
+**카테고리별 Δ(ext−base)**:
+- math: +0.000 (saturation)
+- **logic: +0.125** ⬆ (logic-02 회복 +0.30 — Stage 2C / Exp11 catastrophic 영역)
+- **synthesis: +0.050** (synthesis-05 catastrophic 회복 +0.45)
+- planning: +0.000 (saturation)
+
+**핵심 발견:**
+1. **H11 ⚠ 조건부 채택 (양수 방향, 검정력 한계)** — Δ +0.05 임계, Cohen d +0.323 small 양수, 모든 metric 의 방향이 ext > baseline
+2. **Exp11 의 정반대 메커니즘** — 같은 모델 Role 분리는 양수 (+0.05), 강한 모델 Role 강화는 음수 (−0.08)
+3. **catastrophic 영역 회복** — logic-02 (0.3→0.6, +0.30) / synthesis-05 (0.55→1.0, +0.45). Stage 2C / Exp11 의 약점 영역에서 Extractor 가 자기 발견 chain 안정화
+4. **error mode 안정성 ↑** — NONE 58→63 (+5), err 13%→7% (절반). Extractor 가 catastrophic fail 회피
+5. **synthesis-02 역효과** (1.0→0.8, −0.20) — saturation 깨짐, Extractor prefix 가 안정 답을 흔드는 negative case
+6. **메커니즘** — assertion turnover (added/modified) 차이 미미. Extractor 효과는 cycle 1 의 *입력 정리* (prompt prefix) 형태 — A 의 작업 *대체* 가 아니라 *보조*
+
+**Role 축 정밀화 진화** (Stage 2C / Exp11 / Exp12 종합):
+- H4 (Stage 2C) ⚠ 조건부 채택 — A-B-C 시너지 (synthesis +0.140)
+- H10 (Exp11) ⚠ 미결 (실효적 기각) — Role 강화 (Mixed) 정반대 메커니즘
+- **H11 (Exp12) ⚠ 조건부 채택** — Role 분리/추가 (Extractor) 양수 방향
+- → Role 축 *다양화* (분리/추가) 가 framework 의 자연 진화. 강한 모델 도입 비추천
+
+**Stage 5 다음 의제 (Exp13+):**
+- 🎯 Reducer Role (Exp14 후보) — Role 다양화 라인 연속
+- Search Tool (Exp13 후보) — Tool 축 신규, Stage 5 SQLite ledger 동기
+- Mixed Intelligence 재시도 — 비추천 (Exp11 정반대 메커니즘)
+- math-* use_tools 통일 — 별도 plan 후보
+
+**상세 보고서:** `docs/reference/exp12-extractor-role-analysis-2026-05-04.md`
+**결과 데이터:**
+- `experiments/exp12_extractor_role/results/exp12_extractor_role_20260503_151724.json` (baseline_abc)
+- `experiments/exp12_extractor_role/results/exp12_extractor_abc.json` (extractor)
+
+**한계:**
+- n=15 task paired — 통계 검정력 부족
+- 5 trial 한계
+- first_cycle_assertions = 0 — Extractor 메커니즘 직접 측정 결함 (정확도/error mode 로 간접만)
+- synthesis-02 역효과 (−0.20) — 추가 분석 필요
+- Tool 축 미검증 (math-04 양쪽 0)
+- 외부 API 비교 부재 — Exp11 의 cost-aware 와 직접 비교 불가 (다른 메커니즘)
 
 ---
 

@@ -1,12 +1,15 @@
 ---
 type: plan
-status: draft
-updated_at: 2026-05-03
+status: done
+updated_at: 2026-05-04
 slug: exp12-extractor-role-pre-search
 version: 1
 author: Architect (Windows)
 audience: Developer (Sonnet) + 사용자 검토 (위임 시 Architect default) + 사용자 직접 실행 (Task 04)
 parent_strategy: handoff-to-windows-2026-04-30-followup-strategy.md (Stage 5)
+completed_at: 2026-05-04
+final_verdict: "H11 ⚠ 조건부 채택 (양수 방향, 검정력 한계) — Δ(ext−base)=+0.0500, Cohen d=+0.323 small 양수, 통계 비유의. logic +0.125 / synthesis +0.050. logic-02 catastrophic 회복 (+0.30) + synthesis-05 (+0.45). Exp11 정반대 메커니즘 — Role 분리/추가가 강화보다 안전한 진화 방향"
+analysis_doc: docs/reference/exp12-extractor-role-analysis-2026-05-04.md
 ---
 
 # Stage 5 — Exp12: Extractor Role (Search Tool 이전 Role 축 확장)
