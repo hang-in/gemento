@@ -11,8 +11,9 @@ __pycache__/
 .vscode/
 *.swp
 
-# Claude
-.claude/
+# Claude — ignore local settings/state, but track shared workflow skills
+.claude/settings.local.json
+.claude/*.local.json
 
 # Personal session resume notes (local-only — do not commit)
 resume_gemini.md
