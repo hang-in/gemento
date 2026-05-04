@@ -4,10 +4,11 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- [exp13-reducer-role.md](exp13-reducer-role.md) — **Stage 5 (Exp13)**: Reducer Role — post-stage 결과 통합. H12 후보 가설. Exp12 의 Extractor 와 대칭 (pre-stage 입력 정리 / post-stage 출력 정리). 같은 Gemma 모델, 외부 API 0. 결정 1-7 모두 Architect 확정 (사용자 위임 "리듀서 롤 먼저 해보자"). Sonnet 진행 프롬프트: `docs/prompts/2026-05-04/reducerRoleStart.md`
+(없음 — Stage 5 Exp13 Reducer Role 마감, Exp14 후보 결정 대기)
 
 ## Recently Done — Stage 5
 
+- [exp13-reducer-role.md](exp13-reducer-role.md) — **Stage 5 (Exp13)**: Reducer Role 마감. 5 subtask 완료. **H12 ⚠ 미결 (실효적 기각)** — Δ=−0.0533 (bug 제외) / −0.0711 (with bug, 음수, Exp12 정반대), Cohen d=−0.323 (Exp12 +0.323 거울상). synthesis 5/5 task 음수. 메커니즘 = **abstraction loss** (다중 출처/다중 추정 → 단일 추정 압축). **위치-효과 비대칭 확정**: pre-stage = 안전, post-stage = 위험. orchestrator bug 1건 fix (`cf057b6`). 2026-05-05.
 - [exp12-extractor-role-pre-search.md](exp12-extractor-role-pre-search.md) — **Stage 5 (Exp12)**: Extractor Role 마감. 5 subtask 완료. **H11 ⚠ 조건부 채택 (양수 방향, 검정력 한계)** — Δ=+0.0500, Cohen d=+0.323 small 양수. logic-02 catastrophic 회복 (+0.30) + synthesis-05 (+0.45). Exp11 의 정반대 메커니즘 — Role 분리/추가가 강화보다 안전. 2026-05-04.
 
 ## Recently Done — Stage 4

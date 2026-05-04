@@ -16,7 +16,7 @@
 
 이 레포는 **MIT 라이선스로 공개된 1인 연구 노트**입니다. 관심 있는 누구든 자유롭게 fork·재현·확장할 수 있습니다. 협업 창구는 프로젝트가 더 성숙한 시점에 열 예정입니다.
 
-> *Last updated: 2026-05-04*
+> *Last updated: 2026-05-05*
 
 > 📚 English version: [README.md](./README.md)
 
@@ -178,15 +178,15 @@
 - ~~**Exp09 통계 신뢰도 보강**~~ — Phase 1 후속 (2026-04-30) 5-trial 실행 + 분석 완료. 단 trial 4-5 가 Windows 환경 모델 서버 connection refused (`WinError 10061`) 로 인한 **인프라 무효** 발견 (`docs/reference/exp09-5trial-drop-analysis-2026-04-30.md`). H9b verdict 는 3-trial 결과 (Δ=+0.033) 우선 권고 — 단 영문 노트북 Closed 추가만 정책 보존 (재산정 미적용). 닫힘.
 - **Small Paradox 해결** — Exp09에서 ABC가 small 태스크에서 RAG보다 약함 (0.67 vs 1.00). chunk 수가 적을 때 cycle iteration이 오버킬 가능성. (Exp13+ 후보)
 - **병렬 chunk 순회** — 현재 직렬 chunk 처리를 병렬로 전환 + Tattoo merge 패턴 실험. ABC 시간 비용 절감. (Exp13+ 후보)
-- **Exp12 결과 후 framework 방향 결정** — Extractor Role (진행 중) 의 H11 verdict 가 Search Tool (Exp13) / Reducer Role / 다른 외부화 축의 우선순위 결정.
+- **Stage 5 Role 축 마감 후 framework 방향 결정** — Exp11/12/13 의 Role 축 3 회 검증 (강화/pre-stage/post-stage) 종합 후 Tool 축 (Search Tool, Exp14 후보) 우선순위 결정.
 
 ### 3.2 미외부화 축 (conceptFramework § 9)
 
 | 축 | 현재 상태 | 기여 기회 |
 |----|----------|-----------|
-| **Extractor Role** | **Exp12 마감** (2026-05-04) — H11 ⚠ 조건부 채택 (Δ=+0.050 양수, catastrophic 영역 회복) | 후속 — Reducer 결합 (Exp15+) |
-| **Reducer Role** | **Exp13 진행 중** (2026-05-04~) — post-stage 결과 통합. 가설 H12 후보 | 결과 분석 + 후속 plan |
-| **Search Tool** | 미구현 — **Exp14+ 후보** (Reducer 후, Stage 5 SQLite ledger 동기) | Tool 통합 + 측정 |
+| **Extractor Role (pre-stage)** | **Exp12 마감** (2026-05-04) — H11 ⚠ 조건부 채택 (Δ=+0.050 양수, catastrophic 영역 회복) | pre-stage 효과 확정 |
+| **Reducer Role (post-stage)** | **Exp13 마감** (2026-05-05) — H12 ⚠ 미결 (실효적 기각, Δ=−0.053 음수, abstraction loss). **Exp12 와 거울상**: pre-stage = 안전, post-stage = 위험 — 위치-효과 비대칭 확정 | 위치 의존성 fix 또는 다른 post-stage Role 변형 (보류) |
+| **Search Tool** | 미구현 — **Exp14 후보** (Role 축 마감 후 Tool 축 우선) | Tool 통합 + Stage 5 SQLite ledger 동기 |
 | **Graph Tool** | 미구현 (Exp14+ 후보) | entity/relation 다중 hop traversal |
 | **Evidence Tool** | 미구현 | `evidence_ref` resolve API — Tattoo와 결합 쌍 |
 | **Critic Tool** | 부분 (`FailureLabel` enum + Stage 2B `failureLabels.md` heuristic 분류만) | JSON schema·citation 결정론적 검증기 강화 |
@@ -298,10 +298,11 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 | Stage 2A/2B (마감, 2026-04-30) | 인프라 안정화 (healthcheck/abort + 결과 JSON meta v1.0) + scorer/failure label reference | ✅ |
 | Stage 2C (마감, 2026-05-02) | Exp06 H4 재검증 (확대 task set 15) — H4 ⚠ 조건부 채택 (synthesis +0.140) | ✅ |
 | Stage 4 (마감, 2026-05-03) | Exp11 Mixed Intelligence (Flash Judge) — H10 ⚠ 미결 (실효적 기각). 정반대 메커니즘 발견 | ✅ |
-| Stage 5 Exp12 (마감, 2026-05-04) | Extractor Role — H11 ⚠ 조건부 채택 (Δ=+0.050 양수). Role 축 *분리/추가* 우위 입증 | ✅ |
-| **Stage 5 Exp13 진행 중** | **Reducer Role** (Role 다양화 라인 연속, 2026-05-04~). post-stage 결과 통합 | 🔄 |
-| 중기 | 미외부화 축 보강 — Search Tool / Graph Tool / Evidence Tool 통합. Reducer (Exp13) 결과로 우선순위 결정 | |
-| 중장기 | 외부 지식 환경 (4-layer) 통합 실험 (벡터·그래프 사용). Stage 5 SQLite ledger 검토 (Exp13 후) | |
+| Stage 5 Exp12 (마감, 2026-05-04) | Extractor Role (pre-stage) — H11 ⚠ 조건부 채택 (Δ=+0.050 양수). Role 축 *분리/추가* 우위 입증 | ✅ |
+| Stage 5 Exp13 (마감, 2026-05-05) | Reducer Role (post-stage) — H12 ⚠ 미결 (실효적 기각, Δ=−0.053 음수). **위치-효과 비대칭 확정** (pre-stage = 안전 / post-stage = 위험) | ✅ |
+| **Stage 5 Exp14 후보 (대기)** | **Search Tool** (Tool 축 신규) — Role 축 3 회 검증 마감 후 Tool 축 우선. H7 +18.3pp / H8 +23.3pp 강한 효과 + 결정성 보장 | ⏳ |
+| 중기 | 미외부화 축 보강 — Search Tool / Graph Tool / Evidence Tool 통합. Stage 5 SQLite ledger 동기 | |
+| 중장기 | 외부 지식 환경 (4-layer) 통합 실험 (벡터·그래프 사용) | |
 | 장기 | 크로스 모델 재현 (Qwen / Phi / Llama) · 체계적 ablation · 연구 결과 정리 (technical report / blog) | |
 
 상세 이력·다음 질문: [docs/reference/researchNotebook.md](docs/reference/researchNotebook.md)의 "현재 상태 및 다음 단계" 섹션 + [docs/plans/index.md](docs/plans/index.md) 의 Active/Recently Done.
@@ -353,9 +354,11 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 ### 실험 결과 + 분석 보고서
 | 경로 | 내용 |
 |------|------|
-| [docs/reference/results/](docs/reference/results/) | 실험별 result.md (exp-00 ~ exp-11) |
+| [docs/reference/results/](docs/reference/results/) | 실험별 result.md (exp-00 ~ exp-13) |
 | [docs/reference/h4-recheck-analysis-2026-05-02.md](docs/reference/h4-recheck-analysis-2026-05-02.md) | Stage 2C H4 재검증 분석 (15-task ablation) |
 | [docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md](docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md) | Exp11 Mixed Intelligence 분석 (H10 verdict) |
+| [docs/reference/exp12-extractor-role-analysis-2026-05-04.md](docs/reference/exp12-extractor-role-analysis-2026-05-04.md) | Exp12 Extractor Role 분석 (H11 verdict) |
+| [docs/reference/exp13-reducer-role-analysis-2026-05-05.md](docs/reference/exp13-reducer-role-analysis-2026-05-05.md) | Exp13 Reducer Role 분석 (H12 verdict) |
 | [docs/reference/exp09-5trial-drop-analysis-2026-04-30.md](docs/reference/exp09-5trial-drop-analysis-2026-04-30.md) | Exp09 5-trial 점수 하락 원인 분석 |
 
 ### 작업 진행

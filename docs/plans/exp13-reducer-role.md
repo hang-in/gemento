@@ -1,7 +1,7 @@
 ---
 type: plan
-status: draft
-updated_at: 2026-05-04
+status: done
+updated_at: 2026-05-05
 slug: exp13-reducer-role
 version: 1
 author: Architect (Windows)

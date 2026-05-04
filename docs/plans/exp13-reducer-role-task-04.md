@@ -1,7 +1,7 @@
 ---
 type: plan-task
-status: todo
-updated_at: 2026-05-04
+status: done
+updated_at: 2026-05-05
 parent_plan: exp13-reducer-role
 parallel_group: D
 depends_on: [03]

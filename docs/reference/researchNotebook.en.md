@@ -1,7 +1,7 @@
 ---
 type: reference
 status: in_progress
-updated_at: 2026-05-03
+updated_at: 2026-05-05
 mirror_of: docs/reference/researchNotebook.md (Part 1 — Closed Findings)
 language: en
 ---
@@ -915,6 +915,63 @@ Limitations: n=15 task paired (power-limited); 5 trials per (task, condition); t
 Detail: `docs/reference/exp12-extractor-role-analysis-2026-05-04.md`. Results: `experiments/exp12_extractor_role/results/exp12_extractor_role_20260503_151724.json` (baseline) + `exp12_extractor_abc.json` (extractor).
 
 The hypothesis table above (H1~H10) remains unchanged (Closed-append-only policy). H11's entry is a new addition only.
+
+---
+
+## Exp13 — Reducer Role note (2026-05-05)
+
+A follow-up experiment (`exp13-reducer-role`) tested **H12** — whether adding a new Role (Reducer, same Gemma 4 E4B model) that *post-stage* polishes the final tattoo + final_answer improves keyword-match accuracy and answer clarity. This was the symmetric counterpart to Exp12's Extractor (pre-stage input organization vs post-stage output organization), Architect-recommended after Exp12's H11 conditional support.
+
+Conditions: baseline_abc (all Gemma) vs reducer_abc (A→B→C → Reducer post-stage, all Gemma) × 15 tasks × 5 trials = 150 trials. Same model on all roles. Stage 2A healthcheck/abort + Stage 2B FailureLabel + Stage 2C tattoo_history fix + Exp11 c_caller / Exp12 extractor_pre_stage all preserved. Architect added `reducer_post_stage` argument to `run_abc_chain` (cycle loop *outside*, post-stage helper) + new `REDUCER_PROMPT` / `build_reducer_prompt()` in `system_prompt.py`. During analysis, an orchestrator bug was discovered (`len(final_answer)` failed when `final_answer` was an int) — fixed in commit `cf057b6` (one-line `isinstance` coercion). Bug affected 2/75 reducer trials (math-02 t2/t3); Δ direction unchanged.
+
+Results (v3 scoring, 150 trials):
+- baseline_abc: mean_acc=0.7744, err+null=18, avg cycles=7.2, avg dur=429s, cost=$0
+- **reducer_abc**: mean_acc=**0.7033**, err+null=16 (+ 2 TypeError bug), avg cycles=7.0, avg dur=414s, cost=$0
+
+Δ(reducer − baseline) = **−0.0711** with bug / **−0.0533** bug-excluded (negative — opposite sign from Exp12's +0.0500). Statistics (n=15 paired): Wilcoxon p=0.180, paired t p=0.204 (NOT SIGNIFICANT — power-limited). Cohen's d = **−0.344** with bug / **−0.323** bug-excluded — a near-mirror image of Exp12's +0.323. Bootstrap 95% CI Δ: [−0.176, +0.024] (zero almost included, negative direction dominant).
+
+Category-level Δ(reducer−base):
+- math: −0.083 (math-02 catastrophic 1.0→0.4, partly bug)
+- **logic: −0.100** ⬇ (logic-02/04 catastrophic strengthened)
+- **synthesis: −0.107** ⬇ (5/5 tasks negative — synthesis-04 −0.27 the headline case)
+- planning: +0.100 (n=2, planning-02 saturation stable)
+
+**H12 verdict (Architect)**: ⚠ **Inconclusive (effectively rejected)**. Δ exceeds the −0.05 threshold in both bug-included and bug-excluded computations, Cohen's d sits at −0.32 (mirror of Exp12), and 4 out of 4 catastrophic-region tasks worsened. The "rejected" framing is moderated to "inconclusive (effectively rejected)" because n=15 yields p>0.05 (Stage 2C / Exp11 / Exp12 power-limit pattern).
+
+**Mechanism — abstraction loss (synthesis-04 case study)**: The decisive case is synthesis-04 (multi-source population estimate with conflicts), where baseline produces structured analyses ("## Comprehensive Analysis ... Identification of Contradictions ... Zone C Count (R5 vs R1/R6)") that hit acc=1.00, while reducer compresses to single-point estimates ("The best estimate is **270 individuals**.") that score acc=0.33–0.67. The Reducer prompt's "polish for clarity" + "do NOT change conclusion" instructions push the model toward single-answer compression — losing the multi-source / multi-estimate structure that the keyword scorer relies on. Notably, Reducer outputs are *not shorter* on average (281 chars vs baseline 230 chars); the loss is in *abstraction* (multi → single), not length.
+
+**Decisive contrast — Exp11 / Exp12 / Exp13 mirror pattern**:
+
+| | Exp11 Mixed (H10) | Exp12 Extractor (H11) | Exp13 Reducer (H12) |
+|---|---|---|---|
+| Hypothesis | Strong Judge → compensates weak A/B | New Role pre-stage (input organization) | New Role post-stage (output organization) |
+| Position | C strengthening | **pre-stage** | **post-stage** |
+| Δ acc | −0.0811 | **+0.0500** | **−0.0533** (bug-excluded) |
+| Cohen's d | −0.316 | **+0.323** | **−0.323** |
+| Mechanism | chain disruption | input stabilization | abstraction loss |
+| Verdict | ⚠ Inconclusive (effectively rejected) | ⚠ Conditionally supported | ⚠ Inconclusive (effectively rejected) |
+
+The plan's core assumption (Extractor ↔ Reducer pre/post symmetry) breaks empirically. Exp12 and Exp13 produce nearly identical-magnitude effects in opposite directions — a clean mirror image. This establishes a **framework-level position-effect asymmetry**:
+
+| Role change type | Effect | Mechanism |
+|---|---|---|
+| Role *strengthening* (stronger model) | ❌ Negative (Exp11) | self-discovery chain disruption |
+| Role *separation/addition* — **pre-stage** (Extractor) | ✅ Positive (Exp12) | input stabilization |
+| Role *separation/addition* — **post-stage** (Reducer) | ❌ Negative (Exp13) | output abstraction loss |
+
+The weaker model's reasoning chain is most fertile when *not interfered with*; external Role assistance must be applied with care.
+
+**Stage 5 Exp14+ implications**:
+- 🎯 Search Tool (Exp14 candidate, Tool-axis new) prioritized — Role-axis is now triply validated (strengthen/pre/post). H7 +18.3pp / H8 +23.3pp signal that deterministic Tool externalization carries strong, stable effects
+- ❌ Reducer prompt strengthening — not recommended (the *position* itself is the risk, not prompt phrasing)
+- ❌ Extractor + Reducer combination (Exp15 candidate) — not recommended (effects cancel)
+- Other post-stage Role variants (Verifier, etc.) — on hold (post-stage = risky pattern likely generalizes)
+
+Limitations: n=15 paired tasks (power-limited); 5 trials per (task, condition); orchestrator bug touched 2 reducer trials (direction-preserving but not zero-impact for data integrity); score_answer_v3 keyword matching cannot measure Reducer's *semantic* polish (the polished answers may be more readable but the scorer only sees keywords); Tool axis not exercised (math-04 ~zero on both); Tattoo schema's final_answer type inconsistency is the bug's root cause (separate plan candidate).
+
+Detail: `docs/reference/exp13-reducer-role-analysis-2026-05-05.md`. Results: `experiments/exp13_reducer_role/results/exp13_reducer_role_20260504_191208.json` (baseline) + `exp13_reducer_abc.json` (reducer). Bug fix: commit `cf057b6`.
+
+The hypothesis table above (H1~H11) remains unchanged (Closed-append-only policy). H12's entry is a new addition only.
 
 ---
 

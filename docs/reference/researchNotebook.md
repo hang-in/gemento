@@ -1,7 +1,7 @@
 ---
 type: reference
 status: in_progress
-updated_at: 2026-05-03
+updated_at: 2026-05-05
 parts: [closed, active]
 ---
 
@@ -53,6 +53,7 @@ parts: [closed, active]
 | H9c | **[에러 모드 차이]** ABC의 실패 패턴이 Solo·RAG와 질적으로 다르다 | **채택** (Solo: format_error 24, RAG: wrong_synthesis 6, ABC: evidence_miss 2 + wrong_synthesis 3) | Exp09 |
 | **H10** | **[Role 외부화 강화 — Mixed Intelligence]** 강한 Judge C (Gemini 2.5 Flash) 가 약한 Proposer/Critic (A/B = Gemma 4 E4B) 의 한계를 보완한다 | ⚠ **미결 (실효적 기각)** — 2026-05-03 Exp11: Δ(mixed−base)=−0.0811 (음수), Cohen d=−0.316 small, Wilcoxon p=0.293 비유의. logic 카테고리 catastrophic (−0.275), synthesis 만 양수 (+0.030). Flash Judge 가 약한 모델의 self-discovery chain 을 *방해* 하는 정반대 메커니즘 발견 | Exp11 |
 | **H11** | **[Role 외부화 분리/추가 — Extractor Role]** 신규 Role (Extractor, 동일 Gemma 모델) 이 task prompt 의 claims/entities 를 사전 추출하여 A→B→C input 에 prefix 주입하면, A 부담 감소 + 정확도 향상 | ⚠ **조건부 채택 (양수 방향, 검정력 한계)** — 2026-05-04 Exp12: Δ(ext−base)=+0.0500 (양수, Exp11 정반대), Cohen d=+0.323 small 양수, Wilcoxon p=0.198 비유의 (n=15 한계). logic +0.125 / synthesis +0.050. logic-02 catastrophic 회복 (+0.30) + synthesis-05 (+0.45). Role 축 *분리/추가* 가 *강화* 보다 안전한 진화 방향 입증 | Exp12 |
+| **H12** | **[Role 외부화 분리/추가 — Reducer Role]** 신규 Role (Reducer, 동일 Gemma 모델) 이 ABC chain 의 final tattoo + final_answer 를 받아 *post-stage* 에서 정리/통합하면, keyword 매칭 정확도 + final answer 명료성 향상 | ⚠ **미결 (실효적 기각)** — 2026-05-05 Exp13: Δ(red−base)=−0.0533 (bug 제외) / −0.0711 (with bug, 음수 — Exp12 정반대), Cohen d=−0.323 (Exp12 +0.323 거울상), Wilcoxon p=0.180 비유의. logic −0.100 / math −0.083 / **synthesis −0.107 (5/5 task 음수)** / planning +0.100. 메커니즘 = **abstraction loss** (다중 출처/다중 추정 → 단일 추정 압축). **위치-효과 비대칭 확정**: pre-stage = 안전, post-stage = 위험 | Exp13 |
 
 #### 축 ↔ 실험 매트릭스
 
@@ -73,7 +74,8 @@ parts: [closed, active]
 | Exp08 (Math Tool-Use) | — | ✅ | ▶ | — |
 | Exp08b (Tool Refinement) | — | ✅ | — | — |
 | Exp11 (Mixed Intelligence) | — | — | ✅ (Role 강화 — H10 미결) | — |
-| Exp12 (Extractor Role) | — | — | ✅ (Role 분리/추가 — H11 조건부 채택) | — |
+| Exp12 (Extractor Role) | — | — | ✅ (Role 분리/추가 — pre-stage, H11 조건부 채택) | — |
+| Exp13 (Reducer Role) | — | — | ✅ (Role 분리/추가 — post-stage, H12 미결/실효적 기각) | — |
 
 > 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조.
 
@@ -868,6 +870,71 @@ Small Paradox 상세:
 - synthesis-02 역효과 (−0.20) — 추가 분석 필요
 - Tool 축 미검증 (math-04 양쪽 0)
 - 외부 API 비교 부재 — Exp11 의 cost-aware 와 직접 비교 불가 (다른 메커니즘)
+
+---
+
+### Exp13: Reducer Role (Role 분리/추가 — post-stage)
+
+| 항목 | 내용 |
+|------|------|
+| **누가 (Who)** | A/B/C 모두 Gemma 4 E4B (LM Studio Q8_0) + **Reducer 도 동일 Gemma**. 외부 API 0. Exp12 와 같은 모델 구성, 단 위치만 pre-stage → post-stage 변경 |
+| **언제 (When)** | 2026-05-04 ~ 2026-05-05 |
+| **어디서 (Where)** | Windows + LM Studio (`http://192.168.1.179:1234`) |
+| **무엇을 (What)** | H12 후보 — "신규 Role (Reducer) 가 ABC chain 의 final tattoo + final_answer 를 받아 *post-stage* 에서 정리/통합하면 keyword 매칭 정확도 + final answer 명료성 향상". 2 condition × 15 task × 5 trial = **150 trial** |
+| **왜 (Why)** | Exp12 H11 ⚠ 조건부 채택 (Δ +0.05, catastrophic 회복) 후 Architect 권장. **Extractor (pre-stage) ↔ Reducer (post-stage) 대칭 가정 검증** — Role 분리/추가 라인이 위치에 무관하게 안전한지, 또는 위치-효과 비대칭이 존재하는지 측정 |
+| **어떻게 (How)** | `experiments/system_prompt.py` 에 `REDUCER_PROMPT` + `build_reducer_prompt()` 추가 (assertions list + candidate answer → plain text final answer). `experiments/orchestrator.py:run_abc_chain` 에 `reducer_post_stage: bool = False` 옵션 + `_apply_reducer` 헬퍼 추가 (cycle 루프 *외부* post-stage). `experiments/exp13_reducer_role/run.py` 신규. Stage 2A/2B/2C + Exp11 c_caller / Exp12 extractor_pre_stage 보존 모두 적용. 분석 중 orchestrator bug 발견 + 즉시 fix (commit `cf057b6`, `len(fa)` int 입력 처리) |
+
+**결과 (v3 채점, 150 trial):**
+
+| condition | n | mean_acc | err+null | avg_cycles | avg_dur |
+|-----------|--:|---------:|--------:|-----------:|--------:|
+| baseline_abc | 75 | **0.7744** | 9+9 | 7.2 | 429s |
+| **reducer_abc** | 75 | **0.7033** | 8+8 (+ 2 TypeError bug) | 7.0 | 414s |
+
+**Δ(reducer − baseline) = −0.0711** (음수, Exp12 의 +0.0500 정반대). bug 제외 시 **−0.0533** (방향 불변). 통계 (n=15 paired): Wilcoxon p=0.180 / paired t p=0.204 (NOT SIGNIFICANT). Cohen's d = **−0.344** (with bug) / **−0.323** (bug 제외) — Exp12 의 +0.323 와 거울상. Bootstrap 95% CI Δ: [−0.176, +0.024].
+
+**카테고리별 Δ(red−base)**:
+- math: **−0.083** ⬇ (math-02 catastrophic 1.0→0.4, 2/5 = bug)
+- **logic: −0.100** ⬇ (logic-02/04 catastrophic 강화)
+- **synthesis: −0.107** ⬇ (5/5 task 음수, synthesis-04 −0.27 핵심)
+- planning: +0.100 (n=2 작음, planning-02 saturation 안정)
+
+**핵심 발견:**
+1. **H12 ⚠ 미결 (실효적 기각)** — Δ −0.05~−0.07, Cohen d −0.32~−0.34, 카테고리 logic/math/synthesis 모두 음수, catastrophic 영역 4/4 음수 강화
+2. **Exp12 ↔ Exp13 거울상** — 같은 모델 Role 분리/추가의 효과는 *위치 의존*: pre-stage = 양수 (+0.05), post-stage = 음수 (−0.05). 거의 동일 크기 |d|≈0.32, 정반대 방향
+3. **메커니즘 = abstraction loss** — synthesis-04 case study: baseline 의 구조화된 분석 ("## Comprehensive Analysis ... Identification of Contradictions") 이 acc=1.0, reducer 의 단일 추정 압축 ("The best estimate is 270 individuals") 이 acc=0.33~0.67. Reducer prompt 의 "polish for clarity" + "do NOT change conclusion" 이 *다중 출처/다중 추정 → 단일 추정* 압축 유발 → keyword 매칭 실패
+4. **길이가 아니라 content 가 핵심** — Reducer 평균 길이 281 chars > baseline 230 chars (오히려 김). 짧아져서가 아니라 *추상화* 손실로 keyword 누락
+5. **error mode 안정성 미미** — NONE 66→67 (+1), no_final_answer 9→6. Reducer 가 미완성 답을 *완성* 시키는 효과는 있으나 정확도 손실이 압도
+6. **orchestrator bug 발견** — `len(final_answer)` 가 int 입력에서 깨짐. 한 줄 fix (`isinstance` coercion). Tattoo schema 의 final_answer type 일관성 결함 (별도 plan 후보)
+
+**framework-level 새 원칙 (H4 + H10 + H11 + H12 통합)**:
+
+| Role 변경 유형 | 효과 | 메커니즘 |
+|---------------|------|----------|
+| Role *강화* (강한 모델 도입) | ❌ 음수 | self-discovery chain 단절 (Exp11) |
+| Role *분리/추가* — pre-stage | ✅ 양수 | input 안정화 (Exp12) |
+| Role *분리/추가* — **post-stage** | ❌ **음수** | **output abstraction loss (Exp13)** |
+
+→ **외부화 framework 의 위치-효과 비대칭** 확정. 약한 모델의 chain 은 *건드리지 않을 때* 가장 풍부함. 외부 Role 의 "도움" 은 신중해야.
+
+**Stage 5 다음 의제 (Exp14+):**
+- 🎯 **Search Tool (Exp14 후보)** — Tool 축 신규. Role 축 3 회 검증 (강화/pre/post) 마감. H7 +18.3pp / H8 +23.3pp 강한 효과 + 결정성 보장 — 안전한 다음 단계
+- Reducer prompt 강화 — 비추천 (위치 자체의 위험성이 prompt 보다 본질)
+- Extractor + Reducer 조합 (Exp15 후보) — 비추천 (서로 상쇄)
+- 다른 post-stage Role 변형 (Verifier 등) — 보류 (post-stage = 위험 패턴 일반화 가능성)
+
+**상세 보고서:** `docs/reference/exp13-reducer-role-analysis-2026-05-05.md`
+**결과 데이터:**
+- `experiments/exp13_reducer_role/results/exp13_reducer_role_20260504_191208.json` (baseline_abc)
+- `experiments/exp13_reducer_role/results/exp13_reducer_abc.json` (reducer)
+
+**한계:**
+- n=15 task paired — 통계 검정력 부족
+- 5 trial 한계
+- orchestrator bug 2 trial 영향 — Δ 방향 불변, 단 데이터 정합성 zero-impact 아님
+- score_answer_v3 keyword 매칭 의존 — Reducer 의 *의미적* 정확성 측정 한계
+- Tool 축 미검증 (math-04 양쪽 ~0)
+- Tattoo schema final_answer type 불일치 — bug 의 근본 원인, 별도 plan 후보
 
 ---
 
