@@ -418,6 +418,8 @@ def run_loop(
     phase_prompt_args: tuple[int, int] | None = None,
     use_tools: bool = False,
     tool_functions: dict | None = None,
+    extra_tools: list | None = None,
+    extra_tool_fns: dict | None = None,
 ) -> tuple[Tattoo, LoopLog, str | None, list[dict]]:
     """단일 루프를 실행한다."""
     selected = select_assertions(tattoo)
@@ -452,10 +454,11 @@ def run_loop(
     raw = ""
 
     tool_call_log: list[dict] = []
-    if use_tools:
+    _has_extra = bool(extra_tools or extra_tool_fns)
+    if use_tools or _has_extra:
         from tools import TOOL_SCHEMAS
-        _tools = TOOL_SCHEMAS
-        _tool_fns = tool_functions or {}
+        _tools = (TOOL_SCHEMAS if use_tools else []) + (extra_tools or [])
+        _tool_fns = {**(tool_functions if use_tools else {}), **(extra_tool_fns or {})}
     else:
         _tools = None
         _tool_fns = None
@@ -617,6 +620,8 @@ def run_abc_chain(
     c_caller: Callable[[list[dict]], tuple[str, dict]] | None = None,
     extractor_pre_stage: bool = False,
     reducer_post_stage: bool = False,
+    search_tool: bool = False,
+    corpus: list[dict] | None = None,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -657,6 +662,14 @@ def run_abc_chain(
             return _reduced
         return fa
 
+    # Search Tool 클로저 — cycle 루프 전 1회 초기화 (A 전용)
+    _search_extra_tools: list = []
+    _search_extra_fns: dict = {}
+    if search_tool and corpus is not None:
+        from tools import SEARCH_TOOL_SCHEMA, make_search_chunks_tool
+        _search_extra_tools = [SEARCH_TOOL_SCHEMA]
+        _search_extra_fns = {"search_chunks": make_search_chunks_tool(corpus)}
+
     tattoo = create_initial_tattoo(
         task_id=task_id,
         objective=f"{objective}\n\nProblem:\n{prompt}",
@@ -690,6 +703,8 @@ def run_abc_chain(
         tattoo, a_log, answer, a_tool_calls = run_loop(
             tattoo, cycle, phase_prompt_args=phase_args,
             use_tools=use_tools, tool_functions=_tool_fns,
+            extra_tools=_search_extra_tools or None,
+            extra_tool_fns=_search_extra_fns or None,
         )
 
         if answer:

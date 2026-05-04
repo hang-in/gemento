@@ -7,14 +7,20 @@ import bm25s  # type: ignore[import-untyped]
 
 _TOKEN_RE = re.compile(r"\w+", re.UNICODE)
 
+_STOP_WORDS = frozenset({
+    "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for",
+    "of", "with", "by", "from", "as", "is", "was", "are", "were", "be",
+    "been", "being", "have", "has", "had", "do", "does", "did", "will",
+    "would", "should", "could", "may", "might", "can", "this", "that",
+    "these", "those", "i", "you", "he", "she", "it", "we", "they", "what",
+    "which", "who", "whom", "whose", "when", "where", "why", "how",
+})
+
 
 def _tokenize(text: str) -> list[str]:
-    """단순 tokenizer — 영숫자만 추출, 소문자화.
-
-    언어 중립 · 재현성 우선. 영어 외 언어에서는 형태소 분석기가 더 낫지만
-    Exp09는 영어 기준이므로 이걸로 충분.
-    """
-    return [m.group(0).lower() for m in _TOKEN_RE.finditer(text)]
+    """단순 tokenizer — 영숫자만 추출, 소문자화, stop-words 제거."""
+    tokens = [m.group(0).lower() for m in _TOKEN_RE.finditer(text)]
+    return [t for t in tokens if t not in _STOP_WORDS]
 
 
 def bm25_retrieve(
@@ -58,3 +64,43 @@ def bm25_retrieve(
         c["bm25_score"] = float(score)
         out.append(c)
     return out
+
+
+SEARCH_TOOL_SCHEMA = {
+    "type": "function",
+    "function": {
+        "name": "search_chunks",
+        "description": (
+            "Retrieve top-k most relevant document chunks via BM25 lexical search. "
+            "Use when you need to find specific information in the document. "
+            "Returns chunks with their content and BM25 relevance score."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "Natural-language query. Use specific keywords for best results.",
+                },
+                "top_k": {
+                    "type": "integer",
+                    "description": "Number of chunks to return (default 5, max 10).",
+                    "default": 5,
+                },
+            },
+            "required": ["query"],
+        },
+    },
+}
+
+
+def make_search_chunks_tool(corpus: list[dict]):
+    """corpus가 주입된 search_chunks tool 함수 반환.
+
+    orchestrator가 task의 chunked document를 corpus로 전달하여
+    agent가 tool 호출 시 본 corpus에서만 retrieve.
+    """
+    def search_chunks(query: str, top_k: int = 5) -> list[dict]:
+        capped_top_k = min(max(1, int(top_k)), 10)
+        return bm25_retrieve(query, corpus, top_k=capped_top_k)
+    return search_chunks
