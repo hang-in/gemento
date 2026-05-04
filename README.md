@@ -4,7 +4,7 @@
 
 📚 Korean version: [README.ko.md](./README.ko.md)
 
-> *Last updated: 2026-05-03*
+> *Last updated: 2026-05-04*
 
 ## Why I built this
 
@@ -58,6 +58,7 @@ This repository tracks sequential hypothesis IDs `H1` to `H9c` across the four e
 | **H9b** | [Distinctiveness] ABC+Tattoo contributes something beyond a RAG baseline | ⚠️ Inconclusive (5-trial stats NOT SIGNIFICANT p=0.798; overall Δ=+2.0pp; 3-hop only +20.0pp differentiation; Small Paradox confirmed) | Exp09 |
 | **H9c** | [Error mode difference] ABC fails differently from Solo and RAG | ✅ Supported (Solo: `format_error`, RAG: `wrong_synthesis`, ABC: `evidence_miss` + `wrong_synthesis`) | Exp09 |
 | **H10** | [Role externalization — strong Judge / Mixed Intelligence] A stronger Judge C (Gemini 2.5 Flash) compensates for weaker Proposer/Critic (A/B = Gemma 4 E4B) | ⚠ Inconclusive — effectively rejected (Exp11 2026-05-03). Δ(mixed − baseline) = −0.0811 (mixed *underperforms* baseline-all-Gemma); Cohen's d = −0.316 (small, negative); not significant at n=15, p=0.293; logic category catastrophic (−0.275). **Inverse mechanism observed**: stronger Judge interferes with weaker model's self-discovery chain (logic-02 case study). Detail: `docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md` | Exp11 |
+| **H11** | [Role externalization — separation / addition (Extractor Role)] A new Role (Extractor, same Gemma 4 E4B model) that pre-extracts claims/entities from the prompt and prefixes them into A→B→C input improves accuracy | ⚠ Conditionally supported (positive direction, power-limited; Exp12 2026-05-04). Δ(ext − baseline) = +0.0500 (opposite sign from Exp11); Cohen's d = +0.323 (small, positive); not significant at n=15, p=0.198. **Catastrophic-region recovery**: logic-02 0.3→0.6 (+0.30), synthesis-05 0.55→1.0 (+0.45). Demonstrates that Role-axis *separation/addition* is safer than *strengthening*. Detail: `docs/reference/exp12-extractor-role-analysis-2026-05-04.md` | Exp12 |
 
 ## What worked / What didn't
 
@@ -68,7 +69,8 @@ This repository tracks sequential hypothesis IDs `H1` to `H9c` across the four e
 - Exp09: on Large 20K long-context tasks, Solo dump scored 0%, RAG scored 67%, and ABC+Tattoo scored 100%.
 - Exp10: same Gemma 4 E4B went from 41.3% (1-loop) to 78.1% (8-loop ABC) on a 9-task / 540-trial cost-aware comparison. The same ABC condition matched Gemini 2.5 Flash 1-call by +19pp (78.1% vs 59.1%) at zero per-trial API cost, trading off ~20× wall time. ABC infrastructure had 4 trial-level JSON parse fails (early-stop pattern, see `docs/reference/exp10-v3-abc-json-fail-diagnosis.md`).
 - Stage 2C (2026-05-02) re-evaluated H4 with an expanded 15-task ablation. ABC outperformed Solo-budget by +0.044 (reversing the 9-task subset's Solo +0.067 direction). **The synthesis category was the recovery driver (+0.140)**; statistically not significant at n=15 but Cohen's d=0.449 (medium). H4 verdict moved from Inconclusive to ⚠ Conditionally supported (synthesis only). See `docs/reference/h4-recheck-analysis-2026-05-02.md`.
-- Exp11 (2026-05-03) tested Mixed Intelligence (Judge C = Gemini 2.5 Flash, A/B = Gemma 4 E4B) and **the result was negative**: Δ(mixed − baseline) = −0.081, Cohen's d = −0.316 (small, negative). The logic-02 case study (Δ = −0.900) was decisive — baseline produced 4/5 correct answers explicitly stating "105 inconsistent" via the inclusion-exclusion principle, while mixed produced 5/5 nulls or keyword-missing answers. **Inverse mechanism observed**: a stronger Judge interferes with the weaker model's self-discovery chain via Tattoo-schema mismatch and premature convergence. H10 ⚠ Inconclusive — effectively rejected. The framework's next direction shifts from Role *strengthening* to Role *separation/addition* (e.g. Extractor as a new role, Exp12 in progress).
+- Exp11 (2026-05-03) tested Mixed Intelligence (Judge C = Gemini 2.5 Flash, A/B = Gemma 4 E4B) and **the result was negative**: Δ(mixed − baseline) = −0.081, Cohen's d = −0.316 (small, negative). The logic-02 case study (Δ = −0.900) was decisive — baseline produced 4/5 correct answers explicitly stating "105 inconsistent" via the inclusion-exclusion principle, while mixed produced 5/5 nulls or keyword-missing answers. **Inverse mechanism observed**: a stronger Judge interferes with the weaker model's self-discovery chain via Tattoo-schema mismatch and premature convergence. H10 ⚠ Inconclusive — effectively rejected. The framework's next direction shifts from Role *strengthening* to Role *separation/addition*.
+- Exp12 (2026-05-04) tested Extractor Role (a new Role using the same Gemma model, pre-extracting claims/entities and prefixing them into A's input). **Δ +0.050 positive** (opposite sign from Exp11), Cohen's d = +0.323 (small, positive). **Catastrophic-region recovery is the strongest signal** — logic-02 (the Stage 2C / Exp11 weak spot) recovered 0.3→0.6 (+0.30), synthesis-05 jumped 0.55→1.0 (+0.45). Mechanism = cycle-1 *input organization* (assisting A, not replacing). H11 ⚠ Conditionally supported. → **Role-axis evolution direction is now clear**: strengthening ❌ vs separation/addition ✅. Stage 5 next candidate = **Reducer Role (Exp13)**.
 
 What clearly did **not** work was expecting the same model to notice its own failure mode without a role change. The most useful result in this repository is probably negative: the model does not reliably criticize itself, even when it can criticize the same reasoning from another role.
 
@@ -129,7 +131,7 @@ If you want more than the README:
 - **[docs/reference/scoringHistory.md](./docs/reference/scoringHistory.md)** — Scorer evolution (v0/v2/v3).
 - **[docs/reference/failureLabels.md](./docs/reference/failureLabels.md)** — `FailureLabel` enum and failure classification standard.
 - **[docs/reference/resultJsonSchema.md](./docs/reference/resultJsonSchema.md)** — Result JSON top-level meta v1.0.
-- **Analysis reports** — [Stage 2C H4 recheck](./docs/reference/h4-recheck-analysis-2026-05-02.md) · [Exp11 Mixed Intelligence](./docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md) · [Exp09 5-trial drop](./docs/reference/exp09-5trial-drop-analysis-2026-04-30.md).
+- **Analysis reports** — [Stage 2C H4 recheck](./docs/reference/h4-recheck-analysis-2026-05-02.md) · [Exp11 Mixed Intelligence](./docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md) · [Exp12 Extractor Role](./docs/reference/exp12-extractor-role-analysis-2026-05-04.md) · [Exp09 5-trial drop](./docs/reference/exp09-5trial-drop-analysis-2026-04-30.md).
 
 Plan-level history (decisions and revisions) lives under `docs/plans/` — see `docs/plans/index.md` for the running list (Active + Recently Done).
 
@@ -182,8 +184,9 @@ Append entries to `experiments/tasks/taskset.json` with `id`, `category`, `diffi
 | Stage 2A/2B (2026-04-30) | Infra stabilization (healthcheck/abort + result JSON meta v1.0) + scorer/failure-label reference | ✅ |
 | Stage 2C (2026-05-02) | Exp06 H4 recheck on expanded 15-task set — H4 ⚠ Conditionally supported (synthesis +0.140) | ✅ |
 | Stage 4 (2026-05-03) | Exp11 Mixed Intelligence (Flash Judge) — H10 ⚠ Inconclusive, effectively rejected (inverse mechanism observed) | ✅ |
-| **Stage 5 in progress** | **Exp12 Extractor Role** (Role separation/addition, 2026-05-03~). Search Tool (Exp13) follow-up | 🔄 |
-| Mid-term | Remaining unexternalized axes — Reducer Role / Search Tool / Graph Tool / Evidence Tool. Priority informed by Exp12 (H11) verdict | |
+| Stage 5 Exp12 (2026-05-04) | Extractor Role — H11 ⚠ Conditionally supported (Δ=+0.050 positive). Role-axis *separation/addition* validated | ✅ |
+| **Stage 5 Exp13 in progress** | **Reducer Role** (Role multiplication line continued, 2026-05-04~). Post-stage final-answer consolidation | 🔄 |
+| Mid-term | Remaining unexternalized axes — Search Tool / Graph Tool / Evidence Tool. Priority informed by Exp13 (H12) verdict | |
 | Mid/long-term | Test the four-layer external knowledge environment (vector / graph). Stage 5 SQLite ledger after Exp13 | |
 | Long-term | Cross-model reproduction on Qwen / Phi / Llama, structured ablations, and a public write-up | |
 

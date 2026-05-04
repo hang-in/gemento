@@ -16,7 +16,7 @@
 
 이 레포는 **MIT 라이선스로 공개된 1인 연구 노트**입니다. 관심 있는 누구든 자유롭게 fork·재현·확장할 수 있습니다. 협업 창구는 프로젝트가 더 성숙한 시점에 열 예정입니다.
 
-> *Last updated: 2026-05-03*
+> *Last updated: 2026-05-04*
 
 > 📚 English version: [README.md](./README.md)
 
@@ -155,6 +155,7 @@
 | **H9b** | [차별성] ABC+Tattoo가 RAG baseline 대비 고유 기여를 가진다 | ⚠️ 미결 (5-trial 통계 검정 비유의 p=0.798; overall Δ=+2.0%p; 3-hop에서만 +20.0%p 차별성; Small Paradox 확인) | Exp09 |
 | **H9c** | [에러 모드 차이] ABC의 실패 패턴이 Solo·RAG와 질적으로 다르다 | ✅ 채택 (Solo: format_error 24, RAG: wrong_synthesis 6, ABC: evidence_miss 2 + wrong_synthesis 3) | Exp09 |
 | **H10** | [Role 외부화 강화 — Mixed Intelligence] 강한 Judge C (Gemini 2.5 Flash) 가 약한 Proposer/Critic (A/B = Gemma 4 E4B) 의 한계를 보완한다 | ⚠ 미결 (실효적 기각, Exp11 2026-05-03). Δ(mixed − baseline) = −0.0811 (mixed 가 baseline-모두-Gemma 보다 *약함*); Cohen d = −0.316 (small, 음수); 통계 비유의 (n=15, p=0.293); logic 카테고리 catastrophic (−0.275). **정반대 메커니즘 발견**: 강한 Judge 가 약한 모델의 self-discovery chain 을 *방해* (logic-02 case study). 상세: `docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md` | Exp11 |
+| **H11** | [Role 외부화 분리/추가 — Extractor Role] 신규 Role (Extractor, 동일 Gemma 모델) 이 task prompt 의 claims/entities 를 사전 추출하여 A→B→C input 에 prefix 주입하면 정확도 향상 | ⚠ 조건부 채택 (양수 방향, 검정력 한계, Exp12 2026-05-04). Δ(ext − baseline) = +0.0500 (Exp11 정반대 양수); Cohen d = +0.323 (small, 양수); 통계 비유의 (n=15, p=0.198). **catastrophic 영역 회복**: logic-02 0.3→0.6 (+0.30), synthesis-05 0.55→1.0 (+0.45). Role 축 *분리/추가* 가 *강화* 보다 안전한 진화 방향 입증. 상세: `docs/reference/exp12-extractor-role-analysis-2026-05-04.md` | Exp12 |
 
 핵심 통찰:
 - **모델 능력이 아니라 구조가 성능을 결정한다** — 같은 E4B 모델이 Exp02 v1에서 자율 phase 전이 0%, v2에서 외부 강제 94.4%.
@@ -164,6 +165,7 @@
 - **소형 로컬 + ABC 가 폐쇄형 대형 1-call 을 능가한다** — Exp10 의 9-task / 540-trial cost-aware 비교에서 같은 Gemma 4 E4B 가 1-loop 41.3% → 8-loop ABC 78.1% (+37%p, H1 추가 evidence). 동일 ABC 조건이 Gemini 2.5 Flash 1-call 의 59.1% 를 +19%p 능가, 비용 \$0, 시간은 약 20× (8min vs 24s). ABC chain 인프라 4 trial 의 JSON parse fail (early-stop 패턴, 상세는 `docs/reference/exp10-v3-abc-json-fail-diagnosis.md`).
 - **확대 task set 에서 H4 회복 — synthesis 카테고리가 핵심** — Stage 2C (2026-05-02) 의 15-task 재검증 결과 ABC > Solo-budget +0.044, **synthesis 카테고리 +0.140 회복 핵심**. 9-task subset 의 Solo +0.067 우위 → 15-task 확대 시 ABC 우위로 방향 반전. 통계 비유의 (n=15 검정력) 단 Cohen d=0.449 medium effect. 추가 task (다관점 종합 task) 가 Role 분리 시너지의 자연 측정 영역. (H4 ⚠ 조건부 채택)
 - **강한 Judge 는 약한 모델의 self-discovery 를 *방해* 할 수 있다** — Exp11 (2026-05-03) Mixed Intelligence 결과: Gemini 2.5 Flash 를 Judge C 로 두고 Gemma A/B 와 결합 → **baseline (모두 Gemma) 보다 −0.081 약함** (logic-02 case study: baseline 4/5 trial 이 "105 inconsistent" 자기 발견, mixed 5/5 trial null/keyword 부재). 가설 H10 의 정반대 메커니즘 — Tattoo schema mismatch + cycle 단축 + 추론 chain 단절. **Mixed Intelligence (Role *강화*) 가설 잠정 기각** → Role *분리/추가* (Extractor 같은 신규 Role) 가 framework 의 자연 진화 방향.
+- **Role 분리/추가 (Extractor) 는 양수 방향** — Exp12 (2026-05-04) 에서 동일 Gemma 모델로 Extractor Role 을 신규 추가 (claims/entities 사전 추출 → A 의 input prefix). **Δ +0.050 양수** (Exp11 정반대), Cohen d=+0.323 small 양수. **catastrophic 영역 회복** 명확 — logic-02 (Stage 2C/Exp11 의 약점) 0.3→0.6 +0.30, synthesis-05 0.55→1.0 +0.45. 메커니즘 = cycle 1 의 *입력 정리* (A 의 작업 대체가 아니라 보조). H11 ⚠ 조건부 채택. → **Role 축 진화 방향 명확**: 강화 ❌ vs 분리/추가 ✅. Stage 5 다음 후보 = **Reducer Role (Exp13)**.
 
 ---
 
@@ -182,9 +184,9 @@
 
 | 축 | 현재 상태 | 기여 기회 |
 |----|----------|-----------|
-| **Extractor Role** | **Exp12 진행 중** (2026-05-03~) — 동일 Gemma 모델, claim/entity 사전 추출 | 결과 분석 + 후속 plan |
-| **Reducer Role** | 미구현 (Exp14+ 후보) | 다수 chunk Tattoo → 일일/프로젝트 단위 요약 통합 |
-| **Search Tool** | 미구현 — **Exp13 후보** (Stage 5 다음, SQLite ledger 동기) | Tool 통합 + 측정 |
+| **Extractor Role** | **Exp12 마감** (2026-05-04) — H11 ⚠ 조건부 채택 (Δ=+0.050 양수, catastrophic 영역 회복) | 후속 — Reducer 결합 (Exp15+) |
+| **Reducer Role** | **Exp13 진행 중** (2026-05-04~) — post-stage 결과 통합. 가설 H12 후보 | 결과 분석 + 후속 plan |
+| **Search Tool** | 미구현 — **Exp14+ 후보** (Reducer 후, Stage 5 SQLite ledger 동기) | Tool 통합 + 측정 |
 | **Graph Tool** | 미구현 (Exp14+ 후보) | entity/relation 다중 hop traversal |
 | **Evidence Tool** | 미구현 | `evidence_ref` resolve API — Tattoo와 결합 쌍 |
 | **Critic Tool** | 부분 (`FailureLabel` enum + Stage 2B `failureLabels.md` heuristic 분류만) | JSON schema·citation 결정론적 검증기 강화 |
@@ -296,8 +298,9 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 | Stage 2A/2B (마감, 2026-04-30) | 인프라 안정화 (healthcheck/abort + 결과 JSON meta v1.0) + scorer/failure label reference | ✅ |
 | Stage 2C (마감, 2026-05-02) | Exp06 H4 재검증 (확대 task set 15) — H4 ⚠ 조건부 채택 (synthesis +0.140) | ✅ |
 | Stage 4 (마감, 2026-05-03) | Exp11 Mixed Intelligence (Flash Judge) — H10 ⚠ 미결 (실효적 기각). 정반대 메커니즘 발견 | ✅ |
-| **Stage 5 진행 중** | **Exp12 Extractor Role** (Role 분리/추가, 2026-05-03~). Search Tool (Exp13) 후속 | 🔄 |
-| 중기 | 미외부화 축 보강 — Reducer Role / Search Tool / Graph Tool / Evidence Tool 통합. Extractor (H11) 결과로 우선순위 결정 | |
+| Stage 5 Exp12 (마감, 2026-05-04) | Extractor Role — H11 ⚠ 조건부 채택 (Δ=+0.050 양수). Role 축 *분리/추가* 우위 입증 | ✅ |
+| **Stage 5 Exp13 진행 중** | **Reducer Role** (Role 다양화 라인 연속, 2026-05-04~). post-stage 결과 통합 | 🔄 |
+| 중기 | 미외부화 축 보강 — Search Tool / Graph Tool / Evidence Tool 통합. Reducer (Exp13) 결과로 우선순위 결정 | |
 | 중장기 | 외부 지식 환경 (4-layer) 통합 실험 (벡터·그래프 사용). Stage 5 SQLite ledger 검토 (Exp13 후) | |
 | 장기 | 크로스 모델 재현 (Qwen / Phi / Llama) · 체계적 ablation · 연구 결과 정리 (technical report / blog) | |
 

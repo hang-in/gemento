@@ -4,7 +4,7 @@ Plan document index. Register new plans here.
 
 ## Active
 
-(없음 — Stage 5 Exp12 마감. 다음 단계: Stage 5 다음 의제 — Reducer Role (Exp14 후보) / Search Tool (Exp13 후보) — 사용자 호출 대기)
+- [exp13-reducer-role.md](exp13-reducer-role.md) — **Stage 5 (Exp13)**: Reducer Role — post-stage 결과 통합. H12 후보 가설. Exp12 의 Extractor 와 대칭 (pre-stage 입력 정리 / post-stage 출력 정리). 같은 Gemma 모델, 외부 API 0. 결정 1-7 모두 Architect 확정 (사용자 위임 "리듀서 롤 먼저 해보자"). Sonnet 진행 프롬프트: `docs/prompts/2026-05-04/reducerRoleStart.md`
 
 ## Recently Done — Stage 5
 
