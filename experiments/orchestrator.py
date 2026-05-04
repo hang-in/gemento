@@ -616,6 +616,7 @@ def run_abc_chain(
     use_tools: bool = False,
     c_caller: Callable[[list[dict]], tuple[str, dict]] | None = None,
     extractor_pre_stage: bool = False,
+    reducer_post_stage: bool = False,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -638,6 +639,20 @@ def run_abc_chain(
                 f"{prompt}"
             )
         print(f"  [Extractor] result preview: {extractor_result_text[:200]}{'...' if len(extractor_result_text) > 200 else ''}")
+
+    # ── Reducer post-stage helper (trial 종료 시 1회) ──
+    def _apply_reducer(fa: str | None) -> str | None:
+        if not (reducer_post_stage and fa):
+            return fa
+        from system_prompt import build_reducer_prompt as _brp
+        _asns = [{"claim": a.content, "confidence": getattr(a, "confidence", None)}
+                 for a in tattoo.active_assertions]
+        _resp, _ = call_model(_brp(_asns, fa))
+        _reduced = _resp.strip()
+        if _reduced:
+            print(f"  [Reducer] {len(fa)}→{len(_reduced)} chars | preview: {_reduced[:200]}{'...' if len(_reduced) > 200 else ''}")
+            return _reduced
+        return fa
 
     tattoo = create_initial_tattoo(
         task_id=task_id,
@@ -853,7 +868,7 @@ def run_abc_chain(
                         logs.append(log)
                         if not logger:
                             print(f"  ✓ Converged at cycle {cycle} (C decided)")
-                        return tattoo, logs, final_answer
+                        return tattoo, logs, _apply_reducer(final_answer)
                 else:
                     # C가 잘못된 phase를 출력 — 무시
                     if logger:
@@ -920,15 +935,15 @@ def run_abc_chain(
                 if expected == "CONVERGED":
                     if not logger:
                         print(f"  ✓ Converged at cycle {cycle} (safety)")
-                    return tattoo, logs, final_answer
+                    return tattoo, logs, _apply_reducer(final_answer)
 
         # final_answer가 이미 있고 VERIFY를 지나면 수렴
         if final_answer and tattoo.phase == Phase.CONVERGED:
             print(f"  ✓ Converged at cycle {cycle}")
-            return tattoo, logs, final_answer
+            return tattoo, logs, _apply_reducer(final_answer)
 
     print(f"  ⚠ Max cycles ({max_cycles}) reached without convergence")
-    return tattoo, logs, final_answer
+    return tattoo, logs, _apply_reducer(final_answer)
 
 
 def log_detail(msg: str):

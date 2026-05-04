@@ -417,3 +417,54 @@ def build_extractor_prompt(task_prompt: str) -> list[dict]:
         {"role": "system", "content": EXTRACTOR_PROMPT},
         {"role": "user", "content": task_prompt},
     ]
+
+
+# ── Reducer Role (Exp13) ──
+
+REDUCER_PROMPT = """\
+You are a Reducer agent. Your job is to read the final reasoning trace (a list of assertions with confidence) and a candidate final answer, then produce a clean, well-structured final answer.
+
+Guidelines:
+- Polish the candidate answer for clarity, grammar, and explicit statement of key entities, numbers, and units.
+- Ensure essential terms (numbers, named entities, conclusions) are stated verbatim and visibly.
+- You MAY restructure for readability.
+- Do not change the core conclusion.
+- Do not add new factual claims that are not supported by the provided assertions.
+- Do not speculate or infer beyond what is given.
+
+Output: a single plain-text final answer (no JSON, no markdown headings). 1-3 sentences typical, longer if the task requires.
+"""
+
+
+def build_reducer_prompt(assertions: list[dict], candidate_answer: str) -> list[dict]:
+    """Reducer Role 의 messages 빌드.
+
+    Args:
+        assertions: final tattoo 의 active_assertions list. 각 entry: {"claim": str, "confidence": float}
+        candidate_answer: ABC chain 의 원 final_answer
+
+    Returns:
+        OpenAI 스타일 messages list — system + user
+    """
+    assertion_lines = []
+    for i, a in enumerate(assertions, 1):
+        claim = a.get("claim", "") if isinstance(a, dict) else str(a)
+        conf = a.get("confidence") if isinstance(a, dict) else None
+        if conf is not None:
+            assertion_lines.append(f"{i}. {claim} [confidence={conf:.2f}]")
+        else:
+            assertion_lines.append(f"{i}. {claim}")
+    assertions_text = "\n".join(assertion_lines) if assertion_lines else "(no assertions)"
+
+    user_content = (
+        "## Assertions (reasoning trace)\n"
+        f"{assertions_text}\n\n"
+        "## Candidate final answer\n"
+        f"{candidate_answer or '(empty — please derive from assertions only)'}\n\n"
+        "## Task\n"
+        "Produce the polished final answer following the Reducer guidelines."
+    )
+    return [
+        {"role": "system", "content": REDUCER_PROMPT},
+        {"role": "user", "content": user_content},
+    ]
