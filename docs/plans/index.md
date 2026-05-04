@@ -4,7 +4,7 @@ Plan document index. Register new plans here.
 
 ## Active
 
-(없음 — Stage 5 Exp13 Reducer Role 마감, Exp14 후보 결정 대기)
+- [exp14-search-tool.md](exp14-search-tool.md) — **Stage 5 (Exp14)**: Search Tool — agent-active retrieval 가설 H13. Stage 5 Role 축 3 회 검증 (Exp11/12/13) 마감 후 Tool 축 신규 도입. 결정성 외부 도구 (BM25 lexical search) 로 비결정성 함정 회피. 기존 `bm25_tool` (Exp09) 재사용 + TOOL_SCHEMA 등록 + stop-words. longctx_taskset 10 task × 2 condition × 5 trial = 100 trial. 결정 1-8 모두 Architect 확정 (사용자 위임 "권장으로 가자"). Sonnet 진행 프롬프트: `docs/prompts/2026-05-05/searchToolStart.md`
 
 ## Recently Done — Stage 5
 
