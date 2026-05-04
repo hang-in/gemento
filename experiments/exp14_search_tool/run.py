@@ -120,7 +120,19 @@ def run_abc_search_tool(task: dict, trial_idx: int, max_cycles: int = DEFAULT_MA
     tattoo = None
     abc_logs = []
     try:
-        full_prompt = task["question"]
+        # Agent 는 document 의 존재 자체를 prompt 에서 알아야 search_chunks tool 의
+        # 의미를 인식. dry-run (2026-05-05) 에서 prompt=question 만 시 외부 지식
+        # 검색으로 오인 → needle task 6/6 fail. Document availability + tool 사용
+        # 가이드를 prompt 에 명시.
+        full_prompt = (
+            f"{task['question']}\n\n"
+            f"## Document context\n"
+            f"A long document containing the answer is available but NOT included in this prompt. "
+            f"You have access to a `search_chunks(query, top_k)` tool that performs BM25 lexical "
+            f"search over this document and returns relevant chunks. Use it whenever you need "
+            f"information from the document to answer the question. You may call it multiple "
+            f"times with different queries to refine your search."
+        )
         tattoo, abc_logs, final_answer = run_abc_chain(
             task_id=f"{task['id']}_search_tool_t{trial_idx}",
             objective=task.get("question", ""),
