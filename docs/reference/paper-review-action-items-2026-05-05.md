@@ -44,11 +44,11 @@ framework 는 *organizing principle* 로 유지 (가설 분류 도구), 단 cont
 
 | ID | 항목 | 상태 | 비고 |
 |---|---|---|---|
-| P0-1 | README (한·영) **톤다운 pass** — confirmed→observed, mirror-image 완화, Gemini 비교 wall-time 명시, H11/H12 비유의 명시, scorer limitation 1단락 | pending | 가장 시급 |
-| P0-2 | `docs/paper/draft.md` **revision v0.2** — contribution reorder, abstract defensive, 제목 변경, position effect §5.5 로 이동, scorer limitation Results 위치, same-model isolation protocol 명시 | pending | |
-| P0-3 | Reproducibility 보완 — README "Reproduce headline Exp10" 섹션 + Python version 정정 + LM Studio/llama.cpp 일관 | pending | |
-| P0-4 | `docs/reference/index.md` (있다면) Exp13 링크 검증 + 누락 시 보완 | pending | 정찰 후 결정 |
-| P0-5 | H12 mechanism 보강 — synthesis-04 baseline vs reducer 원문 case study 섹션 추가 (paper draft) | pending | |
+| P0-1 | README (한·영) **톤다운 pass** — confirmed→observed, mirror-image 완화, Gemini 비교 wall-time 명시, H11/H12 비유의 명시, scorer limitation 1단락 | **done** (2026-05-05) | hero / 가설 표 H11+H12 / Roadmap / What this is not / Exp10 Exp12 Exp13 단락 모두 적용 |
+| P0-2 | `docs/paper/draft.md` **revision v0.2** — contribution reorder, abstract defensive, 제목 변경, position effect §5.5 로 이동, scorer limitation Results 위치, same-model isolation protocol 명시 | **done** (2026-05-05) | 제목 "Role Addition Is Not Monotonic" / contribution 순서 변경 / abstract defensive / §4.6 main observation + §4.6.1 case study + §4.6.2 caveat / §5.1 same-model isolation 명시. 단 §5.5 로의 위치 이동은 P1-5 (논문 구조 reorder) 에서 |
+| P0-3 | Reproducibility 보완 — README "Reproduce headline Exp10" 섹션 + Python version 정정 + LM Studio/llama.cpp 일관 | **done** (2026-05-05) | Python 3.14 전제 + 3.12+ 호환 명시 / LM Studio + llama.cpp 양쪽 명령 / `curl /v1/models` 의 model id 매칭 / Exp10 reproduce 명령 추가 |
+| P0-4 | `docs/reference/index.md` Exp13 링크 검증 + 누락 시 보완 | **done** (2026-05-05) | 분석 보고서 + result.md + readme-paper-strategy + paper-review-action-items 4개 추가 |
+| P0-5 | H12 mechanism 보강 — synthesis-04 baseline vs reducer 원문 case study 섹션 추가 (paper draft) | **done (1차)** (2026-05-05) | §4.6.1 stub + §4.6.2 caveat (keyword scorer artifact 가능성 명시 + LLM-as-judge replication 예정). 본문 확장 (전문 인용, evidence coverage 비교) 은 P1-3 LLM-as-judge 결과 후 v0.3 에서 |
 
 ### 2.1 톤다운 단어 매핑 (P0-1 + P0-2 공통)
 
@@ -171,3 +171,4 @@ GPT 정리한 5 가지 예상 반응 — Architect 평가:
 ## 8. 변경 이력
 
 - 2026-05-05 v1: 초안. GPT 피드백 (16 항) + Architect 평가 (P0/P1/P2 분류 + 5 push back) 통합 정리. P1 망각 차단을 위한 영구 문서. 진행 시 본 문서의 status 표를 직접 갱신.
+- 2026-05-05 v2: P0-1 ~ P0-5 모두 **done**. 다음 차단 작업 없음 — P1 진입 가능. P1 의 LLM-as-judge replication (P1-3) 이 H12 핵심 약점 방어이므로 Stage 6 cross-model 인프라 (Groq client) 와 자연 결합 권장.

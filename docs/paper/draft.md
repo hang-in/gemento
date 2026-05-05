@@ -4,21 +4,22 @@ status: draft-skeleton
 updated_at: 2026-05-05
 target: arXiv preprint (single target — venue submission deferred)
 canonical: true
+revision: v0.2 (2026-05-05) — tone-down + contribution reorder per GPT review + Architect evaluation. See docs/reference/paper-review-action-items-2026-05-05.md.
 ---
 
-# Externalization for Small-LLM Workflows: Position-Effect Asymmetry in Role-Axis Addition
+# Role Addition Is Not Monotonic: Position Effects in Small-LLM Workflow Externalization
 
 *Single-author preprint draft. arXiv: TBD. Quality bar: venue-equivalent (self-imposed peer review).*
 
 ---
 
-> **DRAFT v0.1 — skeleton only.** Sections marked `[TBD]` await Exp14 verdict (Search Tool, in progress) and cross-model replication (planned via Groq free tier + Local Qwen 2.5 7B Q4_K_M). Statistics in `[stats: pending]` markers will be regenerated with consistent (Δ, n, p, Cohen's d, 95% CI) 5-tuple.
+> **DRAFT v0.2 — skeleton with tone adjustments.** Sections marked `[TBD]` await Exp14 verdict (Search Tool, in progress) and cross-model replication (planned via Groq free tier + Local Qwen 2.5 7B Q4_K_M). Statistics in `[stats: pending]` markers will be regenerated with consistent (Δ, n, p, Cohen's d, 95% CI) 5-tuple.
 
 ## Abstract
 
 > [TBD — finalize after Exp14 + cross-model results, ~200 words]
 
-Skeleton: Small open-weight LLMs (≤7B params) struggle on multi-step reasoning where larger frontier models excel. We investigate whether externalizing four cognitive axes — working memory ("Tattoo"), computation ("Tools"), self-validation ("Role"), and control flow ("Orchestrator") — into structured workflow components rather than expanding model capacity can close this gap on a single 4B-effective open-weight model (Gemma 4 E4B). Across 13 sequentially numbered hypotheses (H1–H13) over 540+ trials, we report three primary findings: (1) multi-step orchestration with role separation improves baseline 41.3% → 78.1% (+37pp), matching Gemini 2.5 Flash 1-call by +19pp at zero per-trial API cost; (2) self-validation by the same model fails (0/15 detected), but role-separated cross-validation recovers to 80%; (3) we identify a **position-effect asymmetry** in role-axis addition: pre-stage Extractor yields Δ=+0.05 (d=+0.32), post-stage Reducer yields Δ=−0.05 (d=−0.32) — a mirror image driven by abstraction loss in post-stage compression. Cross-model replication on Llama 3.1 8B and Qwen 2.5 7B [TBD] confirms direction. We release a reproducible harness with all hypothesis verdicts including three negative results.
+Skeleton: Small open-weight LLMs (≤7B params) struggle on multi-step reasoning where larger frontier models excel. A common response is to externalize cognitive functions — working memory, computation, validation, and control flow — into the workflow rather than expand model capacity. We ask a narrower question: when extra Roles are added to such a workflow, does *where* they are inserted matter? Using a single 4B-effective open-weight model (Gemma 4 E4B) across 13 sequentially numbered hypotheses (H1–H13) over 540+ trials, we report three observations. (1) On a 9-task cost-aware benchmark, 8-loop ABC orchestration with the same base model scores 78.1% versus 41.3% for 1-loop solo, outperforming a one-call Gemini 2.5 Flash baseline (59.1%) at the cost of roughly 20× wall time — a benchmark-specific result, not a general superiority claim. (2) Same-model self-validation detects 0/15 planted errors, but role-separated cross-validation (A-Proposer / B-Critic / C-Judge with the same base model) recovers to 80% — isolating role separation, not model capability, as the active ingredient. (3) A paired role-axis ablation produces *mirrored directional effects at similar magnitude*: pre-stage Extractor Δ=+0.05 (Cohen's d=+0.32, p=0.198), post-stage Reducer Δ=−0.05 (d=−0.32, p=0.180); both are not statistically significant at n=15 paired tasks and are reported as a replication target. Cross-model replication on Llama 3.1 8B and Qwen 2.5 7B is planned to test whether this direction generalizes beyond Gemma 4 E4B. We release a reproducible harness covering 13 hypotheses including three negative results (self-validation, mixed-strength Judge, post-stage Reducer).
 
 ## 1. Introduction
 
@@ -32,9 +33,13 @@ The dominant narrative in 2024–2026 has been parameter scaling — Llama 3.3 7
 
 ### 1.3 Three contributions
 
-1. **A 4-axis externalization framework for small-LLM workflows**: Tattoo (working memory) / Tools (computation) / Role (self-validation) / Orchestrator (control flow). Taxonomy contribution.
-2. **Position-effect asymmetry in role-axis addition**: pre-stage role addition (Extractor) is safe (Δ=+0.05, d=+0.32), post-stage (Reducer) is risky (Δ=−0.05, d=−0.32); mechanism = abstraction loss in post-stage compression. Empirical / mechanism contribution.
-3. **A reproducible measurement protocol**: 13 hypotheses (H1–H13) with verdict / evidence / negative results, single-base-model rigor (Gemma 4 E4B across all roles to isolate structure from model-quality confound). Methodology contribution.
+This is positioned as a *measurement / ablation paper*, not a framework proposal — externalization frameworks already exist (Zhou et al., 2026; StateFlow; Chain-of-Agents). What is new is **what we measured** and **how we isolated it**.
+
+1. **Position-effect ablation in role-axis addition (single best claim)**: a paired same-model ablation produces mirrored directional effects of nearly identical magnitude — pre-stage Extractor Δ=+0.05 (Cohen's d=+0.32) vs post-stage Reducer Δ=−0.05 (d=−0.32). Both are not statistically significant at n=15 and are reported as a replication target; the proposed mechanism for the negative direction is *abstraction loss* during post-stage compression, with the explicit caveat that the current keyword scorer cannot fully separate this from style mismatch. Empirical / mechanism contribution.
+2. **Same-model isolation protocol for measuring structural workflow effects**: by holding the base model constant (Gemma 4 E4B) across A-Proposer / B-Critic / C-Judge / Extractor / Reducer, we isolate the *structural* effect of role separation and role placement from the model-quality confound that contaminates most multi-agent comparisons. Methodology contribution.
+3. **A reproducible small-LLM externalization harness with negative results**: 13 sequentially numbered hypotheses (H1–H13) with verdict / evidence / open-source data, including three negative-direction results (H2 self-validation 0/15; H10 mixed-strength Judge underperforms; H12 post-stage Reducer underperforms). Resource / reproducibility contribution.
+
+The 4-axis externalization framework (Tattoo / Tools / Role / Orchestrator) is used as the *organizing structure* for the hypotheses below; we do not claim it as a novel framework.
 
 ## 2. Related Work
 
@@ -129,33 +134,48 @@ H1–H13 are sequentially numbered hypotheses about externalization axes — not
 | H8 | Tool refinement + error hints stabilize | +0.233 (math-04: 0% → 100%) | 50 | [TBD] | [TBD] | [TBD] | Exp08b |
 | H9a | ABC+Tattoo > Solo on long context | +0.683 (Large 20K: 0% → 100%) | 30 | [TBD] | [TBD] | [TBD] | Exp09 |
 
-### 4.5 Negative results
+### 4.5 Negative-direction results
 
-[stats: pending]
+[stats: pending — full 5-tuple]
 
-| H | Hypothesis | Verdict | Mechanism |
+| H | Hypothesis | Verdict | Candidate mechanism |
 |---|---|---|---|
-| H2 | Same-model self-validation detects errors | Rejected (0/15 detected) | Model cannot criticize own reasoning trace |
-| H10 | Stronger Judge (Gemini 2.5 Flash) compensates weaker A/B | Inconclusive (effectively rejected); Δ=−0.081, d=−0.316 | Inverse mechanism: stronger Judge breaks weaker model's self-discovery (logic-02 case study, Δ=−0.900) |
-| H12 | Post-stage Reducer role polishes final_answer | Inconclusive (effectively rejected); Δ=−0.053, d=−0.323 | Abstraction loss: "polish for clarity" + "do NOT change conclusion" compresses multi-source reasoning into single-point answers |
+| H2 | Same-model self-validation detects errors | Rejected (0/15 detected) — directly observed | Same-model self-validation does not flag own reasoning errors at this scale; replicated in Exp035 by switching to role separation |
+| H10 | Stronger Judge (Gemini 2.5 Flash) compensates weaker A/B | Inconclusive — effectively rejected; Δ=−0.081, d=−0.316, p=0.293 (NS) | Inverse-direction observation: in the logic-02 case study (Δ=−0.900), the mixed condition produced shorter cycles and missing keywords vs the all-Gemma baseline — *consistent with* a stronger Judge interfering with the weaker model's emergent reasoning via schema mismatch and early convergence; mechanism not directly tested, presented as a hypothesis |
+| H12 | Post-stage Reducer role improves keyword-match accuracy | Inconclusive — effectively rejected; Δ=−0.053, d=−0.323, p=0.180 (NS) | Two non-exclusive candidates (see §4.6.2): (a) *abstraction loss* — Reducer compresses multi-source answers to single-point estimates, discarding structure the keyword scorer was tuned to detect; (b) *scorer-style mismatch* — the compressed answer is semantically correct but lexically incompatible. The current data cannot separate these; LLM-as-judge replication is planned |
 
-### 4.6 Position-effect asymmetry — single best contribution
+### 4.6 Paired role-axis ablation — main observation
 
-[The main contribution. To be expanded into 1-2 pages.]
+This is the central observation of the paper. *(Will be expanded to ~2 pages with synthesis-04 case study and per-task breakdown. Currently a summary placeholder.)*
 
 | | Exp12 Extractor (H11) | Exp13 Reducer (H12) |
 |---|---|---|
 | Position | **pre-stage** (before A) | **post-stage** (after C) |
-| Δ accuracy | **+0.0500** | **−0.0533** (bug-excluded) |
-| Cohen's d | **+0.323** (small, positive) | **−0.323** (small, negative) — **mirror image** |
-| Mechanism | cycle-1 input organization | abstraction loss / multi → single compression |
-| logic-02 catastrophic | base 0.3 → ext 0.6 (+0.30, recovery) | base 0.7 → red 0.5 (−0.20, regression) |
-| synthesis pattern | 5/5 tasks improvement direction | **5/5 tasks negative** |
-| Verdict | Conditionally supported | Inconclusive (effectively rejected) |
+| Δ accuracy | +0.0500 | −0.0533 (bug-excluded) |
+| Cohen's d (paired) | +0.323 (small, positive) | −0.323 (small, negative — mirrored magnitude) |
+| Wilcoxon p (n=15 paired) | 0.198 — **NOT SIGNIFICANT** | 0.180 — **NOT SIGNIFICANT** |
+| Bootstrap 95% CI Δ | [−0.020, +0.133] | [−0.133, +0.027] |
+| Proposed mechanism | cycle-1 input organization | abstraction loss / multi-source → single-point compression (caveat: keyword-scorer artifact possibility, see §4.6.2) |
+| logic-02 (Stage 2C / Exp11 weak spot) | base 0.3 → ext 0.6 (+0.30) | base 0.7 → red 0.5 (−0.20) |
+| Synthesis category direction | 5/5 tasks positive | 5/5 tasks negative |
+| Verdict | ⚠ Conditionally supported, power-limited | ⚠ Inconclusive (effectively rejected), power-limited |
 
-The plan's symmetry assumption (pre/post role addition) breaks empirically. The mirror-image effect (|d|=0.323 in opposite directions) on the same model, taskset, and trial count is a clean signal that **position matters more than addition**: external Role assistance is safe before the chain (input stabilization) and risky after (output compression).
+**What we observe**: on the *same base model, taskset, and trial count*, two paired role additions produce effect sizes of opposite sign with nearly identical magnitude (|Cohen's d|=0.323). This is consistent with a position-dependent mechanism, but at n=15 paired tasks neither effect is statistically significant. We report this as **evidence consistent with a position effect, not a confirmed asymmetry**. Cross-model replication on Llama 3.1 8B / Qwen 2.5 7B is planned to test whether the direction generalizes; LLM-as-judge replication is planned to address the scorer-artifact caveat in §4.6.2.
 
-[TODO: extended discussion — synthesis-04 case study, mechanism analysis]
+#### 4.6.1 Synthesis-04 illustrative case [stub — to be expanded]
+
+In synthesis-04 (a multi-source bird-population estimation task), the baseline ABC chain produced multi-paragraph structured analyses ("## Comprehensive Analysis ... Identification of Contradictions ... Zone C Count (R5 vs R1/R6) ...") that scored 1.0 under the deterministic keyword scorer. Reducer-polished outputs compressed the same content into single-point estimates ("The best estimate is **270 individuals**.") that scored 0.33–0.67. The compression preserved the central numerical conclusion but discarded the multi-source / multi-estimate scaffolding that the scoring keywords were designed to detect.
+
+#### 4.6.2 Caveat — keyword scorer artifact possibility
+
+The H12 mechanism claim ("abstraction loss") is supported by the keyword-coverage drop visible in §4.6.1, but the deterministic scorer (`score_answer_v3`) cannot distinguish two explanations:
+
+- **(a) Real quality drop** — the compressed answer omits semantically required information.
+- **(b) Style mismatch** — the compressed answer is semantically correct but does not contain the keyword set the scorer was tuned to.
+
+These are not separable from the current data. We plan an LLM-as-judge replication (free-tier Groq GPT-OSS 120B as an independent judge over the same final_answer pairs) to estimate which fraction of the H12 drop is recovered when scoring is semantic rather than lexical. Until that replication runs, the abstraction-loss mechanism should be treated as a *candidate explanation*, not an established cause.
+
+[TODO: expand 4.6.1 with full baseline vs reducer answer comparison; add 4.6.3 once LLM-as-judge replication completes]
 
 ### 4.7 Search Tool (H13) — [TBD, Exp14 in progress]
 
@@ -167,17 +187,17 @@ All hypothesis verdicts report (Δ, n, p, Cohen's d, 95% CI) 5-tuple. p-values u
 
 ## 5. Discussion
 
-### 5.1 Why same-model role separation works
+### 5.1 Same-model role separation as an isolation tool
 
-[TODO: H3 (80% detection via cross-validation) + H1 (multi-loop +37pp) — separation, not capability, is the active ingredient. Cite Exp035 result.]
+H2 (same-model self-validation, 0/15 detected) and H3 (role-separated cross-validation with the *same base model*, 12/15 detected) together support a narrow claim: **role separation, not model capability, is the active ingredient** in this validation regime. Because both conditions use Gemma 4 E4B, the 0 → 80% recovery cannot be attributed to a stronger validator. This same-model isolation pattern is what we extend into the role-addition ablation in §4.6 — by holding model capacity fixed, the directional difference between Extractor (+) and Reducer (−) is more readily interpretable as a structural / positional effect than as a model-quality artifact.
 
-### 5.2 Why post-stage role addition fails — abstraction loss
+### 5.2 Candidate explanations for the post-stage negative direction
 
-[TODO: H12 mechanism. Synthesis-04 case study. Connection to Exp11's inverse-mechanism finding (stronger external Role disrupts weaker model's self-discovery).]
+H12 (Reducer post-stage Δ=−0.05) is consistent with two non-exclusive explanations: (i) *abstraction loss* — the prompt-induced compression to a single-point answer discards multi-source structure that downstream evaluation depends on; (ii) *scorer-style mismatch* — the compressed answer omits keywords the deterministic scorer was tuned to, even when the answer is semantically faithful. These are not separable from the current data (§4.6.2). H10 (mixed-strength Judge) shows a related but distinct pattern: a stronger external Judge can interfere with the weaker model's self-discovery chain via Tattoo-schema mismatch and premature convergence — also a *position-and-interface* effect rather than a capability deficit. Together, H10 / H12 / H11 suggest that the *interface between externalized roles and the base model's emergent reasoning* may matter more than which role is added; we present this as a hypothesis for follow-up, not a settled conclusion.
 
 ### 5.3 Implications for small-LLM deployment cost
 
-[TODO: ABC+Gemma 4 E4B vs Flash 1-call cost analysis from Exp10. Trading wall time (~20×) for per-trial API cost ($0).]
+On the 9-task cost-aware benchmark (Exp10), 8-loop ABC with Gemma 4 E4B reaches 78.1% versus 59.1% for a one-call Gemini 2.5 Flash baseline at $0 per-trial API cost, in exchange for roughly 20× longer wall time. This is a benchmark-specific, asymmetric (8-loop vs 1-call) comparison — not a general superiority claim. It does suggest that for use cases where wall-time and per-trial cost have different value (e.g., overnight batch inference on private data), externalization-heavy small-model workflows may be worth measuring against a Flash 1-call baseline.
 
 ## 6. Limitations
 

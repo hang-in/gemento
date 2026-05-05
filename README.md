@@ -7,7 +7,7 @@
 [![Paper](https://img.shields.io/badge/Paper-draft%20in%20progress-orange)](docs/paper/draft.md)
 [![arXiv](https://img.shields.io/badge/arXiv-TBD-b31b1b)]()
 
-> **Gemma 4 E4B (effective 4B params): 41.3% → 78.1% (+37pp) via multi-step orchestration + role separation, matching Gemini 2.5 Flash 1-call (59.1%) by +19pp at zero per-trial API cost.** Tested across 13 sequentially numbered hypotheses (H1–H13, 540+ trials) on a 4-axis externalization framework — including **position-effect asymmetry**: pre-stage role addition (Extractor) yields Δ=+0.05 (Cohen's d=+0.32), while post-stage role addition (Reducer) yields Δ=−0.05 (d=−0.32) — a clean mirror-image result on the same model.
+> **On a 9-task cost-aware benchmark, 8-loop ABC orchestration with Gemma 4 E4B scored 78.1% versus 41.3% for the same model in 1-loop solo, and 59.1% for a one-call Gemini 2.5 Flash baseline — at the cost of roughly 20× wall time and zero per-trial API cost.** Across 13 sequentially numbered hypotheses (H1–H13, 540+ trials), a recent role-axis ablation suggests a **position-effect pattern**: pre-stage role addition (Extractor, H11) shows Δ=+0.05 (Cohen's d=+0.32, p=0.198), while post-stage role addition (Reducer, H12) shows Δ=−0.05 (d=−0.32, p=0.180) — a directional mirroring at similar effect sizes. **Both effects are not statistically significant at n=15 paired tasks; cross-model replication is planned to test whether this direction generalizes.**
 
 📚 Korean version: [README.ko.md](./README.ko.md) · 📄 Paper draft: [docs/paper/draft.md](docs/paper/draft.md) · arXiv: TBD
 
@@ -33,6 +33,14 @@ This is not:
 - a training method
 - a claim that 4B models replace frontier models
 - a claim that ABC+Tattoo universally beats RAG
+
+### Scope and reproducibility caveats (read before quoting numbers)
+
+- All headline numbers come from a **single base model** (Gemma 4 E4B) on **a small custom benchmark** (15 tasks main + 10 long-context tasks). Cross-model replication is planned, not completed.
+- Several Stage 5 hypotheses (H4, H10, H11, H12) are **not statistically significant at n=15 paired tasks** — they are reported with effect sizes (Cohen's d) and bootstrap CIs as *replication targets*, not as confirmed effects.
+- The deterministic keyword scorer (`score_answer_v3`) cannot distinguish "real quality difference" from "answer-style mismatch with the keyword set". This is most relevant to H12 (Reducer compresses multi-source answers); LLM-as-judge replication is planned.
+- The Exp10 vs Gemini Flash comparison is benchmark-specific and trades roughly 20× wall time for $0 per-trial API cost — not a general superiority claim.
+- The "position-effect" observation from H11+H12 is a *directional pattern at mirrored effect sizes*, not a confirmed asymmetry.
 
 ## Core idea
 
@@ -67,8 +75,8 @@ This repository tracks sequential hypothesis IDs `H1` to `H9c` across the four e
 | **H9b** | [Distinctiveness] ABC+Tattoo contributes something beyond a RAG baseline | ⚠️ Inconclusive (5-trial stats NOT SIGNIFICANT p=0.798; overall Δ=+2.0pp; 3-hop only +20.0pp differentiation; Small Paradox confirmed) | Exp09 |
 | **H9c** | [Error mode difference] ABC fails differently from Solo and RAG | ✅ Supported (Solo: `format_error`, RAG: `wrong_synthesis`, ABC: `evidence_miss` + `wrong_synthesis`) | Exp09 |
 | **H10** | [Role externalization — strong Judge / Mixed Intelligence] A stronger Judge C (Gemini 2.5 Flash) compensates for weaker Proposer/Critic (A/B = Gemma 4 E4B) | ⚠ Inconclusive — effectively rejected (Exp11 2026-05-03). Δ(mixed − baseline) = −0.0811 (mixed *underperforms* baseline-all-Gemma); Cohen's d = −0.316 (small, negative); not significant at n=15, p=0.293; logic category catastrophic (−0.275). **Inverse mechanism observed**: stronger Judge interferes with weaker model's self-discovery chain (logic-02 case study). Detail: `docs/reference/exp11-mixed-intelligence-analysis-2026-05-03.md` | Exp11 |
-| **H11** | [Role externalization — separation / addition (Extractor Role)] A new Role (Extractor, same Gemma 4 E4B model) that pre-extracts claims/entities from the prompt and prefixes them into A→B→C input improves accuracy | ⚠ Conditionally supported (positive direction, power-limited; Exp12 2026-05-04). Δ(ext − baseline) = +0.0500 (opposite sign from Exp11); Cohen's d = +0.323 (small, positive); not significant at n=15, p=0.198. **Catastrophic-region recovery**: logic-02 0.3→0.6 (+0.30), synthesis-05 0.55→1.0 (+0.45). Demonstrates that Role-axis *separation/addition* is safer than *strengthening*. Detail: `docs/reference/exp12-extractor-role-analysis-2026-05-04.md` | Exp12 |
-| **H12** | [Role externalization — separation / addition (Reducer Role, post-stage)] A new Role (Reducer, same Gemma 4 E4B model) that *post-stage* polishes the final tattoo + final_answer improves keyword-match accuracy | ⚠ Inconclusive — effectively rejected (Exp13 2026-05-05). Δ(reducer − baseline) = −0.0533 bug-excluded / −0.0711 with bug (negative — opposite sign from Exp12); Cohen's d = −0.323 (mirror image of Exp12's +0.323); not significant at n=15, p=0.180. **Mechanism = abstraction loss** (synthesis-04 case study: baseline's structured multi-source analysis acc=1.0 vs reducer's compressed single-estimate answer acc=0.33–0.67). **Position-effect asymmetry confirmed**: pre-stage Role addition = safe (Exp12), post-stage = risky (Exp13). Detail: `docs/reference/exp13-reducer-role-analysis-2026-05-05.md` | Exp13 |
+| **H11** | [Role externalization — separation / addition (Extractor Role)] A new Role (Extractor, same Gemma 4 E4B model) that pre-extracts claims/entities from the prompt and prefixes them into A→B→C input improves accuracy | ⚠ Conditionally supported, power-limited (Exp12 2026-05-04). Δ(ext − baseline) = +0.0500; Cohen's d = +0.323 (small, positive); **not significant at n=15, p=0.198 (Wilcoxon)**. Directional improvement on logic-02 (0.3→0.6) and synthesis-05 (0.55→1.0). Suggests Role-axis *separation/addition* may be a safer evolution path than *strengthening*; not yet replicated cross-model. Detail: `docs/reference/exp12-extractor-role-analysis-2026-05-04.md` | Exp12 |
+| **H12** | [Role externalization — separation / addition (Reducer Role, post-stage)] A new Role (Reducer, same Gemma 4 E4B model) that *post-stage* polishes the final tattoo + final_answer improves keyword-match accuracy | ⚠ Inconclusive — effectively rejected, power-limited (Exp13 2026-05-05). Δ(reducer − baseline) = −0.0533 (bug-excluded) / −0.0711 (with bug); Cohen's d = −0.323 (mirror of Exp12's +0.323 in magnitude); **not significant at n=15, p=0.180 (Wilcoxon)**. Proposed mechanism — *abstraction loss*: in synthesis-04, baseline produced structured multi-source analyses scoring high under the keyword scorer, while reducer produced compressed single-estimate answers scoring lower. **The current keyword-based scorer (`score_answer_v3`) cannot distinguish "actual quality drop" from "scorer-style mismatch"**; LLM-as-judge replication is planned (P1-3 in `docs/reference/paper-review-action-items-2026-05-05.md`). Together with H11, this provides **evidence consistent with a position effect** at similar effect-size magnitudes in opposite directions; cross-model replication is required before any stronger claim. Detail: `docs/reference/exp13-reducer-role-analysis-2026-05-05.md` | Exp13 |
 
 ## What worked / What didn't
 
@@ -77,11 +85,11 @@ This repository tracks sequential hypothesis IDs `H1` to `H9c` across the four e
 - Exp035: role-separated cross-validation recovered to 80%.
 - Exp08b: math tool calls plus error-message hints moved math-04 from 0% to 100%.
 - Exp09: on Large 20K long-context tasks, Solo dump scored 0%, RAG scored 67%, and ABC+Tattoo scored 100%.
-- Exp10: same Gemma 4 E4B went from 41.3% (1-loop) to 78.1% (8-loop ABC) on a 9-task / 540-trial cost-aware comparison. The same ABC condition matched Gemini 2.5 Flash 1-call by +19pp (78.1% vs 59.1%) at zero per-trial API cost, trading off ~20× wall time. ABC infrastructure had 4 trial-level JSON parse fails (early-stop pattern, see `docs/reference/exp10-v3-abc-json-fail-diagnosis.md`).
+- Exp10: on a 9-task / 540-trial cost-aware comparison, the same Gemma 4 E4B went from 41.3% (1-loop) to 78.1% (8-loop ABC). On this benchmark the ABC condition outperformed a one-call Gemini 2.5 Flash baseline (59.1%) by 19 percentage points, trading API cost for roughly 20× longer wall time. The result is benchmark-specific (9 tasks, math/logic/synthesis/planning) and 1-call vs 8-loop is an asymmetric comparison; it is not a general claim that small local models replace frontier APIs. ABC infrastructure had 4 trial-level JSON parse fails (early-stop pattern, see `docs/reference/exp10-v3-abc-json-fail-diagnosis.md`).
 - Stage 2C (2026-05-02) re-evaluated H4 with an expanded 15-task ablation. ABC outperformed Solo-budget by +0.044 (reversing the 9-task subset's Solo +0.067 direction). **The synthesis category was the recovery driver (+0.140)**; statistically not significant at n=15 but Cohen's d=0.449 (medium). H4 verdict moved from Inconclusive to ⚠ Conditionally supported (synthesis only). See `docs/reference/h4-recheck-analysis-2026-05-02.md`.
 - Exp11 (2026-05-03) tested Mixed Intelligence (Judge C = Gemini 2.5 Flash, A/B = Gemma 4 E4B) and **the result was negative**: Δ(mixed − baseline) = −0.081, Cohen's d = −0.316 (small, negative). The logic-02 case study (Δ = −0.900) was decisive — baseline produced 4/5 correct answers explicitly stating "105 inconsistent" via the inclusion-exclusion principle, while mixed produced 5/5 nulls or keyword-missing answers. **Inverse mechanism observed**: a stronger Judge interferes with the weaker model's self-discovery chain via Tattoo-schema mismatch and premature convergence. H10 ⚠ Inconclusive — effectively rejected. The framework's next direction shifts from Role *strengthening* to Role *separation/addition*.
-- Exp12 (2026-05-04) tested Extractor Role (a new Role using the same Gemma model, pre-extracting claims/entities and prefixing them into A's input). **Δ +0.050 positive** (opposite sign from Exp11), Cohen's d = +0.323 (small, positive). **Catastrophic-region recovery is the strongest signal** — logic-02 (the Stage 2C / Exp11 weak spot) recovered 0.3→0.6 (+0.30), synthesis-05 jumped 0.55→1.0 (+0.45). Mechanism = cycle-1 *input organization* (assisting A, not replacing). H11 ⚠ Conditionally supported.
-- Exp13 (2026-05-05) tested Reducer Role (the symmetric counterpart — same Gemma model, post-stage polishing of the final tattoo + final_answer). **Δ −0.053 negative** (mirror image of Exp12's +0.050), Cohen's d = −0.323 (mirror of Exp12's +0.323). The **synthesis-04 case study** is decisive — baseline produced structured multi-source analyses ("## Comprehensive Analysis ... Identification of Contradictions ...") that hit acc=1.0, while reducer compressed to single-point estimates ("The best estimate is **270 individuals**.") that scored acc=0.33–0.67. Mechanism = **abstraction loss**: the Reducer prompt's "polish for clarity" + "do NOT change conclusion" pushed the model toward single-answer compression, losing the multi-source structure the keyword scorer relies on. H12 ⚠ Inconclusive — effectively rejected. → **Position-effect asymmetry confirmed**: pre-stage Role addition is safe (Exp12, +0.05), post-stage is risky (Exp13, −0.05). Stage 5 Role-axis is now triply validated (strengthen / pre / post), and the next direction shifts to the Tool axis (**Search Tool, Exp14 candidate**).
+- Exp12 (2026-05-04) tested Extractor Role (a new Role using the same Gemma model, pre-extracting claims/entities and prefixing them into A's input). Δ = +0.050 (positive), Cohen's d = +0.323 (small). Directional improvements on logic-02 (0.3→0.6) and synthesis-05 (0.55→1.0). Proposed mechanism: cycle-1 *input organization* (assisting A, not replacing). H11 ⚠ Conditionally supported, **not statistically significant at n=15 (p=0.198)**.
+- Exp13 (2026-05-05) tested Reducer Role (a structurally symmetric counterpart — same Gemma model, post-stage polishing of the final tattoo + final_answer). Δ = −0.053 (bug-excluded), Cohen's d = −0.323 — opposite in sign to Exp12 with nearly identical magnitude. In the synthesis-04 illustrative trial, baseline produced structured multi-source analyses ("## Comprehensive Analysis ... Identification of Contradictions ...") scoring 1.0, while the reducer-polished output compressed to single-point estimates ("The best estimate is **270 individuals**.") scoring 0.33–0.67. **Caveat — keyword scorer artifact possibility**: this drop may reflect *real abstraction loss* OR *style mismatch* between compressed answers and the deterministic keyword scorer (`score_answer_v3`). The two explanations are not separable from the current data; LLM-as-judge replication is planned. H12 ⚠ Inconclusive, effectively rejected (**not significant at n=15, p=0.180**). Together with H11, the two results provide **evidence consistent with a position effect** at similar effect-size magnitudes in opposite directions — but the pattern is a replication target, not a confirmed asymmetry. Stage 5 next direction: Tool axis (**Search Tool, Exp14 in progress**).
 
 What clearly did **not** work was expecting the same model to notice its own failure mode without a role change. The most useful result in this repository is probably negative: the model does not reliably criticize itself, even when it can criticize the same reasoning from another role.
 
@@ -93,23 +101,30 @@ If you are working on externalization for small models, structured state, or mul
 
 ### Environment
 
+Tested with **Python 3.14**. Earlier 3.12+ should work but is not regularly verified — if you hit a syntax/typing error on an older interpreter, please report the version.
+
 ```bash
 git clone https://github.com/hang-in/gemento.git
 cd gemento
 python3.14 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\Activate.ps1
+source .venv/bin/activate   # Windows PowerShell: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-### Connect an inference server
+### Inference server (LM Studio or llama.cpp — both supported)
 
-Set `API_BASE_URL` in `experiments/config.py` to a llama.cpp server that exposes OpenAI-compatible `/v1/chat/completions` and supports `tool_calls`. For local use, `http://localhost:8080` is the expected default.
+Gemento expects an **OpenAI-compatible chat-completions endpoint** that supports `tool_calls`. Two reference setups:
+
+- **LM Studio** (current author's setup): load Gemma 4 E4B Q8_0 with at least 32K context window enabled, server on `http://192.168.1.179:1234` (or `http://localhost:1234`). Set `API_BASE_URL` accordingly in `experiments/config.py`.
+- **llama.cpp server**: `./server -m gemma-4-e4b-q8_0.gguf -ngl <max layers> -c 32768 --port 8080`. Default `http://localhost:8080`.
+
+Confirm the active model id and use it for `MODEL_NAME`:
 
 ```bash
-curl -s $API_BASE_URL/v1/models | jq .data[].id
+curl -s $API_BASE_URL/v1/models | jq -r '.data[].id'
 ```
 
-Expected: `gemma4-e4b` or the model ID you loaded.
+Expected: a model id such as `gemma4-e4b`, `google/gemma-3n-e4b-it`, or whatever your server reports. Set `MODEL_NAME` in `experiments/config.py` to *exactly* this string — a mismatch causes silent fallback to defaults on some servers.
 
 ### Smoke test
 
@@ -120,7 +135,21 @@ python tools/smoke_test.py
 
 Expected: `SMOKE TEST PASSED: math-04 answer=..., tool_calls=...`
 
-### First run
+### Reproduce the headline Exp10 result (~12-14h on a single 8GB GPU)
+
+The README hero number (Gemma 4 E4B 41.3% → 78.1% across 9 tasks × 60 trials = 540 trials per condition) comes from Exp10. To reproduce on your machine:
+
+```bash
+# from the gemento root, after smoke test passes
+python -m experiments.exp10_reproducibility_cost.run --conditions gemma_1loop --trials 60
+python -m experiments.exp10_reproducibility_cost.run --conditions gemma_8loop --trials 60
+# results land in experiments/exp10_reproducibility_cost/results/
+# scorer: score_answer_v3 (negative_patterns) — applied automatically
+```
+
+Per-trial wall time depends on hardware; on a 3060 Ti 8GB with LM Studio the 8-loop condition averages ~7-8 minutes/trial. Optional: `gemini_flash_1call` condition requires `GEMINI_API_KEY` in `.env` and incurs API cost (≈$0.05 for 60 trials at 2026-05 pricing).
+
+### Other experiments
 
 ```bash
 python run_experiment.py baseline
@@ -195,9 +224,9 @@ Append entries to `experiments/tasks/taskset.json` with `id`, `category`, `diffi
 | Stage 2A/2B (2026-04-30) | Infra stabilization (healthcheck/abort + result JSON meta v1.0) + scorer/failure-label reference | ✅ |
 | Stage 2C (2026-05-02) | Exp06 H4 recheck on expanded 15-task set — H4 ⚠ Conditionally supported (synthesis +0.140) | ✅ |
 | Stage 4 (2026-05-03) | Exp11 Mixed Intelligence (Flash Judge) — H10 ⚠ Inconclusive, effectively rejected (inverse mechanism observed) | ✅ |
-| Stage 5 Exp12 (2026-05-04) | Extractor Role (pre-stage) — H11 ⚠ Conditionally supported (Δ=+0.050 positive). Role-axis *separation/addition* validated | ✅ |
-| Stage 5 Exp13 (2026-05-05) | Reducer Role (post-stage) — H12 ⚠ Inconclusive, effectively rejected (Δ=−0.053 negative). **Position-effect asymmetry confirmed** (pre-stage = safe / post-stage = risky) | ✅ |
-| **Stage 5 Exp14 candidate (pending)** | **Search Tool** (Tool axis, new) — Role axis triply validated, Tool axis prioritized next. H7 +18.3pp / H8 +23.3pp signal strong, deterministic effects | ⏳ |
+| Stage 5 Exp12 (2026-05-04) | Extractor Role (pre-stage) — H11 ⚠ Conditionally supported (Δ=+0.050, d=+0.323, p=0.198 NS). Directional positive observed | ✅ |
+| Stage 5 Exp13 (2026-05-05) | Reducer Role (post-stage) — H12 ⚠ Inconclusive, effectively rejected (Δ=−0.053, d=−0.323, p=0.180 NS). **Evidence consistent with a position effect** at mirrored effect sizes; cross-model + LLM-as-judge replication planned | ✅ |
+| **Stage 5 Exp14 in progress** | **Search Tool** (Tool axis, new) — agent-active retrieval. Role axis converging signal across H10/H11/H12; Tool axis explored next as a deterministic externalization candidate | 🔄 |
 | Mid-term | Remaining unexternalized axes — Search Tool / Graph Tool / Evidence Tool. Stage 5 SQLite ledger | |
 | Mid/long-term | Test the four-layer external knowledge environment (vector / graph) | |
 | Long-term | Cross-model reproduction on Qwen / Phi / Llama, structured ablations, and a public write-up | |

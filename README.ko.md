@@ -7,7 +7,7 @@
 [![Paper](https://img.shields.io/badge/Paper-draft%20in%20progress-orange)](docs/paper/draft.md)
 [![arXiv](https://img.shields.io/badge/arXiv-TBD-b31b1b)]()
 
-> **Gemma 4 E4B (effective 4B params): 41.3% → 78.1% (+37%p) — 다단계 오케스트레이션 + 역할 분리만으로. Gemini 2.5 Flash 1-call (59.1%) 을 +19%p 앞섬, 외부 API 비용 0.** 13 가설 (H1–H13, 540+ trial) 을 4축 외부화 framework 에서 검증. 핵심 발견: **위치-효과 비대칭** — pre-stage role 추가 (Extractor) 는 Δ=+0.05 (Cohen's d=+0.32), post-stage role 추가 (Reducer) 는 Δ=−0.05 (d=−0.32) — 같은 모델에서 거울상 결과.
+> **9-task cost-aware benchmark 에서 Gemma 4 E4B 8-loop ABC = 78.1% vs 1-loop solo = 41.3%, Gemini 2.5 Flash 1-call = 59.1%. 외부 API 비용은 0 이지만 wall time 약 20배 trade-off.** 13 가설 (H1–H13, 540+ trial) 의 role-axis ablation 에서 **위치-효과 패턴 관찰**: pre-stage role 추가 (Extractor, H11) Δ=+0.05 (Cohen's d=+0.32, p=0.198), post-stage role 추가 (Reducer, H12) Δ=−0.05 (d=−0.32, p=0.180) — 거울상 방향성. **두 결과 모두 n=15 paired 검정에서 통계적으로 비유의; cross-model replication 으로 일반화 여부 확인 예정.**
 
 > **소형 LLM의 내부 한계를 체계적으로 외부화한다.** 기억은 환경에 새기고, 계산은 도구에 맡기고, 검증은 다른 역할에게 비판받는다.
 
@@ -28,6 +28,14 @@
 > *Last updated: 2026-05-05*
 
 > 📚 English version: [README.md](./README.md)
+
+### Scope 와 재현성 caveats (수치 인용 전 읽기)
+
+- 모든 headline 수치는 **단일 base 모델** (Gemma 4 E4B) + **소형 자체 benchmark** (main 15 task + longctx 10 task) 기준. Cross-model replication 은 *예정*, 미완료.
+- Stage 5 의 다수 가설 (H4, H10, H11, H12) 은 **n=15 paired 검정에서 통계적으로 비유의** — Cohen's d / bootstrap CI 와 함께 *replication target* 으로 보고. 확정 효과 아님.
+- 결정성 keyword scorer (`score_answer_v3`) 는 *실제 품질 차이* 와 *답변 스타일과 keyword set 의 mismatch* 를 구분하지 못함. H12 (Reducer 의 다출처 압축) 에 가장 직접 영향. LLM-as-judge 보조 평가 예정.
+- Exp10 vs Gemini Flash 비교는 *9-task cost-aware benchmark 한정* + wall time 약 20배 trade-off — 일반화된 우월 주장 아님.
+- H11+H12 의 "position effect" 관찰은 *거울상 방향성* 이며 *확정 비대칭* 아님.
 
 ---
 
@@ -187,14 +195,14 @@
 - ~~**Exp09 통계 신뢰도 보강**~~ — Phase 1 후속 (2026-04-30) 5-trial 실행 + 분석 완료. 단 trial 4-5 가 Windows 환경 모델 서버 connection refused (`WinError 10061`) 로 인한 **인프라 무효** 발견 (`docs/reference/exp09-5trial-drop-analysis-2026-04-30.md`). H9b verdict 는 3-trial 결과 (Δ=+0.033) 우선 권고 — 단 영문 노트북 Closed 추가만 정책 보존 (재산정 미적용). 닫힘.
 - **Small Paradox 해결** — Exp09에서 ABC가 small 태스크에서 RAG보다 약함 (0.67 vs 1.00). chunk 수가 적을 때 cycle iteration이 오버킬 가능성. (Exp13+ 후보)
 - **병렬 chunk 순회** — 현재 직렬 chunk 처리를 병렬로 전환 + Tattoo merge 패턴 실험. ABC 시간 비용 절감. (Exp13+ 후보)
-- **Stage 5 Role 축 마감 후 framework 방향 결정** — Exp11/12/13 의 Role 축 3 회 검증 (강화/pre-stage/post-stage) 종합 후 Tool 축 (Search Tool, Exp14 후보) 우선순위 결정.
+- **Stage 5 Role 축 ablation 후 framework 방향 결정** — Exp11/12/13 의 Role 축 3 회 측정 (강화/pre-stage/post-stage) 의 수렴 신호 종합 후 Tool 축 (Search Tool, Exp14 진행 중) 검증.
 
 ### 3.2 미외부화 축 (conceptFramework § 9)
 
 | 축 | 현재 상태 | 기여 기회 |
 |----|----------|-----------|
-| **Extractor Role (pre-stage)** | **Exp12 마감** (2026-05-04) — H11 ⚠ 조건부 채택 (Δ=+0.050 양수, catastrophic 영역 회복) | pre-stage 효과 확정 |
-| **Reducer Role (post-stage)** | **Exp13 마감** (2026-05-05) — H12 ⚠ 미결 (실효적 기각, Δ=−0.053 음수, abstraction loss). **Exp12 와 거울상**: pre-stage = 안전, post-stage = 위험 — 위치-효과 비대칭 확정 | 위치 의존성 fix 또는 다른 post-stage Role 변형 (보류) |
+| **Extractor Role (pre-stage)** | **Exp12 마감** (2026-05-04) — H11 ⚠ 조건부 채택 (Δ=+0.050, d=+0.323, p=0.198 NS). 양수 방향 관찰, catastrophic 영역 회복 신호 | pre-stage 효과의 cross-model replication |
+| **Reducer Role (post-stage)** | **Exp13 마감** (2026-05-05) — H12 ⚠ 미결, 실효적 기각 (Δ=−0.053, d=−0.323, p=0.180 NS). 제안 메커니즘 = abstraction loss; 단 keyword scorer artifact 가능성 분리 불가, LLM-as-judge replication 예정 | scorer-side 검증 (P1-3) + cross-model |
 | **Search Tool** | 미구현 — **Exp14 후보** (Role 축 마감 후 Tool 축 우선) | Tool 통합 + Stage 5 SQLite ledger 동기 |
 | **Graph Tool** | 미구현 (Exp14+ 후보) | entity/relation 다중 hop traversal |
 | **Evidence Tool** | 미구현 | `evidence_ref` resolve API — Tattoo와 결합 쌍 |
@@ -307,9 +315,9 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 | Stage 2A/2B (마감, 2026-04-30) | 인프라 안정화 (healthcheck/abort + 결과 JSON meta v1.0) + scorer/failure label reference | ✅ |
 | Stage 2C (마감, 2026-05-02) | Exp06 H4 재검증 (확대 task set 15) — H4 ⚠ 조건부 채택 (synthesis +0.140) | ✅ |
 | Stage 4 (마감, 2026-05-03) | Exp11 Mixed Intelligence (Flash Judge) — H10 ⚠ 미결 (실효적 기각). 정반대 메커니즘 발견 | ✅ |
-| Stage 5 Exp12 (마감, 2026-05-04) | Extractor Role (pre-stage) — H11 ⚠ 조건부 채택 (Δ=+0.050 양수). Role 축 *분리/추가* 우위 입증 | ✅ |
-| Stage 5 Exp13 (마감, 2026-05-05) | Reducer Role (post-stage) — H12 ⚠ 미결 (실효적 기각, Δ=−0.053 음수). **위치-효과 비대칭 확정** (pre-stage = 안전 / post-stage = 위험) | ✅ |
-| **Stage 5 Exp14 후보 (대기)** | **Search Tool** (Tool 축 신규) — Role 축 3 회 검증 마감 후 Tool 축 우선. H7 +18.3pp / H8 +23.3pp 강한 효과 + 결정성 보장 | ⏳ |
+| Stage 5 Exp12 (마감, 2026-05-04) | Extractor Role (pre-stage) — H11 ⚠ 조건부 채택 (Δ=+0.050, d=+0.323, p=0.198 NS). 양수 방향성 관찰 | ✅ |
+| Stage 5 Exp13 (마감, 2026-05-05) | Reducer Role (post-stage) — H12 ⚠ 미결, 실효적 기각 (Δ=−0.053, d=−0.323, p=0.180 NS). **거울상 effect size 의 position effect 일관 증거**; cross-model + LLM-as-judge replication 예정 | ✅ |
+| **Stage 5 Exp14 진행 중** | **Search Tool** (Tool 축 신규) — agent-active retrieval. Role 축 H10/H11/H12 의 수렴 신호 후 Tool 축 검증 (결정성 외부화 후보) | 🔄 |
 | 중기 | 미외부화 축 보강 — Search Tool / Graph Tool / Evidence Tool 통합. Stage 5 SQLite ledger 동기 | |
 | 중장기 | 외부 지식 환경 (4-layer) 통합 실험 (벡터·그래프 사용) | |
 | 장기 | 크로스 모델 재현 (Qwen / Phi / Llama) · 체계적 ablation · 연구 결과 정리 (technical report / blog) | |
