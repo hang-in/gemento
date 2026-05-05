@@ -1,10 +1,19 @@
 # Gemento
 
-> **Gemento is an experimental harness, not a new architecture or a paper.** It tests whether small local LLMs can run long workflows when memory, tools, roles, and control are externalized.
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.14-3776AB?logo=python&logoColor=white)](https://www.python.org)
+[![Status](https://img.shields.io/badge/Status-active-success)]()
+[![Last commit](https://img.shields.io/github/last-commit/hang-in/gemento)](https://github.com/hang-in/gemento/commits/main)
+[![Paper](https://img.shields.io/badge/Paper-draft%20in%20progress-orange)](docs/paper/draft.md)
+[![arXiv](https://img.shields.io/badge/arXiv-TBD-b31b1b)]()
 
-📚 Korean version: [README.ko.md](./README.ko.md)
+> **Gemma 4 E4B (effective 4B params): 41.3% → 78.1% (+37pp) via multi-step orchestration + role separation, matching Gemini 2.5 Flash 1-call (59.1%) by +19pp at zero per-trial API cost.** Tested across 13 sequentially numbered hypotheses (H1–H13, 540+ trials) on a 4-axis externalization framework — including **position-effect asymmetry**: pre-stage role addition (Extractor) yields Δ=+0.05 (Cohen's d=+0.32), while post-stage role addition (Reducer) yields Δ=−0.05 (d=−0.32) — a clean mirror-image result on the same model.
+
+📚 Korean version: [README.ko.md](./README.ko.md) · 📄 Paper draft: [docs/paper/draft.md](docs/paper/draft.md) · arXiv: TBD
 
 > *Last updated: 2026-05-05*
+
+> **Gemento is an experimental harness, not a new architecture or a paper.** It tests whether small local LLMs can run long workflows when memory, tools, roles, and control are externalized.
 
 ## Why I built this
 
@@ -215,10 +224,10 @@ Contribution flow:
 
 The "externalize the LLM" framing is not unique to this project. Adjacent or overlapping ideas:
 
-- **Externalization frame** — A 2026-04 arXiv preprint¹ proposes a general framework for externalizing memory, reasoning, and verification away from the model. Gemento was developed independently — out of practical context/memory problems hit while building secall and tunaFlow — and only later did the author become aware of this preprint. The four-axis split (Tattoo / Tools / Role / Orchestrator) is best read as **independent convergence** with that line of work, not as a derivation from it.
-- **LightMem**² — Long-term memory externalization for LLMs. Focused on retrieval and key-value memory; Gemento is closer to *working* state across loops, not retrieval against past sessions.
-- **ESAA (Externally Stateful Agentic Architectures)**³ — Treats the agent as a state machine with external state. Conceptually adjacent; Gemento adds explicit role separation (A/B/C) and tool integration on top of the same idea.
-- **Chain-of-Agents**⁴ — Sequentially passes a long input across multiple agents. Gemento's A→B→C pipeline shares this structure but uses *the same base model* for all roles, separated only by prompt and validation contract.
+- **Externalization in LLM Agents** (Zhou et al., 2026)¹ — A unified review proposing four externalization axes (memory / skills / protocols / harness engineering). Gemento was developed independently — out of practical context/memory problems hit while building secall and tunaFlow — and only later did the author become aware of this preprint. The four-axis split (Tattoo / Tools / Role / Orchestrator) is best read as **independent convergence** with that line of work, not as a derivation from it. Axis mapping differs (Gemento separates Role and Orchestrator explicitly; Zhou et al. fold control into harness engineering).
+- **LightMem** (Fang et al., 2026)² — Lightweight memory-augmented generation with three-stage memory (sensory / short-term / long-term, sleep-time consolidation). Focused on long-term retrieval across sessions; Gemento is closer to *working state* across loops within a single task, not memory across sessions.
+- **StateFlow** (Wu et al., 2024)³ — Conceptualizes complex task-solving as state machines, externalizing control flow from LLM. Conceptually adjacent to Gemento's Orchestrator axis; Gemento adds explicit role separation (A/B/C) and Tattoo schema on top.
+- **Chain-of-Agents** (Zhang et al., 2024)⁴ — Sequential multi-agent reading of long inputs (worker agents segment + manager synthesizes). Gemento's A→B→C pipeline shares this structure but uses *the same base model* for all roles, separated only by prompt and validation contract.
 
 What is contributed here, and what is **not**:
 
@@ -226,10 +235,10 @@ What is contributed here, and what is **not**:
 - Not contributed: a new architecture, a new training method, or a claim that small LLMs replace large ones. Gemento is a structural workflow harness on top of an unmodified open-weight model.
 
 ---
-¹ A 2026-04 arXiv preprint on externalization frame for LLM agents — *citation pending; the author has not directly verified the preprint, the reference is the GPT-discovered framing only*.
-² LightMem (long-term memory module for LLMs) — *citation pending; needs bibliographic verification*.
-³ ESAA — Externally Stateful Agentic Architectures — *citation pending; needs bibliographic verification*.
-⁴ Chain-of-Agents — sequential multi-agent reading — *citation pending; needs bibliographic verification*.
+¹ Zhou, C., Chai, H., Chen, W., et al. (2026). *Externalization in LLM Agents: A Unified Review of Memory, Skills, Protocols and Harness Engineering*. [arXiv:2604.08224](https://arxiv.org/abs/2604.08224).
+² Fang, J., Deng, X., Xu, H., et al. (2026). *LightMem: Lightweight and Efficient Memory-Augmented Generation*. ICLR 2026. [arXiv:2510.18866](https://arxiv.org/abs/2510.18866).
+³ Wu, Y., et al. (2024). *StateFlow: Enhancing LLM Task-Solving through State-Driven Workflows*. [arXiv:2403.11322](https://arxiv.org/abs/2403.11322).
+⁴ Zhang, Y., Sun, R., Chen, Y., Pfister, T., Zhang, R., Arik, S. Ö. (2024). *Chain of Agents: Large Language Models Collaborating on Long-Context Tasks*. NeurIPS 2024. [arXiv:2406.02818](https://arxiv.org/abs/2406.02818).
 
 ## Acknowledgements
 

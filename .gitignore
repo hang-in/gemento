@@ -15,6 +15,9 @@ __pycache__/
 .claude/settings.local.json
 .claude/*.local.json
 
+# External tooling local state (BM25 search hook, decision corpus)
+.omc/
+
 # Personal session resume notes (local-only — do not commit)
 resume_gemini.md
 

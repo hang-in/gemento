@@ -1,8 +1,17 @@
 # gemento (제멘토)
 
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.14-3776AB?logo=python&logoColor=white)](https://www.python.org)
+[![Status](https://img.shields.io/badge/Status-active-success)]()
+[![Last commit](https://img.shields.io/github/last-commit/hang-in/gemento)](https://github.com/hang-in/gemento/commits/main)
+[![Paper](https://img.shields.io/badge/Paper-draft%20in%20progress-orange)](docs/paper/draft.md)
+[![arXiv](https://img.shields.io/badge/arXiv-TBD-b31b1b)]()
+
+> **Gemma 4 E4B (effective 4B params): 41.3% → 78.1% (+37%p) — 다단계 오케스트레이션 + 역할 분리만으로. Gemini 2.5 Flash 1-call (59.1%) 을 +19%p 앞섬, 외부 API 비용 0.** 13 가설 (H1–H13, 540+ trial) 을 4축 외부화 framework 에서 검증. 핵심 발견: **위치-효과 비대칭** — pre-stage role 추가 (Extractor) 는 Δ=+0.05 (Cohen's d=+0.32), post-stage role 추가 (Reducer) 는 Δ=−0.05 (d=−0.32) — 같은 모델에서 거울상 결과.
+
 > **소형 LLM의 내부 한계를 체계적으로 외부화한다.** 기억은 환경에 새기고, 계산은 도구에 맡기고, 검증은 다른 역할에게 비판받는다.
 
-제멘토는 Gemma 4 E4B (effective 4B 파라미터, Q8_0) 같은 소형 언어모델이 단일 추론으로 해결하지 못하는 복잡한 태스크를, **외부 상태(문신) + 역할 분리(A-B-C) + 외부 도구(tool-use)**의 세 축으로 확장할 수 있는지 측정하는 오픈 연구 노트입니다.
+제멘토는 Gemma 4 E4B (effective 4B 파라미터, Q8_0) 같은 소형 언어모델이 단일 추론으로 해결하지 못하는 복잡한 태스크를, **외부 상태(문신) + 역할 분리(A-B-C) + 외부 도구(tool-use) + 오케스트레이션** 의 4축으로 확장할 수 있는지 측정하는 오픈 연구 노트입니다.
 
 **증명된 핵심 수치 (재현 가능)**
 
@@ -387,10 +396,10 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 
 "LLM 의 인지를 외부화한다" 는 framing 자체는 본 프로젝트 고유가 아니다. 인접하거나 겹치는 아이디어:
 
-- **Externalization frame** — 2026-04 arXiv preprint¹ 가 모델 외부로 메모리/추론/검증을 옮기는 일반 framework 를 제시. 제멘토는 secall / tunaFlow 를 만들면서 마주친 실제 컨텍스트·기억 문제에서 출발해 독립적으로 개발됨 — 저자는 위 preprint 를 나중에 알게 됨. 4축 분리 (Tattoo / Tools / Role / Orchestrator) 는 그 흐름의 **independent convergence (독립적 수렴)** 으로 읽는 것이 정확하며, 그로부터 도출된 것이 아니다.
-- **LightMem**² — LLM 의 장기 기억 외부화. retrieval / key-value memory 중심. 제멘토는 loop 간 *working* state 에 가까우며, 과거 세션 retrieval 이 아니다.
-- **ESAA (Externally Stateful Agentic Architectures)**³ — agent 를 외부 state 를 가진 state machine 으로 처리. 개념적으로 인접; 제멘토는 그 위에 명시적 역할 분리 (A/B/C) + 도구 통합을 추가.
-- **Chain-of-Agents**⁴ — 긴 입력을 여러 agent 에 순차 전달. 제멘토의 A→B→C 파이프라인이 동일 구조를 공유하지만, *동일 base model* 을 모든 역할에 사용하고 prompt + validation contract 로만 분리.
+- **Externalization in LLM Agents** (Zhou et al., 2026)¹ — 4축 외부화 (memory / skills / protocols / harness engineering) 를 통합 review 한 preprint. 제멘토는 secall / tunaFlow 를 만들면서 마주친 실제 컨텍스트·기억 문제에서 출발해 독립적으로 개발됨 — 저자는 위 preprint 를 나중에 알게 됨. 4축 분리 (Tattoo / Tools / Role / Orchestrator) 는 그 흐름의 **independent convergence (독립적 수렴)** 으로 읽는 것이 정확하며, 그로부터 도출된 것이 아니다. 축 매핑은 다름 (제멘토는 Role 과 Orchestrator 를 명시적으로 분리, Zhou et al. 은 control 을 harness engineering 에 통합).
+- **LightMem** (Fang et al., 2026)² — 3-stage 메모리 (sensory / short-term / long-term, sleep-time consolidation) 의 lightweight memory-augmented generation. 세션 간 장기 retrieval 중심. 제멘토는 loop 간 *working state* 에 가까우며, 과거 세션 retrieval 이 아니다.
+- **StateFlow** (Wu et al., 2024)³ — 복잡한 task-solving 을 state machine 으로 conceptualize, control flow 를 LLM 외부로 빼냄. 제멘토의 Orchestrator 축과 개념적 인접; 제멘토는 그 위에 명시적 역할 분리 (A/B/C) + Tattoo schema 를 추가.
+- **Chain-of-Agents** (Zhang et al., 2024)⁴ — 긴 입력을 여러 worker agent 가 segment 처리 + manager 가 종합. 제멘토의 A→B→C 파이프라인이 구조를 공유하지만, *동일 base model* 을 모든 역할에 사용하고 prompt + validation contract 로만 분리.
 
 기여한 것 / **기여하지 않은** 것:
 
@@ -398,10 +407,10 @@ TOOL_FUNCTIONS["search_tool"] = search_tool
 - 비기여: 새로운 architecture, 새로운 학습 방법, 소형 LLM 이 대형을 대체한다는 주장. 제멘토는 unmodified open-weight 모델 위의 구조적 workflow 하네스.
 
 ---
-¹ 2026-04 arXiv preprint (LLM agent 외부화 frame) — *서지 검증 미완 (citation pending); 저자가 preprint 를 직접 확인하지 않았으며, GPT 가 알려준 framing 만 참조함*.
-² LightMem (LLM 장기 기억 모듈) — *서지 검증 미완 (citation pending)*.
-³ ESAA — Externally Stateful Agentic Architectures — *서지 검증 미완 (citation pending)*.
-⁴ Chain-of-Agents — sequential multi-agent reading — *서지 검증 미완 (citation pending)*.
+¹ Zhou, C., Chai, H., Chen, W., et al. (2026). *Externalization in LLM Agents: A Unified Review of Memory, Skills, Protocols and Harness Engineering*. [arXiv:2604.08224](https://arxiv.org/abs/2604.08224).
+² Fang, J., Deng, X., Xu, H., et al. (2026). *LightMem: Lightweight and Efficient Memory-Augmented Generation*. ICLR 2026. [arXiv:2510.18866](https://arxiv.org/abs/2510.18866).
+³ Wu, Y., et al. (2024). *StateFlow: Enhancing LLM Task-Solving through State-Driven Workflows*. [arXiv:2403.11322](https://arxiv.org/abs/2403.11322).
+⁴ Zhang, Y., Sun, R., Chen, Y., Pfister, T., Zhang, R., Arik, S. Ö. (2024). *Chain of Agents: Large Language Models Collaborating on Long-Context Tasks*. NeurIPS 2024. [arXiv:2406.02818](https://arxiv.org/abs/2406.02818).
 
 ## Acknowledgements
 
