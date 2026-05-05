@@ -1,4 +1,4 @@
-"""External API clients for Exp10 (Gemini Flash, LM Studio)."""
+"""External API clients for Exp10+ (Gemini Flash, Groq, LLM-as-judge)."""
 from __future__ import annotations
 
 import os
@@ -72,3 +72,14 @@ def resolve_groq_key() -> str | None:
     if env1.get("GROQ_API_KEY"):
         return env1["GROQ_API_KEY"]
     return None
+
+
+from .llm_judge import judge_answer, compare_answers  # noqa: E402
+
+__all__ = [
+    "load_env_file",
+    "resolve_gemini_key",
+    "resolve_groq_key",
+    "judge_answer",
+    "compare_answers",
+]

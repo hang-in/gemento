@@ -420,6 +420,7 @@ def run_loop(
     tool_functions: dict | None = None,
     extra_tools: list | None = None,
     extra_tool_fns: dict | None = None,
+    model_caller: Callable | None = None,
 ) -> tuple[Tattoo, LoopLog, str | None, list[dict]]:
     """단일 루프를 실행한다."""
     selected = select_assertions(tattoo)
@@ -465,7 +466,11 @@ def run_loop(
 
     for attempt in range(2):
         try:
-            raw, tool_call_log = call_model(messages, tools=_tools, tool_functions=_tool_fns)
+            if model_caller is not None:
+                raw, _mcmeta = model_caller(messages)
+                tool_call_log = []
+            else:
+                raw, tool_call_log = call_model(messages, tools=_tools, tool_functions=_tool_fns)
             parsed = extract_json_from_response(raw)
         except Exception as e:
             raw = ""
@@ -622,6 +627,7 @@ def run_abc_chain(
     reducer_post_stage: bool = False,
     search_tool: bool = False,
     corpus: list[dict] | None = None,
+    model_caller: Callable | None = None,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -629,6 +635,9 @@ def run_abc_chain(
     C가 phase 전이를 결정. Python은 안전장치(최대 사이클)만 강제.
     """
     from system_prompt import build_critic_prompt, build_judge_prompt
+
+    if c_caller is not None and model_caller is not None:
+        raise ValueError("c_caller and model_caller are mutually exclusive")
 
     # ── Extractor pre-stage (trial 시작 시 1회) ──
     if extractor_pre_stage:
@@ -705,6 +714,7 @@ def run_abc_chain(
             use_tools=use_tools, tool_functions=_tool_fns,
             extra_tools=_search_extra_tools or None,
             extra_tool_fns=_search_extra_fns or None,
+            model_caller=model_caller,
         )
 
         if answer:
@@ -743,7 +753,10 @@ def run_abc_chain(
                 )
             for attempt in range(2):
                 try:
-                    b_raw, _ = call_model(b_messages)
+                    if model_caller is not None:
+                        b_raw, _ = model_caller(b_messages)
+                    else:
+                        b_raw, _ = call_model(b_messages)
                     b_parsed = extract_json_from_response(b_raw)
                 except Exception as e:
                     b_raw = ""
@@ -830,6 +843,8 @@ def run_abc_chain(
             try:
                 if c_caller is not None:
                     c_raw, _ = c_caller(c_messages)
+                elif model_caller is not None:
+                    c_raw, _ = model_caller(c_messages)
                 else:
                     c_raw, _ = call_model(c_messages)
                 c_parsed = extract_json_from_response(c_raw)

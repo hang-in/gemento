@@ -154,3 +154,37 @@ def call_with_meter(
         duration_ms=duration_ms, cost_usd=cost, model=model, error=None,
         reasoning_tokens=reasoning_tok, reasoning_text=reasoning_text,
     )
+
+
+def with_rate_limit_retry(max_retries: int = 3, initial_wait: float = 5.0):
+    """429 응답 시 exponential backoff 재시도. wait 초 × 2 ** attempt."""
+    def decorator(fn):
+        def wrapper(*args, **kwargs):
+            for attempt in range(max_retries + 1):
+                result: CallMeter = fn(*args, **kwargs)
+                if result.error and "HTTP 429" in (result.error or ""):
+                    if attempt < max_retries:
+                        wait = initial_wait * (2 ** attempt)
+                        print(f"  [rate limit] wait {wait}s (attempt {attempt+1}/{max_retries})")
+                        time.sleep(wait)
+                        continue
+                return result
+            return result
+        return wrapper
+    return decorator
+
+
+@with_rate_limit_retry(max_retries=3, initial_wait=5.0)
+def call_with_meter_retry(messages, model=LLAMA_3_1_8B, **kwargs) -> CallMeter:
+    """call_with_meter 의 rate limit retry wrapper."""
+    return call_with_meter(messages, model=model, **kwargs)
+
+
+def batch_call(messages_list: list, model: str, sleep_between: float = 2.5, **kwargs) -> list[CallMeter]:
+    """여러 메시지 순차 호출 + sleep. RPM 한도 회피."""
+    results = []
+    for i, messages in enumerate(messages_list):
+        if i > 0:
+            time.sleep(sleep_between)
+        results.append(call_with_meter_retry(messages, model=model, **kwargs))
+    return results
