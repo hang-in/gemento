@@ -55,6 +55,42 @@ def _extract_tattoo_history(abc_logs: list, fallback_tattoo) -> list:
     return history
 
 
+def _extract_tool_calls(abc_logs) -> list[list[dict]]:
+    """ABCCycleLog.tool_calls 를 cycle 별로 추출. mechanism 분석용 (Exp14 H13).
+
+    Returns:
+        list of cycle's tool_call_log. 각 cycle 의 tool_calls 는
+        [{"name": "search_chunks", "arguments": {...}, "result": ..., "error": ...}, ...]
+        호출 0회 cycle 은 빈 list.
+    """
+    out = []
+    for entry in abc_logs:
+        tc = getattr(entry, "tool_calls", None)
+        if tc is None:
+            out.append([])
+            continue
+        # result 가 dict/list 등 직렬화 가능 형식인지 확인 + truncate (chunk content 가 너무 길 수 있음)
+        sanitized = []
+        for call in tc:
+            try:
+                name = call.get("name", "?")
+                args = call.get("arguments", {})
+                result = call.get("result")
+                err = call.get("error")
+                # search_chunks 의 result 는 chunk list — content 만 truncate
+                if isinstance(result, list):
+                    result = [
+                        {**r, "content": (r.get("content", "")[:300] + "...") if len(r.get("content", "")) > 300 else r.get("content", "")}
+                        if isinstance(r, dict) else r
+                        for r in result
+                    ]
+                sanitized.append({"name": name, "arguments": args, "result": result, "error": err})
+            except Exception:
+                sanitized.append({"name": str(call)[:200]})
+        out.append(sanitized)
+    return out
+
+
 def _load_longctx_taskset(taskset_path: str) -> list[dict]:
     """longctx_taskset.json 로드. 각 task에 chunked corpus 주입."""
     from tools import chunk_document
@@ -153,12 +189,16 @@ def run_abc_search_tool(task: dict, trial_idx: int, max_cycles: int = DEFAULT_MA
         error = str(e)
     duration_ms = int((time.time() - start) * 1000)
     tattoo_history = _extract_tattoo_history(abc_logs, tattoo)
+    tool_calls_per_cycle = _extract_tool_calls(abc_logs)
+    total_tool_calls = sum(len(c) for c in tool_calls_per_cycle)
     return {
         "final_answer": str(final_answer) if final_answer else None,
         "error": error,
         "cycles": actual_cycles,
         "duration_ms": duration_ms,
         "tattoo_history": tattoo_history if tattoo_history else None,
+        "tool_calls_per_cycle": tool_calls_per_cycle,
+        "total_tool_calls": total_tool_calls,
     }
 
 
@@ -174,11 +214,19 @@ def run_experiment(
     trials_per_condition: int = DEFAULT_TRIALS,
     conditions: tuple[str, ...] = ("baseline_abc_chunked", "abc_search_tool"),
     max_cycles: int = DEFAULT_MAX_CYCLES,
+    task_filter: tuple[str, ...] | None = None,
 ) -> dict:
-    """전체 실험 실행 — 사용자 직접 호출 (Task 04)."""
+    """전체 실험 실행 — 사용자 직접 호출 (Task 04).
+
+    task_filter: 특정 task_id 만 실행 (None = 전체). 진단/dry-run 용.
+    """
     started = _dt.datetime.now().astimezone().isoformat()
 
     tasks = _load_longctx_taskset(str(taskset_path))
+    if task_filter:
+        tasks = [t for t in tasks if t["id"] in task_filter]
+        if not tasks:
+            raise ValueError(f"task_filter 가 매칭되는 task 없음: {task_filter}")
 
     partial_path = RESULTS_DIR / "partial_exp14_search_tool.json"
     trials_data: list[dict] = []
@@ -301,6 +349,8 @@ def main() -> int:
     parser.add_argument("--max-cycles", type=int, default=DEFAULT_MAX_CYCLES)
     parser.add_argument("--conditions", nargs="+", default=["baseline_abc_chunked", "abc_search_tool"])
     parser.add_argument("--out-name", default=None)
+    parser.add_argument("--tasks", nargs="+", default=None,
+                        help="특정 task_id 만 실행 (예: longctx-medium-needle-01). None = 전체")
     args = parser.parse_args()
 
     out = run_experiment(
@@ -308,6 +358,7 @@ def main() -> int:
         trials_per_condition=args.trials,
         conditions=tuple(args.conditions),
         max_cycles=args.max_cycles,
+        task_filter=tuple(args.tasks) if args.tasks else None,
     )
 
     ts = _dt.datetime.now().strftime("%Y%m%d_%H%M%S")
