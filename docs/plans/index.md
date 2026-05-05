@@ -4,7 +4,7 @@ Plan document index. Register new plans here.
 
 ## Active
 
-(없음 — Stage 5 Exp14 Search Tool 마감, Stage 6 cross-model 후보 결정 대기)
+- [stage-6-cross-model-llm-as-judge.md](stage-6-cross-model-llm-as-judge.md) — **Stage 6**: Cross-model replication (Llama 3.1 8B / Llama 3.3 70B / Qwen 2.5 7B Q4_K_M) + LLM-as-judge auxiliary evaluation (Groq GPT-OSS 120B). Stage 5 4 가설 (H10/H11/H12/H13) 의 *direction consistency* 검증 + H12/H13 의 keyword scorer artifact 정량화 (P1-3). 통계 5튜플 통일 (P1-4) 통합. paper v0.4 의 §4.3 cross-model + §7 Conclusion 채움 = arXiv preprint v1.0 업로드 가능 상태 도달. 5 subtask, 사용자 직접 실행 ~3-5일. **Llama 3.1 8B 22일 마감 (2026-05-27)** — 우선순위 P0. Sonnet 진행 프롬프트: `docs/prompts/2026-05-05/stage6Start.md`
 
 ## Recently Done — Stage 5
 
