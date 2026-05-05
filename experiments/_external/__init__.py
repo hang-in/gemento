@@ -59,3 +59,16 @@ def resolve_gemini_key() -> str | None:
         if env2.get(k):
             return env2[k]
     return None
+
+
+def resolve_groq_key() -> str | None:
+    """Groq API 키 우선순위: env > gemento/.env."""
+    v = os.environ.get("GROQ_API_KEY")
+    if v:
+        return v
+    here = Path(__file__).resolve()
+    gemento_env = here.parent.parent.parent / ".env"
+    env1 = load_env_file(gemento_env)
+    if env1.get("GROQ_API_KEY"):
+        return env1["GROQ_API_KEY"]
+    return None
