@@ -295,6 +295,9 @@ def run_experiment(
                     "cycles": result.get("cycles"),
                     "tattoo_history": result.get("tattoo_history"),
                     "accuracy_v3": acc,
+                    # Exp14 mechanism 진단 — search_tool 호출 추적 (Search Tool condition 만 채워짐)
+                    "tool_calls_per_cycle": result.get("tool_calls_per_cycle"),
+                    "total_tool_calls": result.get("total_tool_calls"),
                 }
                 trials_data.append(trial)
 
@@ -363,6 +366,9 @@ def main() -> int:
 
     ts = _dt.datetime.now().strftime("%Y%m%d_%H%M%S")
     name = args.out_name or f"exp14_search_tool_{ts}.json"
+    # Auto-append .json 확장자 — --out-name 사용자가 .json 누락 시 (Exp12/13/14 패턴)
+    if not name.endswith(".json"):
+        name = name + ".json"
     out_path = RESULTS_DIR / name
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
