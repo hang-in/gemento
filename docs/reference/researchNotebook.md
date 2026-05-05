@@ -3,6 +3,7 @@ type: reference
 status: in_progress
 updated_at: 2026-05-05
 parts: [closed, active]
+note: 2026-05-05 v2 — Exp14 H13 추가 (Stage 5 첫 통계적 유의 negative)
 ---
 
 > **개념 프레임 canonical 문서**: [conceptFramework.md](./conceptFramework.md) — 4축 외부화 원리, 용어 정의, 축 ↔ 실험 매핑.
@@ -54,6 +55,7 @@ parts: [closed, active]
 | **H10** | **[Role 외부화 강화 — Mixed Intelligence]** 강한 Judge C (Gemini 2.5 Flash) 가 약한 Proposer/Critic (A/B = Gemma 4 E4B) 의 한계를 보완한다 | ⚠ **미결 (실효적 기각)** — 2026-05-03 Exp11: Δ(mixed−base)=−0.0811 (음수), Cohen d=−0.316 small, Wilcoxon p=0.293 비유의. logic 카테고리 catastrophic (−0.275), synthesis 만 양수 (+0.030). Flash Judge 가 약한 모델의 self-discovery chain 을 *방해* 하는 정반대 메커니즘 발견 | Exp11 |
 | **H11** | **[Role 외부화 분리/추가 — Extractor Role]** 신규 Role (Extractor, 동일 Gemma 모델) 이 task prompt 의 claims/entities 를 사전 추출하여 A→B→C input 에 prefix 주입하면, A 부담 감소 + 정확도 향상 | ⚠ **조건부 채택 (양수 방향, 검정력 한계)** — 2026-05-04 Exp12: Δ(ext−base)=+0.0500 (양수, Exp11 정반대), Cohen d=+0.323 small 양수, Wilcoxon p=0.198 비유의 (n=15 한계). logic +0.125 / synthesis +0.050. logic-02 catastrophic 회복 (+0.30) + synthesis-05 (+0.45). Role 축 *분리/추가* 가 *강화* 보다 안전한 진화 방향 입증 | Exp12 |
 | **H12** | **[Role 외부화 분리/추가 — Reducer Role]** 신규 Role (Reducer, 동일 Gemma 모델) 이 ABC chain 의 final tattoo + final_answer 를 받아 *post-stage* 에서 정리/통합하면, keyword 매칭 정확도 + final answer 명료성 향상 | ⚠ **미결 (실효적 기각)** — 2026-05-05 Exp13: Δ(red−base)=−0.0533 (bug 제외) / −0.0711 (with bug, 음수 — Exp12 정반대), Cohen d=−0.323 (Exp12 +0.323 거울상), Wilcoxon p=0.180 비유의. logic −0.100 / math −0.083 / **synthesis −0.107 (5/5 task 음수)** / planning +0.100. 메커니즘 = **abstraction loss** (다중 출처/다중 추정 → 단일 추정 압축). **위치-효과 비대칭 확정**: pre-stage = 안전, post-stage = 위험 | Exp13 |
+| **H13** | **[Tool 외부화 — agent-active retrieval]** ABC 에이전트가 cycle 중 능동적으로 `search_chunks(query, top_k)` 호출하여 long-context document 의 관련 chunk retrieve 시, 32K context baseline (full document in prompt) 대비 정확도 + 효율 향상 | ⚠ **미결 (실효적 기각, SIG)** — 2026-05-05 Exp14: Δ(search−base)=−0.2200 (음수, Stage 5 의 가장 큰 음수). **Cohen d=−1.000 large effect**, **Wilcoxon p=0.0312 / paired t p=0.0115 — Stage 5 첫 통계적 유의 결과**. Bootstrap 95% CI [−0.36, −0.10] (0 미포함). 메커니즘 = **insufficient retrieval iterations on multi-hop tasks** (large-2hop 진단: 1 call → 0% / 2-3 calls → 100%) + premature termination ("document does not contain" 단정) + sufficient-context baseline saturation. needle (1-hop) 은 정상, multi-hop 만 fail. Tool 축 sub-distinction 발견: deterministic computation (H7/H8 +18~23pp) ≠ agent-iterative retrieval (H13 −22pp) | Exp14 |
 
 #### 축 ↔ 실험 매트릭스
 
@@ -76,6 +78,7 @@ parts: [closed, active]
 | Exp11 (Mixed Intelligence) | — | — | ✅ (Role 강화 — H10 미결) | — |
 | Exp12 (Extractor Role) | — | — | ✅ (Role 분리/추가 — pre-stage, H11 조건부 채택) | — |
 | Exp13 (Reducer Role) | — | — | ✅ (Role 분리/추가 — post-stage, H12 미결/실효적 기각) | — |
+| Exp14 (Search Tool) | ▶ | ✅ (agent-active retrieval — H13 미결/SIG 음수) | — | — |
 
 > 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조.
 
@@ -935,6 +938,76 @@ Small Paradox 상세:
 - score_answer_v3 keyword 매칭 의존 — Reducer 의 *의미적* 정확성 측정 한계
 - Tool 축 미검증 (math-04 양쪽 ~0)
 - Tattoo schema final_answer type 불일치 — bug 의 근본 원인, 별도 plan 후보
+
+---
+
+### Exp14: Search Tool (Tool 축 — agent-active BM25 retrieval)
+
+| 항목 | 내용 |
+|------|------|
+| **누가 (Who)** | A/B/C 모두 Gemma 4 E4B (LM Studio Q8_0, 32K context) + agent 가 `search_chunks(query, top_k)` 능동 호출. 외부 API 0 (local BM25 인덱스, `bm25s` 패키지). |
+| **언제 (When)** | 2026-05-05 (A-1 + A-2 + 진단 3 회) |
+| **어디서 (Where)** | Windows + LM Studio (`http://192.168.1.179:1234`) |
+| **무엇을 (What)** | H13 후보 — "ABC 에이전트가 cycle 중 *능동적* search_chunks 호출하여 long-context document 의 관련 chunk retrieve 시 baseline (full document in prompt) 대비 우수". 2 condition × 10 task (longctx_taskset) × 5 trial = **100 trial** + 진단 15 trial |
+| **왜 (Why)** | Stage 5 Role 축 3 회 검증 (Exp11 강화 ❌ / Exp12 pre ✅ / Exp13 post ❌) 마감 후 Architect 권장 — Tool 축 신규 도입. 직전 두 음수 (Exp11/13) 비결정성 외부 vs 본 plan = **결정성 외부 도구** (BM25). H7/H8 의 +18~23pp 라인 연속 검증. Exp09 RAG arm (1-shot retrieve) vs 본 plan (agent-active iterative) 의 차별성 측정 |
+| **어떻게 (How)** | `experiments/tools/bm25_tool.py` 의 기존 `bm25_retrieve` 재사용 + `SEARCH_TOOL_SCHEMA` (OpenAI tool-calling) 등록 + stop-words 추가 + `make_search_chunks_tool(corpus)` factory. `experiments/orchestrator.py:run_abc_chain` 에 `search_tool: bool = False` + `corpus: list[dict] | None = None` 옵션. closure 로 corpus 주입 (agent 는 corpus 존재 모름, tool 만 노출). Stage 2A/2B/2C + Exp11/12/13 hooks 모두 보존. **A-2 본 실행 후 tool_calls capture fix** (run.py 의 trial dict whitelist 누락) → 진단 15 trial 만 호출 데이터 capture |
+
+**결과 (v3 채점, 100 trial 본 + 15 trial 진단):**
+
+| condition | n | mean_acc | err+null | avg_cycles | avg_dur |
+|-----------|--:|---------:|--------:|-----------:|--------:|
+| baseline_abc_chunked | 50 | **0.9500** | 0+0 | 7.0 | 390s |
+| **abc_search_tool** | 50 | **0.7300** | 7+7 | 7.1 | 235s (−40%) |
+
+**Δ(search − baseline) = −0.2200** (음수, Stage 5 가장 큰 음수). 통계 (n=10 task paired): **Wilcoxon p=0.0312 ✅ / paired t p=0.0115 ✅** — **Stage 5 의 첫 통계적 유의 결과**. **Cohen's d = −1.000 large effect**. Bootstrap 95% CI Δ: **[−0.360, −0.100]** (0 미포함).
+
+**hop_type 별 search mean_acc**:
+- needle (1-hop, n=15): **0.800** (진단 5/5 모두 1 call + 5/5 정답)
+- 2-hop (n=20): **0.675** (catastrophic large-2hop-01: base 1.0 → search 0.4)
+- 3-hop (n=15): 0.733
+- baseline 모든 hop_type 에서 1.000 (full document 라 hop count 무관)
+
+**핵심 발견:**
+1. **H13 ⚠ 미결 (실효적 기각, SIG)** — Stage 5 의 첫 *통계적 유의* 결과 (negative direction, |d|=1.0)
+2. **Mechanism = insufficient retrieval iterations on multi-hop tasks** — large-2hop 진단 5 trial: [1, 2, 2, 3, 0] calls → [0, 1, 1, 1, 0] acc. agent 가 *hop count 만큼* iteration 결정 못함. 1 call 후 "document does not contain" 으로 단정 + 종료
+3. **needle 은 정상** — 진단 v2 5/5 trial 모두 1 call + 5/5 정답. multi-hop 한정 음수
+4. **baseline saturation** — 32K context 가 충분 → full document 가 prompt 에 들어가 multi-hop 자연. search 의 추가 가치 0 + iterative 결정 cost 만 발생
+5. **Tool 축 sub-distinction 발견** — *deterministic computation* (calculator/linprog, H7/H8 +18~23pp) ≠ *agent-iterative retrieval* (H13 −22pp). 같은 "Tool 축" 의 sign 정반대
+6. **Cost / time trade-off** — search 가 40% 빠름 (prompt 가벼움) but 22%p accuracy 손실. 32K 환경에서는 비합리적 trade-off
+7. **A-2 50 trial tool_calls 미캡처** — run.py 의 trial dict whitelist 누락 (line 288), 진단 15 trial 만 capture. fix 적용 commit `a3b71af`
+
+**Stage 5 framework-level 통합 원칙 (Exp11/12/13/14)**:
+
+| 외부화 차원 | 효과 | 메커니즘 |
+|------------|------|----------|
+| Role 강화 (강한 모델 도입) | ❌ Δ=−0.08 NS | self-discovery chain 단절 (Exp11) |
+| Role 분리/추가 — pre-stage | ✅ Δ=+0.05 NS | input 안정화 (Exp12) |
+| Role 분리/추가 — post-stage | ❌ Δ=−0.05 NS | abstraction loss caveat (Exp13) |
+| **Tool — agent-iterative retrieval** | ❌ **Δ=−0.22 SIG** | **insufficient hop iterations + premature termination + sufficient-context saturation (Exp14)** |
+
+→ **외부화의 효과는 sign 자체가 *유형 / 위치 / iteration count* 의 복잡한 함수**. "more is better" 는 광범위하게 부정. paper-level claim 후보.
+
+**Stage 6 다음 의제 (Exp15+):**
+- 🎯 **Cross-model replication** (Llama 3.1 8B / Llama 3.3 70B / Qwen 2.5 7B Q4_K_M, Groq free + Local) — Stage 5 4 가설 일반화
+- 🎯 **LLM-as-judge 보조 평가** (Groq GPT-OSS 120B) — H12 + H13 의 의미적 채점 (keyword scorer artifact 방어)
+- Mandatory tool rules 변형 (Exp08b 패턴) — H13 mechanism 직접 fix 시도, 후순위
+- Tool 축 다른 sub-type (Graph / Evidence / 강화된 Critic) — 보류
+
+**상세 보고서:** `docs/reference/exp14-search-tool-analysis-2026-05-05.md`
+**결과 데이터:**
+- `experiments/exp14_search_tool/results/exp14_baseline_abc_chunked.json` (50 trial)
+- `experiments/exp14_search_tool/results/exp14_search_tool_abc.json` (50 trial)
+- `experiments/exp14_search_tool/results/diag_search_medium_needle_v2.json` (진단 needle, 5 trial fix 적용)
+- `experiments/exp14_search_tool/results/diag_search_large_2hop.json` (진단 multi-hop, 5 trial)
+
+**한계:**
+- n=10 task paired (longctx_taskset 의 task 수, Exp11/12/13 의 n=15 보다 작음) — 단 |d|=1.0 large effect 라 유의 도달
+- 5 trial 한계
+- A-2 본 실행 50 trial 의 tool_calls 미캡처 — 진단 15 trial 만 사용
+- score_answer_v3 keyword 매칭 — H12 와 동일 caveat (단답형 task 라 영향 작음)
+- Tool axis 의 단일 sub-type — agent-active BM25 retrieval. 다른 sub-type 미검증
+- baseline 의 sufficient context — 32K 환경. context-limited 환경 다를 수 있음
+- tool_choice = "auto" — mandatory tool rules 적용 시 결과 변할 수 있음
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 type: plan
-status: draft
+status: done
 updated_at: 2026-05-05
 slug: exp14-search-tool
 version: 1

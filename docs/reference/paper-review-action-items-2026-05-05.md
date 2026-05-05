@@ -172,3 +172,4 @@ GPT 정리한 5 가지 예상 반응 — Architect 평가:
 
 - 2026-05-05 v1: 초안. GPT 피드백 (16 항) + Architect 평가 (P0/P1/P2 분류 + 5 push back) 통합 정리. P1 망각 차단을 위한 영구 문서. 진행 시 본 문서의 status 표를 직접 갱신.
 - 2026-05-05 v2: P0-1 ~ P0-5 모두 **done**. 다음 차단 작업 없음 — P1 진입 가능. P1 의 LLM-as-judge replication (P1-3) 이 H12 핵심 약점 방어이므로 Stage 6 cross-model 인프라 (Groq client) 와 자연 결합 권장.
+- 2026-05-05 v3: Exp14 task-05 마감 + H13 verdict 통합 (paper draft v0.3, README 갱신은 사용자 결정 대기). Stage 5 통합 narrative 확정 — Position effect (H11/H12) + Iteration effect (H13) → "more structure is not monotonically better". P1-3 LLM-as-judge 의 의미가 더 커짐 (H13 의 keyword scorer 영향은 H12 보다 작지만, 의미적 채점이 두 가설 모두 보강). 새 P1 추가 후보: P1-7 (논문 결론 §7 작성, cross-model 후), P1-8 (LaTeX 변환 + arXiv 업로드 준비).

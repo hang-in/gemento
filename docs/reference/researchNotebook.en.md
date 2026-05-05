@@ -4,6 +4,7 @@ status: in_progress
 updated_at: 2026-05-05
 mirror_of: docs/reference/researchNotebook.md (Part 1 — Closed Findings)
 language: en
+note: 2026-05-05 v3 — Exp14 H13 Closed-append (Stage 5 first statistically significant negative)
 ---
 
 > **Conceptual framework canonical document**: [conceptFramework.md](./conceptFramework.md) — 4-axis externalization principles, terminology definitions, axis ↔ experiment mapping.
@@ -972,6 +973,65 @@ Limitations: n=15 paired tasks (power-limited); 5 trials per (task, condition); 
 Detail: `docs/reference/exp13-reducer-role-analysis-2026-05-05.md`. Results: `experiments/exp13_reducer_role/results/exp13_reducer_role_20260504_191208.json` (baseline) + `exp13_reducer_abc.json` (reducer). Bug fix: commit `cf057b6`.
 
 The hypothesis table above (H1~H11) remains unchanged (Closed-append-only policy). H12's entry is a new addition only.
+
+---
+
+## Exp14 — Search Tool note (2026-05-05)
+
+A follow-up experiment (`exp14-search-tool`) tested **H13** — whether ABC agents that *actively* call a `search_chunks(query, top_k)` BM25 retrieval tool during cycles outperform a sufficient-context baseline (32K-context window with the full document in the prompt) on long-context tasks. This is the Architect-recommended Tool-axis exploration after the three Stage 5 Role-axis ablations (Exp11/12/13). Unlike the previous two negative results (Exp11 mixed-Judge, Exp13 Reducer), this is a *deterministic external tool* (BM25 lexical search) — extending the H7/H8 Tool-axis line that previously yielded +18.3pp / +23.3pp.
+
+Conditions: baseline_abc_chunked (full document in prompt, ~26K tokens for Large-20K docs) vs abc_search_tool (question only + tool spec, agent decides when/how to call) × 10 longctx tasks (small/medium/large × needle/2-hop/3-hop) × 5 trials = 100 trials, plus 15 diagnostic trials with fix to capture tool_calls. Same Gemma 4 E4B model on all roles. Stage 2A/2B/2C + Exp11 c_caller / Exp12 extractor_pre_stage / Exp13 reducer_post_stage hooks all preserved. The orchestrator integrates `SEARCH_TOOL_SCHEMA` (registered in `experiments/tools/bm25_tool.py`) via OpenAI tool-calling protocol with `tool_choice="auto"` (agent decides whether to call). The existing `bm25_retrieve` from Exp09 is reused; stop-words filtering was added to the tokenizer. A `make_search_chunks_tool(corpus)` factory closes over the per-task chunked corpus so the agent sees only the tool, not the document directly.
+
+Results (v3 scoring, 100 trials):
+- baseline_abc_chunked: mean_acc=0.9500, err+null=0+0, avg cycles=7.0, avg dur=390s, cost=$0
+- **abc_search_tool**: mean_acc=**0.7300**, err+null=7+7, avg cycles=7.1, avg dur=235s (−40%), cost=$0
+
+Δ(search − baseline) = **−0.2200** — by far the largest negative effect in Stage 5 (compare Exp11 −0.081 NS, Exp13 −0.053 NS). Statistics (n=10 paired tasks): **Wilcoxon p=0.0312, paired t p=0.0115 — both SIGNIFICANT at α=0.05**. **Cohen's d = −1.000 (large effect)**. Bootstrap 95% CI Δ: **[−0.360, −0.100]** (does not include zero). This is **the first statistically significant verdict in Stage 5** (Exp10/11/12/13 were all NS at n=15).
+
+Hop-type breakdown:
+- needle (1-hop, n=15 trials): mean = **0.800** — diagnostic v2 confirmed 5/5 trials with exactly 1 call and 5/5 correct (BM25 top score 4.7–4.9, accurate query formation)
+- 2-hop (n=20 trials): mean = **0.675** — catastrophic large-2hop-01 (base 1.0 → search 0.4)
+- 3-hop (n=15 trials): mean = 0.733
+- baseline 1.000 across all hop types (full-document prompt makes hop count irrelevant)
+
+**H13 verdict (Architect)**: ⚠ **Inconclusive — effectively rejected, statistically significant negative direction at this scale**. The negative direction is robust (p<0.05, |d|=1.0, Bootstrap CI excludes 0); however, the result applies specifically to *agent-active BM25 retrieval against a 32K-context baseline on n=10 long-context tasks*, not to "Search Tool" as a general category. A weaker form of the hypothesis ("retrieval helps when context is the limit") is not addressed by this experiment because the baseline saturated.
+
+**Mechanism — *insufficient retrieval iterations on multi-hop tasks***: The diagnostic run on `longctx-large-2hop-01` (Chen Wei → trained at Westbrook Institute → 347 patents) revealed a clear pattern across 5 trials with `total_tool_calls` per trial = [1, 2, 2, 3, 0] and accuracy = [0, 1, 1, 1, 0]. The single-call trial (t0) recovered the hop-1 entity ("Westbrook Institute") then prematurely concluded "the document does not contain a specific [number]" instead of issuing a hop-2 query. The 2- and 3-call trials completed both hops and scored 1.0. The zero-call trial (t4) was a tool-neglect case (no_final_answer). For needle (single-hop) tasks the diagnostic showed 5/5 trials with exactly one well-formed call and 5/5 correct, indicating the negative direction is concentrated on multi-hop reasoning where the agent must decide to issue *additional* queries.
+
+**Caveat — A-2 production run did not capture tool_calls**: The 50-trial A-2 main run was completed before the run.py whitelist fix (commit `a3b71af`) that adds `tool_calls_per_cycle` and `total_tool_calls` to the trial dict. The mechanism analysis therefore relies on the 15-trial diagnostic subset (medium-needle v2 + large-2hop), not on the production 50 trials. This is documented as a limitation; rerunning A-2 with the fix would consume another ~3-4 hours and is deferred since the direction and per-hop pattern are already established.
+
+**Decisive contrast — Exp11 / Exp12 / Exp13 / Exp14**:
+
+| | Exp11 Mixed (H10) | Exp12 Extractor (H11) | Exp13 Reducer (H12) | Exp14 Search (H13) |
+|---|---|---|---|---|
+| Externalization type | Role strengthening (stronger model) | Role separation/addition — pre-stage | Role separation/addition — post-stage | **Tool axis — agent-iterative retrieval** |
+| Δ accuracy | −0.0811 | +0.0500 | −0.0533 | **−0.2200** |
+| Cohen's d | −0.316 | +0.323 | −0.323 | **−1.000** |
+| p-value | 0.293 (NS) | 0.198 (NS) | 0.180 (NS) | **0.012 (SIG)** ✅ |
+| n_paired | 15 | 15 | 15 | 10 |
+| Mechanism | chain disruption | input stabilization | abstraction loss (caveat) | **insufficient hop iterations** |
+| Verdict | ⚠ Inconclusive (effectively rejected) | ⚠ Conditionally supported | ⚠ Inconclusive (effectively rejected) | **⚠ Inconclusive (effectively rejected, SIG)** |
+
+**Stage 5 framework-level integrated principle**: Across the four ablations, the *sign* of an externalization effect depends jointly on (i) externalization type (Role strengthening vs separation/addition vs Tool), (ii) position in the workflow (pre vs post for Role addition), and (iii) iteration count (deterministic single-call computation tools vs agent-controlled multi-call retrieval). The naive prior — "more structure or more capability is better" — is rejected on multiple axes. We also identify a sub-distinction within the Tool axis itself: **deterministic computation tools** (calculator, linprog — H7/H8 +18~23pp) succeed, while **agent-iterative retrieval tools** (BM25 search — H13 −22pp) underperform under sufficient context. This is consistent with the §4.6 paper observation that role *position* matters more than role *addition*: in Exp14, the analogous claim is that *iteration discipline* (fixed vs agent-controlled, deterministic vs probabilistic) matters more than tool *availability*.
+
+**Stage 6 implications**:
+- 🎯 P0 — **Cross-model replication** (Llama 3.1 8B / Llama 3.3 70B / Qwen 2.5 7B Q4_K_M via Groq free tier + local) for Stage 5 hypotheses H10/H11/H12/H13. Infrastructure ready (`experiments/_external/groq_client.py`, commit `b389534`).
+- 🎯 P0 — **LLM-as-judge auxiliary evaluation** (Groq GPT-OSS 120B) for H12 (Reducer, addressing the keyword-scorer artifact caveat from Exp13) and H13 (Search, addressing whether the search-arm answers are semantically equivalent to baseline answers despite the keyword-coverage drop).
+- Iteration-count manipulation (analogous to the Exp08b "mandatory tool rules" pattern) — could fix H13 mechanism directly; deferred since the diagnostic data already establishes the cause.
+- Other Tool sub-types (Graph traversal, Evidence resolution, strengthened Critic) — on hold pending the cross-model replication.
+
+Limitations:
+- n=10 paired tasks (longctx_taskset has 10 tasks; smaller than the 15-task main set used by Exp11/12/13). The large effect size (|d|=1.0) compensated for the smaller n to reach significance.
+- 5 trials per (task, condition) — limited per-task sample.
+- A-2 main 50-trial run lacks tool_call_log capture (fixed in commit `a3b71af` after the run completed); mechanism analysis uses 15 diagnostic trials.
+- score_answer_v3 keyword matching — same caveat as H12, but milder here because longctx tasks have short-answer ground truths (numbers, names) that align reasonably with keyword detection.
+- Tool axis tested only for *agent-active BM25 retrieval*; passive retrieve (Exp09 RAG arm) and other Tool sub-types are not covered by this single experiment.
+- Sufficient-context baseline (32K window covers even Large 20K-word documents). The relative value of Search Tool against a *context-limited* baseline (e.g., 8K window) is not measured.
+- `tool_choice="auto"` — the agent decides whether and how often to call. Mandatory tool rules (H8 pattern) might change the result.
+
+Detail: `docs/reference/exp14-search-tool-analysis-2026-05-05.md`. Results: `experiments/exp14_search_tool/results/exp14_baseline_abc_chunked.json` (baseline) + `exp14_search_tool_abc.json` (search) + `diag_search_medium_needle_v2.json` (needle diagnostic) + `diag_search_large_2hop.json` (multi-hop diagnostic). Tool capture fix: commit `a3b71af`.
+
+The hypothesis table above (H1~H12) remains unchanged (Closed-append-only policy). H13's entry is a new addition only.
 
 ---
 

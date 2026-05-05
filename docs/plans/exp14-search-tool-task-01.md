@@ -1,6 +1,6 @@
 ---
 type: plan-task
-status: pending
+status: done
 updated_at: 2026-05-05
 parent_plan: exp14-search-tool
 parallel_group: A
