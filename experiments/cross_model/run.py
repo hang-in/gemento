@@ -100,9 +100,10 @@ HYPOTHESIS_META: dict[str, dict] = {
 
 # Groq free tier: 30 RPM = 1 call / 2sec. ABC chain bursts (A→B→C in same cycle)
 # 즉시 429 storm → exponential backoff 로 인한 대기 시간 폭증. Preventive throttle:
-# 매 호출 *전* 에 min interval 보장. 2.5s = 24 RPM 마진 (30 RPM 한도 안전).
-# Dry-run (2026-05-06) 의 Llama 3.1 8B math-01 1 trial = 469s (rate limit 60% 이상).
-GROQ_MIN_CALL_INTERVAL_SEC = 2.5
+# 매 호출 *전* 에 min interval 보장.
+# 2026-05-06 v1: 2.5s 시도 → cycle 2 에서 rate limit 재발. Extractor pre-stage 의
+# A 호출이 cycle 시작 직후 burst → 5.0s (= 12 RPM) 로 상향, 30 RPM 한도 안전 마진 큼.
+GROQ_MIN_CALL_INTERVAL_SEC = 5.0
 _groq_last_call_ts: dict[str, float] = {}  # per-model 마지막 호출 시각
 
 
