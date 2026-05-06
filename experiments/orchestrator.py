@@ -467,7 +467,10 @@ def run_loop(
     for attempt in range(2):
         try:
             if model_caller is not None:
-                raw, _mcmeta = model_caller(messages)
+                _mc_call_kwargs = {}
+                if _tools:
+                    _mc_call_kwargs["tools"] = _tools
+                raw, _mcmeta = model_caller(messages, **_mc_call_kwargs)
                 tool_call_log = []
             else:
                 raw, tool_call_log = call_model(messages, tools=_tools, tool_functions=_tool_fns)
@@ -640,10 +643,17 @@ def run_abc_chain(
         raise ValueError("c_caller and model_caller are mutually exclusive")
 
     # ── Extractor pre-stage (trial 시작 시 1회) ──
+    # cross-model 시 model_caller 가 외부 모델 라우팅. None 시 기존 internal call_model.
+    # 2026-05-06 fix: Extractor / Reducer 가 model_caller 무시하고 internal call_model 호출하던 결함 (Stage 6 cross-model 시 Local LM Studio 부재 환경에서 WinError 10061 발생).
+    def _route_call(messages, **kwargs):
+        if model_caller is not None:
+            return model_caller(messages, **kwargs)
+        return call_model(messages, **kwargs)
+
     if extractor_pre_stage:
         from system_prompt import build_extractor_prompt
         extractor_messages = build_extractor_prompt(prompt)
-        extractor_response, _emeta = call_model(extractor_messages)
+        extractor_response, _emeta = _route_call(extractor_messages)
         extractor_result_text = extractor_response.strip()
         if extractor_result_text:
             prompt = (
@@ -664,7 +674,7 @@ def run_abc_chain(
         from system_prompt import build_reducer_prompt as _brp
         _asns = [{"claim": a.content, "confidence": getattr(a, "confidence", None)}
                  for a in tattoo.active_assertions]
-        _resp, _ = call_model(_brp(_asns, fa))
+        _resp, _ = _route_call(_brp(_asns, fa))
         _reduced = _resp.strip()
         if _reduced:
             print(f"  [Reducer] {len(fa)}→{len(_reduced)} chars | preview: {_reduced[:200]}{'...' if len(_reduced) > 200 else ''}")
