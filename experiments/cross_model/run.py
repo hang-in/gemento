@@ -76,24 +76,27 @@ MODELS: dict[str, dict] = {
         "supports_longctx": True,
     },
     # Ollama Cloud free tier — burst OK (GPU time 기반, RPM hard limit 없음).
-    # gemma3:4b 가 gemento Gemma 4 E4B (effective 4B) 와 정확히 동급 — best baseline.
+    # 2026-05-06 검증: 30K input tokens 정상 처리 (Ollama 앱 설정 32K). Gemma 3 의
+    # native context 는 128K — 사용자가 ollama 앱 설정에서 더 큰 값으로 상향 가능.
+    # supports_longctx=True 로 H13 (longctx_taskset) cross-model 가능; 단 large
+    # 20K-word task 는 prompt + Tattoo 누적 시 32K 빠듯 → medium 까지 권장.
     "gemma3_4b_ollama": {
         "provider": "ollama_cloud",
         "model_id": GEMMA_3_4B,
-        "context": 8192,
-        "supports_longctx": False,
+        "context": 32768,
+        "supports_longctx": True,  # medium 까지 안전, large 는 사용자 ollama 앱 설정 상향 시
     },
     "gemma3_12b_ollama": {
         "provider": "ollama_cloud",
         "model_id": GEMMA_3_12B,
-        "context": 8192,
-        "supports_longctx": False,
+        "context": 32768,
+        "supports_longctx": True,
     },
     "rnj_1_8b_ollama": {
         "provider": "ollama_cloud",
         "model_id": RNJ_1_8B,
-        "context": 8192,
-        "supports_longctx": False,
+        "context": 32768,
+        "supports_longctx": True,
     },
     "gpt_oss_20b_ollama": {
         "provider": "ollama_cloud",
@@ -104,12 +107,11 @@ MODELS: dict[str, dict] = {
     },
 }
 
+# 2026-05-06: H10 cross-model dropped — H10 의 baseline_abc 가 all-Gemma (Local LM
+# Studio) 의존 + 가설 의미가 multi-model 자체 (cross-model 의미 모호). H10 의
+# inverse mechanism 은 Stage 5 Exp11 결과로 충분, generalization 별도 plan 영역.
+# Cross-model scope = Stage 5 의 position/iteration effect 가설 (H11/H12/H13).
 HYPOTHESIS_META: dict[str, dict] = {
-    "h10": {
-        "taskset": "standard",
-        "conditions": ["baseline_abc", "cross_c_judge"],
-        "judge_eligible": False,
-    },
     "h11": {
         "taskset": "standard",
         "conditions": ["baseline_abc", "extractor_abc"],
@@ -598,7 +600,8 @@ def reproduce_h13_search(model_key: str, task: dict, trial_idx: int,
 
 
 _REPRODUCE_DISPATCH = {
-    "h10": reproduce_h10_mixed,
+    # h10 dropped 2026-05-06 — cross-model 의미 모호, baseline 이 all-Gemma 의존.
+    # reproduce_h10_mixed 함수는 보존 (Stage 5 Exp11 재현 코드, future plan 활용 가능)
     "h11": reproduce_h11_extractor,
     "h12": reproduce_h12_reducer,
     "h13": reproduce_h13_search,
@@ -833,8 +836,8 @@ def main() -> int:
     parser.add_argument("--model", required=True, choices=list(MODELS.keys()),
                         help="대상 모델 (qwen_25_7b_local / llama_3_1_8b_groq / llama_3_3_70b_groq)")
     parser.add_argument("--hypothesis", nargs="+", required=True,
-                        choices=["h10", "h11", "h12", "h13"],
-                        help="재현할 Stage 5 가설 (복수 지정 가능)")
+                        choices=["h11", "h12", "h13"],
+                        help="재현할 Stage 5 가설 (복수 지정 가능). h10 cross-model dropped 2026-05-06")
     parser.add_argument("--trials", type=int, default=DEFAULT_TRIALS)
     parser.add_argument("--max-cycles", type=int, default=DEFAULT_MAX_CYCLES)
     parser.add_argument("--tasks", nargs="+", default=None,
