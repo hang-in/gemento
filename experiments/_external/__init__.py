@@ -74,12 +74,28 @@ def resolve_groq_key() -> str | None:
     return None
 
 
+def resolve_ollama_cloud_key() -> str | None:
+    """Ollama Cloud API 키 우선순위: env > gemento/.env. Bearer token (public key 와 별개)."""
+    for env_name in ("OLLAMA_CLOUD_API_KEY", "OLLAMA_API_KEY"):
+        v = os.environ.get(env_name)
+        if v:
+            return v
+    here = Path(__file__).resolve()
+    gemento_env = here.parent.parent.parent / ".env"
+    env1 = load_env_file(gemento_env)
+    for k in ("OLLAMA_CLOUD_API_KEY", "OLLAMA_API_KEY"):
+        if env1.get(k):
+            return env1[k]
+    return None
+
+
 from .llm_judge import judge_answer, compare_answers  # noqa: E402
 
 __all__ = [
     "load_env_file",
     "resolve_gemini_key",
     "resolve_groq_key",
+    "resolve_ollama_cloud_key",
     "judge_answer",
     "compare_answers",
 ]

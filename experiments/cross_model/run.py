@@ -24,9 +24,13 @@ import httpx
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from experiments._external.groq_client import (
-    call_with_meter_retry,
+    call_with_meter_retry as groq_call_retry,
     LLAMA_3_1_8B,
     LLAMA_3_3_70B,
+)
+from experiments._external.ollama_cloud_client import (
+    call_with_meter_retry as ollama_call_retry,
+    GEMMA_3_4B, GEMMA_3_12B, RNJ_1_8B, GPT_OSS_20B_OLLAMA,
 )
 from experiments._external.llm_judge import compare_answers
 from experiments.measure import score_answer_v3
@@ -58,6 +62,7 @@ MODELS: dict[str, dict] = {
         "context": 32768,
         "supports_longctx": True,
     },
+    # Groq free tier — 30 RPM throttle 5s 필요. Llama 3.1 8B 마감 2026-05-27.
     "llama_3_1_8b_groq": {
         "provider": "groq",
         "model_id": LLAMA_3_1_8B,
@@ -69,6 +74,33 @@ MODELS: dict[str, dict] = {
         "model_id": LLAMA_3_3_70B,
         "context": 131072,
         "supports_longctx": True,
+    },
+    # Ollama Cloud free tier — burst OK (GPU time 기반, RPM hard limit 없음).
+    # gemma3:4b 가 gemento Gemma 4 E4B (effective 4B) 와 정확히 동급 — best baseline.
+    "gemma3_4b_ollama": {
+        "provider": "ollama_cloud",
+        "model_id": GEMMA_3_4B,
+        "context": 8192,
+        "supports_longctx": False,
+    },
+    "gemma3_12b_ollama": {
+        "provider": "ollama_cloud",
+        "model_id": GEMMA_3_12B,
+        "context": 8192,
+        "supports_longctx": False,
+    },
+    "rnj_1_8b_ollama": {
+        "provider": "ollama_cloud",
+        "model_id": RNJ_1_8B,
+        "context": 8192,
+        "supports_longctx": False,
+    },
+    "gpt_oss_20b_ollama": {
+        "provider": "ollama_cloud",
+        "model_id": GPT_OSS_20B_OLLAMA,
+        "context": 131072,
+        "supports_longctx": True,
+        "reasoning_model": True,  # max_tokens 4096+ 필수 (reasoning tokens 소비)
     },
 }
 
@@ -122,7 +154,27 @@ def make_groq_caller(model_id: str) -> Callable:
             time.sleep(GROQ_MIN_CALL_INTERVAL_SEC - elapsed)
         _groq_last_call_ts[model_id] = time.time()
 
-        result = call_with_meter_retry(messages, model=model_id, tools=tools, **kwargs)
+        result = groq_call_retry(messages, model=model_id, tools=tools, **kwargs)
+        meta = {
+            "input_tokens": result.input_tokens,
+            "output_tokens": result.output_tokens,
+            "duration_ms": result.duration_ms,
+            "cost_usd": result.cost_usd,
+            "error": result.error,
+            "reasoning_tokens": result.reasoning_tokens,
+        }
+        return result.raw_response, meta
+    return _caller
+
+
+def make_ollama_cloud_caller(model_id: str) -> Callable:
+    """Ollama Cloud API → model_caller signature: (messages, tools=None, **kwargs) → (str, dict).
+
+    Free tier 는 GPU time 기반 — Groq 의 30 RPM 같은 hard rate limit 부재.
+    burst 호출 OK. with_quota_retry 가 quota 초과 (HTTP 429) 시 자동 backoff.
+    """
+    def _caller(messages: list[dict], tools=None, **kwargs) -> tuple[str, dict]:
+        result = ollama_call_retry(messages, model=model_id, tools=tools, **kwargs)
         meta = {
             "input_tokens": result.input_tokens,
             "output_tokens": result.output_tokens,
@@ -186,9 +238,14 @@ def make_local_caller(endpoint: str, model_id: str) -> Callable:
 
 def _get_model_caller(model_key: str) -> Callable:
     cfg = MODELS[model_key]
-    if cfg["provider"] == "groq":
+    provider = cfg["provider"]
+    if provider == "groq":
         return make_groq_caller(cfg["model_id"])
-    return make_local_caller(cfg["endpoint"], cfg["model_id"])
+    if provider == "ollama_cloud":
+        return make_ollama_cloud_caller(cfg["model_id"])
+    if provider == "lm_studio_local":
+        return make_local_caller(cfg["endpoint"], cfg["model_id"])
+    raise ValueError(f"unknown provider: {provider}")
 
 
 # ── Shared helpers ────────────────────────────────────────────────────────────
