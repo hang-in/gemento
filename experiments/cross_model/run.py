@@ -98,9 +98,29 @@ HYPOTHESIS_META: dict[str, dict] = {
 
 # ── Model caller factories ────────────────────────────────────────────────────
 
+# Groq free tier: 30 RPM = 1 call / 2sec. ABC chain bursts (A→B→C in same cycle)
+# 즉시 429 storm → exponential backoff 로 인한 대기 시간 폭증. Preventive throttle:
+# 매 호출 *전* 에 min interval 보장. 2.5s = 24 RPM 마진 (30 RPM 한도 안전).
+# Dry-run (2026-05-06) 의 Llama 3.1 8B math-01 1 trial = 469s (rate limit 60% 이상).
+GROQ_MIN_CALL_INTERVAL_SEC = 2.5
+_groq_last_call_ts: dict[str, float] = {}  # per-model 마지막 호출 시각
+
+
 def make_groq_caller(model_id: str) -> Callable:
-    """Groq API → model_caller signature: (messages, tools=None, **kwargs) → (str, dict)."""
+    """Groq API → model_caller signature: (messages, tools=None, **kwargs) → (str, dict).
+
+    Preventive throttle: 직전 호출 후 GROQ_MIN_CALL_INTERVAL_SEC 미경과 시 sleep.
+    per-model 별도 추적 (다른 모델 동시 호출 가능).
+    """
     def _caller(messages: list[dict], tools=None, **kwargs) -> tuple[str, dict]:
+        # Preventive throttle — 호출 전 minimum interval 보장
+        now = time.time()
+        last = _groq_last_call_ts.get(model_id, 0.0)
+        elapsed = now - last
+        if elapsed < GROQ_MIN_CALL_INTERVAL_SEC:
+            time.sleep(GROQ_MIN_CALL_INTERVAL_SEC - elapsed)
+        _groq_last_call_ts[model_id] = time.time()
+
         result = call_with_meter_retry(messages, model=model_id, tools=tools, **kwargs)
         meta = {
             "input_tokens": result.input_tokens,
