@@ -169,14 +169,17 @@ def make_groq_caller(model_id: str) -> Callable:
     return _caller
 
 
-def make_ollama_cloud_caller(model_id: str) -> Callable:
+def make_ollama_cloud_caller(model_id: str, api_key_slot: int = 1) -> Callable:
     """Ollama Cloud API → model_caller signature: (messages, tools=None, **kwargs) → (str, dict).
 
     Free tier 는 GPU time 기반 — Groq 의 30 RPM 같은 hard rate limit 부재.
     burst 호출 OK. with_quota_retry 가 quota 초과 (HTTP 429) 시 자동 backoff.
+
+    api_key_slot: 다중 무료 계정 분산 (1=OLLAMA_CLOUD_API_KEY, 2=KEY2, ...).
     """
     def _caller(messages: list[dict], tools=None, **kwargs) -> tuple[str, dict]:
-        result = ollama_call_retry(messages, model=model_id, tools=tools, **kwargs)
+        result = ollama_call_retry(messages, model=model_id, tools=tools,
+                                    api_key_slot=api_key_slot, **kwargs)
         meta = {
             "input_tokens": result.input_tokens,
             "output_tokens": result.output_tokens,
@@ -238,13 +241,13 @@ def make_local_caller(endpoint: str, model_id: str) -> Callable:
     return _caller
 
 
-def _get_model_caller(model_key: str) -> Callable:
+def _get_model_caller(model_key: str, api_key_slot: int = 1) -> Callable:
     cfg = MODELS[model_key]
     provider = cfg["provider"]
     if provider == "groq":
         return make_groq_caller(cfg["model_id"])
     if provider == "ollama_cloud":
-        return make_ollama_cloud_caller(cfg["model_id"])
+        return make_ollama_cloud_caller(cfg["model_id"], api_key_slot=api_key_slot)
     if provider == "lm_studio_local":
         return make_local_caller(cfg["endpoint"], cfg["model_id"])
     raise ValueError(f"unknown provider: {provider}")
@@ -563,9 +566,10 @@ def reproduce_h10_mixed(model_key: str, task: dict, trial_idx: int,
 
 
 def reproduce_h11_extractor(model_key: str, task: dict, trial_idx: int,
-                             max_cycles: int, condition: str) -> dict:
+                             max_cycles: int, condition: str,
+                             api_key_slot: int = 1) -> dict:
     """H11 cross-model: baseline_abc vs extractor_abc — both with model_caller."""
-    model_caller = _get_model_caller(model_key)
+    model_caller = _get_model_caller(model_key, api_key_slot=api_key_slot)
     if condition == "baseline_abc":
         return _run_cm_baseline(task, trial_idx, max_cycles, model_caller, "h11_cm_baseline")
     elif condition == "extractor_abc":
@@ -574,9 +578,10 @@ def reproduce_h11_extractor(model_key: str, task: dict, trial_idx: int,
 
 
 def reproduce_h12_reducer(model_key: str, task: dict, trial_idx: int,
-                           max_cycles: int, condition: str) -> dict:
+                           max_cycles: int, condition: str,
+                           api_key_slot: int = 1) -> dict:
     """H12 cross-model: baseline_abc vs reducer_abc — both with model_caller + reducer_post_stage."""
-    model_caller = _get_model_caller(model_key)
+    model_caller = _get_model_caller(model_key, api_key_slot=api_key_slot)
     if condition == "baseline_abc":
         return _run_cm_baseline(task, trial_idx, max_cycles, model_caller, "h12_cm_baseline")
     elif condition == "reducer_abc":
@@ -585,13 +590,14 @@ def reproduce_h12_reducer(model_key: str, task: dict, trial_idx: int,
 
 
 def reproduce_h13_search(model_key: str, task: dict, trial_idx: int,
-                          max_cycles: int, condition: str) -> dict:
+                          max_cycles: int, condition: str,
+                          api_key_slot: int = 1) -> dict:
     """H13 cross-model: baseline_abc_chunked vs abc_search_tool — both with model_caller.
 
     corpus loaded via task['_chunks'] (injected by _load_longctx_tasks).
     search_tool=True injects BM25 SEARCH_TOOL_SCHEMA into A-agent.
     """
-    model_caller = _get_model_caller(model_key)
+    model_caller = _get_model_caller(model_key, api_key_slot=api_key_slot)
     if condition == "baseline_abc_chunked":
         return _run_cm_baseline_chunked(task, trial_idx, max_cycles, model_caller)
     elif condition == "abc_search_tool":
@@ -666,12 +672,14 @@ def run_experiment(
     task_filter: list[str] | None = None,
     out_name: str | None = None,
     run_judge: bool = False,
+    api_key_slot: int = 1,
     standard_taskset_path: str = STANDARD_TASKSET_PATH,
     longctx_taskset_path: str = LONGCTX_TASKSET_PATH,
 ) -> dict:
     """Run cross-model replication experiment for given model and hypotheses.
 
     Supports checkpoint/resume via partial JSON. Error rate gate (30% abort).
+    api_key_slot: Ollama Cloud 다중 무료 계정 분산 — process 별 별도 partial 파일.
     """
     started = _dt.datetime.now().astimezone().isoformat()
     model_cfg = MODELS[model_key]
@@ -681,7 +689,13 @@ def run_experiment(
         std_tasks = json.load(f)["tasks"]
     longctx_tasks: list[dict] | None = None
 
-    partial_name = f"partial_stage6_{model_key}.json"
+    # Partial JSON 명명 — out_name 또는 hypothesis+slot 으로 race condition 회피.
+    # 같은 model_key 의 두 process 동시 실행 시 (다른 hyp / 다른 slot) 별도 파일 보장.
+    if out_name:
+        partial_name = f"partial_stage6_{model_key}_{out_name}.json"
+    else:
+        hyp_tag = "_".join(hypotheses)
+        partial_name = f"partial_stage6_{model_key}_{hyp_tag}_slot{api_key_slot}.json"
     partial_path = RESULTS_DIR / partial_name
     trials_data: list[dict] = []
     finished: set[tuple[str, str, str, int]] = set()
@@ -752,7 +766,8 @@ def run_experiment(
                     print(f"\n  [{counter}/{total}] {hyp.upper()} | {cond} | {task['id']} | trial {trial_idx}")
                     print(f"      q: {q_preview}{'...' if len(q_preview) == 100 else ''}")
 
-                    result = reproduce_fn(model_key, task, trial_idx, max_cycles, cond)
+                    result = reproduce_fn(model_key, task, trial_idx, max_cycles, cond,
+                                          api_key_slot=api_key_slot)
                     final = result.get("final_answer") or ""
                     acc = score_answer_v3(str(final), task)
                     err = result.get("error")
@@ -846,6 +861,8 @@ def main() -> int:
                         help="출력 파일명 (없으면 자동 생성)")
     parser.add_argument("--judge", action="store_true",
                         help="LLM-as-judge 보조 채점 활성 (H12/H13 권장)")
+    parser.add_argument("--api-key-slot", type=int, default=1,
+                        help="Ollama Cloud API key slot (1=OLLAMA_CLOUD_API_KEY, 2=KEY2). 다중 무료 계정 분산용")
     parser.add_argument("--standard-taskset", default=STANDARD_TASKSET_PATH)
     parser.add_argument("--longctx-taskset", default=LONGCTX_TASKSET_PATH)
     args = parser.parse_args()
@@ -858,6 +875,7 @@ def main() -> int:
         task_filter=args.tasks,
         out_name=args.out_name,
         run_judge=args.judge,
+        api_key_slot=args.api_key_slot,
         standard_taskset_path=args.standard_taskset,
         longctx_taskset_path=args.longctx_taskset,
     )

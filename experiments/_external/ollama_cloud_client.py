@@ -64,6 +64,7 @@ def call_with_meter(
     model: str = GEMMA_3_4B,
     timeout: int = DEFAULT_TIMEOUT,
     api_key: str | None = None,
+    api_key_slot: int = 1,
     response_format: dict | None = None,
     temperature: float = 0.1,
     max_tokens: int = 4096,
@@ -75,9 +76,12 @@ def call_with_meter(
     """Ollama Cloud API 호출 + metering.
 
     OpenAI Chat Completions 호환. response_format={'type':'json_object'} 로 JSON 강제.
-    tools/tool_choice 는 모델별 호환성 다름 (Qwen/Llama 호환, 일부 모델 미호환).
+    tools/tool_choice 는 모델별 호환성 다름.
+
+    api_key_slot: 다중 무료 계정 분산용 (1=OLLAMA_CLOUD_API_KEY, 2+=KEY{slot}).
+                  api_key 가 직접 전달되면 무시됨.
     """
-    key = api_key or resolve_ollama_cloud_key()
+    key = api_key or resolve_ollama_cloud_key(slot=api_key_slot)
     if not key:
         return CallMeter(
             raw_response="", input_tokens=0, output_tokens=0,
@@ -175,6 +179,6 @@ def with_quota_retry(max_retries: int = 3, initial_wait: float = 30.0):
 
 
 @with_quota_retry(max_retries=2, initial_wait=30.0)
-def call_with_meter_retry(messages, model=GEMMA_3_4B, **kwargs) -> CallMeter:
-    """call_with_meter 의 quota retry wrapper."""
-    return call_with_meter(messages, model=model, **kwargs)
+def call_with_meter_retry(messages, model=GEMMA_3_4B, api_key_slot: int = 1, **kwargs) -> CallMeter:
+    """call_with_meter 의 quota retry wrapper. api_key_slot 명시 가능 (다중 계정 분산)."""
+    return call_with_meter(messages, model=model, api_key_slot=api_key_slot, **kwargs)

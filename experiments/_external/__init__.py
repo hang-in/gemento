@@ -74,16 +74,27 @@ def resolve_groq_key() -> str | None:
     return None
 
 
-def resolve_ollama_cloud_key() -> str | None:
-    """Ollama Cloud API 키 우선순위: env > gemento/.env. Bearer token (public key 와 별개)."""
-    for env_name in ("OLLAMA_CLOUD_API_KEY", "OLLAMA_API_KEY"):
+def resolve_ollama_cloud_key(slot: int = 1) -> str | None:
+    """Ollama Cloud API 키 우선순위: env > gemento/.env. Bearer token (public key 와 별개).
+
+    slot=1 → OLLAMA_CLOUD_API_KEY (또는 fallback OLLAMA_API_KEY)
+    slot=2+ → OLLAMA_CLOUD_API_KEY{slot} (예: OLLAMA_CLOUD_API_KEY2)
+
+    다중 slot = 별도 무료 계정의 quota 분산 (parallel cross-model run 시).
+    """
+    if slot == 1:
+        keys = ("OLLAMA_CLOUD_API_KEY", "OLLAMA_API_KEY")
+    else:
+        keys = (f"OLLAMA_CLOUD_API_KEY{slot}", f"OLLAMA_CLOUD_API_KEY_{slot}")
+
+    for env_name in keys:
         v = os.environ.get(env_name)
         if v:
             return v
     here = Path(__file__).resolve()
     gemento_env = here.parent.parent.parent / ".env"
     env1 = load_env_file(gemento_env)
-    for k in ("OLLAMA_CLOUD_API_KEY", "OLLAMA_API_KEY"):
+    for k in keys:
         if env1.get(k):
             return env1[k]
     return None
