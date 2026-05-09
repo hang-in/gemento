@@ -31,7 +31,7 @@ from experiments._external.groq_client import (
 from experiments._external.ollama_cloud_client import (
     call_with_meter_retry as ollama_call_retry,
     GEMMA_3_4B, GEMMA_3_12B, RNJ_1_8B, GPT_OSS_20B_OLLAMA,
-    MINISTRAL_3_3B, MINISTRAL_3_8B,
+    MINISTRAL_3_3B, MINISTRAL_3_8B, GEMMA_4_31B,
 )
 from experiments._external.llm_judge import compare_answers
 from experiments.measure import score_answer_v3
@@ -120,6 +120,16 @@ MODELS: dict[str, dict] = {
     "ministral_3_8b_ollama": {
         "provider": "ollama_cloud",
         "model_id": MINISTRAL_3_8B,
+        "context": 32768,
+        "supports_longctx": True,
+    },
+    # 2026-05-09 추가 — §4.7.4 mechanism 분기 검증용 Gemma 4 family size-up
+    # control. dry-run 검증: gemma4:31b 도구 호출 ✅ (smoke test, 2026-05-09).
+    # H13 결과로 Gemma 4 family 의 H13 작동 여부 (size 효과) 검증 — Stage 5
+    # 의 Gemma 4 E4B M1 mechanism 이 family-wide 인지 모델별인지 분리.
+    "gemma4_31b_ollama": {
+        "provider": "ollama_cloud",
+        "model_id": GEMMA_4_31B,
         "context": 32768,
         "supports_longctx": True,
     },
