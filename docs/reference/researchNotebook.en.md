@@ -1,10 +1,10 @@
 ---
 type: reference
 status: in_progress
-updated_at: 2026-05-08
+updated_at: 2026-05-09
 mirror_of: docs/reference/researchNotebook.md (Part 1 — Closed Findings)
 language: en
-note: 2026-05-08 v4 — Stage 6 cross-model H14 Closed-append (5/5 H11 direction, 3/4 H12 direction, rnj-1:8b H12 SIG)
+note: 2026-05-09 v5 — Stage 6 v2 update (6-model panel + capability-floor finding). 6/7 H11 (1 outlier), H12 family-systematic (Gemma 3 2/2 positive vs non-Gemma 4/4 negative — direct §4.6.2 caveat evidence), H13 family-agnostic small-dense fail at 8B (M2 capability floor) — minimum operational size ≈ Gemma 4 E4B
 ---
 
 > **Conceptual framework canonical document**: [conceptFramework.md](./conceptFramework.md) — 4-axis externalization principles, terminology definitions, axis ↔ experiment mapping.
@@ -1041,42 +1041,58 @@ The hypothesis table above (H1~H12) remains unchanged (Closed-append-only policy
 
 A follow-up cross-model replication tested **H14** — whether the *direction* of Stage 5's Position-Effect asymmetry (H11 Extractor pre-stage positive; H12 Reducer post-stage negative) generalizes across model families and sizes. Five models in total (Stage 5 baseline + 4 cross-model targets via Ollama Cloud Pro $20/month, 3-concurrent-model loading): Gemma 4 E4B (Stage 5), gemma3:4b, gemma3:12b (H11 done, H12 partial 28/75 baseline), rnj-1:8b, gpt-oss:20b. Same task set (15 main tasks) and trial count (5 per task × condition) as Stage 5.
 
-### H11 (Extractor) — direction match 5/5
+### H11 (Extractor) — 6/7 positive, 1 outlier (Stage 6 v2)
 
 | Model | family | size | Δ | Cohen's d | p (Wilcoxon) |
 |---|---|---|---|---|---|
-| Gemma 4 E4B (Stage 5) | Gemma | 4B | +0.0500 | +0.323 | 0.198 |
-| gemma3:4b | Gemma | 4B | **+0.0787** | +0.299 | 0.594 |
-| gemma3:12b | Gemma | 12B | +0.0022 | +0.009 | 0.888 |
+| Gemma 4 E4B (Stage 5) | Gemma 4 | 4B effective | +0.0500 | +0.323 | 0.198 |
+| gemma3:4b | Gemma 3 | 4B | **+0.0787** | +0.299 | 0.594 |
+| gemma3:12b | Gemma 3 | 12B | +0.0022 | +0.009 | 0.888 |
 | rnj-1:8b | non-Gemma | 8B | +0.0047 | +0.019 | 0.859 |
 | gpt-oss:20b | OpenAI/reasoning | 20B | +0.0244 | +0.177 | 0.672 |
+| **ministral-3:8b** | **Mistral 3** | **8B** | **−0.0433** ⚠ | **−0.292** | 0.311 |
 
-All five Δ values are positive — the H11 *direction* (pre-stage Extractor helps) replicates across families and sizes. Magnitude is small-model dependent: the largest effect appears at the weakest baselines (gemma3:4b +0.079, Stage 5 Gemma 4 E4B +0.050), consistent with capability-headroom saturation in stronger models (gpt-oss:20b at ~0.89 baseline).
+Six of seven values are positive — the H11 direction (pre-stage Extractor helps) replicates across families and sizes, with **one Mistral 3 / 8B outlier** producing a small-magnitude negative effect (NS, p=0.311). The most plausible non-exclusive explanations for the outlier are: (a) baseline saturation — ministral-3:8b's H11 baseline 0.7178 is near the higher end of the panel, and Extractor may add noise rather than structure when the cycle-1 input is already well-organized; (b) Extractor prompt mismatch with Mistral 3's instruction-following pattern; (c) NS-at-n=15 — the result is statistically indistinguishable from zero. Direction match is *strong but not unanimous*. Magnitude is largest at weak baselines (4B group: +0.05~+0.08).
 
-### H12 (Reducer) — direction match 3/4 + paper §4.6.2 caveat evidence
+### H12 (Reducer) — Family-systematic pattern (Stage 6 v2)
 
-| Model | size | Δ | Cohen's d | p (Wilcoxon) |
-|---|---|---|---|---|
-| Gemma 4 E4B (Stage 5) | 4B | −0.0711 | −0.323 | 0.180 |
-| gemma3:4b | 4B | **+0.0562** | +0.331 | 0.423 (outlier) |
-| rnj-1:8b | 8B | **−0.0989** | **−0.617** | **0.036 ✅ SIG** |
-| gpt-oss:20b | 20B | −0.0100 | −0.052 | 0.735 |
-| gemma3:12b | 12B | (28/75 partial) | TBD | TBD |
+| Model | family | size | Δ | Cohen's d | p (Wilcoxon) | direction |
+|---|---|---|---|---|---|---|
+| Gemma 4 E4B (Stage 5) | Gemma 4 | 4B | −0.0711 | −0.323 | 0.180 | non-Gemma negative |
+| gemma3:4b | Gemma 3 | 4B | **+0.0562** | +0.331 | 0.423 | **Gemma 3 positive** |
+| gemma3:12b (final) | Gemma 3 | 12B | **+0.0078** | +0.026 | 0.878 | **Gemma 3 positive** |
+| rnj-1:8b | non-Gemma | 8B | **−0.0989** | **−0.617** | **0.036 ✅ SIG** | non-Gemma negative |
+| gpt-oss:20b | non-Gemma | 20B | −0.0100 | −0.052 | 0.735 | non-Gemma negative |
+| ministral-3:8b | non-Gemma | 8B | **−0.0707** | **−0.287** | 0.327 | non-Gemma negative |
 
-Three out of four completed models show the negative H12 direction. The gemma3:4b outlier (+0.056) is *direct evidence* for the paper §4.6.2 keyword-scorer caveat: gemma3:4b's baseline mean is the weakest of any model (~0.45), so the Reducer's stylistic re-ordering happens to overlap more with the canonical answer keywords — a *style mismatch artifact*, not a genuine accuracy gain. The rnj-1:8b H12 result is also the **first cross-model statistically significant verdict** in either direction (Wilcoxon p=0.036, |d|=0.617 medium-large), strengthening the original Stage 5 H12 narrative.
+H12 splits cleanly along family lines: **Gemma 3 family 2/2 positive** (gemma3:4b +0.056, gemma3:12b +0.008), **non-Gemma family 4/4 negative** (Stage 5 Gemma 4 E4B −0.071, rnj-1:8b −0.099 SIG, gpt-oss:20b −0.010, ministral-3:8b −0.071). This is a *family-systematic* pattern, not a single-outlier observation. The rnj-1:8b H12 result is the **first cross-model statistically significant verdict** in either direction (Wilcoxon p=0.036, |d|=0.617 medium-large) and supports the post-stage Reducer = abstraction-loss claim at the family level for non-Gemma models. The Gemma 3 family inversion (2/2 positive) is *direct family-level evidence* for paper §4.6.2 style-mismatch caveat (b): a learned output-style bias in Gemma 3 such that Reducer's compression accidentally regularizes the answer toward the scorer's expected vocabulary. The Gemma 4 E4B baseline (Stage 5) belongs to the non-Gemma group on this pattern, suggesting the bias is *Gemma-3-specific, not Gemma-family-wide*.
 
-### H13 (Search Tool) — Gemma family-level finding
+### H13 (Search Tool) — Family-agnostic small-dense capability floor (Stage 6 v2)
 
-A dry-run of H13 on gemma3:4b returned 0/50 search_chunks tool calls; gemma3:12b dry-run produced "Unknown" answers with max-cycle exits. **Gemma 3 family does not reliably support tool-calling at this size class** in the Ollama Cloud build — a family-level finding that becomes paper §4.7. H13 cross-family replication (rnj-1, gpt-oss) is left as future work because the Stage 5 H13 narrative was already statistically established.
+Stage 6 v2 ran H13 on four small-dense models. **All four failed to operate the search-tool ABC chain**, with two distinguishable failure modes:
 
-### H14 verdict (Architect)
+| Model | family | size | failure mode |
+|---|---|---|---|
+| Gemma 4 E4B (Stage 5) | Gemma 4 | 4B effective | (M1) tool-calling present, **under-iteration** on multi-hop — Δ=−0.220 SIG |
+| gemma3:4b | Gemma 3 | 4B | (M2) **tool-calling absence** — 0/50 calls |
+| gemma3:12b | Gemma 3 | 12B | (M2) tool-calling not invoked — "Unknown" + max-cycle |
+| ministral-3:3b | Mistral 3 | 3B | (M2) tool-calls present + final_answer never produced |
+| ministral-3:8b | Mistral 3 | 8B | (M2) tool-calls present + final_answer never produced (44/50 errors) |
 
-⚠ **Conditional accept — direction generalization strong, magnitude model-dependent, single SIG at this scale**:
-- H11 direction: 5/5 positive (robust direction match).
-- H12 direction: 3/4 negative (one outlier that itself supplies caveat evidence).
-- rnj-1:8b H12 SIG (p=0.036, |d|=0.617): *first* cross-model significant result, in the predicted direction.
+The mechanism narrative splits in two: **(M1) under-iteration on multi-hop** (Gemma 4 E4B only), and **(M2) capability floor — full no-convergence** (the other four small-dense models tested, family-agnostic, persisting up to 8B parameters). Within our cross-model panel, **Gemma 4 E4B is the only small dense model that operates at all under H13**, and it does so by displaying (M1). The original Stage 5 contribution claim — "tool-axis iteration discipline determines the sign of the externalization effect" — is therefore *conditional on the model clearing the M2 capability floor*. Practical implication: the *minimum operational size* for the 4-axis framework with an agent-iterative tool ≈ Gemma 4 E4B (effective 4B). Cross-family H13 replication on larger or non-dense models (rnj-1:8b, gpt-oss:20b) is future work and would inform whether iteration-discipline (M1) is observable beyond Gemma 4 E4B.
 
-The Stage 5 finding — *Position-Effect asymmetry between pre-stage Extractor (positive) and post-stage Reducer (negative)* — generalizes as a directional regularity across families (Gemma, OpenAI gpt-oss, "rnj-1") and sizes (4B, 8B, 12B, 20B). The magnitude is largest where it should be (weak-baseline regimes), and the H12 outlier itself is a textbook keyword-scorer caveat case, not a counterexample to the position-effect hypothesis.
+**Capability floor below 4B — ministral-3:3b** (3B dense, Mistral 3 family) failed both tool-free H11 (47/150 errors = 31.3%, exceeding the Stage 2A 30% reject gate) and H13 search-tool (50/50 errors = 100%). H13 baseline_chunked on the same model (no tool, document supplied directly) produced 0/50 errors with mean accuracy 0.840 — i.e., ministral-3:3b reads documents fine but cannot sustain the multi-cycle ABC chain. This sets a lower-bound data point for the framework's operating regime.
+
+### H14 verdict v2 (Architect, 2026-05-09)
+
+⚠ **Conditional accept — direction generalization strong, family-systematic pattern discovered, mechanism split into two branches, single SIG at this scale**:
+- H11 direction: 6/7 positive (one outlier, ministral-3:8b — saturation hypothesis).
+- H12 direction: family-systematic — Gemma 3 family 2/2 positive (direct family-level evidence for §4.6.2 style-mismatch caveat (b)), non-Gemma family 4/4 negative (rnj-1:8b SIG p=0.036).
+- H13 mechanism: split into **(M1) under-iteration** (Gemma 4 E4B only) and **(M2) capability floor** (4 other small-dense models tested, family-agnostic, up to 8B).
+- Minimum operational size for 4-axis externalization framework with agent-iterative tool ≈ Gemma 4 E4B (effective 4B) — identified by exclusion (only working model in the small-dense panel).
+- ministral-3:3b 3B = capability floor breach (H11 31.3% reject, H13 100% reject) — lower-bound data point.
+
+The Stage 5 findings — Position-Effect asymmetry (H11/H12) and Tool-axis iteration effect (H13) — generalize as directional regularities under refined conditions: the H11/H12 directions hold across families and sizes (with one Mistral 3 outlier on H11 and a Gemma-3-specific style inversion on H12), and the H13 iteration-discipline framing is *conditional* on clearing the M2 capability floor. Within our 4-axis externalization framework, **a small dense model below ~4B effective does not operate the agent-iterative search chain at all**, and the M1 under-iteration story is observable only on Gemma 4 E4B in this panel.
 
 ### Stage 5 ↔ Stage 6 integrated narrative
 

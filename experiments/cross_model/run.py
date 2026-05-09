@@ -31,6 +31,7 @@ from experiments._external.groq_client import (
 from experiments._external.ollama_cloud_client import (
     call_with_meter_retry as ollama_call_retry,
     GEMMA_3_4B, GEMMA_3_12B, RNJ_1_8B, GPT_OSS_20B_OLLAMA,
+    MINISTRAL_3_3B, MINISTRAL_3_8B,
 )
 from experiments._external.llm_judge import compare_answers
 from experiments.measure import score_answer_v3
@@ -104,6 +105,23 @@ MODELS: dict[str, dict] = {
         "context": 131072,
         "supports_longctx": True,
         "reasoning_model": True,  # max_tokens 4096+ 필수 (reasoning tokens 소비)
+    },
+    # 2026-05-08 추가 — §4.7.4 "Gemma 3 family tool 부재" 의 generation/family 분리
+    # 검증용 dense 동시대 cross-family panel. Ministral 3 family (2026 출시):
+    # 3B = gemma3:4b 와 직접 비교 (size match, dense, 동시대), 8B = rnj-1:8b 와
+    # 직접 비교. 도구 호출 ✅ (Mistral docs 확인). 본 채널이 Ollama Cloud 의
+    # 사실상 유일한 small dense 동시대 cross-family 후보.
+    "ministral_3_3b_ollama": {
+        "provider": "ollama_cloud",
+        "model_id": MINISTRAL_3_3B,
+        "context": 32768,
+        "supports_longctx": True,
+    },
+    "ministral_3_8b_ollama": {
+        "provider": "ollama_cloud",
+        "model_id": MINISTRAL_3_8B,
+        "context": 32768,
+        "supports_longctx": True,
     },
 }
 

@@ -7,7 +7,11 @@ Free tier (2026-05): GPU-time based, "light usage" — burst 호출 가능 (Groq
 hard rate limit 없음). 5h session reset / 7d weekly reset. 1 concurrent model only.
 
 Cross-model 용도: Stage 6 cross-model replication 의 main 외부 모델 baseline.
-qwen3.5 / gemma4 / ministral-3 / nemotron-3-nano 등 다중 size 비교.
+gemma3 / gemma4 / ministral-3 / rnj-1 / gpt-oss / nemotron-3-nano 등 다중 size 비교.
+2026-05-08 카탈로그 재확인 (`/v1/models`, 39 모델): 작은 dense 동시대 cross-family
+후보는 ministral-3:3b/8b/14b 가 사실상 유일 (Qwen 작은 dense 미존재 — 가장 작은
+Qwen 이 80B). qwen3.6:35b-a3b 는 Ollama 공식 라이브러리 등재되어 있지만 cloud
+catalog 에는 미포함 (2026-05-08).
 
 cost_usd 는 free tier 시 $0. paid tier ($20 Pro / $100 Max) 시 별도 추적 가능.
 """
@@ -31,8 +35,9 @@ GEMMA_3_12B = "gemma3:12b"           # 12B, Gemma family scaling up
 GEMMA_3_27B = "gemma3:27b"           # 27B, Gemma family large
 GEMMA_4_31B = "gemma4:31b"           # 31B, Gemma 4 family
 RNJ_1_8B = "rnj-1:8b"                # 8B, gemento E4B size class up
-MINISTRAL_3_3B = "ministral-3:3b"    # 3B, E4B 보다 작음
-MINISTRAL_3_14B = "ministral-3:14b"  # 14B, Mistral mid-size
+MINISTRAL_3_3B = "ministral-3:3b"    # 3B, dense, Mistral 3 family (2026), 도구 호출 ✅
+MINISTRAL_3_8B = "ministral-3:8b"    # 8B, dense, Mistral 3 family (2026), 도구 호출 ✅
+MINISTRAL_3_14B = "ministral-3:14b"  # 14B, dense, Mistral 3 family (2026), 도구 호출 ✅
 GPT_OSS_20B_OLLAMA = "gpt-oss:20b"   # 20B, OpenAI open-source
 GPT_OSS_120B_OLLAMA = "gpt-oss:120b" # 120B, ceiling check
 QWEN_3_NEXT_80B = "qwen3-next:80b"   # 80B, Qwen 차세대
