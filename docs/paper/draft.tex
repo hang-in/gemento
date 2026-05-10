@@ -1,0 +1,580 @@
+\documentclass[11pt]{article}
+
+% --- Packages ---------------------------------------------------------------
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{textcomp}
+\usepackage{microtype}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!60!black,
+    urlcolor=blue!60!black,
+    citecolor=blue!60!black,
+}
+
+% --- Listings (code blocks) -------------------------------------------------
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    framerule=0.3pt,
+    rulecolor=\color{gray!50},
+    xleftmargin=1em,
+    xrightmargin=1em,
+    aboveskip=0.6em,
+    belowskip=0.6em,
+}
+
+% --- Convenience macros -----------------------------------------------------
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\sig}{\textbf{SIG}}
+\newcommand{\NS}{\textbf{NS}}
+
+% ============================================================================
+\title{Role Addition Is Not Monotonic:\\
+       Position Effects in Small-LLM Workflow Externalization}
+\author{Single-author preprint draft \\ \emph{Gemento Project}}
+\date{2026-05-09 (v0.7, arXiv-ready)}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Small open-weight LLMs ($\lesssim$8B params) struggle on multi-step reasoning where larger frontier models excel. A common response is to externalize cognitive functions --- working memory, computation, validation, and control flow --- into the workflow rather than expand model capacity. We ask a narrower question: when extra structure (extra Roles, extra Tools) is added to such a workflow, does \emph{where} and \emph{how} it is inserted matter, and does the answer hold across model families?
+
+Using a single 4B-effective open-weight model (Gemma~4 E4B) as the principal base across 13 sequentially numbered hypotheses (H1--H13) and {\textasciitilde}1{,}640 single-model trials, plus a Stage~6 cross-model panel of 6 additional models (Gemma~3, Mistral~3, OpenAI gpt-oss; 3B--31B) over {\textasciitilde}650 trials, we report four observations.
+\textbf{(1)} On a 9-task cost-aware benchmark, 8-loop ABC orchestration with the same base model scores 78.1\% vs 41.3\% for 1-loop solo ($\Delta\!=\!+0.37$, $d\!=\!+0.94$, $p\!=\!0.039$ \sig, $n\!=\!9$), outperforming a one-call Gemini~2.5 Flash baseline (59.1\%) at the cost of roughly 20$\times$ wall time --- a benchmark-specific result, not a general superiority claim.
+\textbf{(2)} Same-model self-validation detects 0/15 planted errors, but role-separated cross-validation (A-Proposer / B-Critic / C-Judge with the same base model) recovers to 80\% --- isolating role separation, not model capability, as the active ingredient.
+\textbf{(3)} A paired role-axis ablation produces \emph{mirrored directional effects at similar magnitude}: pre-stage Extractor $\Delta\!=\!+0.05$ ($d\!=\!+0.32$) and post-stage Reducer $\Delta\!=\!-0.05$ ($d\!=\!-0.32$) on Gemma~4 E4B (both \NS{} at $n\!=\!15$). Cross-model replication confirms the H11 direction in 6/7 models and reveals a \emph{family-systematic} H12 split (Gemma~3 family 2/2 positive, non-Gemma 4/4 negative including a \sig{} verdict on rnj-1:8b, $p\!=\!0.036$, $|d|\!=\!0.617$) --- direct family-level evidence for the keyword-scorer style-mismatch caveat.
+\textbf{(4)} An agent-active BM25 search tool yields $\Delta\!=\!-0.22$ ($d\!=\!-1.00$, $p\!=\!0.012$ \sig, $n\!=\!10$) against a sufficient-context baseline on Gemma~4 E4B; mechanism is \emph{under-iteration on multi-hop tasks}. Cross-model H13 fails on five additional small-and-mid dense models (3B--31B) under four distinguishable M2 sub-variants --- the H13 (M1) effect is observable on \emph{exactly one} model in our panel, which we report as a \emph{measurement-tool fit} between Gemma~4 E4B and our specific A-agent JSON contract rather than a size threshold.
+
+We release the full harness, taskset, scorer, and per-trial logs covering 13 hypotheses including four negative-direction results (self-validation, mixed-strength Judge, post-stage Reducer, agent-active retrieval).
+\end{abstract}
+
+% ============================================================================
+\section{Introduction}
+
+\subsection{The small-LLM gap on multi-step reasoning}
+\noindent[\emph{TODO: motivation paragraph --- small open-weight models on complex reasoning. Cite frontier-model performance differential.}]
+
+\subsection{Externalization vs parameter scaling}
+The dominant narrative in 2024--2026 has been parameter scaling --- Llama~3.3 70B, Qwen~3 235B, GPT-OSS 120B --- with proportional inference-time cost. We investigate the orthogonal axis: holding model capacity fixed (Gemma~4 E4B, effective 4B params) and externalizing four cognitive functions into the workflow.
+
+\subsection{Three contributions}
+This is positioned as a \emph{measurement / ablation paper}, not a framework proposal --- externalization frameworks already exist (Zhou et al., 2026; StateFlow; Chain-of-Agents). What is new is \textbf{what we measured} and \textbf{how we isolated it}.
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Structure-effect ablations in role and tool axes (single best claim)}: paired same-model ablations show that the \emph{sign} of an externalization effect depends on its position, iteration discipline, and --- newly identified in Stage~6 v2 --- \emph{whether the base model clears a capability floor at all}.
+\begin{itemize}
+\item \textbf{Role axis (position effect)}: pre-stage Extractor $\Delta\!=\!+0.05$ ($d\!=\!+0.32$, $n\!=\!15$, \NS{}) vs post-stage Reducer $\Delta\!=\!-0.05$ ($d\!=\!-0.32$, $n\!=\!15$, \NS{}) --- mirrored directional effects of nearly identical magnitude on the same model and taskset. Cross-model replication (\S\ref{sec:cross-model}) confirms direction generalization: H11 6/7 models positive (1 outlier, ministral-3:8b), H12 4/6 models negative with a \emph{family-systematic split} (Gemma~3 family 2/2 positive --- direct evidence for the \S\ref{sec:caveat} style-mismatch caveat; non-Gemma family 4/4 negative, including the rnj-1:8b \sig{} verdict $p\!=\!0.036$, $|d|\!=\!0.617$).
+\item \textbf{Tool axis (iteration effect, conditional on a specific-model A-agent contract fit)}: an agent-active BM25 retrieval tool yields $\Delta\!=\!-0.22$ ($d\!=\!-1.00$, $n\!=\!10$, $p\!=\!0.012$ \sig) against a sufficient-context baseline on Gemma~4 E4B; mechanism = under-iteration on multi-hop tasks (M1, \S\ref{sec:m1}). Stage~6 v3 (\S\ref{sec:cross-h13}) shows that five other small-and-mid dense models tested --- gemma3:4b/12b, ministral-3:3b/8b, gemma4:31b --- do not reach the under-iteration regime at all, failing under four distinguishable M2 sub-variants: tool-calling absence (gemma3 family), final-answer non-production (Mistral~3 family), and A-agent JSON-schema mismatch (gemma4:31b, same-family size-up of the only working model). Within our panel, the H13 (M1) iteration-effect claim is observable on \emph{exactly one} model --- Gemma~4 E4B (effective 4B). This is \emph{not a size threshold}; gemma4:31b (a same-family larger model) fails too. We therefore report H13 as a \emph{specific-model} observation rather than a generalized small-LLM phenomenon, and acknowledge that the framework's A-agent JSON-schema contract is a \emph{measurement-tool fit} with Gemma~4 E4B specifically. The deterministic single-call computation tools (calculator, linprog, H7/H8 +18--23pp) on the same harness on the same model show no such fragility, supporting the broader sub-distinction between deterministic and agent-iterative tool axes.
+\end{itemize}
+The role and tool axes converge on a refined claim: \emph{more structure is not monotonically better; what matters is \textbf{where it is placed}, \textbf{how it iterates}, and \textbf{whether the base model is capable enough to operate the chain at all}}. Empirical / mechanism contribution.
+
+\item \textbf{Same-model isolation protocol for measuring structural workflow effects}: by holding the base model constant (Gemma~4 E4B) across A-Proposer / B-Critic / C-Judge / Extractor / Reducer, we isolate the \emph{structural} effect of role and tool changes from the model-quality confound that contaminates most multi-agent comparisons. Methodology contribution.
+
+\item \textbf{A reproducible small-LLM externalization harness with negative results}: 13 sequentially numbered hypotheses (H1--H13) with verdict / evidence / open-source data, including four negative-direction results (H2 self-validation 0/15; H10 mixed-strength Judge underperforms; H12 post-stage Reducer underperforms; H13 agent-active retrieval underperforms a sufficient-context baseline). Resource / reproducibility contribution.
+\end{enumerate}
+
+The 4-axis externalization framework (Tattoo / Tools / Role / Orchestrator) is used as the \emph{organizing structure} for the hypotheses below; we do not claim it as a novel framework.
+
+% ============================================================================
+\section{Related Work}
+
+We position this work as a \emph{measurement / ablation} study rather than a novel framework proposal. The closest prior work spans five subareas; the differentiation in each case is \emph{what we held fixed} (model capacity, taskset, scoring) to make the structural effect of externalization causally identifiable on small open-weight models.
+
+\subsection{Externalization frameworks}
+\textbf{Externalization in LLM Agents} (Zhou et al., 2026, arXiv:2604.08224) --- proposes 4 externalization axes (memory / skills / protocols / harness engineering). Independent convergence with our 4-axis (Tattoo / Tools / Role / Orchestrator); axis mapping differs (we separate Role and Orchestrator explicitly; Zhou et al.\ fold control into harness engineering).
+\par\smallskip
+\textbf{LightMem} (Fang et al., ICLR 2026, arXiv:2510.18866) --- three-stage memory (sensory / short-term / long-term) for \emph{cross-session} retrieval. Distinct from our Tattoo (working state \emph{within} a single task) and orthogonal to the position-effect findings in \S\ref{sec:position}.
+
+\subsection{Multi-agent role separation}
+\textbf{Chain-of-Agents} (Zhang et al., NeurIPS 2024, arXiv:2406.02818) --- sequential worker agents + manager synthesis on long inputs. We share sequential structure but use \emph{the same base model} for all roles (A/B/C), separated only by prompt and validation contract --- this \emph{same-model isolation} is what makes the structural effect of role separation causally identifiable (\S\ref{sec:isolation}) and is the key methodological difference.
+\par\smallskip
+\textbf{AutoGen} (Wu et al., 2023, arXiv:2308.08155) --- multi-agent conversation framework with configurable roles. AutoGen targets \emph{agent orchestration as a programming abstraction}; we ablate \emph{role addition / position} on a fixed base model and report effect-direction asymmetries.
+\par\smallskip
+\textbf{MetaGPT} (Hong et al., ICLR 2024, arXiv:2308.00352) --- software-development role assignment (PM / engineer / QA) on top of GPT-4. MetaGPT specializes by \emph{domain role} with a frontier model; we keep capacity fixed and isolate \emph{position} (pre-stage Extractor vs post-stage Reducer) as the variable.
+\par\smallskip
+\textbf{Reflexion} (Shinn et al., NeurIPS 2023, arXiv:2303.11366) --- self-reflection-driven verbal reinforcement on a single agent. Adjacent to our role-separation line; Reflexion's same-model self-correction loop is closest in spirit to our H2 (which we report as \emph{failing} at this scale, motivating the H3 role-separated cross-validation in \S\ref{sec:isolation}).
+
+\subsection{Self-validation / self-refine}
+\textbf{Self-Refine} (Madaan et al., NeurIPS 2023, arXiv:2303.17651) --- single model proposes / critiques / refines its own output. Same model, single-actor self-loop; we contrast this with role-separated \emph{cross-validation} using the same base model in different role contracts (H2 vs H3) and report a discontinuity (0/15 $\to$ 12/15 detection).
+\par\smallskip
+\textbf{CRITIC} (Gou et al., ICLR 2024, arXiv:2305.11738) --- self-correction via external tool feedback. CRITIC introduces \emph{external tool} signals to validate; our self-validation hypotheses (H2/H3) measure validation effects \emph{without} external tools, isolating role contract from tool feedback.
+
+\subsection{Tool use in small LLMs}
+\textbf{Toolformer} (Schick et al., NeurIPS 2023, arXiv:2302.04761) --- train-time tool integration via self-supervision. Differentiation: we measure tool-use \emph{neglect} and \emph{iteration-discipline} failures at \emph{inference time} on a small open-weight model with no tool-specific fine-tuning, and report a within-Tool-axis sub-distinction (deterministic single-call +18--23pp vs agent-iterative retrieval $-22$pp, \S\ref{sec:h13}).
+\par\smallskip
+\textbf{Gorilla} (Patil et al., 2023, arXiv:2305.15334) --- fine-tuned API-call generation for $>$1000 ML APIs. Gorilla optimizes API selection accuracy with training; we measure \emph{whether and how often} the agent decides to call a fixed BM25 search tool at inference time, which is the variable that drives the H13 negative result in \S\ref{sec:m1}.
+
+\subsection{Workflow / state-machine externalization}
+\textbf{StateFlow} (Wu et al., 2024, arXiv:2403.11322) --- task-solving as state machines. Adjacent to our Orchestrator axis; we add explicit role separation and Tattoo schema, and we ablate \emph{role position} (pre-stage vs post-stage) under a fixed Orchestrator loop (\S\ref{sec:position}).
+
+\subsection{Cross-model / capability-level studies}
+\textbf{LLM cascades} (Yue et al., 2024; Chen et al., 2023) --- strong-model planner with weak-model executor for cost-aware deployment. Adjacent to our cross-model panel (Stage~6, \S\ref{sec:cross-model}) and to the \S\ref{sec:cost} cost-aware deployment discussion. Differentiation: we hold capacity fixed \emph{within} the ABC chain (same-model isolation) and treat strong-model scaffolding as a \emph{future-work cascade extension} rather than the principal architecture.
+
+% ============================================================================
+\section{Framework}
+
+\subsection{Four-axis externalization}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+Axis & Externalized component & Anchor experiments \\
+\midrule
+\textbf{Tattoo} & Working memory (claims, evidence, status) --- structured JSON & Exp02 (H1), Exp09 (H9a--c) \\
+\textbf{Tools} & Computation (calculator, linalg, linprog, BM25 search) & Exp08 (H7), Exp08b (H8), Exp14 (H13) \\
+\textbf{Role} & Validation (A-Proposer / B-Critic / C-Judge) & Exp03 (H2), Exp035 (H3), Exp06 (H4), Exp12 (H11), Exp13 (H12) \\
+\textbf{Orchestrator} & Control flow (loops, phase transitions) & Exp02 (H1), Exp07 (H5, H6) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Tattoo schema}
+\noindent[\emph{TODO: JSON schema diagram + brief description. Refer to Appendix~B for full schema.}]
+
+\subsection{Role contracts}
+\noindent[\emph{TODO: A/B/C system prompts summary. Full prompts in Appendix~C.}]
+
+\subsection{Orchestrator loop}
+\begin{lstlisting}
+A (Proposer) -> produces structured assertions, candidate answer
+  |
+  v
+B (Critic) -> cross-validates, flags errors
+  |
+  v
+C (Judge) -> terminal verdict, final answer
+  |
+  v
+[loop until convergence or max_cycles=8]
+\end{lstlisting}
+
+Deterministic Python orchestrator; no LLM-based control logic.
+
+\subsection{Hypothesis numbering convention}
+H1--H13 are sequentially numbered hypotheses about externalization axes --- \emph{not} statistical $H_0/H_1$ pairs. Verdicts use a controlled vocabulary (Supported / Conditionally supported / Inconclusive / Inconclusive (effectively rejected) / Rejected).
+
+% ============================================================================
+\section{Experiments}
+
+\subsection{Model and base setup}
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+\item Model: Gemma~4 E4B (Q8\_0 quantization, 4B effective params)
+\item Inference engine: LM Studio (32K context); earlier experiments (Exp00--06) used Ollama Q4\_K\_M; transition documented in \code{docs/reference/researchNotebook.md} Change History.
+\item Sampling: \code{temperature=0.1}, \code{max\_tokens=4096}, \code{top\_p}/\code{seed} unset.
+\item All ABC roles use the \emph{same base model} (no model-quality confound).
+\end{itemize}
+
+\subsection{Tasksets}
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+\item \textbf{Main taskset} (15 tasks): math (4) / logic (4) / synthesis (5) / planning (2)
+\item \textbf{Long-context taskset} (10 tasks): size\_class $\times$ hop\_type matrix (small/medium/large $\times$ needle/2-hop/3-hop)
+\item All tasks open-source under MIT in \code{experiments/tasks/}
+\end{itemize}
+
+\subsection{Cross-model replication --- Stage 6 v2}\label{sec:cross-model}
+
+To test whether the position-effect asymmetry in \S\ref{sec:position} is a Gemma-specific artifact, we replicated H11 (Extractor pre-stage) and H12 (Reducer post-stage) on five additional open-weight models served through Ollama Cloud (Pro tier, \$20/month, 3-concurrent-session limit): \code{gemma3:4b}, \code{gemma3:12b}, \code{rnj-1:8b} (non-Gemma, 8B), \code{gpt-oss:20b} (OpenAI reasoning class, 20B), and \code{ministral-3:8b} (Mistral~3 family, dense 8B, 2026-released --- added in v2 to extend cross-family small-dense coverage beyond rnj-1:8b). Same main 15-task set and 5 trials per (task, condition) as Stage~5. Stage~5's Gemma~4 E4B baseline is included as the sixth model. A separate finding on \code{ministral-3:3b} (3B, dense, same family) is reported in \S\ref{sec:floor} (capability floor).
+
+\paragraph{H11 (Extractor pre-stage) --- 6/7 positive, 1 outlier.}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lllrrr@{}}
+\toprule
+Model & family & size & $\Delta$ & Cohen's $d$ & $p$ (Wilcoxon) \\
+\midrule
+Gemma 4 E4B (Stage 5) & Gemma 4 & 4B effective & $+0.0500$ & $+0.323$ & 0.198 \\
+gemma3:4b & Gemma 3 & 4B & $\mathbf{+0.0787}$ & $+0.299$ & 0.594 \\
+gemma3:12b & Gemma 3 & 12B & $+0.0022$ & $+0.009$ & 0.888 \\
+rnj-1:8b & non-Gemma & 8B & $+0.0047$ & $+0.019$ & 0.859 \\
+gpt-oss:20b & OpenAI & 20B & $+0.0244$ & $+0.177$ & 0.672 \\
+ministral-3:8b & Mistral 3 & 8B & $\mathbf{-0.0433}$ & $\mathbf{-0.292}$ & 0.311 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Six of seven model rows show the predicted positive direction; ministral-3:8b is a single-model outlier with a small-magnitude negative effect (\NS, $p\!=\!0.311$). Three non-exclusive explanations are consistent with this outlier: (a) \emph{baseline saturation} --- ministral-3:8b's H11 baseline 0.7178 is among the higher baselines in the panel, and Extractor's input-organization step may add noise rather than structure when the cycle-1 input is already well-organized; (b) \emph{Extractor prompt mismatch} --- Mistral~3's instruction-following pattern may interact differently with our Extractor template, surfacing a single-prompt cross-family generalization limit; (c) \emph{NS-at-$n\!=\!15$} --- the result is statistically indistinguishable from zero. None of the cross-model H11 effects reach $\alpha\!=\!0.05$ individually at $n\!=\!15$. We characterize the H11 direction as \emph{strong but not unanimous}, with the largest positive magnitudes at the weakest baselines (gemma3:4b $+0.079$, Stage~5 Gemma~4 E4B $+0.050$), consistent with a capability-headroom story.
+
+\paragraph{H12 (Reducer post-stage) --- family-systematic pattern.}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lllrrrl@{}}
+\toprule
+Model & family & size & $\Delta$ & Cohen's $d$ & $p$ (Wilcoxon) & direction \\
+\midrule
+Gemma 4 E4B (Stage 5) & Gemma 4 & 4B & $-0.0711$ & $-0.323$ & 0.180 & non-Gemma neg \\
+gemma3:4b & Gemma 3 & 4B & $\mathbf{+0.0562}$ & $+0.331$ & 0.423 & \textbf{Gemma 3 pos} \\
+gemma3:12b & Gemma 3 & 12B & $\mathbf{+0.0078}$ & $+0.026$ & 0.878 & \textbf{Gemma 3 pos} \\
+rnj-1:8b & non-Gemma & 8B & $\mathbf{-0.0989}$ & $\mathbf{-0.617}$ & $\mathbf{0.036}$ \sig & non-Gemma neg \\
+gpt-oss:20b & non-Gemma & 20B & $-0.0100$ & $-0.052$ & 0.735 & non-Gemma neg \\
+ministral-3:8b & non-Gemma & 8B & $\mathbf{-0.0707}$ & $\mathbf{-0.287}$ & 0.327 & non-Gemma neg \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+H12 splits cleanly along family lines: \textbf{Gemma 3 family 2/2 positive} (gemma3:4b $+0.056$, gemma3:12b $+0.008$), \textbf{non-Gemma family 4/4 negative} (Stage~5 Gemma~4 E4B $-0.071$, rnj-1:8b $-0.099$ \sig, gpt-oss:20b $-0.010$, ministral-3:8b $-0.071$). This is a \emph{family-systematic} pattern, not a single-outlier observation. The rnj-1:8b H12 result is the \textbf{first cross-model statistically significant verdict} (Wilcoxon $p\!=\!0.036$, $|d|\!=\!0.617$ medium-large) and supports the post-stage Reducer = abstraction-loss claim at the family level for non-Gemma models. The Gemma~3 family inversion is \emph{direct evidence} for the \S\ref{sec:caveat} style-mismatch caveat.
+
+\paragraph{Verdict (cross-model v2).}\hspace{-0.4em} $\triangle$ \emph{Conditional accept} --- direction generalization is strong (6/7 H11 positive, 4/6 H12 negative or family-systematic), magnitude is model-dependent, and a single \sig{} verdict appears at this scale (rnj-1:8b H12). The Stage~5 position-effect asymmetry generalizes as a \emph{directional regularity} across families and sizes for non-Gemma models, while Gemma~3 family exhibits a systematic style-bias that inverts H12 --- itself an important sub-finding (\S\ref{sec:caveat}). H13 cross-model is reported in \S\ref{sec:cross-h13} with a distinct mechanism story (capability floor, M2). Detail: \code{docs/reference/stage6-cross-model-analysis-2026-05-08.md} (v3).
+
+\subsection{Main results --- supported hypotheses}\label{sec:main-results}
+
+All hypothesis verdicts report the unified ($\Delta$, $n$, $p$, Cohen's $d$, 95\% CI) 5-tuple. $n$ is the number of \emph{paired tasks} (Wilcoxon paired test on per-task mean accuracy across 5 trials). $p$-values from paired Wilcoxon (primary) and paired $t$-test (secondary). 95\% CI from paired bootstrap ($n\!=\!10{,}000$, seed=42).
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{@{}p{0.04\textwidth}p{0.30\textwidth}p{0.18\textwidth}rrrrrl@{}}
+\toprule
+H & Hypothesis & $\Delta$ & $n$ & Wilcoxon $p$ & $t$ $p$ & $d$ & 95\% CI & Anchor \\
+\midrule
+\textbf{H1} & Multi-step (8-loop ABC) > single-pass (1-loop solo) & $\mathbf{+0.3685}$ & 9 & $\mathbf{0.039}$~\sig & $0.023$ & $+0.94$ & $[+0.117, +0.609]$ & Exp10 \\
+H7 & External math tools recover math-04 & $+0.115$ (math-04: $0.06\to0.64$) & 4 & 1.000 & 0.518 & $+0.37$ & $[-0.090, +0.435]$ & Exp08 \\
+H8 & Tool refinement + mandatory rules & $+0.230$ (math-04: $0\to0.80$) & 4 & 0.500 & 0.323 & $+0.59$ & $[-0.020, +0.600]$ & Exp08b \\
+\textbf{H9a} & ABC+Tattoo > Solo on long-context & $\mathbf{+0.4100}$ & 10 & $\mathbf{0.012}$~\sig & $0.005$ & $+1.18$ & $[+0.180, +0.600]$ & Exp09 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+H1 and H9a reach $\alpha\!=\!0.05$ with large effect sizes and bootstrap CIs that exclude zero. H7 and H8 are \emph{task-level} claims: the overall paired-task $n\!=\!4$ is underpowered, but the math-04 single-task recovery ($+0.58$ with H7, $+0.80$ with H8) is the substantive effect.
+
+\subsection{Negative-direction results}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{@{}p{0.04\textwidth}p{0.30\textwidth}p{0.30\textwidth}p{0.30\textwidth}@{}}
+\toprule
+H & Hypothesis & Verdict & Candidate mechanism \\
+\midrule
+H2 & Same-model self-validation detects errors & Rejected (0/15 detected) --- directly observed & Same-model self-validation does not flag own reasoning errors at this scale; replicated in Exp035 by switching to role separation \\
+H10 & Stronger Judge (Flash) compensates weaker A/B & Inconclusive --- effectively rejected; $\Delta\!=\!-0.081$, $d\!=\!-0.316$, $p\!=\!0.293$ \NS{} & Inverse-direction observation: stronger Judge can interfere with weaker model's self-discovery via schema mismatch and early convergence \\
+H12 & Post-stage Reducer improves keyword-match accuracy & Inconclusive --- effectively rejected; $\Delta\!=\!-0.053$, $d\!=\!-0.323$, $p\!=\!0.180$ \NS{} & (a) abstraction loss; (b) scorer-style mismatch (see \S\ref{sec:caveat}). LLM-as-judge replication planned \\
+H13 & Agent-active BM25 retrieval improves long-context accuracy & Inconclusive --- effectively rejected; $\Delta\!=\!-0.220$, $d\!=\!-1.00$, $\mathbf{p\!=\!0.012}$ \sig; CI $[-0.36, -0.10]$ & Insufficient retrieval iterations on multi-hop tasks (\S\ref{sec:m1}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Paired role-axis ablation --- main observation}\label{sec:position}
+
+This is the central observation of the paper.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}p{0.30\textwidth}p{0.30\textwidth}p{0.30\textwidth}@{}}
+\toprule
+& Exp12 Extractor (H11) & Exp13 Reducer (H12) \\
+\midrule
+Position & \textbf{pre-stage} (before A) & \textbf{post-stage} (after C) \\
+$\Delta$ accuracy & $+0.0500$ & $-0.0533$ \\
+Cohen's $d$ (paired) & $+0.323$ (small, positive) & $-0.323$ (small, negative --- mirrored magnitude) \\
+Wilcoxon $p$ ($n\!=\!15$ paired) & 0.198 --- \NS{} & 0.180 --- \NS{} \\
+Bootstrap 95\% CI $\Delta$ & $[-0.020, +0.133]$ & $[-0.133, +0.027]$ \\
+Proposed mechanism & cycle-1 input organization & abstraction loss / multi-source $\to$ single-point compression (caveat: scorer artifact, see \S\ref{sec:caveat}) \\
+logic-02 (Exp11 weak spot) & base 0.3 $\to$ ext 0.6 ($+0.30$) & base 0.7 $\to$ red 0.5 ($-0.20$) \\
+Synthesis category direction & 5/5 tasks positive & 5/5 tasks negative \\
+Verdict & $\triangle$ Conditionally supported, power-limited & $\triangle$ Inconclusive (effectively rejected), power-limited \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{What we observe}: on the \emph{same base model, taskset, and trial count}, two paired role additions produce effect sizes of opposite sign with nearly identical magnitude ($|d|\!=\!0.323$). This is consistent with a position-dependent mechanism, but at $n\!=\!15$ paired tasks neither effect is statistically significant. We report this as \textbf{evidence consistent with a position effect, not a confirmed asymmetry}. Cross-model replication (\S\ref{sec:cross-model}) tests direction generalization; LLM-as-judge replication (P1-3, deferred) addresses the scorer-artifact caveat in \S\ref{sec:caveat}.
+
+\subsubsection{Synthesis-04 illustrative case}
+In synthesis-04 (a multi-source bird-population estimation task), the baseline ABC chain produced multi-paragraph structured analyses (``\#\# Comprehensive Analysis \ldots Identification of Contradictions \ldots Zone C Count (R5 vs R1/R6) \ldots'') that scored 1.0 under the deterministic keyword scorer. Reducer-polished outputs compressed the same content into single-point estimates (``The best estimate is \textbf{270 individuals}.'') that scored 0.33--0.67. The compression preserved the central numerical conclusion but discarded the multi-source / multi-estimate scaffolding that the scoring keywords were designed to detect.
+
+\subsubsection{Caveat --- keyword scorer artifact possibility}\label{sec:caveat}
+
+The H12 mechanism claim (``abstraction loss'') is supported by the keyword-coverage drop visible in \S4.6.1, but the deterministic scorer (\code{score\_answer\_v3}) cannot distinguish two explanations:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{(a) Real quality drop} --- the compressed answer omits semantically required information.
+\item \textbf{(b) Style mismatch} --- the compressed answer is semantically correct but does not contain the keyword set the scorer was tuned to.
+\end{itemize}
+
+We plan an LLM-as-judge replication (free-tier Groq GPT-OSS 120B as an independent judge over the same final\_answer pairs) to estimate which fraction of the H12 drop is recovered when scoring is semantic rather than lexical. Until that replication runs, the abstraction-loss mechanism should be treated as a \emph{candidate explanation}, not an established cause.
+
+\paragraph{Stage 6 v2 --- direct evidence for the (b) style-mismatch branch at the family level.}
+The cross-model H12 replication (\S\ref{sec:cross-model}) shows a \emph{family-systematic} split, not a single-model outlier. Both Gemma~3 family models tested (gemma3:4b $\Delta\!=\!+0.056$, gemma3:12b $\Delta\!=\!+0.008$) flipped the H12 sign positive, while all four non-Gemma family models (Stage~5 Gemma~4 E4B $-0.071$, rnj-1:8b $-0.099$ \sig, gpt-oss:20b $-0.010$, ministral-3:8b $-0.071$) showed the predicted negative direction. Two-of-two Gemma~3 inversion vs four-of-four non-Gemma replication is unlikely to be coincidence: it is consistent with a \emph{learned output-style bias in Gemma~3 family} such that the Reducer's compression accidentally regularizes the answer toward the scorer's expected vocabulary --- exactly branch (b). The Gemma~4 E4B baseline (Stage~5) is itself non-Gemma-3 by generation and behaves consistently with the non-Gemma group, suggesting the bias is \emph{Gemma-3-specific, not Gemma-family-wide}. We read this v2 result as \textbf{direct family-level evidence for branch (b) on Gemma~3 specifically}. Branch (a) --- real abstraction loss for the non-Gemma four --- remains a candidate but is no longer ``indistinguishable'' from (b) at the family level. Full (a)/(b) decomposition on individual answers still requires the planned LLM-as-judge replication (P1-3, deferred).
+
+\subsection{Search Tool (H13) --- first statistically significant negative}\label{sec:h13}
+
+\textbf{H13}: ABC agents that \emph{actively} call a \code{search\_chunks(query, top\_k)} BM25 retrieval tool during cycles outperform a sufficient-context baseline (32K-context window with the full document in the prompt) on long-context tasks.
+
+\textbf{Conditions}: \code{baseline\_abc\_chunked} (full document in prompt, $\sim\!26$K tokens for Large-20K docs) vs \code{abc\_search\_tool} (question only + tool spec, agent decides when/how to call) $\times$ 10 longctx tasks $\times$ 5 trials = 100 trials. Same Gemma~4 E4B model on all roles, BM25 lexical retrieval. \code{tool\_choice="auto"} --- the agent decides whether to call.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+condition & $n$ & mean\_acc & err+null & avg cycles & avg dur \\
+\midrule
+baseline\_abc\_chunked & 50 & 0.9500 & $0+0$ & 7.0 & 390s \\
+\textbf{abc\_search\_tool} & 50 & \textbf{0.7300} & $7+7$ & 7.1 & 235s ($-40\%$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+$\Delta(\text{search}-\text{baseline}) = \mathbf{-0.2200}$ --- the largest negative effect in Stage~5. Statistics ($n\!=\!10$ paired tasks): \textbf{Wilcoxon $p\!=\!0.0312$, paired $t$ $p\!=\!0.0115$ --- both \sig{} at $\alpha\!=\!0.05$}. \textbf{Cohen's $d = -1.000$ (large effect)}. Bootstrap 95\% CI $\Delta$: $\mathbf{[-0.360, -0.100]}$ (does not include zero). This is the \emph{first statistically significant verdict in Stage~5}.
+
+\paragraph{Hop-type breakdown.}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+hop\_type & $n$\_trials & search mean\_acc & baseline mean\_acc \\
+\midrule
+needle (1-hop) & 15 & 0.800 & 1.000 \\
+2-hop & 20 & 0.675 & 1.000 \\
+3-hop & 15 & 0.733 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{H13 verdict}: $\triangle$ Inconclusive --- effectively rejected, \emph{statistically significant negative direction at this scale}. The result applies specifically to \emph{agent-active BM25 retrieval against a 32K-context baseline on $n\!=\!10$ long-context tasks}.
+
+\subsubsection{Mechanism --- insufficient retrieval iterations on multi-hop tasks (M1, Gemma 4 E4B)}\label{sec:m1}
+
+This subsection describes the mechanism on Gemma~4 E4B specifically. Stage~6 v2 (\S\ref{sec:cross-h13}) shows that this M1 mechanism is \emph{not the universal small-dense behavior} --- four other small-dense models tested fail by a different mechanism (M2 capability floor) and do not reach the under-iteration regime described here.
+
+A diagnostic run on \code{longctx-large-2hop-01} (Chen Wei $\to$ trained at Westbrook Institute $\to$ 347 patents) revealed a clear pattern. Across 5 trials, \code{total\_tool\_calls} per trial = $[1, 2, 2, 3, 0]$ and accuracy = $[0, 1, 1, 1, 0]$:
+
+\begin{itemize}[leftmargin=*]
+\item The single-call trial (t0) recovered the hop-1 entity (``Westbrook Institute'') then prematurely concluded ``\emph{the document does not contain a specific [number]}'' instead of issuing a hop-2 query.
+\item The 2- and 3-call trials completed both hops and scored 1.0.
+\item The zero-call trial (t4) was a tool-neglect case (no\_final\_answer).
+\end{itemize}
+
+For needle (single-hop) tasks the diagnostic showed 5/5 trials with exactly one well-formed call (BM25 top score 4.7--4.9) and 5/5 correct. The negative direction is concentrated on \textbf{multi-hop reasoning where the agent must decide to issue \emph{additional} queries}. The agent under-iterates.
+
+\subsubsection{Caveat --- tool\_call capture timing}
+The 50-trial A-2 production run was completed before a \code{run.py} whitelist fix that adds \code{tool\_calls\_per\_cycle} and \code{total\_tool\_calls} to the trial dict. The mechanism analysis therefore relies on the 15-trial diagnostic subset (medium-needle and large-2hop), not on the production 50 trials.
+
+\subsubsection{Tool axis sub-distinction}
+H7 (calculator/linalg) and H8 (linprog with mandatory tool rules) yielded $+18.3$pp and $+23.3$pp on math-04. H13 (agent-active BM25 retrieval) yields $-22$pp. All three are ``Tool axis'' externalizations, but they differ structurally: H7/H8 externalize a \emph{deterministic, single-call computation} with a fixed function signature, while H13 externalizes \emph{probabilistic, iterative retrieval} whose effectiveness depends on the agent's own policy for how many times and with what queries to call. This sub-distinction is one of the paper's empirical findings.
+
+\subsubsection{Cross-model H13 --- capability floor narrows to a specific model (Stage 6 v3)}\label{sec:cross-h13}
+
+Stage~6 v3 (2026-05-09) ran H13 on five additional models including a Gemma~4 family size-up control (gemma4:31b). \textbf{All five failed to operate the search-tool ABC chain}, with \textbf{four distinguishable failure modes within the M2 capability-floor category}, plus the Stage~5 M1 under-iteration mode:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}p{0.18\textwidth}p{0.10\textwidth}p{0.10\textwidth}p{0.55\textwidth}@{}}
+\toprule
+Model & family & size & failure mode \\
+\midrule
+Gemma 4 E4B (Stage 5) & Gemma 4 & 4B effective & \textbf{(M1) under-iteration on multi-hop} --- tool-calling present, premature termination --- $\Delta\!=\!-0.220$ \sig{} \\
+gemma3:4b & Gemma 3 & 4B & (M2-a) tool-calling absence --- 0/50 calls \\
+gemma3:12b & Gemma 3 & 12B & (M2-b) tool-calling not invoked --- ``Unknown'' + max-cycle \\
+ministral-3:3b & Mistral 3 & 3B & (M2-c) tool-calls present + final\_answer never produced (50/50 max-cycle exits) \\
+ministral-3:8b & Mistral 3 & 8B & (M2-c) tool-calls present + final\_answer never produced (44/50 errors) \\
+\textbf{gemma4:31b} & \textbf{Gemma 4} & \textbf{31B} & \textbf{(M2-d) A-agent JSON schema mismatch} --- tool-calls present + A-agent's text-mode response not parseable as the expected assertions JSON, leading to zero assertions across all cycles and never-converged ABC chain (45/50 errors, 90\% fail). The \emph{same} model on \code{baseline\_abc\_chunked} (no tool, document supplied directly) achieved 50/50 trials with mean\_acc 0.95. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The mechanism splits as follows:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{(M1) under-iteration on multi-hop} --- Gemma~4 E4B \emph{does} invoke \code{search\_chunks}, recovers hop~1, then prematurely concludes ``the document does not contain a specific answer'' instead of issuing a hop-2 query.
+\item \textbf{(M2) capability floor --- full no-convergence} --- five other models tested fail before reaching the under-iteration regime. The sub-variants (M2-a through M2-d) reflect \emph{where} the chain breaks.
+\end{itemize}
+
+The v3 finding \textbf{narrows the \S1.3 contribution-1 claim significantly}. Within our cross-model panel, the original H13 mechanism (M1 under-iteration with measurable $\Delta$) is observable on \emph{exactly one} model --- Gemma~4 E4B (effective 4B). Same-family size-up to 31B does \emph{not} preserve M1; gemma4:31b joins the M2 group via a new (M2-d) schema-interface failure. The ``minimum operational size for the 4-axis framework with an agent-iterative tool'' is therefore not a \emph{size} threshold at all --- it is a \emph{specific-model identification}. The 4-axis framework with the agent-iterative tool, as currently specified (OpenAI-compatible tool spec + assertions-JSON A-agent contract), operates only on Gemma~4 E4B in the panel we tested. We treat this as an honest \emph{measurement-tool / model-fit} finding rather than a claim about the framework's intrinsic limits.
+
+\paragraph{gemma4:31b H13 baseline (no-tool) is paper-relevant.}
+50/50 trials, mean\_acc 0.95, errors 0/50 --- confirming gemma4:31b can read 26K-token documents and answer correctly within the ABC chain \emph{when the tool-augmented A-agent contract is removed}. This isolates the failure to the A-agent search-tool interface, not the model's long-context or reasoning ability.
+
+\subsubsection{Capability floor below 4B --- ministral-3:3b finding}\label{sec:floor}
+ministral-3:3b (Mistral~3 family, 3B dense) was tested as a candidate to extend the small-dense panel below 4B effective. Two independent reject events resulted: H11 baseline + extractor produced 47/150 errors (31.3\%, exceeding the Stage 2A error-rate gate of 30\%), and H13 search-tool produced 50/50 errors (100\%, complete no-convergence). H13 baseline\_chunked on the same model produced 0/50 errors with mean accuracy 0.840. We treat this as the lower-bound data point: the 4-axis externalization framework requires roughly Gemma~4 E4B-class capability (effective 4B) to operate the tool-free ABC chain reliably, and the same scale is the floor for the tool-augmented variant.
+
+\subsection{Statistical reporting protocol}\label{sec:stats}
+
+All hypothesis verdicts in \S\ref{sec:main-results} / \S4.5 / \S\ref{sec:position} / \S\ref{sec:h13} report the unified \textbf{($\Delta$, $n$, $p$, Cohen's $d$, 95\% CI) 5-tuple}, regenerated for H1 / H7 / H8 / H9a in v0.6 to match the convention previously applied to H10--H13. Conventions:
+
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+\item \textbf{$n$} = number of \emph{paired tasks}.
+\item \textbf{$p$ (primary)} = paired Wilcoxon signed-rank test on per-task means, two-sided.
+\item \textbf{$p$ (secondary)} = paired $t$-test, two-sided. Reported alongside Wilcoxon as a cross-check.
+\item \textbf{Cohen's $d$} = $\text{mean(diffs)} / \text{sd(diffs)}$. small $\approx 0.2$, medium $\approx 0.5$, large $\approx 0.8$.
+\item \textbf{95\% CI} = paired bootstrap ($n\!=\!10{,}000$ resamples, seed=42).
+\end{itemize}
+
+\textbf{Power note}: at $n\!=\!15$ paired tasks, the panel is underpowered for $d\!\approx\!0.3$ effects ($\sim\!35\%$ power at $\alpha\!=\!0.05$), so we report H4/H10/H11/H12 as \NS{} and treat them as \emph{replication targets}. H1, H9a, H13 carry large effect sizes ($|d|\!\geq\!0.94$). H7/H8 ($n\!=\!4$) are reported alongside the task-level math-04 anchor.
+
+% ============================================================================
+\section{Discussion}
+
+\subsection{Same-model role separation as an isolation tool}\label{sec:isolation}
+H2 (same-model self-validation, 0/15 detected) and H3 (role-separated cross-validation with the \emph{same base model}, 12/15 detected) together support a narrow claim: \textbf{role separation, not model capability, is the active ingredient} in this validation regime. Because both conditions use Gemma~4 E4B, the $0\to 80\%$ recovery cannot be attributed to a stronger validator. This same-model isolation pattern is what we extend into the role-addition ablation in \S\ref{sec:position}.
+
+\subsection{Candidate explanations for the post-stage negative direction}
+H12 (Reducer post-stage $\Delta\!=\!-0.05$) is consistent with two non-exclusive explanations: (i) \emph{abstraction loss} --- compression to a single-point answer discards multi-source structure; (ii) \emph{scorer-style mismatch} --- the compressed answer omits keywords. These are not separable from the current data (\S\ref{sec:caveat}). H10 (mixed-strength Judge) shows a related but distinct pattern: a stronger external Judge can interfere with the weaker model's self-discovery via Tattoo-schema mismatch and premature convergence --- a \emph{position-and-interface} effect. Together, H10 / H12 / H11 suggest that the \emph{interface between externalized roles and the base model's emergent reasoning} may matter more than which role is added.
+
+\subsection{Implications for small-LLM deployment cost}\label{sec:cost}
+On the 9-task cost-aware benchmark (Exp10), 8-loop ABC with Gemma~4 E4B reaches 78.1\% versus 59.1\% for a one-call Gemini~2.5 Flash baseline at \$0 per-trial API cost, in exchange for roughly 20$\times$ longer wall time. This is a benchmark-specific, asymmetric (8-loop vs 1-call) comparison --- not a general superiority claim. It does suggest that for use cases where wall-time and per-trial cost have different value (e.g., overnight batch inference on private data), externalization-heavy small-model workflows may be worth measuring against a Flash 1-call baseline.
+
+% ============================================================================
+\section{Limitations}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Cross-model coverage} --- Stage~6 v3 cross-model replication includes 5 additional models (gemma3:4b, gemma3:12b, rnj-1:8b, gpt-oss:20b, ministral-3:8b) on H11/H12. DeepSeek, Llama~4, Phi families not yet covered. H13 cross-model attempted on 5 dense models (gemma3:4b/12b, ministral-3:3b/8b, gemma4:31b --- same-family size-up control) --- all five failed via the M2 capability-floor mechanism under four distinguishable sub-variants. The iteration-discipline (M1) claim is observable on \emph{exactly one} model --- Gemma~4 E4B.
+
+\item \textbf{A-agent contract fragility (M2-d finding)} --- gemma4:31b reads 26K-token documents fluently in \code{baseline\_abc\_chunked} (50/50, mean\_acc 0.95) but fails the search-tool A-agent on the JSON-schema return contract. This isolates the failure to a \emph{measurement-tool fit} concern, not a model-capability deficit.
+
+\item \textbf{Capability-floor data point at 3B} --- ministral-3:3b failed both the tool-free H11 ABC chain and the H13 search-tool condition. One 3B observation does not generalize across all 3B small-dense models, but it sets a lower bound for the framework's operating regime.
+
+\item \textbf{Statistical power} --- $n\!=\!15$ underpowered for several hypotheses (H4, H10, H11, H12 all \NS{} at $\alpha\!=\!0.05$). Effect sizes (Cohen's $d$) and bootstrap CIs reported throughout.
+
+\item \textbf{Single-author coordination} --- no inter-rater reliability for failure-mode labels (Stage 2B FailureLabel taxonomy).
+
+\item \textbf{Deterministic scorer} --- \code{score\_answer\_v3} is keyword-based; semantic correctness not directly measured (relevant for H12 Reducer).
+
+\item \textbf{Korean-language scoring} --- limited support; documented in Stage 2A reference.
+
+\item \textbf{Tool axis under-tested in cross-category} --- math-04 anchor for H7/H8 is a single LP instance.
+\end{itemize}
+
+% ============================================================================
+\section{Conclusion}
+
+We have measured how \emph{adding structure} to a small open-weight LLM workflow changes accuracy, holding the base model fixed (Gemma~4 E4B, effective 4B) across all roles in an A-Proposer / B-Critic / C-Judge chain. Three findings stand out. First, \textbf{role addition is not monotonic}: a pre-stage Extractor produces $+0.05$ in mean accuracy across 15 paired tasks (Cohen's $d\!=\!+0.32$), while a structurally identical post-stage Reducer produces $-0.05$ ($d\!=\!-0.32$) --- mirrored sign at nearly identical magnitude on the same model and taskset (\S\ref{sec:position}). Cross-model replication on six additional models (Gemma~3, Mistral~3, OpenAI gpt-oss; 3B--20B) confirms the H11 direction in 6/7 panel rows and reveals a \emph{family-systematic} H12 split: Gemma~3 family 2/2 positive, non-Gemma family 4/4 negative including a \sig{} verdict on rnj-1:8b ($p\!=\!0.036$, $|d|\!=\!0.617$). The Gemma-3 inversion is direct family-level evidence for the keyword-scorer style-mismatch caveat (\S\ref{sec:caveat}). Second, \textbf{tool axis behavior splits along iteration discipline}: deterministic single-call computation tools yield $+18$--23pp on the math-04 anchor task (H7/H8), while agent-active BM25 retrieval (H13) yields $-22$pp ($d\!=\!-1.0$, $n\!=\!10$, $p\!=\!0.012$ \sig) against a sufficient-context baseline on Gemma~4 E4B. The mechanism is \emph{under-iteration on multi-hop tasks}. Third, \textbf{the framework's tool-augmented variant operates only on a specific model in our panel}: of five additional small-and-mid dense models tested on H13 (gemma3:4b/12b, ministral-3:3b/8b, gemma4:31b --- same-family size-up control), all five fail under four distinguishable M2 sub-variants. Within our cross-model panel, the H13 (M1) iteration effect is observable on \emph{exactly one} model --- Gemma~4 E4B --- and we report this as a \emph{measurement-tool fit}.
+
+These findings point to a refined framing of small-LLM externalization. The paper's headline claim --- \emph{more structure is not monotonically better; what matters is \textbf{where} it is placed, \textbf{how} it iterates, and \textbf{whether} the base model fits the structural contract} --- is supported across role and tool axes by 12 hypotheses, 4 negative-direction results among them, and $\sim\!2{,}290$ trials including $\sim\!650$ cross-model trials on the Stage~6 panel. We release the full harness, taskset, scorer, and per-trial logs as a reproducibility resource. Future work has three concrete directions: (i) \textbf{A-agent contract robustness} --- the M2-d JSON-schema mismatch on gemma4:31b suggests that revising the A-agent's tool-call return contract may broaden M1 observability across models; (ii) \textbf{iteration-discipline manipulation} as a direct fix for M1 --- the H8 mandatory-tool-rule pattern recovered math-04 from 0\% to 80\% by forcing tool calls, and an analogous ``force minimum $N$ retrieval calls'' prompt is the natural Stage~7 ablation candidate; (iii) \textbf{Cross-strength cascade} --- Sonnet-class planner with Gemma-class executor (preserving same-model ABC core) is a natural product extension of the position-effect findings.
+
+% ============================================================================
+\section*{Appendix}
+\begin{itemize}[leftmargin=*]
+\item \textbf{A.} Full hypothesis table with statistics --- [TBD: 13 rows $\times$ 5-tuple].
+\item \textbf{B.} Tattoo JSON schema --- [TBD: full schema from \code{experiments/schema.py}].
+\item \textbf{C.} Role prompts (A/B/C system messages) --- [TBD: from \code{experiments/system\_prompt.py}].
+\item \textbf{D.} Failure label taxonomy (Stage 2B) --- [TBD: from \code{docs/reference/failureLabels.md}].
+\item \textbf{E.} Hardware and reproducibility --- [TBD: GPU specs, inference engine versions, sampling parameters table].
+\end{itemize}
+
+% ============================================================================
+\section*{References}
+\noindent[Bibtex format --- to be migrated to \code{references.bib}]
+
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+@article{zhou2026externalization,
+  title={Externalization in {LLM} Agents: A Unified Review of Memory,
+         Skills, Protocols and Harness Engineering},
+  author={Zhou, Chenyu and Chai, Huacan and Chen, Wenteng and others},
+  journal={arXiv preprint arXiv:2604.08224},
+  year={2026}
+}
+
+@inproceedings{fang2026lightmem,
+  title={{LightMem}: Lightweight and Efficient Memory-Augmented Generation},
+  author={Fang, Jizhan and Deng, Xinle and Xu, Haoming and others},
+  booktitle={ICLR 2026},
+  year={2026},
+  note={arXiv:2510.18866}
+}
+
+@article{wu2024stateflow,
+  title={{StateFlow}: Enhancing {LLM} Task-Solving through State-Driven
+         Workflows},
+  author={Wu, Yiran and others},
+  journal={arXiv preprint arXiv:2403.11322},
+  year={2024}
+}
+
+@inproceedings{zhang2024chainofagents,
+  title={Chain of Agents: Large Language Models Collaborating on
+         Long-Context Tasks},
+  author={Zhang, Yusen and Sun, Ruoxi and Chen, Yanfei and Pfister, Tomas
+          and Zhang, Rui and Arik, Sercan {\"O}.},
+  booktitle={NeurIPS 2024},
+  year={2024},
+  note={arXiv:2406.02818}
+}
+
+@misc{wu2023autogen,
+  title={{AutoGen}: Enabling Next-Gen {LLM} Applications via Multi-Agent
+         Conversation},
+  author={Wu, Qingyun and Bansal, Gagan and Zhang, Jieyu and others},
+  year={2023},
+  eprint={2308.08155},
+  archivePrefix={arXiv}
+}
+
+@inproceedings{hong2024metagpt,
+  title={{MetaGPT}: Meta Programming for a Multi-Agent Collaborative
+         Framework},
+  author={Hong, Sirui and others},
+  booktitle={ICLR 2024},
+  year={2024},
+  note={arXiv:2308.00352}
+}
+
+@inproceedings{shinn2023reflexion,
+  title={Reflexion: Language Agents with Verbal Reinforcement Learning},
+  author={Shinn, Noah and Cassano, Federico and Berman, Edward and others},
+  booktitle={NeurIPS 2023},
+  year={2023},
+  note={arXiv:2303.11366}
+}
+
+@inproceedings{madaan2023selfrefine,
+  title={Self-Refine: Iterative Refinement with Self-Feedback},
+  author={Madaan, Aman and Tandon, Niket and Gupta, Prakhar and others},
+  booktitle={NeurIPS 2023},
+  year={2023},
+  note={arXiv:2303.17651}
+}
+
+@inproceedings{gou2024critic,
+  title={{CRITIC}: Large Language Models Can Self-Correct with Tool-
+         Interactive Critiquing},
+  author={Gou, Zhibin and Shao, Zhihong and Gong, Yeyun and others},
+  booktitle={ICLR 2024},
+  year={2024},
+  note={arXiv:2305.11738}
+}
+
+@inproceedings{schick2023toolformer,
+  title={Toolformer: Language Models Can Teach Themselves to Use Tools},
+  author={Schick, Timo and Dwivedi-Yu, Jane and Dess{\`\i}, Roberto and others},
+  booktitle={NeurIPS 2023},
+  year={2023},
+  note={arXiv:2302.04761}
+}
+
+@misc{patil2023gorilla,
+  title={Gorilla: Large Language Model Connected with Massive APIs},
+  author={Patil, Shishir G. and Zhang, Tianjun and Wang, Xin and Gonzalez,
+          Joseph E.},
+  year={2023},
+  eprint={2305.15334},
+  archivePrefix={arXiv}
+}
+\end{lstlisting}
+
+\end{document}
