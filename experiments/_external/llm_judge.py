@@ -2,13 +2,14 @@
 
 P1-3 in docs/reference/paper-review-action-items-2026-05-05.md.
 
-Uses Groq GPT-OSS 120B (reasoning model) as cross-evaluator.
+Uses Ollama Cloud (default) or Groq GPT-OSS 120B (reasoning model) as cross-evaluator.
 """
 from __future__ import annotations
 
 import json
 
-from .groq_client import call_with_meter_retry, GPT_OSS_120B
+from .groq_client import call_with_meter_retry as groq_call, GPT_OSS_120B as GROQ_GPT_OSS_120B
+from .ollama_cloud_client import call_with_meter_retry as ollama_call, GPT_OSS_120B_OLLAMA
 
 
 JUDGE_SYSTEM_PROMPT = """You are an expert evaluator of question answering. \
@@ -32,7 +33,8 @@ def judge_answer(
     question: str,
     expected_answer: str,
     candidate_answer: str,
-    model: str = GPT_OSS_120B,
+    model: str = "gpt-oss:120b",
+    provider: str = "ollama",
 ) -> dict:
     """단일 답변의 의미적 채점.
 
@@ -48,11 +50,20 @@ def judge_answer(
             f"Output the JSON verdict only."
         )},
     ]
-    result = call_with_meter_retry(
-        messages, model=model,
-        response_format={"type": "json_object"},
-        max_tokens=2048,
-    )
+    
+    if provider == "ollama":
+        result = ollama_call(
+            messages, model=model,
+            response_format={"type": "json_object"},
+            max_tokens=2048,
+        )
+    else:
+        result = groq_call(
+            messages, model=model,
+            response_format={"type": "json_object"},
+            max_tokens=2048,
+        )
+
     if result.error:
         return {"correct": None, "score": None, "reason": None,
                 "raw_response": "", "error": result.error}
@@ -82,7 +93,8 @@ def compare_answers(
     expected_answer: str,
     answer_A: str,
     answer_B: str,
-    model: str = GPT_OSS_120B,
+    model: str = "gpt-oss:120b",
+    provider: str = "ollama",
 ) -> dict:
     """두 답변의 직접 비교 — paired evaluation. order randomized 권장 (caller 책임)."""
     messages = [
@@ -95,11 +107,20 @@ def compare_answers(
             f"Output the JSON verdict only."
         )},
     ]
-    result = call_with_meter_retry(
-        messages, model=model,
-        response_format={"type": "json_object"},
-        max_tokens=2048,
-    )
+    
+    if provider == "ollama":
+        result = ollama_call(
+            messages, model=model,
+            response_format={"type": "json_object"},
+            max_tokens=2048,
+        )
+    else:
+        result = groq_call(
+            messages, model=model,
+            response_format={"type": "json_object"},
+            max_tokens=2048,
+        )
+
     if result.error:
         return {"winner": None, "score_A": None, "score_B": None,
                 "reason": None, "raw_response": "", "error": result.error}
@@ -117,3 +138,4 @@ def compare_answers(
         return {"winner": None, "score_A": None, "score_B": None,
                 "reason": None, "raw_response": result.raw_response,
                 "error": f"parse failed: {e}"}
+

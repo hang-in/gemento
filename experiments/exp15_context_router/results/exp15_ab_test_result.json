@@ -1,0 +1,34 @@
+{
+  "experiment": "exp15_context_router_v2",
+  "model": "gemma4:e4b",
+  "results": {
+    "stuffing": {
+      "score": 1.0,
+      "duration": 332.32355189323425,
+      "answer": "The compilation failure occurred in the file `src/main.rs` at line 342, due to an unresolved import module: `crate::router::SemanticRouter`.",
+      "cycles": 5
+    },
+    "router_basic": {
+      "score": 1.0,
+      "duration": 270.3302457332611,
+      "answer": "The compilation failure occurred in the file `src/main.rs` at line 342. The specific error is an unresolved import for the module: `crate::router::SemanticRouter`.",
+      "cycles": 5
+    },
+    "error_blocks_only": {
+      "score": 0.0,
+      "duration": 203.75076627731323,
+      "answer": null,
+      "cycles": 5
+    },
+    "hybrid": {
+      "score": 1.0,
+      "duration": 251.31636309623718,
+      "answer": {
+        "file_name": "src/main.rs",
+        "line_number": 342,
+        "unresolved_module": "crate::router::SemanticRouter"
+      },
+      "cycles": 5
+    }
+  }
+}

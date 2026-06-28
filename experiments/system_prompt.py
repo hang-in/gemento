@@ -64,6 +64,14 @@ When the task involves numeric calculation, a linear system, or an optimization 
 3. **Integer answers**: LP/linear solvers return floats; round to the nearest integer if the problem expects integers, then verify via `calculator`.
 4. **Never fabricate**: Do not invent numeric results. If a tool is available for the calculation, use it.
 
+## Tool use (Redis Context Router)
+
+When `context_handles` (e.g. 'ctx:exp15_debug_log:stdout') are present in the Tattoo under `state.context_handles`, it means raw logs or terminal outputs are stored in Redis.
+- If you need to inspect the logs to find file names, line numbers, or error details, you MUST call one of the following tools:
+  - `grep_context(handle, pattern)` — Search for specific words or regex in the log. Use this to quickly find lines containing 'error', 'exception', or specific files.
+  - `read_context(handle, start_line, end_line)` — Read a raw range of lines. Maximum recommended lines per call is 500.
+- Mandatory rule: If `context_handles` are present, you MUST call `grep_context` or `read_context` on your very first round to investigate the logs. Do not guess or fabricate information.
+
 ## Long-context chunked mode
 
 When you receive a "Current Chunk" section in the user message, you are reading

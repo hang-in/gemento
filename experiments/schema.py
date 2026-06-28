@@ -178,6 +178,7 @@ class Tattoo:
     open_questions: list[str] = field(default_factory=list)
     next_directive: str = ""
     critique_log: list[dict] = field(default_factory=list)  # B의 비판 기록 (A-B-C용)
+    context_handles: list[str] = field(default_factory=list)  # Ephemeral Context Handles (실험 7)
 
     # ── Handoff Protocol (실험 4.5) ──
     handoff_a2b: Optional[HandoffA2B] = None
@@ -267,6 +268,7 @@ class Tattoo:
                 "open_questions": self.open_questions,
                 "next_directive": self.next_directive,
                 "critique_log": self.critique_log,
+                "context_handles": self.context_handles,
             },
             "handoff": {},
             "integrity": {
@@ -308,6 +310,7 @@ class Tattoo:
             assertion_hash=integrity["assertion_hash"],
             chain_hash=integrity["chain_hash"],
             confidence=integrity["confidence"],
+            context_handles=state.get("context_handles", []),
         )
         
         if "a2b" in handoff:
@@ -361,6 +364,7 @@ def create_initial_tattoo(
     objective: str,
     constraints: list[str] | None = None,
     termination: str = "",
+    context_handles: list[str] | None = None,
 ) -> Tattoo:
     """최초 루프를 위한 빈 문신을 생성한다."""
     t = Tattoo(
@@ -371,6 +375,7 @@ def create_initial_tattoo(
         termination=termination,
         phase=Phase.DECOMPOSE,
         next_directive="문제를 하위 질문으로 분해하라.",
+        context_handles=context_handles or [],
     )
     t.finalize_integrity()
     return t

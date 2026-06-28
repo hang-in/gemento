@@ -31,6 +31,56 @@ from config import (
     MAX_LOOPS, SAMPLING_PARAMS,
 )
 
+def extract_error_blocks(handle: str, window_size: int = 25) -> str:
+    """Redis 로그 핸들에서 에러 관련 키워드가 있는 라인 주변부를 슬라이싱하여 요약 텍스트로 반환합니다. (실험 7 Arm C)"""
+    try:
+        from tools.context_tools import get_redis_client
+        r = get_redis_client()
+        content = r.get(handle)
+        if not content:
+            return ""
+        
+        lines = content.splitlines()
+        total_lines = len(lines)
+        error_keywords = ["error", "exception", "failed", "panic", "unresolved import"]
+        
+        error_line_indices = []
+        for i, line in enumerate(lines, 1):
+            if any(kw in line.lower() for kw in error_keywords):
+                error_line_indices.append(i)
+                
+        if not error_line_indices:
+            return ""
+            
+        # 범위 슬라이싱 병합 (Overlapping intervals merge)
+        intervals = []
+        for idx in error_line_indices:
+            start = max(1, idx - window_size)
+            end = min(total_lines, idx + window_size)
+            intervals.append([start, end])
+            
+        # 정렬 후 병합
+        intervals.sort(key=lambda x: x[0])
+        merged = []
+        for interval in intervals:
+            if not merged or merged[-1][1] < interval[0] - 1:
+                merged.append(interval)
+            else:
+                merged[-1][1] = max(merged[-1][1], interval[1])
+                
+        # 병합된 구간별 텍스트 빌드
+        blocks = []
+        for start, end in merged:
+            selected = lines[start-1 : end]
+            block_text = f"--- ERROR BLOCK (Lines {start}-{end}) ---\n"
+            block_text += "\n".join(selected)
+            blocks.append(block_text)
+            
+        return "\n\n".join(blocks)
+    except Exception as e:
+        return f"Error extracting blocks: {e}"
+
+
 # ── Phase별 next_directive 템플릿 ──
 PHASE_DIRECTIVES = {
     Phase.DECOMPOSE: "Break the problem into sub-questions. List what needs to be figured out.",
@@ -66,7 +116,7 @@ def call_model(
     """
     use_tools = bool(tools and tool_functions)
     payload: dict = {
-        "model": "",  # LM Studio가 로드된 모델을 자동 선택하도록 빈 값 전송
+        "model": model,  # Ollama 등 표준 API 서버 호환을 위해 model 인수 전송
         "messages": list(messages),  # 복사본 — tool 메시지 append용
     }
     # SAMPLING_PARAMS 의 None 이 아닌 값만 spread
@@ -327,6 +377,7 @@ def apply_llm_response(tattoo: Tattoo, response: dict, loop_index: int, hard_cap
         handoff_a2b=tattoo.handoff_a2b,
         handoff_b2c=tattoo.handoff_b2c,
         reject_memo=tattoo.reject_memo,
+        context_handles=list(tattoo.context_handles),
     )
 
     # ── HandoffA2B 파싱 (Architect A의 응답) ──
@@ -440,6 +491,7 @@ def run_loop(
         assertion_hash=tattoo.assertion_hash,
         chain_hash=tattoo.chain_hash,
         confidence=tattoo.confidence,
+        context_handles=tattoo.context_handles,
     )
     tattoo_json = display_tattoo.to_json()
     if phase_prompt_args is not None:
@@ -631,6 +683,9 @@ def run_abc_chain(
     search_tool: bool = False,
     corpus: list[dict] | None = None,
     model_caller: Callable | None = None,
+    context_router: bool = False,
+    context_handles: list[str] | None = None,
+    error_blocks: bool = False,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -641,6 +696,23 @@ def run_abc_chain(
 
     if c_caller is not None and model_caller is not None:
         raise ValueError("c_caller and model_caller are mutually exclusive")
+
+    # ── Error blocks pre-extraction (실험 7 Arm C) ──
+    if error_blocks and context_handles:
+        eb_texts = []
+        for h in context_handles:
+            eb_txt = extract_error_blocks(h)
+            if eb_txt:
+                eb_texts.append(f"### Snippets from {h}:\n{eb_txt}")
+        if eb_texts:
+            merged_eb = "\n\n".join(eb_texts)
+            prompt = (
+                f"{prompt}\n\n"
+                "## Pre-extracted Critical Log Snippets (Error Blocks):\n"
+                "The system pre-extracted the following failure regions around error keywords. "
+                "You can still use grep_context or read_context to inspect other regions:\n\n"
+                f"```text\n{merged_eb}\n```"
+            )
 
     # ── Extractor pre-stage (trial 시작 시 1회) ──
     # cross-model 시 model_caller 가 외부 모델 라우팅. None 시 기존 internal call_model.
@@ -689,11 +761,20 @@ def run_abc_chain(
         _search_extra_tools = [SEARCH_TOOL_SCHEMA]
         _search_extra_fns = {"search_chunks": make_search_chunks_tool(corpus)}
 
+    # Ephemeral Context Router 클로저 (실험 7)
+    _context_extra_tools: list = []
+    _context_extra_fns: dict = {}
+    if context_router:
+        from tools import CONTEXT_TOOL_SCHEMAS, CONTEXT_TOOL_FUNCTIONS
+        _context_extra_tools = CONTEXT_TOOL_SCHEMAS
+        _context_extra_fns = CONTEXT_TOOL_FUNCTIONS
+
     tattoo = create_initial_tattoo(
         task_id=task_id,
         objective=f"{objective}\n\nProblem:\n{prompt}",
         constraints=constraints,
         termination=termination,
+        context_handles=context_handles,
     )
 
     logs: list[ABCCycleLog] = []
@@ -719,11 +800,14 @@ def run_abc_chain(
         if use_tools:
             from tools import TOOL_FUNCTIONS
             _tool_fns = TOOL_FUNCTIONS
+        combined_extra_tools = (_search_extra_tools or []) + (_context_extra_tools or [])
+        combined_extra_fns = {**(_search_extra_fns or {}), **(_context_extra_fns or {})}
+
         tattoo, a_log, answer, a_tool_calls = run_loop(
             tattoo, cycle, phase_prompt_args=phase_args,
             use_tools=use_tools, tool_functions=_tool_fns,
-            extra_tools=_search_extra_tools or None,
-            extra_tool_fns=_search_extra_fns or None,
+            extra_tools=combined_extra_tools or None,
+            extra_tool_fns=combined_extra_fns or None,
             model_caller=model_caller,
         )
 

@@ -11,8 +11,8 @@ TASKS_DIR = EXPERIMENTS_DIR / "tasks"
 LOGS_DIR = EXPERIMENTS_DIR / "logs"
 
 # ── 모델 ──
-MODEL_NAME = "gemma4-e4b"
-API_BASE_URL = os.getenv("GEMENTO_API_BASE_URL", "http://localhost:8080")
+MODEL_NAME = "gemma4:e4b"
+API_BASE_URL = os.getenv("GEMENTO_API_BASE_URL", "http://localhost:11434")
 API_CHAT_URL = f"{API_BASE_URL}/v1/chat/completions"
 API_TIMEOUT = 600
 

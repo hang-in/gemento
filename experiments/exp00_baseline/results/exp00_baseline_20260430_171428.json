@@ -1,0 +1,58 @@
+{
+  "experiment": "baseline",
+  "model": "gemma4-e4b",
+  "results": [
+    {
+      "task_id": "math-01",
+      "objective": "주어진 수학 문제를 단계적으로 풀어라.",
+      "expected_answer": "13 apples and 7 oranges",
+      "trials": [
+        {
+          "trial": 1,
+          "response": [
+            "This problem can be solved using a system of linear equations based on the given constraints.\n\nLet:\n* $A$ be the number of apples.\n* $O$ be the number of oranges.\n\nWe are given the following information:\n1. **Total number of fruits:** $A + O = 20$\n2. **Total cost:** (Cost of apples) + (Cost of oranges) $= \\$47$\n   $2A + 3O = 47$\n3. **Constraint:** The customer buys more apples than oranges ($A > O$).\n\n### Step 1: Solve the system of equations\n\nWe have two main equations:\n(1) $A + O = 20$\n(2) $2A + 3O = 47$\n\nFrom Equation (1), we can express $A$ in terms of $O$:\n$$A = 20 - O$$\n\nSubstitute this expression for $A$ into Equation (2):\n$$2(20 - O) + 3O = 47$$\n\n### Step 2: Solve for $O$ (Oranges)\n\nDistribute the 2:\n$$40 - 2O + 3O = 47$$\n\nCombine the terms involving $O$:\n$$40 + O = 47$$\n\nIsolate $O$:\n$$O = 47 - 40$$\n$$O = 7$$\n\n### Step 3: Solve for $A$ (Apples)\n\nUse Equation (1) to find the number of apples:\n$$A = 20 - O$$\n$$A = 20 - 7$$\n$$A = 13$$\n\n### Step 4: Verify the constraints\n\n1. **Total fruits:** $13 + 7 = 20$. (Correct)\n2. **Total cost:** $2(13) + 3(7) = 26 + 21 = 47$. (Correct)\n3. **Apples vs Oranges:** $13 > 7$. (The customer buys more apples than oranges, which is correct).\n\nThe customer bought 13 apples and 7 oranges.",
+            []
+          ],
+          "duration_ms": 13783,
+          "error": null
+        },
+        {
+          "trial": 2,
+          "response": [
+            "This problem can be solved using a system of linear equations based on the given constraints.\n\nLet:\n* $A$ be the number of apples.\n* $O$ be the number of oranges.\n\nWe are given three main pieces of information that translate into equations or inequalities:\n\n1. **Total Number of Fruits:** The total number of fruits is 20.\n   $$A + O = 20 \\quad (Equation\\ 1)$$\n\n2. **Total Cost:** Apples cost \\$2 each, and oranges cost \\$3 each. The total spending is \\$47.\n   $$2A + 3O = 47 \\quad (Equation\\ 2)$$\n\n3. **Constraint:** The customer buys more apples than oranges.\n   $$A > O$$\n\n### Step 1: Solve the system of equations\n\nWe can use substitution or elimination to solve for $A$ and $O$. Let's use substitution by solving Equation 1 for $A$:\n$$A = 20 - O$$\n\nSubstitute this expression for $A$ into Equation 2:\n$$2(20 - O) + 3O = 47$$\n\n### Step 2: Solve for $O$ (Oranges)\n\nDistribute the 2:\n$$40 - 2O + 3O = 47$$\n\nCombine the terms involving $O$:\n$$40 + O = 47$$\n\nIsolate $O$:\n$$O = 47 - 40$$\n$$O = 7$$\n\n### Step 3: Solve for $A$ (Apples)\n\nSubstitute the value of $O$ back into Equation 1:\n$$A + 7 = 20$$\n$$A = 20 - 7$$\n$$A = 13$$\n\n### Step 4: Verify the solution\n\nWe must check if these values satisfy all conditions:\n\n1. **Total Fruits:** $13 + 7 = 20$. (Correct)\n2. **Total Cost:** $2(\\$13) + 3(\\$7) = \\$26 + \\$21 = \\$47$. (Correct)\n3. **Constraint ($A > O$):** $13 > 7$. (Correct)\n\nThe customer bought 13 apples and 7 oranges.\n\n***\n\nThe customer bought **13 apples** and **7 oranges**.",
+            []
+          ],
+          "duration_ms": 13791,
+          "error": null
+        },
+        {
+          "trial": 3,
+          "response": [
+            "This problem can be solved using a system of linear equations based on the given constraints.\n\nLet $A$ be the number of apples and $O$ be the number of oranges.\n\nWe are given three pieces of information that translate into equations:\n\n1. **Total Number of Fruits:** The total number of fruits is 20.\n   $$A + O = 20 \\quad (Equation\\ 1)$$\n\n2. **Total Cost:** Apples cost $\\$2$ each, and oranges cost $\\$3$ each. The total spending is $\\$47$.\n   $$2A + 3O = 47 \\quad (Equation\\ 2)$$\n\n3. **Constraint:** The customer buys more apples than oranges.\n   $$A > O$$\n\n### Step 1: Solve the system of equations\n\nWe can use substitution or elimination to solve for $A$ and $O$. Let's use substitution by solving Equation 1 for $A$:\n$$A = 20 - O$$\n\nSubstitute this expression for $A$ into Equation 2:\n$$2(20 - O) + 3O = 47$$\n\n### Step 2: Solve for $O$ (Oranges)\n\nDistribute the 2:\n$$40 - 2O + 3O = 47$$\n\nCombine the terms involving $O$:\n$$40 + O = 47$$\n\nIsolate $O$:\n$$O = 47 - 40$$\n$$O = 7$$\n\n### Step 3: Solve for $A$ (Apples)\n\nSubstitute the value of $O$ back into Equation 1:\n$$A + 7 = 20$$\n$$A = 20 - 7$$\n$$A = 13$$\n\n### Step 4: Verify the solution\n\nWe must check if these values satisfy all conditions:\n\n1. **Total Fruits:** $13 + 7 = 20$. (Correct)\n2. **Total Cost:** $2(13) + 3(7) = 26 + 21 = 47$. (Correct)\n3. **Constraint ($A > O$):** $13 > 7$. (Correct)\n\nThe customer bought 13 apples and 7 oranges.\n\n***\nThe customer bought **13 apples** and **7 oranges**.",
+            []
+          ],
+          "duration_ms": 13638,
+          "error": null
+        },
+        {
+          "trial": 4,
+          "response": [
+            "This problem can be solved using a system of linear equations based on the given information.\n\nLet $A$ be the number of apples and $O$ be the number of oranges.\n\nWe are given three pieces of quantitative information:\n1. **Total Number of Fruits:** The total number of fruits is 20.\n   $$A + O = 20 \\quad (Equation\\ 1)$$\n2. **Total Cost:** Apples cost $\\$2$ each, and oranges cost $\\$3$ each. The total spending is $\\$47$.\n   $$2A + 3O = 47 \\quad (Equation\\ 2)$$\n3. **Constraint:** The customer buys more apples than oranges ($A > O$).\n\n**Step 1: Solve the system of equations.**\n\nWe can use Equation 1 to express $A$ in terms of $O$:\n$$A = 20 - O$$\n\nSubstitute this expression for $A$ into Equation 2:\n$$2(20 - O) + 3O = 47$$\n\n**Step 2: Solve for $O$.**\nDistribute the 2:\n$$40 - 2O + 3O = 47$$\nCombine the terms involving $O$:\n$$40 + O = 47$$\nSubtract 40 from both sides:\n$$O = 47 - 40$$\n$$O = 7$$\n\n**Step 3: Solve for $A$.**\nSubstitute the value of $O$ back into Equation 1:\n$$A + 7 = 20$$\n$$A = 20 - 7$$\n$$A = 13$$\n\n**Step 4: Verify the solution.**\n*   **Total Fruits:** $13 \\text{ apples} + 7 \\text{ oranges} = 20$. (Correct)\n*   **Total Cost:** $(13 \\times \\$2) + (7 \\times \\$3) = \\$26 + \\$21 = \\$47$. (Correct)\n*   **Constraint Check:** $A > O$? $13 > 7$. (Correct)\n\nThe customer bought 13 apples and 7 oranges.",
+            []
+          ],
+          "duration_ms": 12917,
+          "error": null
+        },
+        {
+          "trial": 5,
+          "response": [
+            "This problem can be solved using a system of linear equations based on the given constraints.\n\nLet $A$ be the number of apples and $O$ be the number of oranges.\n\nWe are given three main pieces of information that translate into equations:\n\n**1. Total Number of Fruits:**\nThe total number of fruits is 20.\n$$A + O = 20 \\quad (Equation\\ 1)$$\n\n**2. Total Cost:**\nApples cost $\\$2$ each, and oranges cost $\\$3$ each. The total spending is $\\$47$.\n$$2A + 3O = 47 \\quad (Equation\\ 2)$$\n\n**3. Constraint:**\nThe customer buys more apples than oranges: $A > O$.\n\n---\n\n### Step 1: Solve the system of equations\n\nWe can use substitution or elimination to solve for $A$ and $O$. Let's use substitution.\n\nFrom Equation 1, we express $A$ in terms of $O$:\n$$A = 20 - O$$\n\nSubstitute this expression for $A$ into Equation 2:\n$$2(20 - O) + 3O = 47$$\n\n### Step 2: Solve for $O$ (Oranges)\n\nDistribute the 2:\n$$40 - 2O + 3O = 47$$\n\nCombine the terms involving $O$:\n$$40 + O = 47$$\n\nIsolate $O$:\n$$O = 47 - 40$$\n$$O = 7$$\n\n### Step 3: Solve for $A$ (Apples)\n\nSubstitute the value of $O$ back into Equation 1:\n$$A + 7 = 20$$\n$$A = 20 - 7$$\n$$A = 13$$\n\n### Step 4: Verification\n\nWe check if these values satisfy all conditions:\n1. **Total Fruits:** $13 + 7 = 20$. (Correct)\n2. **Total Cost:** $2(13) + 3(7) = 26 + 21 = 47$. (Correct)\n3. **Constraint ($A > O$):** $13 > 7$. (Correct)\n\nThe customer bought 13 apples and 7 oranges.\n\n---\nThe customer bought **13 apples** and **7 oranges**.",
+            []
+          ],
+          "duration_ms": 13764,
+          "error": null
+        }
+      ]
+    }
+  ]
+}

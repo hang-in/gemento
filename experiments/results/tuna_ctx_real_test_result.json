@@ -1,0 +1,61 @@
+{
+  "experiment": "tuna_ctx_real_debug",
+  "model": "gemma4:e4b",
+  "score": 0.0,
+  "duration_seconds": 262.3122341632843,
+  "final_answer": null,
+  "cycles": 5,
+  "tool_calls": [
+    [
+      {
+        "name": "grep_context",
+        "arguments": {
+          "handle": "ctx:tuna_ctx_real:stdout",
+          "pattern": "AttributeError"
+        },
+        "result": {
+          "handle": "ctx:tuna_ctx_real:stdout",
+          "pattern": "AttributeError",
+          "total_matches": 2,
+          "matches": "15: AttributeError: 'NoneType' object has no attribute 'lower'\n26: AttributeError: 'NoneType' object has no attribute 'get'",
+          "truncated": false
+        },
+        "error": null
+      }
+    ],
+    [
+      {
+        "name": "grep_context",
+        "arguments": {
+          "handle": "ctx:tuna_ctx_real:stdout",
+          "pattern": "default|fallback"
+        },
+        "result": {
+          "handle": "ctx:tuna_ctx_real:stdout",
+          "pattern": "default|fallback",
+          "total_matches": 0,
+          "matches": "",
+          "truncated": false
+        },
+        "error": null
+      }
+    ],
+    [
+      {
+        "name": "grep_context",
+        "arguments": {
+          "handle": "ctx:tuna_ctx_real:stdout",
+          "pattern": "default|fallback"
+        },
+        "result": {
+          "handle": "ctx:tuna_ctx_real:stdout",
+          "pattern": "default|fallback",
+          "total_matches": 0,
+          "matches": "",
+          "truncated": false
+        },
+        "error": null
+      }
+    ]
+  ]
+}
