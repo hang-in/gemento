@@ -75,9 +75,9 @@
 
 ## 6. 한계점 및 향후 과제 (Limitations & Future Work)
 
-### 6.1 오케스트레이터 상태 머신의 유연성 한계
-* **현상**: 실증 테스트 중 C 에이전트(Judge)가 이른 시점에 수렴했다고 판단하여 `next_phase: CONVERGED` 신호를 보냈으나, 오케스트레이터가 `DECOMPOSE ➔ INVESTIGATE ➔ SYNTHESIZE`로 이어지는 강성 상태 머신 전이 규칙을 고집하여 해당 전이를 무효화(Ignored)하는 현상이 발견되었습니다.
-* **보완 조치**: 조기 수렴 신호 발생 시 중간 상태를 강제로 건너뛰는 **Fast-Forward 기법** 또는 C 에이전트의 최종 수렴 판정을 유연하게 반영하는 오케스트레이터 상태 기계 튜닝이 차기 버전에서 구현되어야 합니다.
+### 6.1 오케스트레이터 상태 머신의 조기 수렴(Fast-Forward) 튜닝 완료
+* **상황**: 초기 실증 테스트 중 C 에이전트(Judge)가 조기 수렴을 선언해 `next_phase: CONVERGED`를 보내도, 상태 기계의 강한 단계 규칙(`DECOMPOSE ➔ INVESTIGATE ➔ SYNTHESIZE`) 때문에 전이가 무시되어 무한 루프를 돌다 미수렴(None)되는 한계가 있었습니다.
+* **보완 결과**: `next_phase == "CONVERGED"`를 예외적으로 즉각 승인하는 **조기 월반(Fast-Forward) 규칙**을 오케스트레이터 검증 함수에 반영했습니다. 그 결과, `tunaCtx` 실물 재테스트 시 에이전트 체인이 불필요한 루프를 스킵하고 **단 3 cycle 만에 정상 수렴(Status: SUCCESS, Score: 100%)**하여 조기 탈출에 성공했으며, 지연 시간이 `262.3초`에서 **`131.1초`로 50% 대폭 절감**되었습니다.
 
 ### 6.2 상용 제품(Production)을 위한 아키텍처 제언
 * 실험 대조군인 **Arm A (Stuffing)**는 소형 모델의 Attention 붕괴를 학술적으로 대조하기 위한 장치일 뿐이므로, 실제 상용 제품(Production) 배포 시에는 Stuffing을 영구 제거하고 오직 **ExoMind (Redis Router + ErrorBlocks)** 단일 엔진으로만 파이프라인을 고정합니다.

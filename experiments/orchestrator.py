@@ -962,9 +962,9 @@ def run_abc_chain(
             c_directive = c_parsed.get("next_directive", "")
 
             if converged and next_phase_str:
-                # next_phase 유효성 검증
+                # next_phase 유효성 검증 (expected 단계 혹은 CONVERGED 조기 월반 허용)
                 expected = VALID_NEXT_PHASE.get(phase_str)
-                if next_phase_str == expected:
+                if next_phase_str == expected or next_phase_str == "CONVERGED":
                     old_phase = phase_str
                     tattoo.phase = Phase(next_phase_str)
                     cycles_in_current_phase = 0

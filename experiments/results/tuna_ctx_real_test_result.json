@@ -1,57 +1,39 @@
 {
   "experiment": "tuna_ctx_real_debug",
   "model": "gemma4:e4b",
-  "score": 0.0,
-  "duration_seconds": 262.3122341632843,
-  "final_answer": null,
-  "cycles": 5,
+  "score": 1.0,
+  "duration_seconds": 131.12754774093628,
+  "final_answer": {
+    "summary": "Two test cases failed due to AttributeError in 'd:\\privateProject\\tunaCtx\\tests\\test_router_error.py'.",
+    "failures": [
+      {
+        "test_method": "test_routing_failure_empty_endpoint",
+        "file_name": "d:\\privateProject\\tunaCtx\\tests\\test_router_error.py",
+        "exception_type": "AttributeError",
+        "exception_message": "'NoneType' object has no attribute 'lower'"
+      },
+      {
+        "test_method": "test_routing_failure_none_config",
+        "file_name": "d:\\privateProject\\tunaCtx\\tests\\test_router_error.py",
+        "exception_type": "AttributeError",
+        "exception_message": "'NoneType' object has no attribute 'get'"
+      }
+    ]
+  },
+  "cycles": 3,
   "tool_calls": [
     [
       {
         "name": "grep_context",
         "arguments": {
           "handle": "ctx:tuna_ctx_real:stdout",
-          "pattern": "AttributeError"
+          "pattern": "ERROR|AttributeError"
         },
         "result": {
           "handle": "ctx:tuna_ctx_real:stdout",
-          "pattern": "AttributeError",
-          "total_matches": 2,
-          "matches": "15: AttributeError: 'NoneType' object has no attribute 'lower'\n26: AttributeError: 'NoneType' object has no attribute 'get'",
-          "truncated": false
-        },
-        "error": null
-      }
-    ],
-    [
-      {
-        "name": "grep_context",
-        "arguments": {
-          "handle": "ctx:tuna_ctx_real:stdout",
-          "pattern": "default|fallback"
-        },
-        "result": {
-          "handle": "ctx:tuna_ctx_real:stdout",
-          "pattern": "default|fallback",
-          "total_matches": 0,
-          "matches": "",
-          "truncated": false
-        },
-        "error": null
-      }
-    ],
-    [
-      {
-        "name": "grep_context",
-        "arguments": {
-          "handle": "ctx:tuna_ctx_real:stdout",
-          "pattern": "default|fallback"
-        },
-        "result": {
-          "handle": "ctx:tuna_ctx_real:stdout",
-          "pattern": "default|fallback",
-          "total_matches": 0,
-          "matches": "",
+          "pattern": "ERROR|AttributeError",
+          "total_matches": 9,
+          "matches": "7: ERROR: test_routing_failure_empty_endpoint (tests.test_router_error.TestTunaAgentRouter.test_routing_failure_empty_endpoint)\n10:   File \"d:\\privateProject\\tunaCtx\\tests\\test_router_error.py\", line 38, in test_routing_failure_empty_endpoint\n12:   File \"d:\\privateProject\\tunaCtx\\tests\\test_router_error.py\", line 22, in start_routing\n15: AttributeError: 'NoneType' object has no attribute 'lower'\n18: ERROR: test_routing_failure_none_config (tests.test_router_error.TestTunaAgentRouter.test_routing_failure_none_config)\n21:   File \"d:\\privateProject\\tunaCtx\\tests\\test_router_error.py\", line 31, in test_routing_failure_none_config\n23:   File \"d:\\privateProject\\tunaCtx\\tests\\test_router_error.py\", line 18, in start_routing\n26: AttributeError: 'NoneType' object has no attribute 'get'\n31: FAILED (errors=2)",
           "truncated": false
         },
         "error": null
