@@ -4,7 +4,15 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- (current Active queue is empty — Stage 6 partial 마감 후 다음 우선순위는 paper-review-action-items P1-3 LLM-as-judge 보조 평가)
+- **실 n100 Caddy 로그 연동** — Exp15 v1 의 n100 Caddy 는 mock fallback(실서버 미접속). 실 Caddy 절대경로 확인 후 5xx 트래픽 1회 실증 (핸드오프 액션아이템 #3).
+- (그 외) paper-review-action-items P1-3 LLM-as-judge 보조 평가.
+
+## Recently Done — Stage 7 (소급 등록, 2026-06-28~29)
+
+> ⚠ Stage 7 은 plan/verdict skill 워크플로를 우회해 수행됨 — plan 문서 없음. 아래는 소급 기록.
+
+- **Stage 7 v2: Context Router Stress Test (H15 정식 판정)** — Exp15 v2: canonical gemma4:e4b(Q4_K_M, 지인 서버 RTX 5060 Ti, SSH 터널), 5 task × 4 arm × num_ctx{4096,32768} × n=5 = 200 chains. **H15 (Context 외부화) ⚠ 조건부 채택 (입력 크기 의존)** — router 전체 mean 0.857 vs stuffing 0.300; **큰 로그(≥~10K) router 0.908 vs stuffing 0.125 (Δ+0.78)**; **overflow(컨텍스트 초과) router 1.00 vs stuffing 0.00 (유일 생존)**; 작은 로그(pytrace)는 stuffing 1.00 > router 0.65(overhead); num_ctx artifact 부분적(multihop만 32K 회복); ErrorBlocks brittle. 원본 "latency 35%" 철회. cross-model ministral-3:8b 무이득 → router 효용=f(모델용량,로그크기). 분석: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md`. 결과: `experiments/exp15_context_router/results/exp15_v2_stress_gemma4_e4b.json`. 2026-06-29.
+- **Stage 7 v1: Ephemeral Context Router (SQLite+Redis + ErrorBlocks + Fast-Forward)** — `orchestrator.py:967` C(Judge) CONVERGED 조기 월반(Fast-Forward) 전이 추가(실재, tunaCtx 3 cycle 수렴 131s). Exp15 A/B/C/D 대조 + tunaCtx/n100 실증. v1 은 arm당 n=1 예비 → v2 가 해소. ※ H14 충돌로 Context 가설 H15 재부호화. 보고서: `docs/reference/stage7-context-router-analysis-2026-06-28.md`(검증범위 보정본). 2026-06-28.
 
 ## Recently Done — Stage 6
 

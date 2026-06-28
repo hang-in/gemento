@@ -1,0 +1,1017 @@
+{
+  "experiment": "exp15_v2_stress",
+  "model": "gemma4:e4b",
+  "provider": "ollama_native_via_ssh_tunnel",
+  "n_trials": 5,
+  "max_cycles": 5,
+  "ctx_levels": [
+    4096,
+    32768
+  ],
+  "results": {
+    "rust_35k": {
+      "approx_tokens": 15971,
+      "note": "~11K tok: exceeds 4096, fits 32768. artifact-판별 핵심.",
+      "ctx": {
+        "4096": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 29.3,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 40960,
+            "answers": [
+              "Based on the provided log snippet, no compilation or runtime error is detectable. The log appears to show a sequence of successful build steps. If an error occurred, please provide the specific section of the log that contains the error message or traceback.",
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 157.7,
+            "mean_cycles": 3.6,
+            "mean_tool_rounds": 5.6,
+            "mean_in_tok": 25092,
+            "answers": [
+              "The Rust compilation failure was caused by an unresolved import of `crate::router::SemanticRouter` in the file `src/main.rs` at line 342.",
+              "The Rust compilation failure occurred in the file `src/main.rs` at line 342, due to an unresolved import of the module `crate::router::SemanticRouter`.",
+              {
+                "file_name": "src/main.rs",
+                "line_number": 342,
+                "unresolved_import": "crate::router::SemanticRouter"
+              },
+              {
+                "file_name": "src/main.rs",
+                "line_number": 342,
+                "unresolved_module": "crate::router::SemanticRouter"
+              },
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 122.1,
+            "mean_cycles": 3.6,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 35010,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 112.6,
+            "mean_cycles": 3.4,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 28891,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        },
+        "32768": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 108.1,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 327680,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.6,
+            "mean_dur": 172.1,
+            "mean_cycles": 4.8,
+            "mean_tool_rounds": 5.6,
+            "mean_in_tok": 27952,
+            "answers": [
+              "The Rust compilation failure was caused by an unresolved import of the module `crate::router::SemanticRouter` in the file `src/main.rs` at line 342.",
+              "The Rust compilation failure occurred in the file `src/main.rs` at line 342, caused by the unresolved import module `crate::router::SemanticRouter`.",
+              {
+                "file_name": "src/main.rs",
+                "line_number": 342,
+                "unresolved_import": "crate::router::SemanticRouter"
+              },
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.6,
+            "mean_dur": 102.2,
+            "mean_cycles": 3,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 32675,
+            "answers": [
+              "The Rust compilation failure was caused by an unresolved import of `crate::router::SemanticRouter` in the file `src/main.rs` at line 342.",
+              "The Rust compilation failure was caused by an unresolved import of `crate::router::SemanticRouter` in the file `src/main.rs` at line 342.",
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.2,
+            "mean_dur": 166.3,
+            "mean_cycles": 3.8,
+            "mean_tool_rounds": 3.2,
+            "mean_in_tok": 59163,
+            "answers": [
+              null,
+              null,
+              {
+                "file_name": "src/main.rs",
+                "line_number": 342,
+                "unresolved_import_module": "crate::router::SemanticRouter"
+              },
+              null,
+              null
+            ]
+          }
+        }
+      }
+    },
+    "pytrace": {
+      "approx_tokens": 91,
+      "note": "~1K tok: fits both ctx. 통제군 — stuffing 정상 기대.",
+      "ctx": {
+        "4096": {
+          "stuffing": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 55.8,
+            "mean_cycles": 2.2,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 6371,
+            "answers": [
+              null,
+              "File and Line: app/payment.py, line 88; Exception Type: KeyError; Missing Key: 'amount'",
+              null,
+              null,
+              "The root cause is a KeyError: 'amount', which occurred in the file 'app/payment.py' at line 88."
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.5,
+              0.5,
+              0.5,
+              1.0,
+              0.5
+            ],
+            "mean_score": 0.6,
+            "mean_dur": 127.4,
+            "mean_cycles": 3,
+            "mean_tool_rounds": 3.2,
+            "mean_in_tok": 17866,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 56.4,
+            "mean_cycles": 2,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 6181,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 84.3,
+            "mean_cycles": 2.6,
+            "mean_tool_rounds": 1.2,
+            "mean_in_tok": 11275,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        },
+        "32768": {
+          "stuffing": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 54.1,
+            "mean_cycles": 2.2,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 5995,
+            "answers": [
+              null,
+              null,
+              "The root cause is a KeyError: 'amount', which occurred in the file app/payment.py at line 88.",
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.5,
+              1.0,
+              1.0,
+              0.5,
+              0.5
+            ],
+            "mean_score": 0.7,
+            "mean_dur": 137.0,
+            "mean_cycles": 3.2,
+            "mean_tool_rounds": 3.2,
+            "mean_in_tok": 18612,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              1.0,
+              0.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "mean_score": 0.6,
+            "mean_dur": 90.6,
+            "mean_cycles": 3.4,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 10585,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              "The failure is caused by a KeyError, indicating that the required key 'amount' was missing from the payload structure. The immediate point of failure is located in the file `app/payment.py` at line 88. While the root cause of the malformed payload cannot be definitively determined from the provided "
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.5,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 0.7,
+            "mean_dur": 100.5,
+            "mean_cycles": 3,
+            "mean_tool_rounds": 2,
+            "mean_in_tok": 14388,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        }
+      }
+    },
+    "caddy_5xx": {
+      "approx_tokens": 10928,
+      "note": "~9K tok. n100 caddy 시나리오 재현 (실로그 아님, 합성).",
+      "ctx": {
+        "4096": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 23.5,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 40960,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 0.8,
+            "mean_dur": 111.7,
+            "mean_cycles": 2.6,
+            "mean_tool_rounds": 2.6,
+            "mean_in_tok": 14627,
+            "answers": [
+              null,
+              {
+                "client_ip": "10.0.0.7",
+                "request_url_path": "/api/v2/payment/checkout",
+                "http_status_code": "500"
+              },
+              {
+                "failing_requests": [
+                  {
+                    "client_ip": "10.0.0.7",
+                    "request_url_path": "/api/v2/payment/checkout",
+                    "http_status_code": 500
+                  }
+                ],
+                "summary": "The failing requests all originated from IP 10.0.0.7, targeted the path /api/v2/payment/checkout, and resulted in a 500 Internal Server Error."
+              },
+              null,
+              {
+                "failing_requests": [
+                  {
+                    "client_ip": "10.0.0.7",
+                    "request_url_path": "/api/v2/payment/checkout",
+                    "http_status_code": "500"
+                  }
+                ],
+                "summary": "The Caddy access log shows two instances of a 500 Internal Server Error originating from client IP 10.0.0.7, targeting the path /api/v2/payment/checkout."
+              }
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 104.7,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 12104,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 0.8,
+            "mean_dur": 123.1,
+            "mean_cycles": 2.8,
+            "mean_tool_rounds": 2.6,
+            "mean_in_tok": 15193,
+            "answers": [
+              null,
+              null,
+              {
+                "failing_requests": [
+                  {
+                    "client_ip": "10.0.0.7",
+                    "request_url_path": "/api/v2/payment/checkout",
+                    "http_status_code": 500
+                  },
+                  {
+                    "client_ip": "10.0.0.7",
+                    "request_url_path": "/api/v2/payment/checkout",
+                    "http_status_code": 500
+                  }
+                ],
+                "summary": "The failing requests all originated from IP 10.0.0.7, targeting the path /api/v2/payment/checkout, and returned an HTTP 500 Internal Server Error."
+              },
+              "The failing requests are characterized by the following details:\n\n*   **Client IP:** 10.0.0.7\n*   **Request URL Path:** /api/v2/payment/checkout\n*   **HTTP Status Code:** 500",
+              {
+                "client_ip": "10.0.0.7",
+                "request_url_path": "/api/v2/payment/checkout",
+                "http_status_code": "500"
+              }
+            ]
+          }
+        },
+        "32768": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 224.7,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 491255,
+            "answers": [
+              null,
+              null,
+              "The request from IP 192.168.1.10 to /api/v1/data returned a 503 status code.",
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 90.1,
+            "mean_cycles": 2.2,
+            "mean_tool_rounds": 1.8,
+            "mean_in_tok": 12444,
+            "answers": [
+              {
+                "failing_requests": [
+                  {
+                    "client_ip": "10.0.0.7",
+                    "request_url_path": "/api/v2/payment/checkout",
+                    "http_status_code": "500"
+                  }
+                ]
+              },
+              {
+                "client_ip": "10.0.0.7",
+                "request_url_path": "/api/v2/payment/checkout",
+                "http_status_code": 500
+              },
+              {
+                "failing_requests": [
+                  {
+                    "client_ip": "10.0.0.7",
+                    "request_url_path": "/api/v2/payment/checkout",
+                    "http_status_code": "500"
+                  },
+                  {
+                    "client_ip": "10.0.0.7",
+                    "request_url_path": "/api/v2/payment/checkout",
+                    "http_status_code": "500"
+                  }
+                ]
+              },
+              {
+                "failing_requests": [
+                  {
+                    "client_ip": "10.0.0.7",
+                    "request_url_path": "/api/v2/payment/checkout",
+                    "http_status_code": 500
+                  }
+                ]
+              },
+              {
+                "failing_requests": [
+                  {
+                    "client_ip": "10.0.0.7",
+                    "request_url_path": "/api/v2/payment/checkout",
+                    "http_status_code": "500"
+                  }
+                ]
+              }
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 91.8,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 11462,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.3333333333333333,
+              1.0,
+              1.0,
+              0.0
+            ],
+            "mean_score": 0.467,
+            "mean_dur": 93.0,
+            "mean_cycles": 2,
+            "mean_tool_rounds": 2,
+            "mean_in_tok": 15591,
+            "answers": [
+              null,
+              null,
+              {
+                "client_ip": "10.0.0.7",
+                "request_url_path": "/api/v2/payment/checkout",
+                "http_status_code": "500"
+              },
+              null,
+              null
+            ]
+          }
+        }
+      }
+    },
+    "multihop": {
+      "approx_tokens": 8867,
+      "note": "~9K tok. 2-hop 상관 필요 (config@95 + error@642).",
+      "ctx": {
+        "4096": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 66.5,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 40960,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.6666666666666666,
+              1.0,
+              1.0,
+              1.0,
+              0.6666666666666666
+            ],
+            "mean_score": 0.867,
+            "mean_dur": 101.6,
+            "mean_cycles": 2.8,
+            "mean_tool_rounds": 2.2,
+            "mean_in_tok": 13215,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 105.3,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 27113,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.6666666666666666,
+              0.0
+            ],
+            "mean_score": 0.133,
+            "mean_dur": 143.8,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 3.6,
+            "mean_in_tok": 46281,
+            "answers": [
+              null,
+              null,
+              null,
+              {
+                "root_cause": "The connection failure is caused by the application initializing the database connection pool with a size of zero (`db_pool_size=0`).",
+                "location_of_error": "The failure occurs within the database connection logic, specifically at `internal/db/conn.go:123`.",
+                "action_required": "The configuration file must be corrected to set `db_pool_size` to a positive integer value to allow the application to establish a functional connection pool."
+              },
+              "The root cause of the connection pool exhaustion error is a **misconfiguration** in the application's settings.\n\n**Evidence:** The logs show the configuration setting `config.ConnectionPoolSize=0`.\n\n**Conclusion:** The connection pool is initialized with zero available connections, making it impossi"
+            ]
+          }
+        },
+        "32768": {
+          "stuffing": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 125.0,
+            "mean_cycles": 2.8,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 150087,
+            "answers": [
+              "The root cause of the pool exhaustion error is the configuration value `db_pool_size=0`. This value, which was loaded during configuration, caused the pool to have zero available connections. The error surfaced at `internal/db/conn.go:88` when the application attempted to request a connection (reque",
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 118.5,
+            "mean_cycles": 3.8,
+            "mean_tool_rounds": 2.6,
+            "mean_in_tok": 16306,
+            "answers": [
+              null,
+              "The root cause of the pool exhaustion error is the configuration value `db_pool_size=0`. This value was loaded into the system (observed at log line 95), which set the connection pool size to zero. This lack of available connections then caused the error to surface at `internal/db/conn.go:88`.",
+              null,
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 109.2,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 28713,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 97.8,
+            "mean_cycles": 2.4,
+            "mean_tool_rounds": 1.8,
+            "mean_in_tok": 25312,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        }
+      }
+    },
+    "overflow_60k": {
+      "approx_tokens": 93081,
+      "note": "~65K tok: exceeds BOTH 4096 and 32768. 결정적 부하>용량 영역.",
+      "ctx": {
+        "4096": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 58.7,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 61440,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 38.9,
+            "mean_cycles": 1,
+            "mean_tool_rounds": 1,
+            "mean_in_tok": 5318,
+            "answers": [
+              null,
+              {
+                "file": "src/auth/jwt.rs",
+                "line_number": 1873,
+                "panic_reason": "ExpiredSignature"
+              },
+              null,
+              "The worker crash was caused by an ExpiredSignature panic, occurring at src/auth/jwt.rs on line 1873.",
+              "The worker crash was caused by an ExpiredSignature panic, occurring in the file src/auth/jwt.rs at line 1873."
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 50.8,
+            "mean_cycles": 2,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 12455,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 35.2,
+            "mean_cycles": 1.6,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 12053,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        },
+        "32768": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 116.1,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 340787,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 58.0,
+            "mean_cycles": 2,
+            "mean_tool_rounds": 1,
+            "mean_in_tok": 7531,
+            "answers": [
+              "The worker crash occurred at the following location and with the following reason:\n\n*   **File**: src/auth/jwt.rs\n*   **Line Number**: 1873\n*   **Panic Reason**: ExpiredSignature",
+              "The worker crashed due to an ExpiredSignature panic, which occurred in the file src/auth/jwt.rs at line 1873.",
+              "The worker crash was caused by an 'ExpiredSignature' panic, occurring in the file 'src/auth/jwt.rs' at line 1873.",
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "mean_score": 0.6,
+            "mean_dur": 35.3,
+            "mean_cycles": 1,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 8411,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 0.8,
+            "mean_dur": 39.0,
+            "mean_cycles": 1.2,
+            "mean_tool_rounds": 0.8,
+            "mean_in_tok": 12787,
+            "answers": [
+              null,
+              {
+                "panic_reason": "ExpiredSignature",
+                "file": "src/auth/jwt.rs",
+                "line_number": 1873
+              },
+              "The worker crash was caused by a panic with the reason 'ExpiredSignature'. This occurred in the file `src/auth/jwt.rs` at line 1873.",
+              "The worker crash was caused by an ExpiredSignature panic, originating from the file src/auth/jwt.rs at line 1873.",
+              null
+            ]
+          }
+        }
+      }
+    }
+  },
+  "total_elapsed_sec": 19194.1
+}

@@ -1,0 +1,52 @@
+{
+  "experiment": "exp15_context_router_crossmodel",
+  "model": "ministral-3:8b",
+  "provider": "ollama_cloud",
+  "note": "arm당 n=1 예비 cross-model 사이드테스트. caller 내부 tool-loop 사용.",
+  "results": {
+    "stuffing": {
+      "score": 1.0,
+      "duration": 93.19381141662598,
+      "answer": {
+        "file_name": "src/main.rs",
+        "line_number": 342,
+        "unresolved_import_module": "crate::router::SemanticRouter"
+      },
+      "cycles": 5,
+      "tool_calls": []
+    },
+    "router_basic": {
+      "score": 1.0,
+      "duration": 121.83347368240356,
+      "answer": {
+        "file_name": "src/main.rs",
+        "line_number": 342,
+        "unresolved_import_module": "crate::router::SemanticRouter"
+      },
+      "cycles": 5,
+      "tool_calls": []
+    },
+    "error_blocks_only": {
+      "score": 1.0,
+      "duration": 188.84380793571472,
+      "answer": {
+        "file_name": "src/main.rs",
+        "line_number": 342,
+        "unresolved_import_module": "crate::router::SemanticRouter"
+      },
+      "cycles": 5,
+      "tool_calls": []
+    },
+    "hybrid": {
+      "score": 1.0,
+      "duration": 138.09346461296082,
+      "answer": {
+        "file_name": "src/main.rs",
+        "line_number": 342,
+        "unresolved_import_module": "crate::router::SemanticRouter"
+      },
+      "cycles": 5,
+      "tool_calls": []
+    }
+  }
+}

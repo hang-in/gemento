@@ -225,9 +225,9 @@ Evidence Tool은 `raw_key="cycle_3.tool_calls[0]"`을 resolve하여 원본 tool_
 | **Stage 2C** (H4 재검증) | **Role 외부화 시너지 정밀화** | 15-task ablation: ABC > Solo-budget +0.044, **synthesis +0.140 회복 핵심**, n=15 검정력 한계, Cohen d=0.449 medium |
 | **Exp11** (Mixed Intelligence) | **Role 강화 (H10)** | ⚠ 미결 (실효적 기각). Δ(Mixed Flash − baseline)=−0.081, Cohen d=−0.316 음수. **정반대 메커니즘 발견** — 강한 Judge 가 약한 모델 self-discovery 방해 (logic-02 case study) |
 | **Exp12** (Extractor Role) | **Role 분리/추가 (H11)** | ✅ 조건부 채택 (양수 방향, n=15 비유의). Extractor pre-stage hook 으로 task prompt → claims/entities 사전 추출. |
-| **Exp15** (Context Router) | **Context 외부화 (H14)** | ✅ 채택 (Supported). SQLite + Redis 이중화 인지 메모리 티어링 및 ErrorBlocks 구현. Stuffing 대비 Latency 35% 단축 및 JSON 안정성 100% 보존. C 에이전트의 CONVERGED 조기 월반(Fast-Forward) 튜닝으로 tunaCtx 3 cycle 만에 수렴 성공 (수행 지연 50% 추가 단축). |
+| **Exp15 v2** (Context Router) | **Context 외부화 (H15)** | ⚠ **조건부 채택 (입력 크기 의존)** — canonical gemma4:e4b, 5 task × 4 arm × num_ctx{4096,32768} × n=5. router 전체 mean 0.857 vs stuffing 0.300; **큰 로그(≥~10K) router 0.908 vs stuffing 0.125**; **overflow(컨텍스트 초과) router 1.00 vs stuffing 0.00 — 유일 생존**. 단 **작은 로그(0.1K)는 stuffing 1.00 > router 0.65 (overhead)**. num_ctx artifact 부분적(multihop만 회복, rust/caddy는 32K서도 stuffing 0% = 진짜 lost-in-the-middle). ErrorBlocks brittle(mean 0.28). v1 의 "latency 35% 단축" 철회(n=1+ctx artifact). cross-model ministral-3:8b 무이득 → **router 효용 = f(모델 용량, 로그 크기)**. Fast-Forward 전이(`orchestrator.py:967`) 실재. ※ H14 충돌로 H15 재부호화. |
 
-**관찰**: 4축을 넘어 **Context (기억 인출) 외부화 축**이 Exp15를 통해 성공적으로 입증 및 통합되었습니다. SQLite(장기억)와 Redis(휘발성 작업기억 스풀)로 인지적 맥락을 분리하여 소형 8B 모델의 Attention Breakdown 및 JSON 붕괴를 예방하고, 조기 수렴 튜닝을 통해 연산 낭비를 차단하는 상수 토큰 $O(1)$ 복잡도의 실시간 에이전트 제어 프레임워크가 실증 완료되었습니다.
+**관찰**: 4축을 넘어 **Context (기억 인출) 외부화 축**(H15)이 Exp15 v2 의 canonical 재검증(gemma4:e4b, n=5, num_ctx 통제)으로 **조건부 입증**되었습니다. Context Router(Redis 핸들 + grep/read 도구)는 모델 용량에 근접/초과하는 큰 로그(≥~10K tok)에서 stuffing 대비 견고하게 우수하고(router 0.908 vs stuffing 0.125), 로그가 컨텍스트를 초과하면 유일하게 작동합니다(overflow 1.00 vs 0.00). 다만 **작은 로그에선 오히려 손해**(overhead)라 만능이 아니며, **라우터 효용 = f(모델 용량, 로그 크기)** 입니다(8B ministral 은 35KB 에서 무이득). 원본 v1 의 "latency 35% 단축"은 n=1 + num_ctx=4096 artifact 로 철회되었습니다. 즉 Context 외부화는 **"소형 모델 + 용량 초과 부하"라는 조건에서 참인 5번째 축**으로 자리매김합니다.
 
 ---
 

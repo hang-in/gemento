@@ -1,10 +1,10 @@
 ---
 type: reference
 status: in_progress
-updated_at: 2026-05-09
+updated_at: 2026-06-29
 mirror_of: docs/reference/researchNotebook.md (Part 1 — Closed Findings)
 language: en
-note: 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
+note: 2026-06-29 v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
 ---
 
 > **Conceptual framework canonical document**: [conceptFramework.md](./conceptFramework.md) — 4-axis externalization principles, terminology definitions, axis ↔ experiment mapping.
@@ -1137,6 +1137,38 @@ The hypothesis table above (H1~H13) remains unchanged (Closed-append-only policy
 - `experiments/results/tuna_ctx_real_test_result.json`
 - `experiments/results/caddy_n100_analysis_result.json`
 - `docs/reference/stage7-context-router-analysis-2026-06-28.md` (Technical Report)
+
+---
+
+## Correction / Errata — Stage 7 entry (2026-06-28)
+
+> Append-only policy: the Stage 7 block above is **not modified in place**. This erratum supersedes its hypothesis ID and verdict.
+
+The Stage 7 entry above contains two errors and one overclaim, corrected here:
+
+1. **Hypothesis ID collision → renamed H14 ⇒ H15.** `H14` is already assigned to *Cross-model generalization* (Stage 6, above). The Context-Externalization hypothesis is therefore re-coded as **H15**.
+2. **Verdict downgrade: ✅ Supported ⇒ ⚠ Preliminary (n=1, re-validation pending).** The Exp15 A/B/C/D comparison is **a single trial per arm** (`exp15_ab_test_result.json`). Accuracy scores are tied at 100% for Stuffing / Router-Basic / Hybrid (ErrorBlocks-Only 0%), so the router shows **no accuracy advantage** — only a single-measurement latency difference (332.3s → 251.3s, no variance). All four arms ran `cycles=5`; there was **no early convergence among the Exp15 arms** (the "Arm B early-converged" claim was unsupported by the data).
+3. **n100 Caddy = mock fallback, not real-server integration.** `caddy_n100_analysis_result.json` has `is_fallback: true`: the script could not reach the real n100 log and fell back to a script-generated mock log, then "extracted" the mock-planted values (circular). The "Successfully demonstrated ... real-time Caddy logs" claim is not yet substantiated.
+
+What *is* validated: the Fast-Forward CONVERGED transition (`orchestrator.py:967`) genuinely works — the tunaCtx unittest debugging case converged in 3 cycles (Score 100%, 131.1s, `tuna_ctx_real_test_result.json`). H15 acceptance is deferred until n≥5 re-run + real Caddy-log integration.
+
+---
+
+## Exp15 v2 — Context Router Stress Test (H15 verdict, 2026-06-29)
+
+A canonical re-validation (side branch `side/exp15-crossmodel-ministral`) tested **H15** — whether a Context Router (Redis log handle + `grep_context`/`read_context` tools) beats log-stuffing for a small local LLM. This supersedes the Exp15 v1 preliminary result (see the Correction/Errata above): v1 was n=1 per arm with tied scores and an uncontrolled context window.
+
+Conditions: 5 synthetic log-debugging tasks × 4 arms (stuffing / router_basic / error_blocks_only / hybrid) × num_ctx {4096, 32768} × n=5 = **200 ABC chains** on canonical gemma4:e4b (Q4_K_M) over an SSH tunnel to a remote RTX 5060 Ti (no local VRAM). A side-branch native `/api/chat` caller controlled num_ctx per request and ran the tool-execution loop internally (the orchestrator's `model_caller` path does not execute tool_calls). Scoring credits final_answer ∪ final tattoo assertions, applied uniformly to all arms. Shared orchestrator/Stage 6 code unchanged.
+
+Results (mean_score per arm, averaged across all 10 task×ctx cells): **router_basic 0.857** > hybrid 0.510 > stuffing 0.300 ≈ error_blocks_only 0.280. On large logs only (≥~10K tok): **router_basic 0.908 vs stuffing 0.125 (Δ +0.78)**. On the overflow task (~93K tok, exceeds both context windows): **router_basic 1.00 vs stuffing 0.00 — the only surviving arm**. On the small control (pytrace, ~0.1K tok): **stuffing 1.00 > router_basic 0.65** — routing adds overhead without benefit when the log trivially fits.
+
+**H15 verdict (Architect)**: ⚠ **Conditionally supported (input-size dependent)**. The Context Router robustly outperforms stuffing on logs that approach or exceed the model's context window, and is the sole functional arm when the log overflows the context — but it *hurts* on small logs. The num_ctx=4096 artifact hypothesis is only partially true: multihop recovers (stuffing 0%→100%) when context is raised to 32K, but rust_35k/caddy/overflow stay at stuffing 0% even at 32K (genuine lost-in-the-middle, not just truncation). ErrorBlocks-Only is brittle (mean 0.28) because its ±25-line slicing keys on the literal "error" string. The original Stage 7 "35% latency reduction" claim is retracted (n=1 + ctx artifact). Cross-model: ministral-3:8b (8B) showed no router benefit on the same 35KB log it handles natively — so **router utility = f(model capacity, log size)**.
+
+Limitations: synthetic logs (not production); keyword-substring scoring; n=5 (descriptive, not powered for significance); single small model for the v2 matrix (cross-model only n=1 on ministral-3:8b); hybrid arm inconsistent (0–100%) and not characterized.
+
+Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md`. Results: `experiments/exp15_context_router/results/exp15_v2_stress_gemma4_e4b.json` (200 chains) + `exp15_crossmodel_ministral_3_8b.json` (cross-model).
+
+The hypothesis table above (H1~H14) remains unchanged (Closed-append-only policy). H15's entry is a new addition only.
 
 ---
 

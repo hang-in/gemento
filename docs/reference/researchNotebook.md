@@ -1,9 +1,9 @@
 ---
 type: reference
 status: in_progress
-updated_at: 2026-05-09
+updated_at: 2026-06-29
 parts: [closed, active]
-note: 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화 (M2-a/b/c/d). H13 measurable = Gemma 4 E4B 한정, *specific-model identification*. A-agent JSON-schema contract = measurement-tool fit caveat. paper §1.3 narrowing.
+note: 2026-06-29 v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
 ---
 
 > **개념 프레임 canonical 문서**: [conceptFramework.md](./conceptFramework.md) — 4축 외부화 원리, 용어 정의, 축 ↔ 실험 매핑.
@@ -57,6 +57,7 @@ note: 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants �
 | **H12** | **[Role 외부화 분리/추가 — Reducer Role]** 신규 Role (Reducer, 동일 Gemma 모델) 이 ABC chain 의 final tattoo + final_answer 를 받아 *post-stage* 에서 정리/통합하면, keyword 매칭 정확도 + final answer 명료성 향상 | ⚠ **미결 (실효적 기각)** — 2026-05-05 Exp13: Δ(red−base)=−0.0533 (bug 제외) / −0.0711 (with bug, 음수 — Exp12 정반대), Cohen d=−0.323 (Exp12 +0.323 거울상), Wilcoxon p=0.180 비유의. logic −0.100 / math −0.083 / **synthesis −0.107 (5/5 task 음수)** / planning +0.100. 메커니즘 = **abstraction loss** (다중 출처/다중 추정 → 단일 추정 압축). **위치-효과 비대칭 확정**: pre-stage = 안전, post-stage = 위험 | Exp13 |
 | **H13** | **[Tool 외부화 — agent-active retrieval]** ABC 에이전트가 cycle 중 능동적으로 `search_chunks(query, top_k)` 호출하여 long-context document 의 관련 chunk retrieve 시, 32K context baseline (full document in prompt) 대비 정확도 + 효율 향상 | ⚠ **미결 (실효적 기각, SIG)** — 2026-05-05 Exp14: Δ(search−base)=−0.2200 (음수, Stage 5 의 가장 큰 음수). **Cohen d=−1.000 large effect**, **Wilcoxon p=0.0312 / paired t p=0.0115 — Stage 5 첫 통계적 유의 결과**. Bootstrap 95% CI [−0.36, −0.10] (0 미포함). 메커니즘 = **insufficient retrieval iterations on multi-hop tasks** (large-2hop 진단: 1 call → 0% / 2-3 calls → 100%) + premature termination ("document does not contain" 단정) + sufficient-context baseline saturation. needle (1-hop) 은 정상, multi-hop 만 fail. Tool 축 sub-distinction 발견: deterministic computation (H7/H8 +18~23pp) ≠ agent-iterative retrieval (H13 −22pp) | Exp14 |
 | **H14** | **[Cross-model generalization]** Stage 5 의 H11 (Extractor pre-stage 양수) / H12 (Reducer post-stage 음수) / H13 (Search Tool 음수) 의 *direction / mechanism* 이 cross-family / cross-size 모델에서 generalize | ⚠ **조건부 채택 (direction match 강함, family-systematic pattern, mechanism 5-mode 분화, 단일 SIG, *measurement-tool fit caveat*)** — 2026-05-09 Stage 6 v3 (6 model H11/H12 + 5 model H13). **H11 6/7 양수, 1 outlier** (ministral-3:8b −0.043). **H12 family-systematic**: Gemma 3 **2/2 양수**, non-Gemma **4/4 음수** (rnj-1:8b **SIG p=0.036 \|d\|=0.617**) → §4.6.2 *style mismatch (b) family-level 직접 evidence*. **H13 5 small-and-mid dense 모두 fail**: gemma3:4b (M2-a 0/50 calls), gemma3:12b (M2-b "Unknown"), ministral-3:3b/8b (M2-c 100% no-converge), **gemma4:31b (M2-d A-agent JSON schema mismatch, 90% fail)** ⚠ NEW. **(M1) under-iteration measurable = Gemma 4 E4B 한정** — *size threshold 아닌 specific-model identification* (gemma4:31b 도 fail). **gemma4:31b baseline_chunked 95% 정상** = 모델 capability 정상, A-agent contract fit 만 실패. **A-agent JSON-schema contract = measurement-tool fit** (paper §1.3 narrowing + §4.7.4 / §6 limitations). **ministral-3:3b 3B = capability floor 미달** (H11 31.3% reject, H13 100% reject). 상세: `docs/reference/stage6-cross-model-analysis-2026-05-08.md` (v3 2026-05-09) | Stage 6 v3 |
+| **H15** | **[Context 외부화]** Redis 핸들 + grep/read 도구로 대용량 로그를 컨텍스트 라우팅하면, log-stuffing 대비 소형 LLM 의 정확도/안정성이 향상된다 | ⚠ **조건부 채택 (입력 크기 의존, n=5 canonical 재검증)** — 2026-06-29 Exp15 v2 (gemma4:e4b, 5 task × 4 arm × num_ctx{4096,32768} × n=5). router 전체 mean 0.857 vs stuffing 0.300; **큰 로그(≥~10K tok) router 0.908 vs stuffing 0.125 (Δ+0.78)**; **overflow(93K, 컨텍스트 초과) router 1.00 vs stuffing 0.00 — 유일 생존 arm**. 단 **작은 로그(pytrace 0.1K)는 stuffing 1.00 > router 0.65 (overhead)**. num_ctx artifact는 부분적 (multihop만 32K서 stuffing 0→100%, rust/caddy/overflow는 32K서도 stuffing 0% = 진짜 lost-in-the-middle). ErrorBlocks-Only brittle (키워드 의존, mean 0.28). 원본 Stage7 "latency 35% 단축"은 n=1+ctx artifact로 **철회**. cross-model ministral-3:8b(35KB)는 라우터 무이득 → **router 효용 = f(모델 용량, 로그 크기)**. ※ H14 와 충돌하던 Context 가설을 H15 로 재부호화. 상세: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` | Exp15 v2 |
 
 #### 축 ↔ 실험 매트릭스
 
@@ -80,8 +81,9 @@ note: 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants �
 | Exp12 (Extractor Role) | — | — | ✅ (Role 분리/추가 — pre-stage, H11 조건부 채택) | — |
 | Exp13 (Reducer Role) | — | — | ✅ (Role 분리/추가 — post-stage, H12 미결/실효적 기각) | — |
 | Exp14 (Search Tool) | ▶ | ✅ (agent-active retrieval — H13 미결/SIG 음수) | — | — |
+| Exp15 v2 (Context Router) | ✅ (Context 외부화 — H15 조건부 채택) | ▶ (grep/read 도구) | — | ▶ (Fast-Forward 전이) |
 
-> 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조.
+> 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조. Context 외부화(H15)는 4축을 넘는 5번째 축 후보 — [conceptFramework.md § 8](./conceptFramework.md) 참조.
 
 ---
 
@@ -1016,21 +1018,61 @@ Small Paradox 상세:
 
 - **날짜:** 2026-06-28
 - **목적:** 소형 로컬 LLM 환경에서 대용량 로그 주입 시 발생하는 Attention Breakdown 및 Latency 지연, 출력 구조(JSON) 붕괴를 방어하기 위해 SQLite(장기억) + Redis(휘발성 작업기억) 티어링 프레임워크와 하이브리드 오류 선제 슬라이서(ErrorBlocks)를 검증 및 실증.
-- **가설:** H14 (Context 외부화 가설) — 채택 (Supported).
+- **가설:** **H15** (Context 외부화 가설) — ⚠ **예비 (n=1, 재검증 대기)**. ※ H14 는 Stage 6 cross-model 에 이미 사용되어 충돌하므로 H15 로 재부호화 (2026-06-28 정정).
 - **실험 및 실증 설계:**
-  - **대조 실험 (4개 Arm)**: Arm A (Stuffing), Arm B (Router-Basic), Arm C (ErrorBlocks-Only), Arm D (Hybrid).
-  - **실물 프로젝트 실증**: [tunaCtx](file:///d:/privateProject/tunaCtx) (pytest) 단위 테스트 디버깅 및 [n100 Caddy](file:///C:/Users/사자/.ssh/config#L63-L67) (SSH 원격 로그) 분석.
-- **결과:**
-  - **토큰 효율 극대화**: 전체 로그를 주입하지 않고 Redis Key와 2KB 미만의 에러 스니펫만 상수 복잡도 $O(1)$ 크기로 제어하여 Stuffing 대비 **추론 지연을 35% 단축(332s ➔ 251s)**하고 **JSON 무결성을 100% 보존**하는 데 성공.
-  - **조기 수렴 튜닝 (5단계)**: 에이전트 C(Judge)가 조기 종료 신호를 보냈을 때 오케스트레이터가 순차 단계 전이 제약을 해제하고 CONVERGED 월반(Fast-Forward)을 허용하도록 보완. 그 결과, `tunaCtx` 디버깅 시 단 3 cycle 만에 수렴 성공(Status: SUCCESS, Score: 100.0%)하며 수행 시간이 **131.1초로 50% 추가 단축**됨.
-  - **인천 보안 이점**: 비밀번호 없는 SSH 키를 활용해 n100 서버의 로그를 안전하게 수집/분석하는 사내 온프레미스 보안망 디버깅 환경 실증 완료.
+  - **대조 실험 (4개 Arm, arm당 n=1)**: Arm A (Stuffing), Arm B (Router-Basic), Arm C (ErrorBlocks-Only), Arm D (Hybrid). `max_cycles=5`.
+  - **실물 프로젝트 실증**: [tunaCtx](file:///d:/privateProject/tunaCtx) (unittest) 단위 테스트 디버깅 및 [n100 Caddy](file:///C:/Users/사자/.ssh/config#L63-L67) (SSH 원격 로그) 분석.
+- **결과 (검증 기준 보정 — 2026-06-28):**
+  - **대조 실험은 arm당 1회 시행** (`exp15_ab_test_result.json`). 점수: Stuffing 100% / Router-Basic 100% / Hybrid 100% / ErrorBlocks-Only 0%. **라우터의 정확도 우위는 미확인** (3개 arm 동률), 관측된 차이는 단일 측정 latency 뿐 (Stuffing 332.3s → Hybrid 251.3s, −81s / −24%; "35%"는 보고서 표기, 단일 측정값). 4개 arm 모두 `cycles=5` (exp15 arm 중 조기 수렴 없음).
+  - **JSON 무결성**: Hybrid arm 이 dict 구조 답변 산출 성공(1회). "100% 보존"은 n=1 관측.
+  - **Fast-Forward 조기 수렴 (실재)**: C(Judge)가 CONVERGED 신호 시 순차 단계 전이 제약을 풀어 직접 전이 허용(`orchestrator.py:967`). `tunaCtx` 실증에서 3 cycle 수렴(Score 100%, 131.1s) 확인 — exp15 대조 arm 이 아니라 tunaCtx 실증에서 관측됨. "262s→131s 50% 단축"의 before 값(262s)은 저장된 결과 파일에 없음.
+  - **n100 Caddy = mock fallback**: `caddy_n100_analysis_result.json` `is_fallback: true` — **실서버 미접속**, 스크립트가 생성한 mock 로그(IP `192.168.1.103` 등)를 다시 추출한 것. 실서버 연동은 미실증 (핸드오프 액션아이템 #3).
+- **v1 판정 보류 사유 (2026-06-28)**: arm당 n=1, 점수 동률(라우터 우위 미입증), 실서버 미연동. → **Exp15 v2 (아래)에서 n=5 canonical 재검증으로 해소.**
 
-**산출물:**
+**v1 산출물:**
 - `experiments/run_tuna_real_test.py` (tunaCtx 연동 러너)
-- `experiments/run_caddy_n100_analysis.py` (SSH n100 Caddy 분석기)
-- `experiments/results/tuna_ctx_real_test_result.json`
-- `experiments/results/caddy_n100_analysis_result.json`
-- `docs/reference/stage7-context-router-analysis-2026-06-28.md` (공식 연구 보고서)
+- `experiments/run_caddy_n100_analysis.py` (SSH n100 Caddy 분석기 — mock fallback)
+- `experiments/results/{tuna_ctx_real_test,caddy_n100_analysis}_result.json`
+- `docs/reference/stage7-context-router-analysis-2026-06-28.md` (보고서, 검증범위 보정본)
+
+---
+
+### Exp15 v2: Context Router Stress Test (canonical 재검증, H15 verdict)
+
+| 항목 | 내용 |
+|------|------|
+| **누가 (Who)** | gemma4:e4b (Q4_K_M) — 지인 서버 RTX 5060 Ti 16GB, SSH 터널(`:2232`→ollama) 경유. 로컬 VRAM 무관. |
+| **언제 (When)** | 2026-06-28 ~ 2026-06-29 |
+| **어디서 (Where)** | Windows + 원격 Ollama 0.24 (네이티브 `/api/chat`, num_ctx 요청단위 통제 + tool-loop 내장 caller) |
+| **무엇을 (What)** | H15 — "Context Router(Redis 핸들 + grep/read 도구)가 log-stuffing 대비 우수". 5 task × 4 arm(stuffing/router_basic/error_blocks_only/hybrid) × num_ctx{4096,32768} × n=5 = **200 ABC chains** (5.3h) |
+| **왜 (Why)** | 원본 Exp15 v1 이 arm당 n=1 + 점수 동률 + num_ctx 미통제. 복제(n=5) + 입력 크기/컨텍스트 통제 + canonical 모델로 H15 정식 판정 |
+| **어떻게 (How)** | side 브랜치 격리. `native_ollama_caller.py`(num_ctx 통제 + tool 실행 루프 — orchestrator model_caller 경로의 tool 미실행 한계 우회) + `run_v2.py`(matrix 드라이버, healthcheck/증분저장/resume). 채점 = final_answer + 최종 tattoo assertions 합집합(final_answer=None fragility 보정, 전 arm 동일). 공유 orchestrator/Stage6 코드 불변 |
+
+**결과 (mean_score, n=5):**
+
+| task (~tok) | ctx | stuffing | router | errorblk | hybrid |
+|---|---|---|---|---|---|
+| pytrace (0.1K, 통제) | 4096/32768 | **100/100%** | 60/70% | 100/60% | 100/70% |
+| multihop (9K) | 4096/32768 | 0/**100%** | **87/100%** | 0/0% | 13/100% |
+| caddy_5xx (11K) | 4096/32768 | 0/0% | 80/**100%** | 0/0% | 80/47% |
+| rust_35k (16K) | 4096/32768 | 0/0% | **100**/60% | 0/60% | 0/20% |
+| overflow (93K, 결정적) | 4096/32768 | 0/0% | **100/100%** | 0/60% | 0/80% |
+
+**arm별 종합 mean**: router **0.857** > hybrid 0.510 > stuffing 0.300 ≈ error_blocks 0.280. **큰 로그(≥~10K)만**: router **0.908** vs stuffing 0.125 (Δ **+0.78**). **overflow(컨텍스트 초과)**: router **1.00** vs stuffing 0.00.
+
+**핵심 발견:**
+1. **H15 ⚠ 조건부 채택** — Context Router 는 모델 용량에 근접/초과하는 큰 로그(≥~10K tok)에서 stuffing 대비 견고 우위, **로그가 컨텍스트를 초과하면 유일하게 작동**(overflow 100% vs 0%).
+2. **작은 로그에선 손해** — pytrace(0.1K): stuffing 1.00 > router 0.65. 도구 왕복이 noise. → 라우터는 **입력이 클 때만** 유효.
+3. **num_ctx artifact 는 부분적** — multihop 만 32K서 stuffing 0→100% 회복(순수 artifact). **rust/caddy/overflow 는 32K서도 stuffing 0%** = 로그가 컨텍스트에 들어가도 소형 모델이 needle 을 못 찾는 **진짜 lost-in-the-middle**. 원본 "라우터 우위"는 일부 ctx 탓이지만 정확도 이점 자체는 실재.
+4. **ErrorBlocks-Only brittle** — mean 0.28. ±25줄 슬라이싱이 "error" 키워드 의존 → caddy(문자열 없음)·multihop(원인이 에러서 멀리) 0%. 원본 "Arm C 0%" 재현·일반화(인출 없는 사전요약의 취약성).
+5. **원본 latency 주장 철회** — Stage7 "35% 단축"은 n=1 + num_ctx=4096 artifact. v2 에서 stuffing 은 truncate 로 빠르되 오답.
+6. **cross-model 합치** — ministral-3:8b(8B, 35KB)는 라우터 무이득(앞 사이드테스트). gemma4:e4b(~4B)는 16K도 버거워 이득 큼. → **router 효용 = f(모델 용량, 로그 크기)**.
+
+**의의:** Context 외부화(H15)는 4축을 넘는 5번째 축 후보로 **조건부 입증**. 단 "만능"이 아니라 **입력 크기 의존** — 작은 입력엔 stuffing 이 낫고, 큰/초과 입력엔 라우터가 필수.
+
+**상세 보고서:** `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md`
+**결과 데이터:** `experiments/exp15_context_router/results/exp15_v2_stress_gemma4_e4b.json` (200 chains) + `exp15_crossmodel_ministral_3_8b.json` (cross-model n=1)
+**코드:** `experiments/exp15_context_router/{run_v2.py, native_ollama_caller.py, run_crossmodel_ministral.py}`
 
 ---
 
