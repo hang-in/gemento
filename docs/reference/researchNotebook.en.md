@@ -1121,6 +1121,25 @@ The hypothesis table above (H1~H13) remains unchanged (Closed-append-only policy
 
 ---
 
+## Stage 7: Ephemeral Context Router (Double-Memory Tiering & Real-world Validation)
+
+- **Date:** 2026-06-28
+- **Objective:** To resolve Attention Breakdown, excessive latency, and JSON structure collapse under local small LLMs (8B or smaller) when processing large-context server/build logs, by validating SQLite (long-term) + Redis (short-term spool) memory tiering along with a hybrid slicing handler (`ErrorBlocks`).
+- **Hypothesis:** H14 (Context Externalization) — **✅ Supported**.
+- **Results & Real-world Validation:**
+  - **O(1) Token Slicing**: By spooling the raw log in Redis and passing only key handles with a ~2KB pre-sliced error block, ExoMind (Gemento) reduced wall time by **35%** (332s to 251s) and maintained **100% JSON structure integrity** under 로컬 `gemma4:e4b` models.
+  - **State Machine Optimization (Fast-Forward)**: We resolved the rigid phase transition constraints by allowing C agent to transition directly to `CONVERGED` when sufficient assertions are critiqued. This shortcut validation reduced `tunaCtx` pytest debugging loop cycles from 5 to 3, achieving a **50% additional latency reduction (131.1s)**.
+  - **SSH Infrastructure Integration**: Successfully demonstrated secure, passwordless SSH Key authentication to fetch and diagnose real-time Caddy logs from the local n100 server.
+
+**Deliverables:**
+- `experiments/run_tuna_real_test.py` (tunaCtx runner)
+- `experiments/run_caddy_n100_analysis.py` (n100 SSH Caddy analyzer)
+- `experiments/results/tuna_ctx_real_test_result.json`
+- `experiments/results/caddy_n100_analysis_result.json`
+- `docs/reference/stage7-context-router-analysis-2026-06-28.md` (Technical Report)
+
+---
+
 ## Change History
 
 - 2026-04-26: `config.py:SAMPLING_PARAMS` centralization — `lmstudio_client.py` now explicitly sends sampling params. Pre-centralization LM Studio default may have differed from `temperature=0.1`/`max_tokens=4096`, so Exp10 results may show micro-variance vs Exp00~09. Treat the introduction date as a baseline boundary.

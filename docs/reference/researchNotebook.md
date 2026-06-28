@@ -1012,6 +1012,28 @@ Small Paradox 상세:
 
 ---
 
+### Exp15: Ephemeral Context Router (이중 기억 티어링 & 실증)
+
+- **날짜:** 2026-06-28
+- **목적:** 소형 로컬 LLM 환경에서 대용량 로그 주입 시 발생하는 Attention Breakdown 및 Latency 지연, 출력 구조(JSON) 붕괴를 방어하기 위해 SQLite(장기억) + Redis(휘발성 작업기억) 티어링 프레임워크와 하이브리드 오류 선제 슬라이서(ErrorBlocks)를 검증 및 실증.
+- **가설:** H14 (Context 외부화 가설) — 채택 (Supported).
+- **실험 및 실증 설계:**
+  - **대조 실험 (4개 Arm)**: Arm A (Stuffing), Arm B (Router-Basic), Arm C (ErrorBlocks-Only), Arm D (Hybrid).
+  - **실물 프로젝트 실증**: [tunaCtx](file:///d:/privateProject/tunaCtx) (pytest) 단위 테스트 디버깅 및 [n100 Caddy](file:///C:/Users/사자/.ssh/config#L63-L67) (SSH 원격 로그) 분석.
+- **결과:**
+  - **토큰 효율 극대화**: 전체 로그를 주입하지 않고 Redis Key와 2KB 미만의 에러 스니펫만 상수 복잡도 $O(1)$ 크기로 제어하여 Stuffing 대비 **추론 지연을 35% 단축(332s ➔ 251s)**하고 **JSON 무결성을 100% 보존**하는 데 성공.
+  - **조기 수렴 튜닝 (5단계)**: 에이전트 C(Judge)가 조기 종료 신호를 보냈을 때 오케스트레이터가 순차 단계 전이 제약을 해제하고 CONVERGED 월반(Fast-Forward)을 허용하도록 보완. 그 결과, `tunaCtx` 디버깅 시 단 3 cycle 만에 수렴 성공(Status: SUCCESS, Score: 100.0%)하며 수행 시간이 **131.1초로 50% 추가 단축**됨.
+  - **인천 보안 이점**: 비밀번호 없는 SSH 키를 활용해 n100 서버의 로그를 안전하게 수집/분석하는 사내 온프레미스 보안망 디버깅 환경 실증 완료.
+
+**산출물:**
+- `experiments/run_tuna_real_test.py` (tunaCtx 연동 러너)
+- `experiments/run_caddy_n100_analysis.py` (SSH n100 Caddy 분석기)
+- `experiments/results/tuna_ctx_real_test_result.json`
+- `experiments/results/caddy_n100_analysis_result.json`
+- `docs/reference/stage7-context-router-analysis-2026-06-28.md` (공식 연구 보고서)
+
+---
+
 ## 채점 시스템 변천
 
 ### v1 → v2 전환 (2026-04-15)

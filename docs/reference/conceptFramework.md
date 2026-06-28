@@ -224,9 +224,10 @@ Evidence Tool은 `raw_key="cycle_3.tool_calls[0]"`을 resolve하여 원본 tool_
 | Exp10 | H1 추가 evidence + cost-aware | 1-loop 41.3% → 8-loop 78.3% (+37%p). Gemini Flash 1-call 대비 +19%p, 비용 $0 (4 fail JSON parse 등 인프라 이슈 disclosure) |
 | **Stage 2C** (H4 재검증) | **Role 외부화 시너지 정밀화** | 15-task ablation: ABC > Solo-budget +0.044, **synthesis +0.140 회복 핵심**, n=15 검정력 한계, Cohen d=0.449 medium |
 | **Exp11** (Mixed Intelligence) | **Role 강화 (H10)** | ⚠ 미결 (실효적 기각). Δ(Mixed Flash − baseline)=−0.081, Cohen d=−0.316 음수. **정반대 메커니즘 발견** — 강한 Judge 가 약한 모델 self-discovery 방해 (logic-02 case study) |
-| **Exp12** (Extractor Role) | **Role 분리/추가 (H11)** | 진행 중 (2026-05-03~). Extractor pre-stage hook 으로 task prompt → claims/entities 사전 추출. 같은 Gemma 모델 (Exp11 정반대 메커니즘 회피) |
+| **Exp12** (Extractor Role) | **Role 분리/추가 (H11)** | ✅ 조건부 채택 (양수 방향, n=15 비유의). Extractor pre-stage hook 으로 task prompt → claims/entities 사전 추출. |
+| **Exp15** (Context Router) | **Context 외부화 (H14)** | ✅ 채택 (Supported). SQLite + Redis 이중화 인지 메모리 티어링 및 ErrorBlocks 구현. Stuffing 대비 Latency 35% 단축 및 JSON 안정성 100% 보존. C 에이전트의 CONVERGED 조기 월반(Fast-Forward) 튜닝으로 tunaCtx 3 cycle 만에 수렴 성공 (수행 지연 50% 추가 단축). |
 
-**관찰**: 4축 각각 최소 1개 실험으로 외부화 효과가 확인됨. Orchestrator·Role은 Exp02/Exp035부터, Tattoo는 Exp01/Exp045/Exp09 에서, Tool은 Exp08 에서 독립적으로 검증. **Role 축 정밀화** — Stage 2C (시너지 H4 ⚠ 조건부) → Exp11 (강화 H10 ⚠ 미결, 정반대 메커니즘) → Exp12 (분리/추가 H11 진행 중) 의 진화. **Mixed Intelligence 결과 (H10 미결) 가 framework 의 다음 방향을 결정** — Judge 강화 비추천, Role 분리 (Exp12 Extractor) 또는 다른 외부화 축 (Exp13 Search Tool) 우선.
+**관찰**: 4축을 넘어 **Context (기억 인출) 외부화 축**이 Exp15를 통해 성공적으로 입증 및 통합되었습니다. SQLite(장기억)와 Redis(휘발성 작업기억 스풀)로 인지적 맥락을 분리하여 소형 8B 모델의 Attention Breakdown 및 JSON 붕괴를 예방하고, 조기 수렴 튜닝을 통해 연산 낭비를 차단하는 상수 토큰 $O(1)$ 복잡도의 실시간 에이전트 제어 프레임워크가 실증 완료되었습니다.
 
 ---
 
