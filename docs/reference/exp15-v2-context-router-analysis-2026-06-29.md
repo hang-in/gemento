@@ -134,8 +134,24 @@ gemma4:e4b, router_basic, size{12K,25K,50K}, num_ctx=32768, baseline(1시도) vs
 
 **데이터:** `experiments/exp15_context_router/results/exp16_stabilize_gemma4_e4b.json`. **코드:** `run_v16_stabilize.py`.
 
-## 9. 다음 후보
-- **Exp16b (1순위) — per-attempt 신뢰도 향상**: mandatory-tool 프롬프트 / A-agent JSON 산출 강화 / cycle·num_predict 상향. retry 와 결합해 ~90%+ 목표.
-- Exp17 — multi-hop/multi-needle/repo-규모 로그로 e4b+router 의 *진짜 상한* 측정.
+## 10. Exp16b — mandatory-tool 프롬프트 (per-attempt 신뢰도, H16b, 2026-06-30)
+
+Exp16 의 retry 정체 → per-attempt(원인)를 고친다. 라우터 task prompt 에 mandatory 4규칙(반드시 grep / 다양한 패턴 / 조기 단정 금지 / **매치 라인 3요소 그대로 전사**) 주입(driver only, Exp08b 각색). gemma4:e4b, router, size{12K,25K,50K}, num_ctx=32768, baseline vs mandatory, n=10, 1시도.
+
+| size | baseline | mandatory | lift |
+|---|---|---|---|
+| 12K | 20% (tr 5.9) | **90%** (tr 3.3) | +70pp |
+| 25K | 40% (tr 6.6) | **90%** (tr 2.2) | +50pp |
+| 50K | 20% (tr 6.7) | **70%** (tr 4.4) | +50pp |
+| **평균** | **27%** | **83%** | **+57pp** |
+
+**H16b ✅ 채택.** 핵심 메커니즘: **mandatory 에서 tool_rounds 가 오히려 감소**(도구를 *덜* 부름). baseline 은 grep ~6회 부르고도 27% — 실패는 **tool-neglect 아닌 전사/결론 누락**(찾은 라인을 final_answer 로 안 옮기거나 결론 못 내고 재검색). 규칙4("그대로 전사")가 commit-to-answer 단계를 잡음. → Exp16 재해석: retry=증상, per-attempt 신뢰도(프롬프트)=원인. H13 premature-termination·H16 None-fragility 의 공통 뿌리 = "찾은 걸 답으로 커밋 못 함". per-attempt 83% + retry(K=2) ≈ 99% 기대(Exp16c). H15 Context Router 가 실용 단계로 승격.
+
+**데이터:** `experiments/exp15_context_router/results/exp16b_mandatory_gemma4_e4b.json`. **코드:** `run_v16b_mandatory.py`.
+
+## 11. 다음 후보
+- **Exp16c (1순위) — mandatory + retry 결합**: per-attempt 83% + retry-on-None(K=2) → ~99% 실측 검증. ~1h.
+- mandatory 프롬프트의 라우터 기본값 승격(공유 system_prompt.py 변경, 별도 plan).
+- Exp17 — multi-hop/multi-needle/repo-규모 로그로 e4b+router 진짜 상한 측정.
 - 실 Caddy/프로덕션 로그 연동(Active, mock→실서버).
 - (보류) e2b 전용 push-기반 외재화 + LLM-as-judge 보조 채점.

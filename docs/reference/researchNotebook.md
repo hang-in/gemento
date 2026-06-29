@@ -3,7 +3,7 @@ type: reference
 status: in_progress
 updated_at: 2026-06-29
 parts: [closed, active]
-note: 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
+note: 2026-06-30 v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). retry+mandatory ≈ 99% 경로. 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
 ---
 
 > **개념 프레임 canonical 문서**: [conceptFramework.md](./conceptFramework.md) — 4축 외부화 원리, 용어 정의, 축 ↔ 실험 매핑.
@@ -59,6 +59,7 @@ note: 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 �
 | **H14** | **[Cross-model generalization]** Stage 5 의 H11 (Extractor pre-stage 양수) / H12 (Reducer post-stage 음수) / H13 (Search Tool 음수) 의 *direction / mechanism* 이 cross-family / cross-size 모델에서 generalize | ⚠ **조건부 채택 (direction match 강함, family-systematic pattern, mechanism 5-mode 분화, 단일 SIG, *measurement-tool fit caveat*)** — 2026-05-09 Stage 6 v3 (6 model H11/H12 + 5 model H13). **H11 6/7 양수, 1 outlier** (ministral-3:8b −0.043). **H12 family-systematic**: Gemma 3 **2/2 양수**, non-Gemma **4/4 음수** (rnj-1:8b **SIG p=0.036 \|d\|=0.617**) → §4.6.2 *style mismatch (b) family-level 직접 evidence*. **H13 5 small-and-mid dense 모두 fail**: gemma3:4b (M2-a 0/50 calls), gemma3:12b (M2-b "Unknown"), ministral-3:3b/8b (M2-c 100% no-converge), **gemma4:31b (M2-d A-agent JSON schema mismatch, 90% fail)** ⚠ NEW. **(M1) under-iteration measurable = Gemma 4 E4B 한정** — *size threshold 아닌 specific-model identification* (gemma4:31b 도 fail). **gemma4:31b baseline_chunked 95% 정상** = 모델 capability 정상, A-agent contract fit 만 실패. **A-agent JSON-schema contract = measurement-tool fit** (paper §1.3 narrowing + §4.7.4 / §6 limitations). **ministral-3:3b 3B = capability floor 미달** (H11 31.3% reject, H13 100% reject). 상세: `docs/reference/stage6-cross-model-analysis-2026-05-08.md` (v3 2026-05-09) | Stage 6 v3 |
 | **H15** | **[Context 외부화]** Redis 핸들 + grep/read 도구로 대용량 로그를 컨텍스트 라우팅하면, log-stuffing 대비 소형 LLM 의 정확도/안정성이 향상된다 | ⚠ **조건부 채택 (입력 크기 의존, n=5 canonical 재검증)** — 2026-06-29 Exp15 v2 (gemma4:e4b, 5 task × 4 arm × num_ctx{4096,32768} × n=5). router 전체 mean 0.857 vs stuffing 0.300; **큰 로그(≥~10K tok) router 0.908 vs stuffing 0.125 (Δ+0.78)**; **overflow(93K, 컨텍스트 초과) router 1.00 vs stuffing 0.00 — 유일 생존 arm**. 단 **작은 로그(pytrace 0.1K)는 stuffing 1.00 > router 0.65 (overhead)**. num_ctx artifact는 부분적 (multihop만 32K서 stuffing 0→100%, rust/caddy/overflow는 32K서도 stuffing 0% = 진짜 lost-in-the-middle). ErrorBlocks-Only brittle (키워드 의존, mean 0.28). 원본 Stage7 "latency 35% 단축"은 n=1+ctx artifact로 **철회**. cross-model ministral-3:8b(35KB)는 라우터 무이득 → **router 효용 = f(모델 용량, 로그 크기)**. ※ H14 와 충돌하던 Context 가설을 H15 로 재부호화. 상세: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` | Exp15 v2 |
 | **H16** | **[Orchestrator 외부화 — 출력 안정화]** `final_answer=None` 시 체인을 재실행(retry-on-None)하는 결정론적 안정화 층이 e4b router 의 큰 로그 실효 정답률을 ~90%+ 로 끌어올린다 | ⚠ **부분 채택** — 2026-06-29 Exp16 (e4b router, size{12K,25K,50K} × baseline vs stabilized≤3시도 × n=10). retry 가 +30~60pp lift (12k 30→60, 25k 20→50, 50k 10→70) 하나 **~90% 미달, 50~70% 정체** (평균 2.3~2.7 시도, cap 도달 잦음). 원인 = 큰 로그에서 **per-attempt 성공률 자체가 낮음(~10~30%)** → 재시도만으로 부족. 비용 ~2.5× call. 진짜 레버 = per-attempt 신뢰도(Exp16b). run-to-run 변동 큼(baseline soft). 상세: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §8 | Exp16 |
+| **H16b** | **[Orchestrator 외부화 — mandatory-tool 프롬프트]** 라우터 task prompt 에 mandatory-tool 지시(반드시 grep 먼저 / 조기 단정 금지 / 매치 라인 3요소 그대로 전사)를 주면 e4b router 의 per-attempt 성공률이 오른다 | **✅ 채택** — 2026-06-30 Exp16b (e4b router, size{12K,25K,50K} × baseline vs mandatory × n=10, 1시도). per-attempt **27%→83% (+57pp)**, 전 size +50~70pp 일관. **핵심: mandatory 에서 tool_rounds 가 오히려 감소**(5.9→3.3 등) → baseline 실패는 tool-neglect 아닌 **전사/결론 누락**(grep 반복하며 final_answer 미전사). 규칙4("그대로 전사")가 레버. per-attempt 83% + Exp16 retry(K=2) 결합 시 기대 ~99%. (n=10 서술적, 대효과 일관.) 상세: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §10 | Exp16b |
 
 #### 축 ↔ 실험 매트릭스
 
@@ -84,6 +85,7 @@ note: 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 �
 | Exp14 (Search Tool) | ▶ | ✅ (agent-active retrieval — H13 미결/SIG 음수) | — | — |
 | Exp15 v2 (Context Router) | ✅ (Context 외부화 — H15 조건부 채택) | ▶ (grep/read 도구) | — | ▶ (Fast-Forward 전이) |
 | Exp16 (Output Stabilization) | — | — | — | ✅ (출력 안정화 retry — H16 부분 채택) |
+| Exp16b (Mandatory-tool Prompt) | — | ▶ (grep/read 도구) | — | ✅ (mandatory 프롬프트 — H16b 채택) |
 
 > 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조. Context 외부화(H15)는 4축을 넘는 5번째 축 후보 — [conceptFramework.md § 8](./conceptFramework.md) 참조.
 
@@ -1110,6 +1112,29 @@ ministral 제외(임시 대체였음), gemma4 본질에 맞춰 e2b(~2B)+e4b(~4B)
 **함의:** 진짜 레버는 retry 가 아니라 **per-attempt 신뢰도 향상** — mandatory-tool 프롬프트(Exp08b 패턴, tool_neglect 0% 전례)/A-JSON 산출 강화/cycle·num_predict 상향. → **Exp16b** 후보.
 
 **데이터:** `experiments/exp15_context_router/results/exp16_stabilize_gemma4_e4b.json` | **코드:** `run_v16_stabilize.py`
+
+---
+
+### Exp16b: mandatory-tool 프롬프트 (per-attempt 신뢰도, H16b)
+
+| 항목 | 내용 |
+|------|------|
+| **누가/언제/어디서** | gemma4:e4b, 2026-06-30, 지인 서버 RTX 5060 Ti (SSH 터널) |
+| **무엇을** | H16b — 라우터 task prompt 에 mandatory-tool 지시를 주면 per-attempt 성공률이 오르는가. router_basic × size{12K,25K,50K} × baseline vs mandatory × n=10 (1시도, retry 없음) |
+| **왜** | Exp16 에서 retry 만으론 정체 — per-attempt(원인)를 고친다. Exp08b 의 mandatory-tool rules(tool_neglect 0% 전례)를 라우터 prompt prefix 로 각색. Orchestrator 축 |
+| **어떻게** | mandatory 4규칙(반드시 grep 먼저 / 다양한 패턴 / "not found" 조기 단정 금지 / **매치 라인 파일·라인·모듈 그대로 전사**)을 driver task prompt 에만. 공유 system_prompt.py 불변 |
+
+**결과 (per-attempt):** 12k 20→90% (tr 5.9→3.3), 25k 40→90% (6.6→2.2), 50k 20→70% (6.7→4.4). **평균 27%→83% (+57pp).**
+
+**핵심 발견:**
+1. **H16b ✅ 채택** — mandatory 프롬프트가 per-attempt 27%→83% (+57pp), 전 size +50~70pp 일관.
+2. **메커니즘: tool_rounds 가 오히려 감소** — baseline 은 grep 을 *더*(~6회) 부르고도 27%. 실패는 **tool-neglect 아닌 전사/결론 누락**(찾은 라인을 final_answer 로 안 옮김, 또는 결론 못 내고 재검색). mandatory 규칙4("그대로 전사")가 결단력↑·재검색↓로 잡음.
+3. **Exp16 재해석** — retry(증상) 가 아니라 **per-attempt 신뢰도(원인)**가 진짜 레버. H13 premature-termination·H16 None-fragility 의 공통 뿌리 = "찾은 걸 답으로 커밋 못 함".
+4. **경로 완성** — per-attempt 83% + retry(K=2) ≈ 99% 기대 (Exp16c 로 실측 예정). H15 Context Router 가 "유망하지만 flaky" → "실용적"으로 승격.
+
+**의의:** 라우터의 약점은 도구 *능력*이 아니라 도구를 *안정적으로 쓰고 결과를 커밋하게* 만드는 프롬프트. mandatory 프롬프트의 라우터 기본값 승격(공유 코드 변경)은 별도 plan 후보.
+
+**데이터:** `experiments/exp15_context_router/results/exp16b_mandatory_gemma4_e4b.json` | **코드:** `run_v16b_mandatory.py`
 
 ---
 

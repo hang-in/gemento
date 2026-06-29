@@ -1,0 +1,127 @@
+{
+  "experiment": "exp16b_mandatory_tool",
+  "model": "gemma4:e4b",
+  "num_ctx": 32768,
+  "n_trials": 10,
+  "max_cycles": 5,
+  "results": {
+    "12k": {
+      "approx_tokens": 18973,
+      "baseline": {
+        "scores": [
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean_score": 0.2,
+        "mean_dur": 168.4,
+        "mean_cycles": 4.7,
+        "mean_tool_rounds": 5.9
+      },
+      "mandatory": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 0.9,
+        "mean_dur": 103.3,
+        "mean_cycles": 2.6,
+        "mean_tool_rounds": 3.3
+      }
+    },
+    "25k": {
+      "approx_tokens": 39698,
+      "baseline": {
+        "scores": [
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "mean_score": 0.4,
+        "mean_dur": 180.2,
+        "mean_cycles": 4.7,
+        "mean_tool_rounds": 6.6
+      },
+      "mandatory": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 0.9,
+        "mean_dur": 86.7,
+        "mean_cycles": 2.6,
+        "mean_tool_rounds": 2.2
+      }
+    },
+    "50k": {
+      "approx_tokens": 79673,
+      "baseline": {
+        "scores": [
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "mean_score": 0.2,
+        "mean_dur": 181.8,
+        "mean_cycles": 4.9,
+        "mean_tool_rounds": 6.7
+      },
+      "mandatory": {
+        "scores": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 0.7,
+        "mean_dur": 136.6,
+        "mean_cycles": 3.6,
+        "mean_tool_rounds": 4.4
+      }
+    }
+  },
+  "total_elapsed_sec": 6886.1
+}

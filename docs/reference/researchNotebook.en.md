@@ -4,7 +4,7 @@ status: in_progress
 updated_at: 2026-06-29
 mirror_of: docs/reference/researchNotebook.md (Part 1 — Closed Findings)
 language: en
-note: 2026-06-29 v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
+note: 2026-06-30 v9 — Exp16b mandatory-tool prompting. H16b SUPPORTED (per-attempt 27->83%, +57pp; failure was transcription-omission not tool-neglect — tool_rounds DROPPED). mandatory + retry ~= 99% path. v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
 ---
 
 > **Conceptual framework canonical document**: [conceptFramework.md](./conceptFramework.md) — 4-axis externalization principles, terminology definitions, axis ↔ experiment mapping.
@@ -1201,6 +1201,22 @@ Results: 12K 30%→60%, 25K 20%→50%, 50K 10%→70% (lift +30~60pp), mean attem
 Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §8. Results: `experiments/exp15_context_router/results/exp16_stabilize_gemma4_e4b.json`.
 
 This is an addendum (no table change; H1~H15 remain unchanged, H16 documented here).
+
+---
+
+## Exp16b — Mandatory-tool prompting (H16b, 2026-06-30)
+
+Following Exp16's partial result (retry alone plateaus), Exp16b tested **H16b** — whether adding mandatory-tool instructions to the router task prompt (must grep first; don't conclude "not found" prematurely; **transcribe the exact file/line/module from the matching line verbatim into final_answer**) raises the e4b router's *per-attempt* success. The mandatory block lives in the driver task prompt only (Exp08b's mandatory-tool-rules pattern, adapted); shared system_prompt.py unchanged.
+
+Conditions: gemma4:e4b, router_basic, sizes {12/25/50K tok}, num_ctx=32768, baseline-prompt vs mandatory-prompt × n=10, single attempt (no retry — clean per-attempt measurement).
+
+Results (per-attempt): 12K 20→90% (tool_rounds 5.9→3.3), 25K 40→90% (6.6→2.2), 50K 20→70% (6.7→4.4). **Mean 27% → 83% (+57pp)**, consistent +50~70pp across sizes.
+
+**H16b verdict (Architect): Supported.** The mechanism is the key result: **tool_rounds DROPPED** under the mandatory prompt (it calls *fewer* tools, not more). So baseline's failure was *not* tool-neglect — baseline grepped ~6 rounds but only scored 27%; it repeatedly retrieved without transcribing the found line into final_answer or kept re-searching without concluding. The mandatory prompt's rule #4 ("transcribe verbatim") fixed the commit-to-answer step (more decisive, fewer rounds, higher accuracy). This recasts Exp16: retry treated the symptom; per-attempt reliability (a prompt fix) is the cause. The common root of H13 premature-termination and H16 None-fragility is "failing to commit the retrieved answer." Path: per-attempt 83% + retry(K=2) ≈ 99% (to be measured in Exp16c). H15 Context Router thus moves from "promising but flaky" to "practical." (n=10 descriptive; large consistent effect.)
+
+Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §10. Results: `experiments/exp15_context_router/results/exp16b_mandatory_gemma4_e4b.json`.
+
+This is an addendum (no table change; H1~H15 unchanged, H16/H16b documented in append-only sections).
 
 ---
 
