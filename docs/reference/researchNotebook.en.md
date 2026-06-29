@@ -1172,6 +1172,22 @@ The hypothesis table above (H1~H14) remains unchanged (Closed-append-only policy
 
 ---
 
+## Exp15 v3 — Same-family size sweep (gemma4 e2b vs e4b, 2026-06-29)
+
+A follow-up to Exp15 v2 dropped ministral (a temporary stand-in) and tested the gemento-essential question on **gemma4:e2b (~2B) vs gemma4:e4b (~4B)** — at what log size does stuffing break (threshold S), and which externalization mechanism each size needs. Single 1-needle log scaled to 5 sizes (~1.5K/8K/19K/40K/80K tok) × {stuffing, router_basic} × num_ctx=32768 × n=5, plus the full v2 matrix re-run on e2b.
+
+- **e4b: S ≈ 8–19K tok.** Stuffing works to ~8K (40–80%), collapses to 0% at 19K+; beyond S only router survives (~60%). The 60% is *not* a quality ceiling but the `final_answer=None` reliability fragility — produced answers are 3/3 perfect (bimodal 0/1, never wrong). Dynamic gate: route once input >~10K tok.
+- **e2b is below the agent-tool-use floor.** v3 router = 0% across all sizes (tool_rounds ~0.6 — it barely calls the tools). On the v2 matrix its arm ranking *inverts* vs e4b: router_basic 0.097 (fails) < stuffing 0.287 < error_blocks_only 0.340 < hybrid 0.413. e2b *reads* injected text fine (pytrace stuffing 100%, ErrorBlocks 100% even on the 93K overflow) but cannot *drive* the grep/read tool loop.
+- **Mechanism = push vs pull, capacity-gated.** e4b (~4B) → agent-active Router (pull: model issues tool calls). e2b (~2B) → deterministic pre-slicing (push: orchestrator extracts ErrorBlocks, model only reads). This replicates the Exp14/Stage 6 finding (*agent-active retrieval needs ~4B; H13 M1 measurable only on Gemma 4 E4B*) **within the gemma4 family** — H15 (Context) and H13 (Tool agent-retrieval) share the same capability floor; e2b's tool-call absence mirrors gemma3:4b's M2-a.
+
+e2b is **archived** (future push-based e2b experiments); the main model is fixed to gemma4:e4b. Next (Exp16): orchestrator output-stabilization (synthesize-from-assertions + retry on `final_answer=None`) to lift the e4b router's effective accuracy from ~60% toward ~90%+ without changing the model — squarely the Orchestrator (Python safety-net) axis.
+
+Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` (§6–7). Results: `experiments/exp15_context_router/results/exp15_v3_sweep_gemma4_e2b_e4b.json` + `exp15_v2_stress_gemma4_e2b.json`.
+
+This is an addendum to H15 (no table change; H1~H14 remain unchanged, H15 already added above).
+
+---
+
 ## Change History
 
 - 2026-04-26: `config.py:SAMPLING_PARAMS` centralization — `lmstudio_client.py` now explicitly sends sampling params. Pre-centralization LM Studio default may have differed from `temperature=0.1`/`max_tokens=4096`, so Exp10 results may show micro-variance vs Exp00~09. Treat the introduction date as a baseline boundary.

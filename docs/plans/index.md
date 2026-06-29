@@ -4,14 +4,17 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- **실 n100 Caddy 로그 연동** — Exp15 v1 의 n100 Caddy 는 mock fallback(실서버 미접속). 실 Caddy 절대경로 확인 후 5xx 트래픽 1회 실증 (핸드오프 액션아이템 #3).
-- (그 외) paper-review-action-items P1-3 LLM-as-judge 보조 평가.
+- **Exp16 (1순위) — 오케스트레이터 출력 안정화 (None-fragility fix)** — e4b router 의 큰 로그 ~60% 는 품질 천장이 아니라 `final_answer=None` 재현성(틀린 답 0, 침묵만). `final_answer=None` 시 assertions 합성 + retry 로 실효 정답률 ~60%→~90%+ 목표(모델 무변경, Orchestrator 축). 주력 모델 gemma4:e4b.
+- Exp17 — multi-hop/multi-needle/repo-규모 로그로 e4b+router 진짜 상한 측정.
+- 실 n100 Caddy 로그 연동 (mock→실서버, 핸드오프 #3).
+- (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge.
 
 ## Recently Done — Stage 7 (소급 등록, 2026-06-28~29)
 
 > ⚠ Stage 7 은 plan/verdict skill 워크플로를 우회해 수행됨 — plan 문서 없음. 아래는 소급 기록.
 
-- **Stage 7 v2: Context Router Stress Test (H15 정식 판정)** — Exp15 v2: canonical gemma4:e4b(Q4_K_M, 지인 서버 RTX 5060 Ti, SSH 터널), 5 task × 4 arm × num_ctx{4096,32768} × n=5 = 200 chains. **H15 (Context 외부화) ⚠ 조건부 채택 (입력 크기 의존)** — router 전체 mean 0.857 vs stuffing 0.300; **큰 로그(≥~10K) router 0.908 vs stuffing 0.125 (Δ+0.78)**; **overflow(컨텍스트 초과) router 1.00 vs stuffing 0.00 (유일 생존)**; 작은 로그(pytrace)는 stuffing 1.00 > router 0.65(overhead); num_ctx artifact 부분적(multihop만 32K 회복); ErrorBlocks brittle. 원본 "latency 35%" 철회. cross-model ministral-3:8b 무이득 → router 효용=f(모델용량,로그크기). 분석: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md`. 결과: `experiments/exp15_context_router/results/exp15_v2_stress_gemma4_e4b.json`. 2026-06-29.
+- **Stage 7 v3: gemma4 size sweep (e2b vs e4b) + push/pull 메커니즘** — Exp15 v3: 1-needle × 5 size × {stuffing,router} × num_ctx 32768 × n=5 + v2 매트릭스 e2b. **S_e4b ≈ 8~19K tok**(stuffing 19K부터 0%, 그 너머 router만 생존 60%). **e2b 는 agent tool-use 미달**(router 0.097, tool_rounds~0.6) — arm 순위 e4b 와 정반대(e2b 최선=ErrorBlocks push). **메커니즘 push(e2b, 오케스트레이터 추출) vs pull(e4b, agent 도구호출), capacity-gated** — H13 의 "agent-retrieval 최소 ~4B"를 gemma4 패밀리 내부 재현. e2b archived, 주력=e4b. 2026-06-29.
+- **Stage 7 v2: Context Router Stress Test (H15 정식 판정)** — Exp15 v2: canonical gemma4:e4b(Q4_K_M, 지인 서버 RTX 5060 Ti, SSH 터널), 5 task × 4 arm × num_ctx{4096,32768} × n=5 = 200 chains. **H15 (Context 외부화) ⚠ 조건부 채택 (입력 크기 의존)** — router 전체 mean 0.857 vs stuffing 0.300; **큰 로그(≥~10K) router 0.908 vs stuffing 0.125 (Δ+0.78)**; **overflow(컨텍스트 초과) router 1.00 vs stuffing 0.00 (유일 생존)**; 작은 로그(pytrace)는 stuffing 1.00 > router 0.65(overhead); num_ctx artifact 부분적(multihop만 32K 회복); ErrorBlocks brittle. 원본 "latency 35%" 철회. router 60% = None-fragility(틀린 답 0, 침묵만 — Exp16 으로 보완 예정). 분석: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md`. 결과: `experiments/exp15_context_router/results/exp15_v2_stress_gemma4_e4b.json`. 2026-06-29.
 - **Stage 7 v1: Ephemeral Context Router (SQLite+Redis + ErrorBlocks + Fast-Forward)** — `orchestrator.py:967` C(Judge) CONVERGED 조기 월반(Fast-Forward) 전이 추가(실재, tunaCtx 3 cycle 수렴 131s). Exp15 A/B/C/D 대조 + tunaCtx/n100 실증. v1 은 arm당 n=1 예비 → v2 가 해소. ※ H14 충돌로 Context 가설 H15 재부호화. 보고서: `docs/reference/stage7-context-router-analysis-2026-06-28.md`(검증범위 보정본). 2026-06-28.
 
 ## Recently Done — Stage 6

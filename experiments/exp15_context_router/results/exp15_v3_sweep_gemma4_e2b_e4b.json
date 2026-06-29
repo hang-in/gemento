@@ -1,0 +1,338 @@
+{
+  "experiment": "exp15_v3_load_capacity_sweep",
+  "models": [
+    "gemma4:e2b",
+    "gemma4:e4b"
+  ],
+  "arms": [
+    "stuffing",
+    "router_basic"
+  ],
+  "num_ctx": 32768,
+  "sizes": [
+    "1k",
+    "5k",
+    "12k",
+    "25k",
+    "50k"
+  ],
+  "n_trials": 5,
+  "max_cycles": 5,
+  "results": {
+    "gemma4:e2b": {
+      "1k": {
+        "approx_tokens": 1558,
+        "stuffing": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 123.5,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 0,
+          "mean_in_tok": 81994
+        },
+        "router_basic": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 72.3,
+          "mean_cycles": 4.6,
+          "mean_tool_rounds": 1,
+          "mean_in_tok": 19355
+        }
+      },
+      "5k": {
+        "approx_tokens": 7973,
+        "stuffing": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 142.8,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 0,
+          "mean_in_tok": 324199
+        },
+        "router_basic": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 72.1,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 0.8,
+          "mean_in_tok": 21363
+        }
+      },
+      "12k": {
+        "approx_tokens": 18973,
+        "stuffing": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 72.5,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 0,
+          "mean_in_tok": 334233
+        },
+        "router_basic": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 74.5,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 0.8,
+          "mean_in_tok": 20310
+        }
+      },
+      "25k": {
+        "approx_tokens": 39698,
+        "stuffing": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 64.1,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 0,
+          "mean_in_tok": 327680
+        },
+        "router_basic": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 69.9,
+          "mean_cycles": 4.6,
+          "mean_tool_rounds": 0.2,
+          "mean_in_tok": 14514
+        }
+      },
+      "50k": {
+        "approx_tokens": 79673,
+        "stuffing": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 100.6,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 0,
+          "mean_in_tok": 491520
+        },
+        "router_basic": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 63.4,
+          "mean_cycles": 4.8,
+          "mean_tool_rounds": 0.8,
+          "mean_in_tok": 18407
+        }
+      }
+    },
+    "gemma4:e4b": {
+      "1k": {
+        "approx_tokens": 1558,
+        "stuffing": {
+          "scores": [
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.4,
+          "mean_dur": 138.9,
+          "mean_cycles": 3.6,
+          "mean_tool_rounds": 0,
+          "mean_in_tok": 53204
+        },
+        "router_basic": {
+          "scores": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "mean_score": 1.0,
+          "mean_dur": 167.5,
+          "mean_cycles": 4,
+          "mean_tool_rounds": 5.8,
+          "mean_in_tok": 26277
+        }
+      },
+      "5k": {
+        "approx_tokens": 7973,
+        "stuffing": {
+          "scores": [
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0
+          ],
+          "mean_score": 0.8,
+          "mean_dur": 177.5,
+          "mean_cycles": 3.2,
+          "mean_tool_rounds": 0,
+          "mean_in_tok": 223285
+        },
+        "router_basic": {
+          "scores": [
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            1.0
+          ],
+          "mean_score": 0.4,
+          "mean_dur": 199.7,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 7.2,
+          "mean_in_tok": 33431
+        }
+      },
+      "12k": {
+        "approx_tokens": 18973,
+        "stuffing": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 144.9,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 0,
+          "mean_in_tok": 340787
+        },
+        "router_basic": {
+          "scores": [
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "mean_score": 0.6,
+          "mean_dur": 202.2,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 7.8,
+          "mean_in_tok": 33657
+        }
+      },
+      "25k": {
+        "approx_tokens": 39698,
+        "stuffing": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 97.5,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 0,
+          "mean_in_tok": 327680
+        },
+        "router_basic": {
+          "scores": [
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "mean_score": 0.6,
+          "mean_dur": 165.6,
+          "mean_cycles": 4.2,
+          "mean_tool_rounds": 6.2,
+          "mean_in_tok": 27810
+        }
+      },
+      "50k": {
+        "approx_tokens": 79673,
+        "stuffing": {
+          "scores": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mean_score": 0.0,
+          "mean_dur": 100.7,
+          "mean_cycles": 5,
+          "mean_tool_rounds": 0,
+          "mean_in_tok": 327680
+        },
+        "router_basic": {
+          "scores": [
+            0.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "mean_score": 0.6,
+          "mean_dur": 150.3,
+          "mean_cycles": 3.6,
+          "mean_tool_rounds": 5.6,
+          "mean_in_tok": 24895
+        }
+      }
+    }
+  },
+  "total_elapsed_sec": 12002.7
+}

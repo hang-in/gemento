@@ -1074,6 +1074,18 @@ Small Paradox 상세:
 **결과 데이터:** `experiments/exp15_context_router/results/exp15_v2_stress_gemma4_e4b.json` (200 chains) + `exp15_crossmodel_ministral_3_8b.json` (cross-model n=1)
 **코드:** `experiments/exp15_context_router/{run_v2.py, native_ollama_caller.py, run_crossmodel_ministral.py}`
 
+#### v3 부록 — gemma4 동일-패밀리 size sweep (e2b vs e4b, 2026-06-29)
+
+ministral 제외(임시 대체였음), gemma4 본질에 맞춰 e2b(~2B)+e4b(~4B) 로 부하-용량 임계 측정 (1-needle × 5 size × {stuffing,router} × num_ctx 32768 × n=5) + v2 매트릭스 e2b 재실행.
+
+- **S_e4b ≈ 8~19K tok**: stuffing 은 ~8K 까지(40~80%), 19K 부터 0% 붕괴. 그 너머 router 만 생존(60%, None-fragility 로 bimodal). → 동적 게이트: e4b 입력 >~10K tok 이면 router.
+- **e2b 는 agent tool-use 미달**: v3 전 size router 0% (tool_rounds ~0.6). v2 arm 순위가 **e4b 와 정반대** — router 0.097(실패) < stuffing 0.287 < error_blocks 0.340 < hybrid 0.413. e2b 는 **읽기는 되나 도구를 못 몬다**(pytrace stuffing 100%, ErrorBlocks overflow 100%).
+- **메커니즘 = push vs pull**: e4b(~4B)=agent-active Router(pull, 모델이 도구 호출), e2b(~2B)=deterministic ErrorBlocks(push, 오케스트레이터 추출·모델 읽기만). Exp14/Stage6 의 *"agent-retrieval 최소 용량 ~4B, M1=E4B 한정"* 을 gemma4 패밀리 내부에서 재현 — **H15(Context)와 H13(Tool) 이 같은 capability-floor 공유**(e2b tool-call 부재 = gemma3:4b M2-a 동형).
+- **e2b 는 archived** (향후 push-기반 e2b 전용 실험 후보). 주력 = gemma4:e4b.
+- 다음(Exp16 1순위): **오케스트레이터 출력 안정화** — `final_answer=None`(router 60% 의 정체, 틀린 답 아닌 침묵) 을 assertions 합성+retry 로 보완 → e4b router 실효 ~60%→~90%+ 목표. Orchestrator 축.
+
+**v3 데이터:** `experiments/exp15_context_router/results/{exp15_v3_sweep_gemma4_e2b_e4b, exp15_v2_stress_gemma4_e2b}.json`
+
 ---
 
 ## 채점 시스템 변천

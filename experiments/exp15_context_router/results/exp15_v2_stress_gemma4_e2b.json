@@ -1,0 +1,904 @@
+{
+  "experiment": "exp15_v2_stress",
+  "model": "gemma4:e2b",
+  "provider": "ollama_native_via_ssh_tunnel",
+  "n_trials": 5,
+  "max_cycles": 5,
+  "ctx_levels": [
+    4096,
+    32768
+  ],
+  "results": {
+    "rust_35k": {
+      "approx_tokens": 15971,
+      "note": "~11K tok: exceeds 4096, fits 32768. artifact-판별 핵심.",
+      "ctx": {
+        "4096": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 18.4,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 61440,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "mean_score": 0.2,
+            "mean_dur": 71.6,
+            "mean_cycles": 4.8,
+            "mean_tool_rounds": 1,
+            "mean_in_tok": 16322,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              "File Name: src/main.rs\nLine Number: 342\nUnresolved Import Module: crate::router::SemanticRouter"
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 101.5,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 59288,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 45.6,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 40819,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        },
+        "32768": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 64.4,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 327680,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 60.5,
+            "mean_cycles": 3.8,
+            "mean_tool_rounds": 0.6,
+            "mean_in_tok": 16399,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 115.9,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 59908,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 97.5,
+            "mean_cycles": 4.4,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 55459,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        }
+      }
+    },
+    "pytrace": {
+      "approx_tokens": 91,
+      "note": "~1K tok: fits both ctx. 통제군 — stuffing 정상 기대.",
+      "ctx": {
+        "4096": {
+          "stuffing": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 17.8,
+            "mean_cycles": 1,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 3375,
+            "answers": [
+              null,
+              "File: app/payment.py, Line: 88. Exception Type: KeyError. Missing Key: 'amount'.",
+              "File: app/payment.py, Line: 88, Exception Type: KeyError, Missing Key: 'amount'",
+              "File: app/payment.py, Line: 88, Exception Type: KeyError, Missing Key: 'amount'",
+              "Root Cause Analysis:\n\nFile and Line of Root Cause: app/payment.py, line 88\nPython Exception Type: KeyError\nMissing Key: 'amount'"
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.2,
+            "mean_dur": 61.5,
+            "mean_cycles": 4.6,
+            "mean_tool_rounds": 0.4,
+            "mean_in_tok": 12999,
+            "answers": [
+              null,
+              "Root Cause Analysis:\n\nBased on the log file 'ctx:exp15v2_pytrace:stdout', the failure was caused by a missing key during payment processing.\n\n*   **Error Message/Traceback:** `KeyError: 'amount'`\n*   **File and Line of Origin:** `app/payment.py`, line 88\n*   **Exact Python Exception Type:** `KeyErro",
+              null,
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              1.0,
+              0.5,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 0.9,
+            "mean_dur": 17.9,
+            "mean_cycles": 1,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 3710,
+            "answers": [
+              null,
+              null,
+              "Root Cause Analysis:\n\n*   **File and Line of Root Cause:** `app/payment.py`, line 88\n*   **Python Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`",
+              "File: app/payment.py, Line: 88. Exception Type: KeyError. Missing Key: 'amount'.",
+              "Root Cause Analysis:\n\n*   **Python Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`\n*   **Location of Root Cause:** File `app/payment.py`, Line 88\n\n**Explanation:** The error occurred when attempting to access the key 'amount' from the `payload` dictionary within the `process_payment` fu"
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 17.9,
+            "mean_cycles": 1,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 3916,
+            "answers": [
+              "Root Cause Analysis:\n\n*   **File and Line of Root Cause:** `app/payment.py`, line 88\n*   **Python Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`",
+              "Root Cause Analysis:\n\n*   **Python Exception Type:** KeyError\n*   **Missing Key:** 'amount'\n*   **File and Line of Root Cause:** `app/payment.py`, line 88",
+              "Root Cause Analysis:\n\n*   **File and Line of Root Cause:** `app/payment.py`, line 88\n*   **Exact Python Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`",
+              "File: app/payment.py, Line: 88, Exception Type: KeyError, Missing Key: 'amount'",
+              "File: app/payment.py, Line: 88, Exception Type: KeyError, Missing Key: 'amount'"
+            ]
+          }
+        },
+        "32768": {
+          "stuffing": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 18.3,
+            "mean_cycles": 1,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 3355,
+            "answers": [
+              "Root Cause Analysis:\n\nBased on the provided log, the root cause of the failure is a missing key during dictionary access.\n\n*   **File and Line of Root Cause:** `app/payment.py`, line 88\n*   **Exact Python Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`",
+              "File: app/payment.py, Line: 88. Exception Type: KeyError. Missing Key: 'amount'.",
+              "File: app/payment.py, Line: 88. Exception Type: KeyError. Missing Key: 'amount'.",
+              "Root Cause Analysis:\n\n*   **File and Line of Root Cause:** `app/payment.py`, line 88\n*   **Exact Python Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`",
+              "Based on the provided log, the required information is:\n\n*   **File and Line of Root Cause**: `app/payment.py`, line 88\n*   **Exact Python Exception Type**: `KeyError`\n*   **Missing Key**: `'amount'`"
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.1,
+            "mean_dur": 66.0,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0.4,
+            "mean_in_tok": 14255,
+            "answers": [
+              "Root Cause Analysis:\n\nBased on the log analysis from `ctx:exp15v2_pytrace:stdout`, the following information has been determined:\n\n*   **Python Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`\n*   **Location of Error:** Line 8 of the traceback.\n\nNote: The log snippet provided does not ex",
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              0.5,
+              1.0
+            ],
+            "mean_score": 0.9,
+            "mean_dur": 18.0,
+            "mean_cycles": 1,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 3689,
+            "answers": [
+              "File: app/payment.py, Line: 88, Exception Type: KeyError, Missing Key: 'amount'",
+              "File: app/payment.py, Line: 88, Exception Type: KeyError, Missing Key: 'amount'",
+              "Root Cause Analysis:\n\nFile and Line of Root Cause: `app/payment.py`, line 88\nPython Exception Type: `KeyError`\nMissing Key: `'amount'`",
+              null,
+              "Root Cause Analysis:\n\n*   **File and Line of Root Cause:** `app/payment.py`, line 88\n*   **Python Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`"
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 18.8,
+            "mean_cycles": 1,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 3971,
+            "answers": [
+              "File: app/payment.py, Line: 88, Exception Type: KeyError, Missing Key: 'amount'",
+              "Root Cause Analysis:\n\n*   **File and Line of Root Cause:** `app/payment.py`, line 88\n*   **Exact Python Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`",
+              "Root Cause Analysis:\n\n*   **File:** `app/payment.py`\n*   **Line:** 88\n*   **Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`",
+              "Root Cause Details:\n\n*   **File and Line of Root Cause:** `app/payment.py`, line 88\n*   **Exact Python Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`",
+              "The root cause is a Python `KeyError` because the key 'amount' was missing from the payload dictionary.\n\n**Details:**\n*   **Python Exception Type:** `KeyError`\n*   **Missing Key:** `'amount'`\n*   **File and Line of Root Cause:** `app/payment.py`, line 88"
+            ]
+          }
+        }
+      }
+    },
+    "caddy_5xx": {
+      "approx_tokens": 10928,
+      "note": "~9K tok. n100 caddy 시나리오 재현 (실로그 아님, 합성).",
+      "ctx": {
+        "4096": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 11.5,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 40960,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.3333333333333333,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.067,
+            "mean_dur": 55.2,
+            "mean_cycles": 3.6,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 11156,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 62.8,
+            "mean_cycles": 4,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 12186,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.0,
+              0.3333333333333333,
+              0.0,
+              0.3333333333333333
+            ],
+            "mean_score": 0.133,
+            "mean_dur": 54.2,
+            "mean_cycles": 3.8,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 11436,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        },
+        "32768": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 271.7,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 491250,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.2,
+            "mean_dur": 62.0,
+            "mean_cycles": 3.6,
+            "mean_tool_rounds": 0.6,
+            "mean_in_tok": 18642,
+            "answers": [
+              null,
+              null,
+              "The failing (5xx) request found in the log is:\nClient IP: 10.0.0.7\nRequest URL Path: /api/v2/payment/checkout\nHTTP Status Code: 500",
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.3333333333333333,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.067,
+            "mean_dur": 65.6,
+            "mean_cycles": 4.4,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 12240,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.0,
+              1.0,
+              0.3333333333333333,
+              0.3333333333333333
+            ],
+            "mean_score": 0.333,
+            "mean_dur": 75.6,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0.2,
+            "mean_in_tok": 18137,
+            "answers": [
+              null,
+              null,
+              "Failing request details found:\n\nClient IP: 10.0.0.7\nRequest URL Path: /api/v2/payment/checkout\nHTTP Status Code: 500",
+              null,
+              null
+            ]
+          }
+        }
+      }
+    },
+    "multihop": {
+      "approx_tokens": 8867,
+      "note": "~9K tok. 2-hop 상관 필요 (config@95 + error@642).",
+      "ctx": {
+        "4096": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 43.6,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 43417,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 69.3,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 14197,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 60.1,
+            "mean_cycles": 3.6,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 24835,
+            "answers": [
+              "<ERROR: 'str' object has no attribute 'get'>",
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 84.5,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 34643,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        },
+        "32768": {
+          "stuffing": {
+            "scores": [
+              0.3333333333333333,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 0.867,
+            "mean_dur": 45.1,
+            "mean_cycles": 1.6,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 92486,
+            "answers": [
+              null,
+              "The ROOT CAUSE of the connection pool exhaustion error is that the effective connection pool size was 0.\n\n**Correlation:**\n\n1.  **Configuration Value:** The pool size was set to `0`.\n2.  **Configuration Source:** The log indicates that the default setting `db_pool_size=0` was loaded, which was then ",
+              "The ROOT CAUSE of the pool exhaustion error is that the connection pool size was 0.\n\n**Correlation:**\n\n1. **Config Value Causing Exhaustion:** The pool size was 0, derived from the configuration setting `db_pool_size=0` (which was overridden by the environment variable `DB_POOL`).\n2. **Error Locatio",
+              "The ROOT CAUSE of the pool exhaustion error is the configuration setting `db_pool_size` being set to 0, which resulted in an empty connection pool.\n\n**Correlation:**\n*   **Config Value:** `db_pool_size=0` (as seen in the log: `config loaded: db_pool_size=0 (overridden by env DB_POOL)`)\n*   **Error L",
+              "The root cause of the pool exhaustion error is the configuration setting `db_pool_size=0`, which resulted in the connection pool size being zero.\n\n**Correlation:**\n\n*   **Config Line:** `config loaded: db_pool_size=0 (overridden by env DB_POOL)`\n*   **Error Line:** `ERROR: connection pool exhausted:"
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 74.2,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 1,
+            "mean_in_tok": 18419,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.6666666666666666,
+              0.6666666666666666,
+              0.0,
+              0.6666666666666666,
+              0.6666666666666666
+            ],
+            "mean_score": 0.533,
+            "mean_dur": 61.1,
+            "mean_cycles": 3.8,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 24635,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.6666666666666666,
+              0.6666666666666666,
+              0.6666666666666666,
+              0.6666666666666666,
+              0.6666666666666666
+            ],
+            "mean_score": 0.667,
+            "mean_dur": 88.1,
+            "mean_cycles": 4.6,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 34157,
+            "answers": [
+              null,
+              null,
+              "The ROOT CAUSE of the pool exhaustion error is that the database connection pool size was configured to 0, which resulted in the pool being exhausted when a connection was requested.\n\n**Correlation:**\n\n1.  **Configuration Value:** The configuration value that caused the issue is the database connect",
+              null,
+              "The root cause of the pool exhaustion error cannot be determined from the provided context. While the log indicates that the connection pool size was 0 (`connection pool exhausted: requested 1 but pool size is 0 at internal/db/conn.go:88`), the specific configuration value that caused this state (e."
+            ]
+          }
+        }
+      }
+    },
+    "overflow_60k": {
+      "approx_tokens": 93081,
+      "note": "~65K tok: exceeds BOTH 4096 and 32768. 결정적 부하>용량 영역.",
+      "ctx": {
+        "4096": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 33.0,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 61440,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "mean_score": 0.2,
+            "mean_dur": 71.8,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0.4,
+            "mean_in_tok": 15462,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              "The worker crash details found in the log are:\n\nFile: src/auth/jwt.rs\nLine Number: 1873\nPanic Reason: ExpiredSignature"
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 110.4,
+            "mean_cycles": 4.6,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 36857,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 111.2,
+            "mean_cycles": 4.8,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 47452,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        },
+        "32768": {
+          "stuffing": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 108.2,
+            "mean_cycles": 5,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 511180,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "router_basic": {
+            "scores": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "mean_score": 0.0,
+            "mean_dur": 72.3,
+            "mean_cycles": 4.6,
+            "mean_tool_rounds": 0.6,
+            "mean_in_tok": 17155,
+            "answers": [
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          "error_blocks_only": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 18.0,
+            "mean_cycles": 1,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 8888,
+            "answers": [
+              "File: src/auth/jwt.rs, Line: 1873, Panic Reason: ExpiredSignature",
+              null,
+              "File: src/auth/jwt.rs, Line: 1873, Panic Reason: ExpiredSignature",
+              "File: src/auth/jwt.rs, Line: 1873, Panic Reason: ExpiredSignature",
+              "File: src/auth/jwt.rs, Line: 1873, Panic Reason: ExpiredSignature"
+            ]
+          },
+          "hybrid": {
+            "scores": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "mean_score": 1.0,
+            "mean_dur": 18.3,
+            "mean_cycles": 1,
+            "mean_tool_rounds": 0,
+            "mean_in_tok": 9068,
+            "answers": [
+              "File: src/auth/jwt.rs, Line: 1873, Panic Reason: ExpiredSignature",
+              "File: src/auth/jwt.rs, Line: 1873, Panic Reason: ExpiredSignature",
+              "File: src/auth/jwt.rs, Line: 1873, Panic Reason: ExpiredSignature",
+              "File: src/auth/jwt.rs, Line: 1873, Panic Reason: ExpiredSignature",
+              "File: src/auth/jwt.rs, Line: 1873, Panic Reason: ExpiredSignature"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "total_elapsed_sec": 12696.6
+}

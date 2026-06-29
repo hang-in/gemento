@@ -75,7 +75,50 @@ updated_at: 2026-06-29
 - n=5 (서술적, 유의성 검정 아님).
 - hybrid arm 비특성화(0~100% 변동).
 
-## 6. 다음 후보
-- 실 Caddy/프로덕션 로그 연동 1회 실증(Active).
-- 부하-용량 임계 sweep: ministral-3:8b 에 컨텍스트 초과(>32K) 로그를 줘 "부하>용량 시 라우터 부활" 확인.
-- LLM-as-judge 보조 채점으로 keyword artifact 방어.
+## 6. 부록 — Exp15 v3: 동일-패밀리 size sweep (gemma4 e2b vs e4b, 2026-06-29)
+
+ministral 은 제외(임시 대체 모델이었음). gemento 본질(똑똑한 소형 gemma4 의 외재화 한계)에 맞춰 **gemma4:e2b(~2B) + gemma4:e4b(~4B)** 로 부하-용량 임계(S)를 측정. 1-needle 로그를 5 size(~1.5K/8K/19K/40K/80K tok)로 스케일, stuffing vs router_basic, num_ctx=32768 고정, n=5. + v2 전체 매트릭스를 e2b 에도 실행.
+
+### S 임계 (v3, num_ctx=32768)
+
+| size(~tok) | e4b stuffing | e4b router | e2b stuffing | e2b router |
+|---|---|---|---|---|
+| 1.5K | 40% | **100%** | 0% | 0% |
+| 8K | 80% | 40% | 0% | 0% |
+| 19K | **0%** | 60% | 0% | 0% |
+| 40K | 0% | 60% | 0% | 0% |
+| 80K | 0% | 60% | 0% | 0% |
+
+- **e4b: stuffing 은 ~8K 까지 작동, 19K 부터 완전 붕괴 → S_e4b ≈ 8~19K tok.** 그 너머는 router 만 생존(60%). router 60% 는 품질 천장이 아니라 **None-fragility**(per-trial bimodal 0/1 — 답을 내면 3/3 완벽, 일부 trial 은 `final_answer=None`). 동적 게이트: e4b 는 입력 >~10K tok 이면 router 전환.
+- **e2b: 전 size·양 arm 0%, router tool_rounds ~0.6.** ~2B 는 **agent tool-use 를 못 몬다**(도구를 거의 호출 안 함 + 답 None).
+
+### e2b 전체 매트릭스 (v2) — arm 순위가 e4b 와 정반대
+
+| arm 종합 mean | e4b | **e2b** |
+|---|---|---|
+| router_basic | 0.857 | **0.097** (실패) |
+| hybrid | 0.510 | 0.413 (최선) |
+| error_blocks_only | 0.280 | 0.340 |
+| stuffing | 0.300 | 0.287 |
+
+e2b 는 pytrace stuffing 100%, **error_blocks/hybrid 가 overflow(93K)에서도 100%**("File: src/auth/jwt.rs, Line: 1873, ExpiredSignature" 정확). 즉 **읽기는 되는데 도구를 못 몬다**.
+
+### 결론 — 올바른 외재화 메커니즘은 모델 용량에 따라 갈린다 (push vs pull)
+
+- **e4b(~4B)**: **agent-active Router (pull)** — 모델이 직접 grep/read 호출. S 너머에서 stuffing 압도.
+- **e2b(~2B)**: **agent tool-use 능력 미달** → deterministic 사전 슬라이싱(**ErrorBlocks, push** — 오케스트레이터가 추출, 모델은 읽기만)이 최선. overflow 도 push 로 100%.
+
+이는 Exp14/Stage6 의 *"agent-active retrieval 은 최소 용량(~4B) 필요, M1 measurable = Gemma 4 E4B 한정"* 발견을 **gemma4 패밀리 내부(e2b vs e4b)에서 재현** — H15(Context)와 H13(Tool agent-retrieval)이 **같은 capability-floor 메커니즘** 공유. e2b 의 tool-call 부재 = Stage6 gemma3:4b 의 M2-a 와 동형.
+
+**e2b 는 archived (향후 e2b 전용 외재화 — push 기반 — 실험 후보). 주력 모델은 gemma4:e4b 로 고정.**
+
+### v3/e2b 결과 데이터
+- `experiments/exp15_context_router/results/exp15_v3_sweep_gemma4_e2b_e4b.json`
+- `experiments/exp15_context_router/results/exp15_v2_stress_gemma4_e2b.json`
+- 코드: `run_v3_sweep.py` + `run_v2.py`(model 인자화)
+
+## 7. 다음 후보
+- **Exp16 (1순위) — 오케스트레이터 출력 안정화**: `final_answer=None` 시 assertions 합성 + retry. e4b router 실효 정답률 ~60%→~90%+ 목표(모델 무변경, Orchestrator 축). None-fragility 가 router 의 유일 갭.
+- Exp17 — multi-hop/multi-needle/repo-규모 로그로 e4b+router 의 *진짜 상한* 측정("얼마나 큰 일" 헤드라인).
+- 실 Caddy/프로덕션 로그 연동(Active, mock→실서버).
+- (보류) e2b 전용 push-기반 외재화 + LLM-as-judge 보조 채점.

@@ -26,7 +26,7 @@ from orchestrator import run_abc_chain
 from native_ollama_caller import make_ollama_native_caller
 
 BASE_URL = "http://127.0.0.1:11435"   # SSH 터널 → 지인 서버 ollama
-MODEL = "gemma4:e4b"
+MODEL = sys.argv[1] if len(sys.argv) > 1 else "gemma4:e4b"   # 인자로 모델 지정 (e2b 재실행)
 CTX_LEVELS = [4096, 32768]
 N_TRIALS = 5
 MAX_CYCLES = 5
@@ -35,7 +35,7 @@ ARMS = ["stuffing", "router_basic", "error_blocks_only", "hybrid"]
 _DIR = Path(__file__).resolve().parent
 RESULTS_DIR = _DIR / "results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-OUT_PATH = RESULTS_DIR / "exp15_v2_stress_gemma4_e4b.json"
+OUT_PATH = RESULTS_DIR / f"exp15_v2_stress_{MODEL.replace(':', '_').replace('-', '_')}.json"
 
 
 # ── 타스크셋 생성 (합성 로그, 재현 가능) ──────────────────────────────────────
