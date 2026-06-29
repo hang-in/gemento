@@ -1,0 +1,119 @@
+{
+  "experiment": "exp16_output_stabilization",
+  "model": "gemma4:e4b",
+  "num_ctx": 32768,
+  "n_trials": 10,
+  "max_retries": 2,
+  "max_cycles": 5,
+  "results": {
+    "12k": {
+      "baseline": {
+        "scores": [
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        "mean_score": 0.3
+      },
+      "stabilized": {
+        "scores": [
+          1.0,
+          0.0,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        "mean_score": 0.6,
+        "mean_attempts": 2.3,
+        "mean_total_cycles": 10.6,
+        "mean_total_tool_rounds": 15.8
+      },
+      "approx_tokens": 18973
+    },
+    "25k": {
+      "baseline": {
+        "scores": [
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "mean_score": 0.2
+      },
+      "stabilized": {
+        "scores": [
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          1.0,
+          0.0,
+          1.0
+        ],
+        "mean_score": 0.5,
+        "mean_attempts": 2.4,
+        "mean_total_cycles": 11.3,
+        "mean_total_tool_rounds": 18.8
+      },
+      "approx_tokens": 39698
+    },
+    "50k": {
+      "baseline": {
+        "scores": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean_score": 0.1
+      },
+      "stabilized": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 0.7,
+        "mean_attempts": 2.7,
+        "mean_total_cycles": 11.9,
+        "mean_total_tool_rounds": 18.1
+      },
+      "approx_tokens": 79673
+    }
+  },
+  "total_elapsed_sec": 13314.8
+}

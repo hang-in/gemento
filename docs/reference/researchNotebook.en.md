@@ -4,7 +4,7 @@ status: in_progress
 updated_at: 2026-06-29
 mirror_of: docs/reference/researchNotebook.md (Part 1 — Closed Findings)
 language: en
-note: 2026-06-29 v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
+note: 2026-06-29 v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
 ---
 
 > **Conceptual framework canonical document**: [conceptFramework.md](./conceptFramework.md) — 4-axis externalization principles, terminology definitions, axis ↔ experiment mapping.
@@ -1185,6 +1185,22 @@ e2b is **archived** (future push-based e2b experiments); the main model is fixed
 Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` (§6–7). Results: `experiments/exp15_context_router/results/exp15_v3_sweep_gemma4_e2b_e4b.json` + `exp15_v2_stress_gemma4_e2b.json`.
 
 This is an addendum to H15 (no table change; H1~H14 remain unchanged, H15 already added above).
+
+---
+
+## Exp16 — Orchestrator output-stabilization (H16, 2026-06-29)
+
+A follow-up tested **H16** — whether a deterministic retry-on-None layer (re-run the chain when `final_answer is None`, up to K=2) lifts the e4b Context Router's effective accuracy on large logs toward ~90%. Motivation: in Exp15 v2/v3 the router's zero-score trials were `final_answer=None` (silence), not wrong answers — produced answers are 3/3 perfect. The retry trigger uses a deployable signal (None), not the gold score. Driver wrapper only; shared orchestrator unchanged.
+
+Conditions: gemma4:e4b, router_basic, sizes {12K, 25K, 50K tok}, num_ctx=32768, baseline (1 attempt) vs stabilized (≤3 attempts) × n=10.
+
+Results: 12K 30%→60%, 25K 20%→50%, 50K 10%→70% (lift +30~60pp), mean attempts 2.3–2.7.
+
+**H16 verdict (Architect)**: ⚠ **Partially supported**. Retry-on-None gives a real lift (+30~60pp) but does **not** reach ~90% — it plateaus at ~50–70% with K=2 (mean 2.3–2.7 attempts, cap frequently hit). The cause: per-attempt success on large logs is itself low (~10–30%), so a few retries cannot close the gap (per-attempt 30% → 1−0.7³ ≈ 66%, matching observation). Cost ~2.5× calls. The deeper lever is **per-attempt reliability** (mandatory-tool prompting à la Exp08b, A-agent JSON hardening, more cycles), not retry — the Exp16b candidate. Run-to-run variance is large (baseline came in below v3's 60%), so point estimates are soft but the direction and the bottleneck are clear.
+
+Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §8. Results: `experiments/exp15_context_router/results/exp16_stabilize_gemma4_e4b.json`.
+
+This is an addendum (no table change; H1~H15 remain unchanged, H16 documented here).
 
 ---
 

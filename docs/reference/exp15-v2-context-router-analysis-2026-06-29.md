@@ -117,8 +117,25 @@ e2b 는 pytrace stuffing 100%, **error_blocks/hybrid 가 overflow(93K)에서도 
 - `experiments/exp15_context_router/results/exp15_v2_stress_gemma4_e2b.json`
 - 코드: `run_v3_sweep.py` + `run_v2.py`(model 인자화)
 
-## 7. 다음 후보
-- **Exp16 (1순위) — 오케스트레이터 출력 안정화**: `final_answer=None` 시 assertions 합성 + retry. e4b router 실효 정답률 ~60%→~90%+ 목표(모델 무변경, Orchestrator 축). None-fragility 가 router 의 유일 갭.
-- Exp17 — multi-hop/multi-needle/repo-규모 로그로 e4b+router 의 *진짜 상한* 측정("얼마나 큰 일" 헤드라인).
+## 8. Exp16 — Orchestrator 출력 안정화 (retry-on-None, H16, 2026-06-29)
+
+Exp15 의 e4b router 0점 trial = `final_answer=None`(침묵, 틀린 답 아님). retry 가 메우는지 측정.
+gemma4:e4b, router_basic, size{12K,25K,50K}, num_ctx=32768, baseline(1시도) vs stabilized(≤3시도, retry-on-None), n=10.
+
+| size | baseline | stabilized | lift | 평균 시도 |
+|---|---|---|---|---|
+| 12K | 30% | 60% | +30pp | 2.3 |
+| 25K | 20% | 50% | +30pp | 2.4 |
+| 50K | 10% | 70% | +60pp | 2.7 |
+
+**H16 ⚠ 부분 채택.** retry 가 유의미한 lift(+30~60pp)를 주지만 **~90% 미달, 50~70% 정체**. 근본 원인은 큰 로그에서 **per-attempt 성공률 자체가 낮음(~10~30%)** — per-attempt 30%면 3시도 = 1−0.7³≈66%로 관측과 일치. retry 는 증상 완화. 비용 ~2.5× call. baseline 이 v3(60%)보다 낮게 나온 건 큰 로그 router 신뢰도의 run-to-run 변동(점추정 soft, 방향은 명확).
+
+**함의:** 진짜 레버 = per-attempt 신뢰도 — mandatory-tool 프롬프트(Exp08b: tool_neglect 0% 전례)/A-JSON 산출 강화/cycle·num_predict 상향. → Exp16b.
+
+**데이터:** `experiments/exp15_context_router/results/exp16_stabilize_gemma4_e4b.json`. **코드:** `run_v16_stabilize.py`.
+
+## 9. 다음 후보
+- **Exp16b (1순위) — per-attempt 신뢰도 향상**: mandatory-tool 프롬프트 / A-agent JSON 산출 강화 / cycle·num_predict 상향. retry 와 결합해 ~90%+ 목표.
+- Exp17 — multi-hop/multi-needle/repo-규모 로그로 e4b+router 의 *진짜 상한* 측정.
 - 실 Caddy/프로덕션 로그 연동(Active, mock→실서버).
 - (보류) e2b 전용 push-기반 외재화 + LLM-as-judge 보조 채점.
