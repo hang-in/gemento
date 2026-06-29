@@ -149,9 +149,26 @@ Exp16 의 retry 정체 → per-attempt(원인)를 고친다. 라우터 task prom
 
 **데이터:** `experiments/exp15_context_router/results/exp16b_mandatory_gemma4_e4b.json`. **코드:** `run_v16b_mandatory.py`.
 
-## 11. 다음 후보
-- **Exp16c (1순위) — mandatory + retry 결합**: per-attempt 83% + retry-on-None(K=2) → ~99% 실측 검증. ~1h.
-- mandatory 프롬프트의 라우터 기본값 승격(공유 system_prompt.py 변경, 별도 plan).
+## 12. Exp16c — mandatory + retry 결합 (H16c, 2026-06-30)
+
+mandatory(per-attempt↑) + retry-on-None(K=2) 결합. gemma4:e4b router, size{12K,25K,50K}, n=10.
+
+| size | retry-only(Exp16) | mand-only(Exp16b) | **mand+retry(Exp16c)** | 평균 시도 |
+|---|---|---|---|---|
+| 12K | 60% | 90% | **100%** | 1.7 |
+| 25K | 50% | 90% | **100%** | 1.3 |
+| 50K | 70% | 70% | **100%** | 1.0 |
+
+**H16c ✅ 채택.** 전 size 100% (30/30). progression: retry-only ~60%(증상) → mandatory 83%(원인) → 결합 100%. mandatory 로 per-attempt 가 높아 retry 거의 불필요(평균 1.0~1.7, 비용 효율). **caveat**: n=10 합성·단일 needle·keyword 채점, 참값 ~95~100% (50k 쏠림). **H15 Context Router = e4b 실용 완성.**
+
+**데이터:** `experiments/exp15_context_router/results/exp16c_combined_gemma4_e4b.json`. **코드:** `run_v16c_combined.py`.
+
+## 13. Stage 7 arc 종결 + 다음 후보
+
+**Stage 7 종결**: Exp15 발견 → v2 조건부 채택(H15) → v3 capacity 분기(push/pull) → Exp16 retry 정체(H16) → Exp16b 원인규명(H16b, 전사 누락) → Exp16c 완성(H16c, ~100%).
+
+다음 후보:
+- **mandatory 프롬프트 라우터 기본값 승격** — 공유 `system_prompt.py`(또는 orchestrator 라우터 경로)에 mandatory rules 편입. 별도 plan (회귀 게이트 필요).
 - Exp17 — multi-hop/multi-needle/repo-규모 로그로 e4b+router 진짜 상한 측정.
 - 실 Caddy/프로덕션 로그 연동(Active, mock→실서버).
 - (보류) e2b 전용 push-기반 외재화 + LLM-as-judge 보조 채점.

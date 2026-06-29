@@ -4,7 +4,7 @@ status: in_progress
 updated_at: 2026-06-29
 mirror_of: docs/reference/researchNotebook.md (Part 1 — Closed Findings)
 language: en
-note: 2026-06-30 v9 — Exp16b mandatory-tool prompting. H16b SUPPORTED (per-attempt 27->83%, +57pp; failure was transcription-omission not tool-neglect — tool_rounds DROPPED). mandatory + retry ~= 99% path. v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
+note: 2026-06-30 v10 — Exp16c mandatory+retry combined. H16c SUPPORTED (all sizes 100%, 30/30; H15 Context Router practical-complete on e4b). v9 — Exp16b mandatory-tool prompting. H16b SUPPORTED (per-attempt 27->83%, +57pp; failure was transcription-omission not tool-neglect — tool_rounds DROPPED). mandatory + retry ~= 99% path. v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
 ---
 
 > **Conceptual framework canonical document**: [conceptFramework.md](./conceptFramework.md) — 4-axis externalization principles, terminology definitions, axis ↔ experiment mapping.
@@ -1217,6 +1217,20 @@ Results (per-attempt): 12K 20→90% (tool_rounds 5.9→3.3), 25K 40→90% (6.6�
 Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §10. Results: `experiments/exp15_context_router/results/exp16b_mandatory_gemma4_e4b.json`.
 
 This is an addendum (no table change; H1~H15 unchanged, H16/H16b documented in append-only sections).
+
+---
+
+## Exp16c — Mandatory + retry combined (H16c, 2026-06-30)
+
+Exp16c combined Exp16b's mandatory prompt (raises per-attempt) with Exp16's retry-on-None (K=2) to test whether the e4b Context Router reaches ~99% on large logs. gemma4:e4b router, sizes {12/25/50K tok}, num_ctx=32768, n=10.
+
+Results: **all sizes 100% (30/30 trials)**, mean attempts 12K 1.7 / 25K 1.3 / 50K 1.0. Progression: retry-only ~60% (Exp16, symptom) → mandatory-only 83% (Exp16b, cause) → **combined 100%** (Exp16c).
+
+**H16c verdict (Architect): Supported.** mandatory (per-attempt 83%) + retry(K=2) ≈ effective ~100%, meeting/exceeding the ~99% prediction; because the mandatory prompt already makes per-attempt high, retry is rarely needed (mean 1.0–1.7 attempts — cost-efficient). Caveat: n=10, synthetic single-needle logs, keyword scoring — 100% is over 30 trials (50K's 1.0-attempt/100% leans lucky vs Exp16b's 70%), so the true rate is best read as ~95–100%. **Significance: H15 Context Router is practical-complete on e4b** — mandatory prompting + retry handles large-log (incl. context-overflow) debugging robustly. This closes the Stage 7 arc: Exp15 discovery → v2 conditional support → v3 capacity split (push/pull) → Exp16 retry plateau → Exp16b cause identified → Exp16c completion.
+
+Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §12. Results: `experiments/exp15_context_router/results/exp16c_combined_gemma4_e4b.json`.
+
+This is an addendum (no table change; H1~H15 unchanged, H16/H16b/H16c documented in append-only sections).
 
 ---
 

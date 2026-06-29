@@ -3,7 +3,7 @@ type: reference
 status: in_progress
 updated_at: 2026-06-29
 parts: [closed, active]
-note: 2026-06-30 v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). retry+mandatory ≈ 99% 경로. 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
+note: 2026-06-30 v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size 100% 30/30; H15 Context Router e4b 실용 완성). v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
 ---
 
 > **개념 프레임 canonical 문서**: [conceptFramework.md](./conceptFramework.md) — 4축 외부화 원리, 용어 정의, 축 ↔ 실험 매핑.
@@ -60,6 +60,7 @@ note: 2026-06-30 v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per
 | **H15** | **[Context 외부화]** Redis 핸들 + grep/read 도구로 대용량 로그를 컨텍스트 라우팅하면, log-stuffing 대비 소형 LLM 의 정확도/안정성이 향상된다 | ⚠ **조건부 채택 (입력 크기 의존, n=5 canonical 재검증)** — 2026-06-29 Exp15 v2 (gemma4:e4b, 5 task × 4 arm × num_ctx{4096,32768} × n=5). router 전체 mean 0.857 vs stuffing 0.300; **큰 로그(≥~10K tok) router 0.908 vs stuffing 0.125 (Δ+0.78)**; **overflow(93K, 컨텍스트 초과) router 1.00 vs stuffing 0.00 — 유일 생존 arm**. 단 **작은 로그(pytrace 0.1K)는 stuffing 1.00 > router 0.65 (overhead)**. num_ctx artifact는 부분적 (multihop만 32K서 stuffing 0→100%, rust/caddy/overflow는 32K서도 stuffing 0% = 진짜 lost-in-the-middle). ErrorBlocks-Only brittle (키워드 의존, mean 0.28). 원본 Stage7 "latency 35% 단축"은 n=1+ctx artifact로 **철회**. cross-model ministral-3:8b(35KB)는 라우터 무이득 → **router 효용 = f(모델 용량, 로그 크기)**. ※ H14 와 충돌하던 Context 가설을 H15 로 재부호화. 상세: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` | Exp15 v2 |
 | **H16** | **[Orchestrator 외부화 — 출력 안정화]** `final_answer=None` 시 체인을 재실행(retry-on-None)하는 결정론적 안정화 층이 e4b router 의 큰 로그 실효 정답률을 ~90%+ 로 끌어올린다 | ⚠ **부분 채택** — 2026-06-29 Exp16 (e4b router, size{12K,25K,50K} × baseline vs stabilized≤3시도 × n=10). retry 가 +30~60pp lift (12k 30→60, 25k 20→50, 50k 10→70) 하나 **~90% 미달, 50~70% 정체** (평균 2.3~2.7 시도, cap 도달 잦음). 원인 = 큰 로그에서 **per-attempt 성공률 자체가 낮음(~10~30%)** → 재시도만으로 부족. 비용 ~2.5× call. 진짜 레버 = per-attempt 신뢰도(Exp16b). run-to-run 변동 큼(baseline soft). 상세: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §8 | Exp16 |
 | **H16b** | **[Orchestrator 외부화 — mandatory-tool 프롬프트]** 라우터 task prompt 에 mandatory-tool 지시(반드시 grep 먼저 / 조기 단정 금지 / 매치 라인 3요소 그대로 전사)를 주면 e4b router 의 per-attempt 성공률이 오른다 | **✅ 채택** — 2026-06-30 Exp16b (e4b router, size{12K,25K,50K} × baseline vs mandatory × n=10, 1시도). per-attempt **27%→83% (+57pp)**, 전 size +50~70pp 일관. **핵심: mandatory 에서 tool_rounds 가 오히려 감소**(5.9→3.3 등) → baseline 실패는 tool-neglect 아닌 **전사/결론 누락**(grep 반복하며 final_answer 미전사). 규칙4("그대로 전사")가 레버. per-attempt 83% + Exp16 retry(K=2) 결합 시 기대 ~99%. (n=10 서술적, 대효과 일관.) 상세: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §10 | Exp16b |
+| **H16c** | **[Orchestrator 외부화 — mandatory + retry 결합]** mandatory 프롬프트(per-attempt↑) + retry-on-None(K=2) 결합이 e4b router 의 큰 로그 실효 정답률을 ~99%+ 로 만든다 | **✅ 채택** — 2026-06-30 Exp16c (e4b router, size{12K,25K,50K} × mandatory+retry × n=10). **전 size 100% (30/30)**, 평균 시도 1.0~1.7. progression: retry-only ~60%(Exp16) → mandatory-only 83%(Exp16b) → **결합 100%**. (n=10 합성·단일 needle, 참값 ~95~100% 로 읽는 게 안전; 50k 의 1.0시도/100% 는 표본 쏠림 있음.) **H15 Context Router = e4b 에서 실용 완성** (큰 로그·컨텍스트 초과 디버깅 ~안정). 상세: §12 | Exp16c |
 
 #### 축 ↔ 실험 매트릭스
 
@@ -86,6 +87,7 @@ note: 2026-06-30 v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per
 | Exp15 v2 (Context Router) | ✅ (Context 외부화 — H15 조건부 채택) | ▶ (grep/read 도구) | — | ▶ (Fast-Forward 전이) |
 | Exp16 (Output Stabilization) | — | — | — | ✅ (출력 안정화 retry — H16 부분 채택) |
 | Exp16b (Mandatory-tool Prompt) | — | ▶ (grep/read 도구) | — | ✅ (mandatory 프롬프트 — H16b 채택) |
+| Exp16c (Mandatory + Retry) | — | ▶ (grep/read 도구) | — | ✅ (결합 ~100% — H16c 채택) |
 
 > 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조. Context 외부화(H15)는 4축을 넘는 5번째 축 후보 — [conceptFramework.md § 8](./conceptFramework.md) 참조.
 
@@ -1135,6 +1137,25 @@ ministral 제외(임시 대체였음), gemma4 본질에 맞춰 e2b(~2B)+e4b(~4B)
 **의의:** 라우터의 약점은 도구 *능력*이 아니라 도구를 *안정적으로 쓰고 결과를 커밋하게* 만드는 프롬프트. mandatory 프롬프트의 라우터 기본값 승격(공유 코드 변경)은 별도 plan 후보.
 
 **데이터:** `experiments/exp15_context_router/results/exp16b_mandatory_gemma4_e4b.json` | **코드:** `run_v16b_mandatory.py`
+
+---
+
+### Exp16c: mandatory + retry 결합 (H16c)
+
+mandatory 프롬프트(원인 fix, per-attempt↑) + retry-on-None(K=2) 결합. gemma4:e4b router, size{12K,25K,50K} × n=10.
+
+**결과:** 전 size **100% (30/30)**, 평균 시도 12k 1.7 / 25k 1.3 / 50k 1.0.
+
+**progression**: retry-only ~60%(Exp16, 증상) → mandatory-only 83%(Exp16b, 원인) → **결합 100%**(Exp16c).
+
+**핵심 발견:**
+1. **H16c ✅ 채택** — mandatory(per-attempt 83%) + retry(K=2) = 실효 ~100%. 기대(~99%) 부합·상회.
+2. **낮은 시도 횟수** — mandatory 로 per-attempt 가 높아 retry 가 거의 불필요(평균 1.0~1.7). 비용 효율적.
+3. **caveat** — n=10 합성·단일 needle·keyword 채점. 100%는 30 trial 표본(50k 1.0시도/100%는 Exp16b 70% 대비 쏠림). 참값 ~95~100%.
+
+**의의:** **H15 Context Router 가 e4b 에서 실용 완성** — mandatory 프롬프트 + retry 로 큰 로그(컨텍스트 초과 포함) 디버깅을 ~안정적으로 처리. Stage 7 핵심 arc 종결(Exp15 발견 → v2 조건부 채택 → v3 capacity 분기 → Exp16 retry 정체 → Exp16b 원인규명 → Exp16c 완성).
+
+**데이터:** `experiments/exp15_context_router/results/exp16c_combined_gemma4_e4b.json` | **코드:** `run_v16c_combined.py`
 
 ---
 
