@@ -1,0 +1,73 @@
+{
+  "experiment": "exp21_facet_ab",
+  "model": "gemma4:e4b",
+  "approx_tokens": 29326087,
+  "n_lines": 1105320,
+  "n_trials": 5,
+  "max_cycles": 8,
+  "max_retries": 2,
+  "arms": {
+    "grep_only": {
+      "exp21a_crashloop": {
+        "non_null_rate": 0.4,
+        "mean_score": 0.3,
+        "mean_attempts": 2.2,
+        "answers": [
+          null,
+          "Crash-looping Service Unit: gohttpserver.service\n\nRecent Failure Evidence:\nThe service repeatedly fails with the message: `systemd[1]: gohttpserver.service: Failed with result 'exit-code'.` This indicates that the service is starting but immediately exiting with a non-zero exit code, causing systemd",
+          null,
+          null,
+          "The service unit that appears to be crash-looping is **dufs.service**. \n\n**Recent Failure Evidence:**\n*   **Date/Time:** Jun 06 06:40:37\n*   **Log Entry:** `d9ng-i3-laptop systemd[1]: Failed to start dufs.service - DUFS File Server.`"
+        ]
+      },
+      "exp21b_bruteforce": {
+        "non_null_rate": 1.0,
+        "mean_score": 0.0,
+        "mean_attempts": 1.6,
+        "answers": [
+          "The single source IP address responsible for the most failed attempts is 174.138.8.10, with at least 16 failed attempts observed in the provided log snippet.",
+          {
+            "source_ip": "174.138.8.10",
+            "attempt_count": "Based on visible evidence, this IP is the most frequent source. A full log analysis is required for the exact count."
+          },
+          {
+            "source_ip": "174.138.8.10",
+            "attempt_count": 10
+          },
+          "The single source IP address responsible for the MOST failed attempts is 174.138.8.10, with 16 attempts.",
+          "The single source IP address responsible for the MOST failed attempts is 174.138.8.10, with 8 attempts."
+        ]
+      }
+    },
+    "grep_facet": {
+      "exp21a_crashloop": {
+        "non_null_rate": 0.2,
+        "mean_score": 0.2,
+        "mean_attempts": 3,
+        "answers": [
+          "The service unit that is repeatedly crash-looping is `gohttpserver.service`. The consistent failure evidence observed in the systemd journal is the pattern 'Failed with result 'exit-code''. Although the specific verbatim file path, line number, and module identifier could not be transcribed, the uni",
+          null,
+          null,
+          null,
+          null
+        ],
+        "facet_calls": 3
+      },
+      "exp21b_bruteforce": {
+        "non_null_rate": 1.0,
+        "mean_score": 0.8,
+        "mean_attempts": 1.4,
+        "answers": [
+          "The single source IP address responsible for the MOST failed attempts is 174.138.8.10, with a total of 8 attempts.",
+          "The single source IP address responsible for the most failed attempts is 45.144.212.75, with 286 attempts.",
+          "The single source IP address responsible for the most failed attempts is 45.144.212.75, with a total of 286 attempts.",
+          "The single source IP address responsible for the most failed login attempts is 45.144.212.75, with a total of 286 attempts.",
+          "The single source IP address responsible for the most failed login attempts is 45.144.212.75, with a total of 286 failed attempts."
+        ],
+        "facet_calls": 16
+      },
+      "facet_calls": 19
+    }
+  },
+  "elapsed_sec": 8724.4
+}
