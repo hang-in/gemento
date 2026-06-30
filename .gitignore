@@ -24,3 +24,6 @@ resume_gemini.md
 # Environment / API keys (local-only — do not commit)
 .env
 .env.local
+
+# transient experiment stdout logs
+exp*_run*.log
