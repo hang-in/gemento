@@ -169,7 +169,7 @@ Interpretation: separating "the role that answers" from "the role that criticize
 
 Interpretation: "add a tool and it gets better" is false. Results depend on the tool's nature, the call count, the model's tool-use ability, and the input size.
 
-In Exp14 the search tool failed to iterate enough on multi-hop tasks and lost accuracy. Conversely in Exp15–16 the context router was effective exactly where stuffing the whole log broke down.
+In Exp14 the search tool failed to iterate enough on multi-hop tasks and lost accuracy. Conversely in Exp15–16 the context router was effective exactly where stuffing the whole log broke down. Exp18 pushed this to synthetic repo-scale (~245K tokens, 7.5× the context window) with no degradation, and **Exp19 validated it on real data**: gemma4:e4b on an RTX 5060Ti correctly diagnosed a real `certbot` failure in a live 1.15M-token `journald` from another server, every trial — stuffing was impossible. The router decouples prefill cost from log size (on the 5060Ti, gemma4:e4b runs ~95 tok/s generation / ~1,620 tok/s prefill, so stuffing 1.15M tokens would be ~12 min of prefill per call vs ~3 s for the small grep result).
 
 ---
 

@@ -1,0 +1,55 @@
+{
+  "experiment": "exp19_n100_journald_realdata",
+  "model": "gemma4:e4b",
+  "analyzer": "boxie(14.58.110.187) gemma4:e4b",
+  "log_source": "n100 journald (7d)",
+  "approx_tokens": 1150043,
+  "n_lines": 34528,
+  "n_trials": 5,
+  "max_retries": 2,
+  "stack": "router+mandatory+retry",
+  "scores": [
+    0.5,
+    0.5,
+    1.0,
+    0.5,
+    1.0
+  ],
+  "mean_score": 0.7,
+  "mean_attempts": 2.2,
+  "answers": [
+    "The failing service unit is certbot. The service is repeatedly failing to renew certificates, with the most recent failures observed on 6월 25 (June 25) at various times, including 16:54 and 22:22.",
+    {
+      "failing_unit": "certbot",
+      "recent_failure_timestamps": [
+        "2024-06-25 16:54:10",
+        "2024-06-25 16:54:15",
+        "2024-06-25 16:54:20",
+        "2024-06-25 16:54:25",
+        "2024-06-25 18:02:03",
+        "2024-06-25 22:21:58",
+        "2024-06-25 09:52:53"
+      ]
+    },
+    "The failing service unit is `certbot.service`. Recent failure timestamps are observed repeatedly throughout the log, with the latest visible failures occurring on June 25th (e.g., 09:53:37, 11:28:48, 16:54:53, 22:22:42, 23:30:27).",
+    {
+      "failing_service_unit": "certbot.service",
+      "recent_failure_timestamps": [
+        "6월 25 01:28:27",
+        "6월 24 23:30:27",
+        "6월 23 19:15:43"
+      ]
+    },
+    {
+      "failing_unit": "certbot.service",
+      "failure_description": "Certificate renewal failure (Multiple challenges have failed / rateLimited).",
+      "recent_failure_timestamps": [
+        "6월 23 19:15:43",
+        "6월 23 22:16:44",
+        "6월 24 09:51:12",
+        "6월 24 10:28:18"
+      ]
+    }
+  ],
+  "elapsed_sec": 1469.7
+}

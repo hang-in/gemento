@@ -183,7 +183,8 @@ Exp10 비교는 9-task benchmark 기준입니다. Gemini 2.5 Flash 1-call보다 
 도구의 성격, 호출 횟수, 모델의 도구 사용 능력, 입력 크기에 따라 결과가 갈립니다.
 
 특히 Exp14에서는 검색 도구를 줬지만 multi-hop task에서 충분히 반복 검색하지 못해 성능이 떨어졌습니다.  
-반대로 Exp15~16에서는 큰 로그를 통째로 넣는 방식이 무너지는 구간에서 context router가 유효했습니다.
+반대로 Exp15~16에서는 큰 로그를 통째로 넣는 방식이 무너지는 구간에서 context router가 유효했습니다.  
+Exp18은 이를 합성 repo-규모(~245K tok, 컨텍스트 7.5배)까지 밀어도 무저하였고, **Exp19는 실데이터로 검증**했습니다: RTX 5060Ti의 gemma4:e4b가 다른 서버의 살아있는 1.15M-token `journald`에서 실제 `certbot` 장애를 매 trial 정확히 진단(stuffing 불가). router는 prefill 비용을 로그 크기에서 분리합니다(5060Ti에서 gemma4:e4b 생성 ~95 tok/s / prefill ~1,620 tok/s — stuffing이면 1.15M tok prefill만 ~12분/호출, router는 grep 결과만 ~3초).
 
 ---
 

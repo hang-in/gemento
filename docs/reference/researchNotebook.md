@@ -3,7 +3,7 @@ type: reference
 status: in_progress
 updated_at: 2026-06-29
 parts: [closed, active]
-note: 2026-06-30 v11 — Exp18 repo-규모 (size invariance). H18 ✅ 채택 (multihop3 75→92→100%, multineedle 100% @ ~245K tok; router 인지 부하 O(1) = 로그 크기 무관). Stage 7 Context Router 라인 완결. v10 — Exp17 hard tasks. H17 부분 (전반 ✅ e4b+router 가 multi-hop/집계/distractor 까지 스케일 baseline 92%; 후반 ❌ mandatory 는 failure-mode-specific 처방, hard task 선 −3pp). v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size 100% 30/30; H15 Context Router e4b 실용 완성). v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
+note: 2026-06-30 v12 — Exp19 실데이터 검증 (n100 journald 1.15M tok → boxie e4b router, certbot 장애 5/5 정확 진단, mock caddy 대체; 5060Ti tps gen~95/prefill~1620). v11 — Exp18 repo-규모 (size invariance). H18 ✅ 채택 (multihop3 75→92→100%, multineedle 100% @ ~245K tok; router 인지 부하 O(1) = 로그 크기 무관). Stage 7 Context Router 라인 완결. v10 — Exp17 hard tasks. H17 부분 (전반 ✅ e4b+router 가 multi-hop/집계/distractor 까지 스케일 baseline 92%; 후반 ❌ mandatory 는 failure-mode-specific 처방, hard task 선 −3pp). v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size 100% 30/30; H15 Context Router e4b 실용 완성). v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
 ---
 
 > **개념 프레임 canonical 문서**: [conceptFramework.md](./conceptFramework.md) — 4축 외부화 원리, 용어 정의, 축 ↔ 실험 매핑.
@@ -1206,6 +1206,31 @@ mandatory 프롬프트(원인 fix, per-attempt↑) + retry-on-None(K=2) 결합. 
 **caveat:** 합성 로그·grep-findable needle·부분점수·n=8. 추론은 인출 라인 대상(전체 245K 아님) — 그게 router 의 요점.
 
 **데이터:** `experiments/exp15_context_router/results/exp18_reposcale_gemma4_e4b.json` | **코드:** `run_v18_reposcale.py`
+
+---
+
+### Exp19: 실데이터 검증 — n100 journald → boxie e4b router 진단
+
+신규 가설 아님 — H15/H18(Context Router)의 **실데이터 검증** + Stage 7 v1 mock caddy(`is_fallback:true`)의 정직한 대체.
+
+| 항목 | 내용 |
+|------|------|
+| **누가/언제/어디서** | 진단 모델 gemma4:e4b @ **boxie**(외부 GPU 서버 RTX 5060Ti), 진단 대상 **n100**(내부 장기운영 서버) 실 journald. 2026-06-30 |
+| **무엇을** | n100 실 저널(7일, **34,528줄 / ~1.15M tok**)을 Windows 에서 SSH-pull → 로컬 Redis → boxie e4b 가 router+mandatory+retry 로 "반복 실패 서비스" 진단. n=5 |
+| **왜** | Exp18(합성 245K)을 진짜 운영 로그로. mock caddy 대체 — 소형 모델이 다른 박스의 대형 실 로그를 router 로 진단 가능한지 |
+| **어떻게** | `run_v19_n100_journald.py`. `ssh n100 'journalctl --since "7 days ago"'` pull. 공유 코드 불변 |
+
+**결과:** scores [0.5,0.5,1.0,0.5,1.0], mean **0.7**, ~24.5분(retry 2.2×).
+
+**핵심 발견:**
+1. **실 진단 5/5 정확** — 모든 답변이 **certbot** 지목(`certbot.service` 반복 Failed to start), 타임스탬프 포함, ans5 는 root cause("certificate renewal — challenges failed / rate-limited")까지. **stuffing 불가(1.15M tok), router 만 가능.**
+2. **0.7 = keyword-scorer artifact** — 채점이 literal "failed to start" 요구하나 모델이 "failing to renew"로 패러프레이즈 → 0.5 처리. 실 정확도는 5/5. H12/H13 의 scorer caveat 재현(의미 채점이면 ~100%).
+3. **mock 대체 완성** — Stage 7 v1 의 n100 caddy mock(`is_fallback:true`)을 진짜 n100 journald 로 대체. 소형(~4B) 모델 + router 로 **실 운영 장애 진단** 입증.
+4. **인프라 사실 (RTX 5060Ti, gemma4:e4b Q4_K_M)**: 생성 **~95 tok/s**, prefill **~1,620 tok/s**(Ollama 서버측 측정). → router 가 **prefill 비용을 로그 크기와 분리**: stuffing 이면 1.15M tok prefill ≈ ~12분/호출(+컨텍스트 초과), router 는 grep 결과만 prefill ≈ ~3초. Exp18 의 O(1) 를 tps 로 재확인.
+
+**caveat:** keyword 채점(의미 채점 아님), n=5, 단일 needle(certbot), retry 2.2× 시간.
+
+**데이터:** `experiments/exp15_context_router/results/exp19_n100_journald_gemma4_e4b.json` | **코드:** `run_v19_n100_journald.py`
 
 ---
 

@@ -4,7 +4,6 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- 실 n100 Caddy 로그 연동 (mock→실서버, 핸드오프 #3).
 - (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge.
 
 ## Recently Done — Stage 8 (2026-06-30)
@@ -15,6 +14,7 @@ Plan document index. Register new plans here.
 
 > ⚠ Stage 7 은 plan/verdict skill 워크플로를 우회해 수행됨 — plan 문서 없음. 아래는 소급 기록.
 
+- **Stage 7 Exp19: 실데이터 검증 (n100 journald → boxie e4b)** — 소형 e4b(@boxie GPU)가 n100 실 저널(7d, 34.5K줄/~1.15M tok)을 router+mandatory+retry 로 진단. **실 장애 5/5 정확**(certbot.service 반복 실패, ans5 root cause까지). mean 0.7(keyword artifact — "failing to renew"≠"failed to start", 실정확도 5/5). **mock caddy(`is_fallback`) 정직한 대체.** 인프라: 5060Ti gemma4:e4b gen~95/prefill~1620 tok/s → router 가 prefill 비용을 로그 크기서 분리(stuffing ~12분 vs router ~3초). 분석 §17. 2026-06-30.
 - **Stage 7 Exp18: repo-규모 추론 상한 (H18 ✅ size invariance)** — multihop3/multineedle × {50K,100K,200K tok} × n=8, router+retry, mandatory off. **size↑ 저하 전무**: multihop3 75→92→100%, multineedle 100% 전부. **~245K tok(컨텍스트 7.5배)에서도 92~100%**. 메커니즘 = router 가 인지 부하를 로그 크기와 분리(O(1), 모델은 grep 결과만 봄). 소형(~4B)+router 로 repo-규모 디버깅 입증. 터널 불안정으로 3회 분할 resume. 분석 §16. 2026-06-30.
 - **Stage 7 Exp17: 복잡도 상한 (H17 부분)** — 4 hard task(multihop2/3, multineedle, distractor) × {baseline, stack} × n=8. **전반 ✅**: e4b+router baseline 92%(multihop2 75/multihop3 92/집계 100/판별 100) — 진짜 복잡 디버깅 스케일. **후반 ❌**: mandatory+retry 스택 89%(−3pp) — Exp16b 의 +57pp 는 큰-로그 전사누락 전용이라 hard task 엔 무효. mandatory = failure-mode-specific. 분석 §14. 2026-06-30.
 - **Stage 7 Exp16c: mandatory + retry 결합 (H16c ✅ 채택)** — mandatory(per-attempt↑) + retry-on-None(K=2). e4b router 전 size **100% (30/30)**, 평균 시도 1.0~1.7. progression: retry-only ~60% → mandatory 83% → 결합 100%. **H15 Context Router = e4b 실용 완성** (Stage 7 arc 종결). caveat: n=10 합성, 참값 ~95~100%. 분석 §12. 2026-06-30.

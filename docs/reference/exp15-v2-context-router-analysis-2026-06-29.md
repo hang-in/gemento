@@ -192,7 +192,17 @@ e4b + router 가 trivial 1-needle 을 넘어 복잡 디버깅까지 가는지 + 
 
 **데이터:** `experiments/exp15_context_router/results/exp18_reposcale_gemma4_e4b.json`. **코드:** `run_v18_reposcale.py`.
 
-## 17. Stage 7 arc 종결 + 다음 후보
+## 17. Exp19 — 실데이터 검증: n100 journald → boxie e4b (2026-06-30)
+
+소형 gemma4:e4b(@boxie 외부 GPU)가 n100(내부 장기운영 서버)의 실 journald(7일, **34,528줄 / ~1.15M tok**)를 router+mandatory+retry 로 진단. n=5. Stage 7 v1 mock caddy 대체.
+
+**결과:** scores [0.5,0.5,1.0,0.5,1.0], mean 0.7, ~24.5분(retry 2.2×). **실 진단 5/5 정확** — 전부 `certbot.service` 반복 Failed to start 지목 + 타임스탬프, ans5 root cause(rate-limited renewal). 0.7 은 keyword artifact("failing to renew" ≠ literal "failed to start"). stuffing 불가, router 만 가능.
+
+**인프라 (RTX 5060Ti, gemma4:e4b Q4_K_M, Ollama 서버측):** gen **~95 tok/s**, prefill **~1,620 tok/s**. → stuffing 1.15M tok prefill ≈ ~12분/호출, router 는 grep 결과만 ≈ ~3초. Exp18 O(1) 를 tps 로 재확인.
+
+**데이터:** `experiments/exp15_context_router/results/exp19_n100_journald_gemma4_e4b.json`. **코드:** `run_v19_n100_journald.py`.
+
+## 18. Stage 7 arc 종결 + 다음 후보
 
 **Stage 7 종결**: Exp15 발견 → v2 조건부 채택(H15) → v3 capacity 분기(push/pull) → Exp16 retry 정체(H16) → Exp16b 원인규명(H16b, 전사 누락) → Exp16c 완성(H16c, ~100%) → Exp17 복잡도 상한(H17, 스케일 ✅ / mandatory 일반성 ❌).
 
