@@ -61,8 +61,8 @@ cd "D:/privateProject/gemento" && git diff docs/reference/researchNotebook.en.md
 # 3) 문서 메타 (type/status/updated_at)
 cd "D:/privateProject/gemento" && head -5 docs/reference/exp21-facet-ab-analysis-2026-06-30.md
 
-# 4) test_static (인벤토리 카운트)
-cd experiments && python -m pytest tests/test_static* -q
+# 4) test_static (인벤토리 카운트) — repo root 에서 unittest (pytest 미설치)
+python -m unittest experiments.tests.test_static -v 2>&1 | tail -3
 ```
 
 ## Risks

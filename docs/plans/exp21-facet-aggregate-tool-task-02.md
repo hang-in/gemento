@@ -64,11 +64,12 @@ def test_caller_optin_signature_default_none():
 # 1) syntax
 cd experiments && python -c "import ast; ast.parse(open('tests/test_facet_tool.py',encoding='utf-8').read()); print('test syntax OK')"
 
-# 2) facet 테스트 단독 (unittest)
-cd experiments && python -m unittest tests.test_facet_tool -v
+# 2) facet 테스트 단독 (unittest) — repo root 에서 실행
+python -m unittest experiments.tests.test_facet_tool -v
 
-# 3) 전체 회귀 — 기존 테스트가 facet 추가로 깨지지 않는지
-cd experiments && python -m unittest discover -s tests -q
+# 3) 전체 회귀 — repo root 에서 (experiments/ 를 cwd 로 두면 test_static 이
+#    'experiments' 패키지 import 실패 = 경로 아티팩트, 회귀 아님). 56 OK 기대.
+python -m unittest discover -s experiments/tests -t .
 ```
 
 ## Risks
