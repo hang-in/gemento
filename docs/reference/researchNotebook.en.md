@@ -1,10 +1,10 @@
 ---
 type: reference
 status: in_progress
-updated_at: 2026-06-29
+updated_at: 2026-06-30
 mirror_of: docs/reference/researchNotebook.md (Part 1 — Closed Findings)
 language: en
-note: 2026-06-30 v13 — Exp19 real-data validation (n100 journald 1.15M tok → boxie e4b router; correctly diagnosed real certbot failure 5/5; replaces the mock caddy; RTX 5060Ti tps gen~95/prefill~1620). v12 — Exp18 repo-scale (size invariance). H18 SUPPORTED (multihop3 75→92→100%, multineedle 100% at ~245K tok; router makes the model's reasoning load O(1) in log size). Stage 7 Context Router line complete. v11 — Exp17 hard tasks. H17 partial (scaling ✅ e4b+router reaches multi-hop/aggregation/distractor, baseline 92%; mandatory generality ❌ — it's a failure-mode-specific fix, −3pp on hard tasks). v10 — Exp16c mandatory+retry combined. H16c SUPPORTED (all sizes 100%, 30/30; H15 Context Router practical-complete on e4b). v9 — Exp16b mandatory-tool prompting. H16b SUPPORTED (per-attempt 27->83%, +57pp; failure was transcription-omission not tool-neglect — tool_rounds DROPPED). mandatory + retry ~= 99% path. v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
+note: 2026-06-30 v14 — Exp21 facet aggregate tool A/B (Stage 9). H21 CONDITIONALLY SUPPORTED (aggregation-specific): aggregate_context (untruncated full aggregation) is decisive on aggregation tasks (score 0.0→0.8 — grep_only is confidently-wrong 174.138.8.10 5/5 due to the 16KB cap; grep_facet correct 45.144.212.75 4/5), but no benefit on single-needle tasks (0.3→0.2, facet barely used). non-null rate is uninformative (both arms 1.0) → the real signal is accuracy. more structure != monotonically better (failure-mode-specific). H19/H20 absent = Exp19/Exp20 were validations, not new hypotheses. v13 — Exp19 real-data validation (n100 journald 1.15M tok → boxie e4b router; correctly diagnosed real certbot failure 5/5; replaces the mock caddy; RTX 5060Ti tps gen~95/prefill~1620). v12 — Exp18 repo-scale (size invariance). H18 SUPPORTED (multihop3 75→92→100%, multineedle 100% at ~245K tok; router makes the model's reasoning load O(1) in log size). Stage 7 Context Router line complete. v11 — Exp17 hard tasks. H17 partial (scaling ✅ e4b+router reaches multi-hop/aggregation/distractor, baseline 92%; mandatory generality ❌ — it's a failure-mode-specific fix, −3pp on hard tasks). v10 — Exp16c mandatory+retry combined. H16c SUPPORTED (all sizes 100%, 30/30; H15 Context Router practical-complete on e4b). v9 — Exp16b mandatory-tool prompting. H16b SUPPORTED (per-attempt 27->83%, +57pp; failure was transcription-omission not tool-neglect — tool_rounds DROPPED). mandatory + retry ~= 99% path. v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
 ---
 
 > **Conceptual framework canonical document**: [conceptFramework.md](./conceptFramework.md) — 4-axis externalization principles, terminology definitions, axis ↔ experiment mapping.
@@ -1286,6 +1286,25 @@ Not a new hypothesis — the productionization of H16b/c. The mandatory-tool blo
 - An auto (log-size) gate is deferred — current evidence gives no reliable signal. Plan: `docs/plans/mandatory-tool-opt-in.md`.
 
 This is an addendum (no table change; H1~H15 unchanged).
+
+---
+
+## Exp21 — Facet aggregate tool A/B: grep-only vs grep+facet (H21, 2026-06-30)
+
+A controlled A/B follow-up to the Exp20 megalog diagnosis. The question: does a deterministic full-aggregation tool — `aggregate_context(handle, pattern, group_by, top_n)`, which returns untruncated top-N counts by a captured field instead of a 16KB line dump — improve a small model's diagnostic accuracy? Setup: megalog (test9ng 30-day journal, ~29.3M tokens), gemma4:e4b @ boxie, two arms differing ONLY in facet-tool availability (caller opt-in injection; the global tool surface stays byte-identical), 2 tasks × n=5, max_cycles=8.
+
+Results:
+
+| arm | task | non_null_rate | mean_score | facet_calls |
+|---|---|---|---|---|
+| grep_only | A crash-loop | 0.4 | 0.3 | — |
+| grep_only | B aggregation | 1.0 | 0.0 | — |
+| grep_facet | A crash-loop | 0.2 | 0.2 | 3 |
+| grep_facet | B aggregation | 1.0 | 0.8 | 16 |
+
+**H21 verdict (Architect): Conditionally supported (aggregation-specific).** The facet tool is decisive on the aggregation task (task B: find the top brute-force source IP), lifting score from 0.0 to 0.8. The mechanism is sharp: grep_only is **confidently wrong 5/5** — every trial answers `174.138.8.10`, because `grep_context('Failed password')` truncates 5,093 matches to 16KB (the time-ordered first ~100 lines), so the model mistakes an IP that appears early-and-often in that window for the global maximum. The consistent identical wrong answer is a systematic artifact of the cap, not noise. grep_facet is correct 4/5 (`45.144.212.75`, the true top attacker with 286 attempts), because `aggregate_context` returns the full count with `truncated:false` (16 facet calls — the tool is adopted). On the single-needle task (A, gohttpserver crash-loop) the facet provides no benefit (0.3→0.2, barely used at 3 calls): a unit name is grep-findable and truncation never blocks the answer itself, and finalization there is stochastic for both arms (0.4/0.2). Two methodological notes: (1) the planned primary metric — non-null rate (finalization) — is **uninformative on task B** (both arms 1.0); the real signal is accuracy, because grep_only "finalizes but is wrong." Finalization ≠ correctness. (2) This re-frames the Exp20 diagnosis, which fixated on task A's None finalization: across n=5, task A finalization is stochastic and facet doesn't fix it; the facet's true value is task B accuracy, and the core failure mode is "16KB cap → confidently-wrong aggregation," not finalization. This adds a Tool-axis sub-distinction: deterministic computation (H7/H8 +) / agent-iterative retrieval (H13 −) / **facet aggregation (H21 +, aggregation-only)** — "more structure ≠ monotonically better," failure-mode-specific (isomorphic to Exp17's mandatory). Caveats: n=5, single model (e4b), single facet tool, 2 tasks; grep_facet task B trial 1 was wrong (facet not used that run) — providing a tool does not guarantee its use. H19/H20 are intentionally absent: Exp19 (n100 real-data validation) and Exp20 (megalog finalization diagnosis) were validations, not new hypotheses.
+
+The hypothesis table above (H1~H18) remains unchanged (Closed-append-only policy). H21's entry is a new addition only.
 
 ---
 

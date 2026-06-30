@@ -4,7 +4,11 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- [exp21-facet-aggregate-tool.md](exp21-facet-aggregate-tool.md) — **Stage 9 (Exp21)**: facet 집계 도구 A/B (grep-only vs grep+facet). Exp20 진단(megalog 0.0=high-volume+16KB캡→finalization 실패, router 정상) 후속. 단일 `aggregate_context` opt-in(글로벌 도구 불변) + caller 주입. megalog 2-task n=5 max_cycles=8. 1차 지표=non-null ans rate. **more structure ≠ monotonically better** — A/B 입증 후 채택. 4 subtask(A→B병렬→C). 사용자 결정: facet A/B 직행. Architect 위임(파라미터 default). 실행=에이전트 직접(boxie 원격). Sonnet 진행 프롬프트: `docs/prompts/2026-06-30/exp21FacetStart.md`
+- (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge + facet 도메인 다종화(`list_failed_units` 등, 집계 task 한정 — H21 후속).
+
+## Recently Done — Stage 9 (2026-06-30)
+
+- [exp21-facet-aggregate-tool.md](exp21-facet-aggregate-tool.md) — **Stage 9 (Exp21)**: facet 집계 도구 A/B (grep-only vs grep+facet, megalog ~29.3M tok, e4b, 2-task × n=5). **H21 ⚠ 조건부 채택 (aggregation-specific)** — `aggregate_context`(untruncated 전수 집계)가 집계 task 에서 결정적 (task B score **0.0→0.8**: grep_only 5/5 confidently-wrong `174.138.8.10`(16KB 캡 아티팩트) vs grep_facet 4/5 정답 `45.144.212.75`, facet 16 calls), 단일-needle 엔 무효 (0.3→0.2, 거의 미사용). non-null rate 무력(양 arm 1.0) → 신호는 accuracy. "more structure ≠ monotonically better" (failure-mode-specific). 4 subtask 완료, 회귀 게이트(글로벌 도구 불변) 통과. 커밋 task-01 `5202991`/02 `63d6c51`/03 `cdbcb6b`/결과 `6905ca5`. 분석 §18 / `docs/reference/exp21-facet-ab-analysis-2026-06-30.md`. 2026-06-30.
 
 ## Recently Done — Stage 8 (2026-06-30)
 
