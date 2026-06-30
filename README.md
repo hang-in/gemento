@@ -153,6 +153,8 @@ Caveat: the Exp10 comparison is on a 9-task benchmark. There is a condition wher
 | Exp03 | model validates its own answer | error detection 0/15 |
 | Exp035 | a separate Critic role validates | error detection 12/15, 80% |
 
+*Exp035 is an interstitial experiment between Exp03 and Exp04 (a cross-validation gate) — not the "35th" experiment. New experiments use letter suffixes instead (see `docs/reference/namingConventions.md` §5).*
+
 Interpretation: separating "the role that answers" from "the role that criticizes" changed the failure-recovery rate — even with the same model.
 
 ---

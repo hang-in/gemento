@@ -1,7 +1,7 @@
 ---
 type: reference
 status: done
-updated_at: 2026-04-30
+updated_at: 2026-06-30
 canonical: true
 ---
 
@@ -108,10 +108,11 @@ frontmatter / commit message: `H4 verdict ⚠ 미결` 형식.
 
 ## 5. Experiment 표기
 
-- **ExpNN** — zero-padded 두자리 (Exp00, Exp01, ..., Exp10)
-- **ExpNNx** — 변종 / 부분 실험 (Exp08b, Exp045)
-  - x = 영문 소문자 (a, b, ...) 또는 0.5 위치는 `045` (Exp045 = Exp04.5 의 줄임)
-- 새 실험: Exp11, Exp12, ... (순차)
+- **ExpNN** — zero-padded 두자리 (Exp00, Exp01, ..., Exp10). 새 실험은 순차 (Exp11, Exp12, ...).
+- **ExpNNx** — 변종 / 간이(interstitial) 실험. **x = 영문 소문자만** (a, b, c, ...).
+  - 예: `Exp05a`, `Exp05b`, `Exp08b`. Exp03 과 Exp04 사이의 간이 실험이면 `Exp03b`.
+  - **⚠ `0X5` half-notation 폐기 (deprecated, 2026-06-30)**: `Exp045`(= Exp04.5 의 줄임) 같은 표기는 `045` 가 **"45번째 실험"으로 오독**되므로 신규 사용 금지. 반드시 letter suffix 로 표기.
+  - **Legacy alias (rename 안 함 — §13.3)**: `Exp035` = Exp03–Exp04 사이 cross-validation gate, `Exp045` = Exp04 후속 Handoff Protocol. 둘 다 historical ID 로 보존되며 **`035`/`045` 는 35/45 번째 실험이 아니다**. 신규 문서·코드·디렉토리는 letter suffix 를 쓴다.
 
 ---
 
@@ -298,3 +299,4 @@ scope:
 ## 14. 변경 이력
 
 - 2026-04-30 v1: 초안. Stage 2C plan 작성 + 본 turn 의 (a)/(i) 혼재 + Stage 2A vs Group A 충돌 식별을 계기로 정리. 기존 plan / 문서의 retroactive 변경 의무 없음 — 점진 적용.
+- 2026-06-30 v2: §5 개정 — interstitial/변종 실험은 **letter suffix (Exp03b) 로 통일**, `0X5` half-notation (`Exp045`) **폐기** (`035`/`045` 가 35/45 번째로 오독되는 문제). 기존 `Exp035`/`Exp045` 는 §13.3 (retroactive 변경 0) 따라 historical alias 로 보존 — rename 하지 않음.

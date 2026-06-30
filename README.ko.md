@@ -163,6 +163,8 @@ Exp10 비교는 9-task benchmark 기준입니다. Gemini 2.5 Flash 1-call보다 
 | Exp03 | 모델이 자기 답을 검증 | 오류 감지 0/15 |
 | Exp035 | 별도 Critic 역할이 검증 | 오류 감지 12/15, 80% |
 
+*Exp035는 Exp03과 Exp04 사이의 간이 실험(cross-validation gate)이며 "35번째"가 아닙니다. 신규 실험은 letter suffix를 씁니다 (`docs/reference/namingConventions.md` §5).*
+
 해석:  
 같은 모델이라도 “답하는 역할”과 “비판하는 역할”을 분리하면 실패 회수율이 달라졌습니다.
 
