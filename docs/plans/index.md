@@ -4,8 +4,8 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- **mandatory 프롬프트 라우터 기본값 승격** — Exp16b/c 에서 검증된 mandatory rules 를 공유 `system_prompt.py`/orchestrator 라우터 경로에 편입. 회귀 게이트 필요, 별도 plan (gemento-plan-create).
-- Exp17 — multi-hop/multi-needle/repo-규모 로그로 e4b+router 진짜 상한 측정 ("얼마나 큰 일").
+- **mandatory 프롬프트 = 적응적 게이트** (Exp17 반영) — 무조건 기본값 승격이 아니라, 입력이 크거나 전사-누락 실패 모드일 때만 mandatory 를 적용하는 게이트 설계. (Exp17: hard task 에선 mandatory 가 −3pp, 범용 부스터 아님.) 별도 plan.
+- 더 큰 hard task (repo-규모 50K+ multi-hop) 로 e4b 추론 상한 추가 탐색.
 - 실 n100 Caddy 로그 연동 (mock→실서버, 핸드오프 #3).
 - (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge.
 
@@ -13,6 +13,7 @@ Plan document index. Register new plans here.
 
 > ⚠ Stage 7 은 plan/verdict skill 워크플로를 우회해 수행됨 — plan 문서 없음. 아래는 소급 기록.
 
+- **Stage 7 Exp17: 복잡도 상한 (H17 부분)** — 4 hard task(multihop2/3, multineedle, distractor) × {baseline, stack} × n=8. **전반 ✅**: e4b+router baseline 92%(multihop2 75/multihop3 92/집계 100/판별 100) — 진짜 복잡 디버깅 스케일. **후반 ❌**: mandatory+retry 스택 89%(−3pp) — Exp16b 의 +57pp 는 큰-로그 전사누락 전용이라 hard task 엔 무효. mandatory = failure-mode-specific. 분석 §14. 2026-06-30.
 - **Stage 7 Exp16c: mandatory + retry 결합 (H16c ✅ 채택)** — mandatory(per-attempt↑) + retry-on-None(K=2). e4b router 전 size **100% (30/30)**, 평균 시도 1.0~1.7. progression: retry-only ~60% → mandatory 83% → 결합 100%. **H15 Context Router = e4b 실용 완성** (Stage 7 arc 종결). caveat: n=10 합성, 참값 ~95~100%. 분석 §12. 2026-06-30.
 - **Stage 7 Exp16b: mandatory-tool 프롬프트 (H16b ✅ 채택)** — 라우터 prompt 에 mandatory-tool 지시(특히 "매치 라인 그대로 전사"). e4b router per-attempt **27%→83% (+57pp)**, 전 size +50~70pp. **핵심: tool_rounds 오히려↓** → baseline 실패는 tool-neglect 아닌 전사 누락. retry(증상)가 아닌 per-attempt(원인)가 레버. mandatory+retry ≈ 99% 경로. 분석 §10. 2026-06-30.
 - **Stage 7 Exp16: Orchestrator 출력 안정화 (H16 ⚠ 부분 채택)** — `final_answer=None` retry-on-None (e4b router, size{12K,25K,50K} × baseline vs stabilized≤3시도 × n=10). retry +30~60pp lift(12k 30→60, 25k 20→50, 50k 10→70) 하나 **~90% 미달, 50~70% 정체** (평균 2.3~2.7 시도, ~2.5× 비용). 근본 = 큰 로그 per-attempt 성공률 ~10~30%. 진짜 레버 = per-attempt 신뢰도(→Exp16b). 분석: `exp15-v2-context-router-analysis-2026-06-29.md` §8. 2026-06-29.

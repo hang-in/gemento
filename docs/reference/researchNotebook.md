@@ -3,7 +3,7 @@ type: reference
 status: in_progress
 updated_at: 2026-06-29
 parts: [closed, active]
-note: 2026-06-30 v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size 100% 30/30; H15 Context Router e4b 실용 완성). v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
+note: 2026-06-30 v10 — Exp17 hard tasks. H17 부분 (전반 ✅ e4b+router 가 multi-hop/집계/distractor 까지 스케일 baseline 92%; 후반 ❌ mandatory 는 failure-mode-specific 처방, hard task 선 −3pp). v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size 100% 30/30; H15 Context Router e4b 실용 완성). v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
 ---
 
 > **개념 프레임 canonical 문서**: [conceptFramework.md](./conceptFramework.md) — 4축 외부화 원리, 용어 정의, 축 ↔ 실험 매핑.
@@ -61,6 +61,7 @@ note: 2026-06-30 v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size
 | **H16** | **[Orchestrator 외부화 — 출력 안정화]** `final_answer=None` 시 체인을 재실행(retry-on-None)하는 결정론적 안정화 층이 e4b router 의 큰 로그 실효 정답률을 ~90%+ 로 끌어올린다 | ⚠ **부분 채택** — 2026-06-29 Exp16 (e4b router, size{12K,25K,50K} × baseline vs stabilized≤3시도 × n=10). retry 가 +30~60pp lift (12k 30→60, 25k 20→50, 50k 10→70) 하나 **~90% 미달, 50~70% 정체** (평균 2.3~2.7 시도, cap 도달 잦음). 원인 = 큰 로그에서 **per-attempt 성공률 자체가 낮음(~10~30%)** → 재시도만으로 부족. 비용 ~2.5× call. 진짜 레버 = per-attempt 신뢰도(Exp16b). run-to-run 변동 큼(baseline soft). 상세: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §8 | Exp16 |
 | **H16b** | **[Orchestrator 외부화 — mandatory-tool 프롬프트]** 라우터 task prompt 에 mandatory-tool 지시(반드시 grep 먼저 / 조기 단정 금지 / 매치 라인 3요소 그대로 전사)를 주면 e4b router 의 per-attempt 성공률이 오른다 | **✅ 채택** — 2026-06-30 Exp16b (e4b router, size{12K,25K,50K} × baseline vs mandatory × n=10, 1시도). per-attempt **27%→83% (+57pp)**, 전 size +50~70pp 일관. **핵심: mandatory 에서 tool_rounds 가 오히려 감소**(5.9→3.3 등) → baseline 실패는 tool-neglect 아닌 **전사/결론 누락**(grep 반복하며 final_answer 미전사). 규칙4("그대로 전사")가 레버. per-attempt 83% + Exp16 retry(K=2) 결합 시 기대 ~99%. (n=10 서술적, 대효과 일관.) 상세: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §10 | Exp16b |
 | **H16c** | **[Orchestrator 외부화 — mandatory + retry 결합]** mandatory 프롬프트(per-attempt↑) + retry-on-None(K=2) 결합이 e4b router 의 큰 로그 실효 정답률을 ~99%+ 로 만든다 | **✅ 채택** — 2026-06-30 Exp16c (e4b router, size{12K,25K,50K} × mandatory+retry × n=10). **전 size 100% (30/30)**, 평균 시도 1.0~1.7. progression: retry-only ~60%(Exp16) → mandatory-only 83%(Exp16b) → **결합 100%**. (n=10 합성·단일 needle, 참값 ~95~100% 로 읽는 게 안전; 50k 의 1.0시도/100% 는 표본 쏠림 있음.) **H15 Context Router = e4b 에서 실용 완성** (큰 로그·컨텍스트 초과 디버깅 ~안정). 상세: §12 | Exp16c |
+| **H17** | **[복잡도 상한 + mandatory 일반성]** e4b + router 가 trivial 1-needle 을 넘어 multi-hop/집계/distractor 까지 스케일하고, mandatory+retry 스택이 거기서도 일반적으로 이득을 준다 | **부분 — 전반 ✅ / 후반 ❌** — 2026-06-30 Exp17 (e4b router, 4 hard task × {baseline, stack} × n=8, ~23K tok). **전반(스케일) ✅**: baseline 만으로 multihop2 75% / multihop3 92% / multineedle 100% / distractor 100% (평균 92%) — 진짜 복잡 디버깅 처리. **후반(mandatory 일반성) ❌**: stack 평균 89% (−3pp, neutral~약간 음수). mandatory 는 **특정 실패 모드(큰 로그 전사 누락, Exp16b) 전용 처방**이지 범용 부스터 아님 — baseline 이 이미 높으면 noise. → "router 기본값 승격" 은 무조건이 아니라 **적응적 적용**. (n=8 합성·부분점수.) 상세: §14 | Exp17 |
 
 #### 축 ↔ 실험 매트릭스
 
@@ -88,6 +89,7 @@ note: 2026-06-30 v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size
 | Exp16 (Output Stabilization) | — | — | — | ✅ (출력 안정화 retry — H16 부분 채택) |
 | Exp16b (Mandatory-tool Prompt) | — | ▶ (grep/read 도구) | — | ✅ (mandatory 프롬프트 — H16b 채택) |
 | Exp16c (Mandatory + Retry) | — | ▶ (grep/read 도구) | — | ✅ (결합 ~100% — H16c 채택) |
+| Exp17 (Hard Tasks) | — | ▶ (grep/read 도구) | — | ✅ 스케일 / mandatory 일반성 ❌ (H17 부분) |
 
 > 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조. Context 외부화(H15)는 4축을 넘는 5번째 축 후보 — [conceptFramework.md § 8](./conceptFramework.md) 참조.
 
@@ -1156,6 +1158,29 @@ mandatory 프롬프트(원인 fix, per-attempt↑) + retry-on-None(K=2) 결합. 
 **의의:** **H15 Context Router 가 e4b 에서 실용 완성** — mandatory 프롬프트 + retry 로 큰 로그(컨텍스트 초과 포함) 디버깅을 ~안정적으로 처리. Stage 7 핵심 arc 종결(Exp15 발견 → v2 조건부 채택 → v3 capacity 분기 → Exp16 retry 정체 → Exp16b 원인규명 → Exp16c 완성).
 
 **데이터:** `experiments/exp15_context_router/results/exp16c_combined_gemma4_e4b.json` | **코드:** `run_v16c_combined.py`
+
+---
+
+### Exp17: 복잡도 상한 (hard tasks, H17)
+
+| 항목 | 내용 |
+|------|------|
+| **누가/언제/어디서** | gemma4:e4b, 2026-06-30, 지인 서버 RTX 5060 Ti (SSH 터널) |
+| **무엇을** | e4b + router 가 trivial 1-needle 을 넘어 복잡 디버깅까지 가는지 + mandatory+retry 스택이 거기서도 이득인지. 4 hard task(multihop2/multihop3/multineedle/distractor, ~23K tok) × {baseline, stack} × n=8, num_ctx=32768. 부분점수 채점 |
+| **왜** | 지금까지 needle 은 한 줄에 3요소가 다 있어 grep 한 방이면 끝. 실제 디버깅(2-hop 상관, 3-hop 사슬, 다중 집계, 오답 판별)에서 e4b 의 *추론* 한계 측정 |
+| **어떻게** | 신규 4 task 생성/채점. stack = mandatory 프롬프트 + retry-on-None(K=2). 공유 코드 불변 |
+
+**결과:** baseline → stack — multihop2 75→71%, multihop3 92→83%, multineedle 100→100%, distractor 100→100%. **평균 92→89% (−3pp).**
+
+**핵심 발견:**
+1. **전반(스케일) ✅** — baseline 만으로 평균 92%. e4b+router 가 **2-hop 상관·3-hop 인과 사슬·다중 발견 집계·오답 유인 판별**까지 처리. "똑똑한 소형 모델이 외재화로 얼마나 큰 일?"의 긍정 근거.
+2. **후반(mandatory 일반성) ❌** — stack 이 hard task 에선 neutral~약간 음수(−3pp). Exp16b 에서 +57pp 살리던 스택이 여기선 무효.
+3. **이유** — Exp16b/c 의 lift 는 **큰 로그 1-needle 의 전사 누락** 실패 모드 전용 처방이었음. Exp17 은 로그가 작고(~23k) baseline 이 이미 높아(추론 완성도 한계, 0.67 = 2/3 키워드) mandatory 의 "여러 번 grep"이 noise 만 더함(stack tr 3.8-4.6 > base 1.5-3.5인데 정확도 안 오름).
+4. **함의** — mandatory = 범용 부스터 아닌 **failure-mode-specific 처방**. "router 기본값 승격"은 무조건이 아니라 **입력 크기/실패 모드에 따른 적응적 적용**. 제멘토 주장 *"more structure is not monotonically better"* 의 또 다른 사례.
+
+**caveat:** n=8(−3pp 노이즈 범위), 합성·단일 크기(~23k), 부분점수.
+
+**데이터:** `experiments/exp15_context_router/results/exp17_hardtasks_gemma4_e4b.json` | **코드:** `run_v17_hardtasks.py`
 
 ---
 

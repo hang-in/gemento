@@ -1,0 +1,143 @@
+{
+  "experiment": "exp17_hard_tasks",
+  "model": "gemma4:e4b",
+  "num_ctx": 32768,
+  "n_trials": 8,
+  "max_retries": 2,
+  "n_lines": 1800,
+  "results": {
+    "multihop2": {
+      "approx_tokens": 30207,
+      "baseline": {
+        "scores": [
+          0.6666666666666666,
+          0.6666666666666666,
+          0.6666666666666666,
+          1.0,
+          0.6666666666666666,
+          0.6666666666666666,
+          1.0,
+          0.6666666666666666
+        ],
+        "mean_score": 0.75,
+        "mean_attempts": 1,
+        "mean_tool_rounds": 1.5
+      },
+      "stack": {
+        "scores": [
+          1.0,
+          1.0,
+          0.6666666666666666,
+          1.0,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.0
+        ],
+        "mean_score": 0.708,
+        "mean_attempts": 2.75,
+        "mean_tool_rounds": 4.6
+      }
+    },
+    "multihop3": {
+      "approx_tokens": 30217,
+      "baseline": {
+        "scores": [
+          0.6666666666666666,
+          1.0,
+          0.6666666666666666,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 0.917,
+        "mean_attempts": 1,
+        "mean_tool_rounds": 2.6
+      },
+      "stack": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.6666666666666666
+        ],
+        "mean_score": 0.833,
+        "mean_attempts": 2.75,
+        "mean_tool_rounds": 3.8
+      }
+    },
+    "multineedle": {
+      "approx_tokens": 30214,
+      "baseline": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 1.0,
+        "mean_attempts": 1,
+        "mean_tool_rounds": 2.9
+      },
+      "stack": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 1.0,
+        "mean_attempts": 2,
+        "mean_tool_rounds": 4.4
+      }
+    },
+    "distractor": {
+      "approx_tokens": 30230,
+      "baseline": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 1.0,
+        "mean_attempts": 1,
+        "mean_tool_rounds": 3.5
+      },
+      "stack": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 1.0,
+        "mean_attempts": 1.12,
+        "mean_tool_rounds": 3.9
+      }
+    }
+  },
+  "total_elapsed_sec": 9517.1
+}

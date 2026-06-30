@@ -218,6 +218,7 @@ Exp11에서는 Gemini 2.5 Flash를 Judge로 넣었지만, 모두 Gemma로 구성
 | H13 | Search Tool | 미결/실효 기각 | agent-active retrieval은 multi-hop에서 부족 |
 | H15 | Context Router | 조건부 | 큰 로그에서 유효, 작은 로그에서는 overhead |
 | H16b/c | mandatory prompt + retry | 채택 | 큰 로그 router 조건에서 출력 안정화 |
+| H17 | 복잡도 상한 | 부분 | e4b+router가 multi-hop/집계/판별까지 스케일(baseline ~92%); 단 mandatory 스택은 특정 실패 모드 전용이라 hard task에선 −3pp |
 
 상세 수치와 분석은 `docs/reference/` 아래의 각 실험 보고서에 있습니다.
 

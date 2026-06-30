@@ -4,7 +4,7 @@ status: in_progress
 updated_at: 2026-06-29
 mirror_of: docs/reference/researchNotebook.md (Part 1 — Closed Findings)
 language: en
-note: 2026-06-30 v10 — Exp16c mandatory+retry combined. H16c SUPPORTED (all sizes 100%, 30/30; H15 Context Router practical-complete on e4b). v9 — Exp16b mandatory-tool prompting. H16b SUPPORTED (per-attempt 27->83%, +57pp; failure was transcription-omission not tool-neglect — tool_rounds DROPPED). mandatory + retry ~= 99% path. v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
+note: 2026-06-30 v11 — Exp17 hard tasks. H17 partial (scaling ✅ e4b+router reaches multi-hop/aggregation/distractor, baseline 92%; mandatory generality ❌ — it's a failure-mode-specific fix, −3pp on hard tasks). v10 — Exp16c mandatory+retry combined. H16c SUPPORTED (all sizes 100%, 30/30; H15 Context Router practical-complete on e4b). v9 — Exp16b mandatory-tool prompting. H16b SUPPORTED (per-attempt 27->83%, +57pp; failure was transcription-omission not tool-neglect — tool_rounds DROPPED). mandatory + retry ~= 99% path. v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
 ---
 
 > **Conceptual framework canonical document**: [conceptFramework.md](./conceptFramework.md) — 4-axis externalization principles, terminology definitions, axis ↔ experiment mapping.
@@ -1231,6 +1231,20 @@ Results: **all sizes 100% (30/30 trials)**, mean attempts 12K 1.7 / 25K 1.3 / 50
 Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §12. Results: `experiments/exp15_context_router/results/exp16c_combined_gemma4_e4b.json`.
 
 This is an addendum (no table change; H1~H15 unchanged, H16/H16b/H16c documented in append-only sections).
+
+---
+
+## Exp17 — Complexity ceiling on hard tasks (H17, 2026-06-30)
+
+Exp17 asked two things: (a) does e4b + router scale beyond the trivial 1-needle case to real debugging, and (b) does the mandatory+retry stack generalize there? Four hard tasks (multihop2 / multihop3 / multineedle / distractor, ~23K tok) × {baseline, stack} × n=8, partial scoring.
+
+Results (baseline → stack): multihop2 75→71%, multihop3 92→83%, multineedle 100→100%, distractor 100→100%. **Mean 92% → 89% (−3pp).**
+
+**H17 verdict (Architect): partial — scaling ✅, mandatory-generality ❌.** (a) **The framework scales**: baseline alone reaches 92% mean across 2-hop correlation, 3-hop causal chains, multi-finding aggregation, and distractor discrimination — a ~4B model with the router does genuinely multi-step debugging. (b) **But the mandatory+retry stack does not help here** (neutral to slightly negative). The +57pp lift in Exp16b/c was specific to the *large-log transcription-omission* failure mode; here the logs are smaller (~23K) and baseline is already high, so the residual failures are reasoning-completeness limits (2/3 keywords), not transcription — and the mandatory "grep multiple times" rule only adds noise (stack tool_rounds 3.8–4.6 > baseline 1.5–3.5, no accuracy gain). Implication: the mandatory prompt is a **failure-mode-specific remedy**, not a general booster; promoting it to a router default should be *adaptive* (by input size / failure mode), not unconditional — another instance of the project's "more structure is not monotonically better." Caveat: n=8 (the −3pp is within noise), synthetic, single ~23K size, partial keyword scoring.
+
+Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §14. Results: `experiments/exp15_context_router/results/exp17_hardtasks_gemma4_e4b.json`.
+
+This is an addendum (no table change; H1~H15 unchanged, H16/H16b/H16c/H17 documented in append-only sections).
 
 ---
 

@@ -163,12 +163,28 @@ mandatory(per-attempt↑) + retry-on-None(K=2) 결합. gemma4:e4b router, size{1
 
 **데이터:** `experiments/exp15_context_router/results/exp16c_combined_gemma4_e4b.json`. **코드:** `run_v16c_combined.py`.
 
-## 13. Stage 7 arc 종결 + 다음 후보
+## 14. Exp17 — 복잡도 상한 (hard tasks, H17, 2026-06-30)
 
-**Stage 7 종결**: Exp15 발견 → v2 조건부 채택(H15) → v3 capacity 분기(push/pull) → Exp16 retry 정체(H16) → Exp16b 원인규명(H16b, 전사 누락) → Exp16c 완성(H16c, ~100%).
+e4b + router 가 trivial 1-needle 을 넘어 복잡 디버깅까지 가는지 + mandatory+retry 가 거기서도 이득인지. 4 hard task(multihop2/multihop3/multineedle/distractor, ~23K tok) × {baseline, stack(mandatory+retry K=2)} × n=8, 부분점수.
+
+| task | baseline | stack | lift |
+|---|---|---|---|
+| multihop2 (2-hop 상관) | 75% | 71% | −4pp |
+| multihop3 (3-hop 사슬) | 92% | 83% | −8pp |
+| multineedle (3개 집계) | 100% | 100% | 0 |
+| distractor (오답 판별) | 100% | 100% | 0 |
+| **평균** | **92%** | **89%** | **−3pp** |
+
+**H17 부분 — 전반 ✅ / 후반 ❌.** (전반) e4b+router 가 baseline 만으로 92% — 2-hop·3-hop·집계·판별까지 스케일. (후반) mandatory+retry 스택은 neutral~음수 — Exp16b 의 +57pp 는 **큰 로그 전사 누락** 전용 처방이었고, hard task 는 로그가 작고 baseline 이 이미 높아(추론 완성도 한계) mandatory 가 noise(stack tr 3.8-4.6 > base 1.5-3.5, 정확도 무변). → mandatory = failure-mode-specific, "router 기본값 승격"은 **적응적**이어야. caveat: n=8(노이즈 범위), 합성·단일 크기.
+
+**데이터:** `experiments/exp15_context_router/results/exp17_hardtasks_gemma4_e4b.json`. **코드:** `run_v17_hardtasks.py`.
+
+## 15. Stage 7 arc 종결 + 다음 후보
+
+**Stage 7 종결**: Exp15 발견 → v2 조건부 채택(H15) → v3 capacity 분기(push/pull) → Exp16 retry 정체(H16) → Exp16b 원인규명(H16b, 전사 누락) → Exp16c 완성(H16c, ~100%) → Exp17 복잡도 상한(H17, 스케일 ✅ / mandatory 일반성 ❌).
 
 다음 후보:
-- **mandatory 프롬프트 라우터 기본값 승격** — 공유 `system_prompt.py`(또는 orchestrator 라우터 경로)에 mandatory rules 편입. 별도 plan (회귀 게이트 필요).
-- Exp17 — multi-hop/multi-needle/repo-규모 로그로 e4b+router 진짜 상한 측정.
+- **mandatory 프롬프트 = 적응적 적용** (Exp17 반영) — 무조건 기본값 승격이 아니라 입력 크기/실패 모드(큰 로그 전사 누락)일 때만 적용하는 게이트. 별도 plan.
 - 실 Caddy/프로덕션 로그 연동(Active, mock→실서버).
+- 더 큰 hard task (repo-규모 50K+ multi-hop) 로 e4b 추론 상한 추가 탐색.
 - (보류) e2b 전용 push-기반 외재화 + LLM-as-judge 보조 채점.
