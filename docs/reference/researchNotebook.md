@@ -1040,7 +1040,7 @@ Small Paradox 상세:
 **v1 산출물:**
 - `experiments/run_tuna_real_test.py` (tunaCtx 연동 러너)
 - `experiments/run_caddy_n100_analysis.py` (SSH n100 Caddy 분석기 — mock fallback)
-- `experiments/results/{tuna_ctx_real_test,caddy_n100_analysis}_result.json`
+- `experiments/exp15_context_router/results/{tuna_ctx_real_test,caddy_n100_analysis}_result.json` (Stage 8 에서 top-level results/ → exp15 하위로 이동)
 - `docs/reference/stage7-context-router-analysis-2026-06-28.md` (보고서, 검증범위 보정본)
 
 ---

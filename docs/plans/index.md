@@ -5,7 +5,6 @@ Plan document index. Register new plans here.
 ## Active
 
 - 더 큰 hard task (repo-규모 50K+ multi-hop) 로 e4b 추론 상한 추가 탐색.
-- **[test 위생] `TestResultFilesByExperiment` 갱신** — Stage 7 이 result JSON 다수 추가 + tuna/caddy 를 top-level `experiments/results/` 에 기록해 3개 인벤토리 테스트(`test_static`) FAIL. 기대값 갱신 또는 tuna/caddy 출력 경로를 exp 하위로 이동. (Stage 8 회귀 분석 중 발견 — mandatory opt-in 무관.)
 - 실 n100 Caddy 로그 연동 (mock→실서버, 핸드오프 #3).
 - (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge.
 

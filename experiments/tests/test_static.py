@@ -101,7 +101,7 @@ class TestResultFilesByExperiment(unittest.TestCase):
     """task-02 후 — 결과 파일이 실험별 results/ 디렉토리에 정확히 배치됨"""
 
     EXPECTED = {
-        "exp00_baseline": {"prefix": "exp00_baseline_", "json_count": 3, "extras": []},
+        "exp00_baseline": {"prefix": "exp00_baseline_", "json_count": 4, "extras": []},
         "exp01_assertion_cap": {"prefix": "exp01_assertion_cap", "json_count": 7, "extras": []},
         "exp02_multiloop": {"prefix": "exp02_multiloop_", "json_count": 2,
                             "extras": ["exp02_report.md"]},
@@ -110,14 +110,14 @@ class TestResultFilesByExperiment(unittest.TestCase):
         "exp04_abc_pipeline": {"prefix": "exp04_abc_pipeline_", "json_count": 1, "extras": []},
         "exp045_handoff_protocol": {"prefix": "exp045_handoff_protocol_", "json_count": 3, "extras": []},
         "exp05a_prompt_enhance": {"prefix": "exp05a_prompt_enhance_", "json_count": 1, "extras": []},
-        "exp06_solo_budget": {"prefix": "exp06_solo_budget_", "json_count": 1, "extras": []},
+        "exp06_solo_budget": {"prefix": "exp06_", "json_count": 3, "extras": []},  # solo_budget + reconciliation (Stage 2C)
         "exp07_loop_saturation": {"prefix": "exp07_loop_saturation_", "json_count": 1,
                                   "extras": ["exp07_report.md"]},
         "exp08_tool_use": {"prefix": "exp08_tool_use_", "json_count": 1,
                            "extras": ["exp08_report.md"]},
         "exp08b_tool_use_refined": {"prefix": "exp08b_tool_use_refined_", "json_count": 1,
                                     "extras": ["exp08b_report.md"]},
-        "exp09_longctx": {"prefix": "exp09_longctx_", "json_count": 1,
+        "exp09_longctx": {"prefix": "exp09_", "json_count": 4,  # longctx + 5trial + stats×2 (Phase 1 follow-up)
                           "extras": ["exp09_report.md"]},
     }
 
@@ -144,15 +144,16 @@ class TestResultFilesByExperiment(unittest.TestCase):
                          "exp01_run.log should be moved to exp01_assertion_cap/")
 
     def test_total_result_count_preserved(self):
-        # 24 JSON + 5 report.md = 29, + 1 log = 30
+        # 30 JSON + 5 report.md = 35, + 1 log = 36
+        # (2026-04 v2/v3 rescoring 이 exp00 +1 / exp06 +2 reconciliation / exp09 +3 stats·5trial 추가)
         all_results = []
         for exp in self.EXPECTED.keys():
             all_results.extend(list((EXPERIMENTS_DIR / exp / "results").glob("*")))
         log = EXPERIMENTS_DIR / "exp01_assertion_cap" / "exp01_run.log"
         if log.exists():
             all_results.append(log)
-        self.assertEqual(len(all_results), 30,
-                         f"expected 30 result files preserved, got {len(all_results)}")
+        self.assertEqual(len(all_results), 36,
+                         f"expected 36 result files preserved, got {len(all_results)}")
 
 
 class TestPerExperimentImports(unittest.TestCase):

@@ -21,7 +21,7 @@ from orchestrator import run_abc_chain
 from config import MODEL_NAME
 
 _DIR = Path(__file__).resolve().parent
-RESULTS_DIR = _DIR / "results"
+RESULTS_DIR = _DIR / "exp15_context_router" / "results"   # Stage 7 Context Router 검증물 (top-level results/ 금지 — test_static)
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 TUNA_DIR = Path("d:/privateProject/tunaCtx")
