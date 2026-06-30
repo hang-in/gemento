@@ -4,7 +4,7 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- **mandatory 프롬프트 = 적응적 게이트** (Exp17 반영) — 무조건 기본값 승격이 아니라, 입력이 크거나 전사-누락 실패 모드일 때만 mandatory 를 적용하는 게이트 설계. (Exp17: hard task 에선 mandatory 가 −3pp, 범용 부스터 아님.) 별도 plan.
+- [mandatory-tool-opt-in.md](mandatory-tool-opt-in.md) — **Stage 8**: mandatory-tool 프롬프트를 `run_abc_chain` opt-in 파라미터(`mandatory_tool_prompt=False`)로 정식 편입 (안 A — caller-decides). 자동 게이트 아님(증거 부족). Exp16b/c 검증 4규칙을 `system_prompt.MANDATORY_TOOL_RULES` source-of-truth 화. 기본 False → 거동 불변(회귀 게이트). 3 subtask (코드→회귀→문서). 사용자 결정: 안 A 확정. Architect 직접 진행 또는 Sonnet 위임. 검증 실행은 cloud 터널.
 - 더 큰 hard task (repo-규모 50K+ multi-hop) 로 e4b 추론 상한 추가 탐색.
 - 실 n100 Caddy 로그 연동 (mock→실서버, 핸드오프 #3).
 - (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge.
