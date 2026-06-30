@@ -21,7 +21,7 @@ depends_on: [01]
 facet 도구는 opt-in 이어야 한다(parent 결정 2). 본 테스트가 ① 집계 정확성, ② 글로벌 `CONTEXT_TOOL_*` byte-identical, ③ caller default 경로 동치를 회귀 게이트로 고정한다. 기존 테스트(`test_static` 등)와 동일한 위치/스타일(`experiments/tests/`).
 
 ### Step 1 — fixture 기반 집계 정확성 테스트
-`pytest` 스타일. Redis 에 알려진 분포를 SET 하고 검증:
+`unittest.TestCase` 스타일(repo 표준 `test_static.py` 와 동일). Redis 에 알려진 분포를 SET 하고 검증:
 - top IP: `1.1.1.1`×3 > `2.2.2.2`×2 > `3.3.3.3`×1 → `aggregate_context(..., group_by="from (\\d+\\.\\d+\\.\\d+\\.\\d+)")` 의 `top[0]=={'value':'1.1.1.1','count':3}`, `total_matches==6`, `unique_groups==3`.
 - systemd unit: `foo.service` fail×4 vs `bar.service`×1 → group_by `"(\\S+\\.service)"` top[0] 검증.
 - group_by 생략: `total_matches` + `sample`(≤5) 반환, `truncated==False`.
@@ -56,7 +56,7 @@ def test_caller_optin_signature_default_none():
 ## Dependencies
 
 - task-01 완료(facet 함수/스키마 + caller 파라미터 존재).
-- 외부: `pytest`, `redis`(로컬 6379 가동 — 기존 테스트와 동일 전제).
+- 외부: `redis`(로컬 6379 가동 — 기존 테스트와 동일 전제). **테스트는 `unittest.TestCase` 스타일**(repo 표준 = `test_static.py`; pytest 미설치). 실행은 `python -m unittest`.
 
 ## Verification
 
@@ -64,11 +64,11 @@ def test_caller_optin_signature_default_none():
 # 1) syntax
 cd experiments && python -c "import ast; ast.parse(open('tests/test_facet_tool.py',encoding='utf-8').read()); print('test syntax OK')"
 
-# 2) facet 테스트 단독
-cd experiments && python -m pytest tests/test_facet_tool.py -v
+# 2) facet 테스트 단독 (unittest)
+cd experiments && python -m unittest tests.test_facet_tool -v
 
 # 3) 전체 회귀 — 기존 테스트가 facet 추가로 깨지지 않는지
-cd experiments && python -m pytest tests/ -q
+cd experiments && python -m unittest discover -s tests -q
 ```
 
 ## Risks
