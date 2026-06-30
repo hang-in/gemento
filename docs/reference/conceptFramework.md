@@ -165,6 +165,7 @@ Evidence Tool은 `raw_key="cycle_3.tool_calls[0]"`을 resolve하여 원본 tool_
 - "Orchestrator를 완전히 LLM화할 수 있는가"라는 질문은 **틀렸다**. 두 종류의 판단이 섞여 있기 때문.
 - Python 안전장치는 **남겨야 한다** — 모델이 무한 루프·malformed output에 빠질 때 개입.
 - 의미론적 진행 결정은 **Judge Role에 완전 위임 가능** — Exp04가 입증.
+- **출력 안정화도 Python Orchestrator 영역** (Stage 8): `run_abc_chain(mandatory_tool_prompt=True)` opt-in 이 검증된 mandatory-tool 규칙(grep 먼저 / 조기 단정 금지 / 매치 라인 그대로 전사)을 prompt 에 주입해 "찾고도 답으로 커밋 못 함" 실패를 잡는다 (H16b: per-attempt 27→83%). 단 **failure-mode-specific** — 큰 로그 1-needle retrieval 에서만 유효, 추론 중심 task 엔 무효(Exp17 −3pp)라 자동 적용이 아닌 caller-decides opt-in (기본 off). 자동 게이트는 증거 부족으로 보류.
 
 ---
 

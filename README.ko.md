@@ -358,6 +358,8 @@ Exp14처럼 agent가 충분히 반복 호출하지 못하면 오히려 나빠질
 현재 실험 기준으로는 pre-stage Extractor가 post-stage Reducer보다 안전한 방향으로 관찰됐습니다.  
 다만 이 역시 확정 결론은 아니며, 모델·태스크별 재현이 필요합니다.
 
+큰 로그 retrieval에는 `run_abc_chain(mandatory_tool_prompt=True)`로 검증된 mandatory-tool 규칙(grep 먼저 / 조기 단정 금지 / 매치 라인 그대로 전사)을 주입할 수 있습니다 — 1-needle 큰 로그에서 e4b router per-attempt를 27%→83%로 끌어올림(Exp16b). opt-in이며 **failure-mode-specific**: 추론 중심·작은 입력엔 끄세요(기본값, Exp17에서 −3pp). 자동 게이트 아님 — caller가 입력 성격으로 판단.
+
 ---
 
 ## 새 태스크셋 추가

@@ -340,6 +340,8 @@ The call order is in `experiments/orchestrator.py:run_abc_chain`.
 
 In current experiments a pre-stage Extractor looked safer than a post-stage Reducer — but this too is not a settled conclusion and needs per-model/task replication.
 
+For large-log retrieval, `run_abc_chain(mandatory_tool_prompt=True)` injects validated mandatory-tool rules (grep first; don't conclude "not found" early; transcribe the matching line verbatim) — it lifted the e4b router's per-attempt accuracy 27%→83% on 1-needle large logs (Exp16b). It is opt-in and **failure-mode-specific**: leave it off (the default) for reasoning-heavy or small-input tasks, where it gave −3pp (Exp17). Not an automatic gate — the caller decides by input shape.
+
 ---
 
 ## Adding a new taskset item

@@ -1248,6 +1248,19 @@ This is an addendum (no table change; H1~H15 unchanged, H16/H16b/H16c/H17 docume
 
 ---
 
+## Stage 8 (engineering): mandatory-tool prompt opt-in
+
+Not a new hypothesis — the productionization of H16b/c. The mandatory-tool block, previously copy-pasted across three experiment drivers, is promoted into shared code as an opt-in (option A — caller-decides, **not** an auto-threshold gate).
+
+- `system_prompt.MANDATORY_TOOL_RULES` constant (the validated 4 rules, source-of-truth) + `run_abc_chain(mandatory_tool_prompt: bool = False)`. When True, appends the rules to the prompt right after the error_blocks injection.
+- **Invariant**: default False → prompt/behavior byte-identical (regression gate `tests/test_mandatory_optin.py`, 5/5 pass; existing experiments + Stage 6 unaffected). Param path verified end-to-end via cloud tunnel (2/3, within None-fragility variance).
+- **When to enable**: large-log 1-needle-style retrieval (transcription-omission failure mode) → ON; reasoning-heavy / small inputs → OFF. It is **failure-mode-specific** (Exp17: −3pp on hard tasks), not a general booster.
+- An auto (log-size) gate is deferred — current evidence gives no reliable signal. Plan: `docs/plans/mandatory-tool-opt-in.md`.
+
+This is an addendum (no table change; H1~H15 unchanged).
+
+---
+
 ## Change History
 
 - 2026-04-26: `config.py:SAMPLING_PARAMS` centralization — `lmstudio_client.py` now explicitly sends sampling params. Pre-centralization LM Studio default may have differed from `temperature=0.1`/`max_tokens=4096`, so Exp10 results may show micro-variance vs Exp00~09. Treat the introduction date as a baseline boundary.

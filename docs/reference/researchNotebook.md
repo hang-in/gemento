@@ -1184,6 +1184,17 @@ mandatory 프롬프트(원인 fix, per-attempt↑) + retry-on-None(K=2) 결합. 
 
 ---
 
+### Stage 8 (운영): mandatory-tool 프롬프트 opt-in 편입
+
+신규 가설 아님 — H16b/c 의 **운영화(productionization)**. 드라이버 3곳에 흩어진 mandatory 블록을 공유 코드의 opt-in 파라미터로 정식 편입 (안 A — caller-decides, 자동 게이트 아님).
+
+- `system_prompt.MANDATORY_TOOL_RULES` 상수 (검증된 4규칙, source-of-truth) + `run_abc_chain(mandatory_tool_prompt=False)` 파라미터. True 시 error_blocks 직후 prompt 에 append.
+- **불변식**: 기본 False → prompt/거동 byte-identical (회귀 게이트 `tests/test_mandatory_optin.py` 5/5 통과). param 경로 cloud 검증 2/3 (None-fragility 변동).
+- **언제 켜나**: 큰 로그 1-needle 류 retrieval(전사 누락 실패 모드) ON / 추론 중심·작은 입력 OFF. **failure-mode-specific** (Exp17: hard task 에선 −3pp).
+- 자동 (log-size) 게이트는 증거 부족으로 보류 (별도 plan). plan: `docs/plans/mandatory-tool-opt-in.md`. 커밋 `1066b82`(코드)/`fb56a7e`(테스트).
+
+---
+
 ## 채점 시스템 변천
 
 ### v1 → v2 전환 (2026-04-15)

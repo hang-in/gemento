@@ -4,10 +4,14 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- [mandatory-tool-opt-in.md](mandatory-tool-opt-in.md) — **Stage 8**: mandatory-tool 프롬프트를 `run_abc_chain` opt-in 파라미터(`mandatory_tool_prompt=False`)로 정식 편입 (안 A — caller-decides). 자동 게이트 아님(증거 부족). Exp16b/c 검증 4규칙을 `system_prompt.MANDATORY_TOOL_RULES` source-of-truth 화. 기본 False → 거동 불변(회귀 게이트). 3 subtask (코드→회귀→문서). 사용자 결정: 안 A 확정. Architect 직접 진행 또는 Sonnet 위임. 검증 실행은 cloud 터널.
 - 더 큰 hard task (repo-규모 50K+ multi-hop) 로 e4b 추론 상한 추가 탐색.
+- **[test 위생] `TestResultFilesByExperiment` 갱신** — Stage 7 이 result JSON 다수 추가 + tuna/caddy 를 top-level `experiments/results/` 에 기록해 3개 인벤토리 테스트(`test_static`) FAIL. 기대값 갱신 또는 tuna/caddy 출력 경로를 exp 하위로 이동. (Stage 8 회귀 분석 중 발견 — mandatory opt-in 무관.)
 - 실 n100 Caddy 로그 연동 (mock→실서버, 핸드오프 #3).
 - (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge.
+
+## Recently Done — Stage 8 (2026-06-30)
+
+- [mandatory-tool-opt-in.md](mandatory-tool-opt-in.md) — **Stage 8**: mandatory-tool 프롬프트를 `run_abc_chain(mandatory_tool_prompt=False)` opt-in 으로 정식 편입 (안 A — caller-decides, 자동 게이트 아님). `system_prompt.MANDATORY_TOOL_RULES` source-of-truth + 검증된 4규칙. **기본 False → 거동 byte-identical** (회귀 게이트 `tests/test_mandatory_optin.py` 5/5, param 경로 cloud 2/3). failure-mode-specific (큰 로그 1-needle ON / 추론 중심 OFF). 3 subtask 완료. 커밋 `1066b82`(코드)/`fb56a7e`(테스트). 2026-06-30.
 
 ## Recently Done — Stage 7 (소급 등록, 2026-06-28~29)
 
