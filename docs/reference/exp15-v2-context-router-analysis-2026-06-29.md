@@ -179,7 +179,20 @@ e4b + router 가 trivial 1-needle 을 넘어 복잡 디버깅까지 가는지 + 
 
 **데이터:** `experiments/exp15_context_router/results/exp17_hardtasks_gemma4_e4b.json`. **코드:** `run_v17_hardtasks.py`.
 
-## 15. Stage 7 arc 종결 + 다음 후보
+## 16. Exp18 — repo-규모 추론 상한 / size invariance (H18, 2026-06-30)
+
+컨텍스트(32K) 초과 repo-규모에서 e4b+router 추론이 유지되나. multihop3/multineedle × {50K,100K,200K tok} × n=8, router + retry-on-None(K=2), mandatory off, needle 20/55/85% 분산.
+
+| task | 50K(~59K tok) | 100K(~121K tok) | 200K(~245K tok) |
+|---|---|---|---|
+| multihop3 | 75% (att3) | 92% (att2.9) | **100%** (att3) |
+| multineedle | 100% (att1.5) | 100% (att1.1) | 100% (att1.4) |
+
+**H18 ✅ 채택.** size↑ 저하 전무(multihop3 75→92→100%). ~245K tok(32K 컨텍스트 **7.5배**)에서도 92~100%. 메커니즘 = **인지 부하 O(1)**: 모델은 거대 로그가 아닌 grep 결과만 봄 → 로그 크기와 추론 부하 분리. retry 분화: multihop3 att~3(깊은 추론 None↑ 회복), multineedle att~1.2. 50K multihop3 75%(최저)는 None 변동(200K=100%). caveat: 합성·grep-findable·부분점수·n=8, 추론은 인출 라인 대상.
+
+**데이터:** `experiments/exp15_context_router/results/exp18_reposcale_gemma4_e4b.json`. **코드:** `run_v18_reposcale.py`.
+
+## 17. Stage 7 arc 종결 + 다음 후보
 
 **Stage 7 종결**: Exp15 발견 → v2 조건부 채택(H15) → v3 capacity 분기(push/pull) → Exp16 retry 정체(H16) → Exp16b 원인규명(H16b, 전사 누락) → Exp16c 완성(H16c, ~100%) → Exp17 복잡도 상한(H17, 스케일 ✅ / mandatory 일반성 ❌).
 

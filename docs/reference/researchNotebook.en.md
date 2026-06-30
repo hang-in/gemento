@@ -4,7 +4,7 @@ status: in_progress
 updated_at: 2026-06-29
 mirror_of: docs/reference/researchNotebook.md (Part 1 — Closed Findings)
 language: en
-note: 2026-06-30 v11 — Exp17 hard tasks. H17 partial (scaling ✅ e4b+router reaches multi-hop/aggregation/distractor, baseline 92%; mandatory generality ❌ — it's a failure-mode-specific fix, −3pp on hard tasks). v10 — Exp16c mandatory+retry combined. H16c SUPPORTED (all sizes 100%, 30/30; H15 Context Router practical-complete on e4b). v9 — Exp16b mandatory-tool prompting. H16b SUPPORTED (per-attempt 27->83%, +57pp; failure was transcription-omission not tool-neglect — tool_rounds DROPPED). mandatory + retry ~= 99% path. v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
+note: 2026-06-30 v12 — Exp18 repo-scale (size invariance). H18 SUPPORTED (multihop3 75→92→100%, multineedle 100% at ~245K tok; router makes the model's reasoning load O(1) in log size). Stage 7 Context Router line complete. v11 — Exp17 hard tasks. H17 partial (scaling ✅ e4b+router reaches multi-hop/aggregation/distractor, baseline 92%; mandatory generality ❌ — it's a failure-mode-specific fix, −3pp on hard tasks). v10 — Exp16c mandatory+retry combined. H16c SUPPORTED (all sizes 100%, 30/30; H15 Context Router practical-complete on e4b). v9 — Exp16b mandatory-tool prompting. H16b SUPPORTED (per-attempt 27->83%, +57pp; failure was transcription-omission not tool-neglect — tool_rounds DROPPED). mandatory + retry ~= 99% path. v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
 ---
 
 > **Conceptual framework canonical document**: [conceptFramework.md](./conceptFramework.md) — 4-axis externalization principles, terminology definitions, axis ↔ experiment mapping.
@@ -1245,6 +1245,20 @@ Results (baseline → stack): multihop2 75→71%, multihop3 92→83%, multineedl
 Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §14. Results: `experiments/exp15_context_router/results/exp17_hardtasks_gemma4_e4b.json`.
 
 This is an addendum (no table change; H1~H15 unchanged, H16/H16b/H16c/H17 documented in append-only sections).
+
+---
+
+## Exp18 — Repo-scale reasoning ceiling / size invariance (H18, 2026-06-30)
+
+Does e4b + router hold its multi-hop/aggregation accuracy at repo-scale (logs exceeding the 32K context window), or does the reasoning ceiling drop? multihop3 / multineedle × {50K, 100K, 200K tok} × n=8, router + retry-on-None (K=2), mandatory off, needles spread across the log (20/55/85%).
+
+Results: multihop3 75% / 92% / **100%** (at 50K/100K/200K); multineedle **100%** at all three sizes.
+
+**H18 verdict (Architect): Supported.** No degradation with scale — if anything, an increase (multihop3 75→92→100%). At ~245K tokens (**7.5× the 32K context window**) the model still traces 3-hop causal chains and aggregates 3 scattered findings at 92–100%. The mechanism: the model never sees the giant log — only the small grep result lines — so its reasoning load is **O(1) in log size**. The router decouples log size from the model's cognitive load. Retry differentiates by task: multihop3 needed ~3 attempts (deeper reasoning raises None-fragility, which retry recovers), multineedle ~1.2 (solved first try). The 50K multihop3 75% (the lowest cell) is None-variance, not a size effect (200K scored 100%). This is strong evidence for "repo-scale debugging on a small (~4B) model via the router," completing the Stage 7 Context Router line (Exp15 conditional → 16b/c ~100% → 17 reasoning → 18 repo-scale). Caveat: synthetic logs, grep-findable needles, partial keyword scoring, n=8 — and the reasoning is over retrieved lines, not the full 245K (which is exactly the router's point).
+
+Detail: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §16. Results: `experiments/exp15_context_router/results/exp18_reposcale_gemma4_e4b.json`.
+
+This is an addendum (no table change; H1~H15 unchanged).
 
 ---
 

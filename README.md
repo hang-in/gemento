@@ -205,6 +205,7 @@ So gemento's current direction is **less "stack a stronger model on top," more "
 | H15 | Context Router | Conditional | effective on large logs, overhead on small ones |
 | H16b/c | mandatory prompt + retry | Supported | output stabilization for the large-log router (e4b per-attempt 27%→83%; +retry ~100%) |
 | H17 | complexity ceiling | Partial | e4b+router scales to multi-hop/aggregation/distractor (baseline ~92%); but the mandatory stack is a failure-mode-specific fix, not a general booster (−3pp on hard tasks) |
+| H18 | size invariance | Supported | router makes the model's reasoning load O(1) in log size — multi-hop/aggregation hold at 92–100% up to ~245K tok (7.5× the context window); the model only sees grep results, not the giant log |
 
 Detailed numbers and analysis live in the per-experiment reports under `docs/reference/`.
 

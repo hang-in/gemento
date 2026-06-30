@@ -1,0 +1,104 @@
+{
+  "experiment": "exp18_reposcale",
+  "model": "gemma4:e4b",
+  "num_ctx": 32768,
+  "n_trials": 8,
+  "max_retries": 2,
+  "results": {
+    "multihop3": {
+      "50k": {
+        "scores": [
+          0.0,
+          1.0,
+          0.6666666666666666,
+          1.0,
+          0.3333333333333333,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 0.75,
+        "mean_attempts": 3,
+        "approx_tokens": 59771
+      },
+      "100k": {
+        "scores": [
+          1.0,
+          0.6666666666666666,
+          1.0,
+          1.0,
+          1.0,
+          0.6666666666666666,
+          1.0,
+          1.0
+        ],
+        "mean_score": 0.917,
+        "mean_attempts": 2.88,
+        "approx_tokens": 121651
+      },
+      "200k": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 1.0,
+        "mean_attempts": 3,
+        "approx_tokens": 245920
+      }
+    },
+    "multineedle": {
+      "50k": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 1.0,
+        "mean_attempts": 1.5,
+        "approx_tokens": 59770
+      },
+      "100k": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 1.0,
+        "mean_attempts": 1.12,
+        "approx_tokens": 121650
+      },
+      "200k": {
+        "scores": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "mean_score": 1.0,
+        "mean_attempts": 1.38,
+        "approx_tokens": 245919
+      }
+    }
+  },
+  "total_elapsed_sec": 5933.4
+}

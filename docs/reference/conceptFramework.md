@@ -230,6 +230,8 @@ Evidence Tool은 `raw_key="cycle_3.tool_calls[0]"`을 resolve하여 원본 tool_
 
 **관찰**: 4축을 넘어 **Context (기억 인출) 외부화 축**(H15)이 Exp15 v2 의 canonical 재검증(gemma4:e4b, n=5, num_ctx 통제)으로 **조건부 입증**되었습니다. Context Router(Redis 핸들 + grep/read 도구)는 모델 용량에 근접/초과하는 큰 로그(≥~10K tok)에서 stuffing 대비 견고하게 우수하고(router 0.908 vs stuffing 0.125), 로그가 컨텍스트를 초과하면 유일하게 작동합니다(overflow 1.00 vs 0.00). 다만 **작은 로그에선 오히려 손해**(overhead)라 만능이 아니며, **라우터 효용 = f(모델 용량, 로그 크기)** 입니다(8B ministral 은 35KB 에서 무이득). 원본 v1 의 "latency 35% 단축"은 n=1 + num_ctx=4096 artifact 로 철회되었습니다. 즉 Context 외부화는 **"소형 모델 + 용량 초과 부하"라는 조건에서 참인 5번째 축**으로 자리매김합니다.
 
+Exp18(H18 ✅)은 이를 한 단계 더 밀어, **router 가 모델 인지 부하를 로그 크기와 분리(O(1))**함을 보였습니다 — 모델은 거대 로그가 아닌 grep 결과(작은 매치 라인)만 보므로, ~245K tok(32K 컨텍스트의 7.5배)의 repo-규모 로그에서도 3-hop 인과 추적·다중 집계가 92~100% 무저하. Context 축의 핵심 가치는 "더 큰 컨텍스트"가 아니라 **"로그 크기를 추론 부하에서 떼어내는 것"**이다.
+
 ---
 
 ## 9. 외부화 미완 영역 (향후 확장 후보)

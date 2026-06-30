@@ -3,7 +3,7 @@ type: reference
 status: in_progress
 updated_at: 2026-06-29
 parts: [closed, active]
-note: 2026-06-30 v10 — Exp17 hard tasks. H17 부분 (전반 ✅ e4b+router 가 multi-hop/집계/distractor 까지 스케일 baseline 92%; 후반 ❌ mandatory 는 failure-mode-specific 처방, hard task 선 −3pp). v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size 100% 30/30; H15 Context Router e4b 실용 완성). v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
+note: 2026-06-30 v11 — Exp18 repo-규모 (size invariance). H18 ✅ 채택 (multihop3 75→92→100%, multineedle 100% @ ~245K tok; router 인지 부하 O(1) = 로그 크기 무관). Stage 7 Context Router 라인 완결. v10 — Exp17 hard tasks. H17 부분 (전반 ✅ e4b+router 가 multi-hop/집계/distractor 까지 스케일 baseline 92%; 후반 ❌ mandatory 는 failure-mode-specific 처방, hard task 선 −3pp). v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size 100% 30/30; H15 Context Router e4b 실용 완성). v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
 ---
 
 > **개념 프레임 canonical 문서**: [conceptFramework.md](./conceptFramework.md) — 4축 외부화 원리, 용어 정의, 축 ↔ 실험 매핑.
@@ -62,6 +62,7 @@ note: 2026-06-30 v10 — Exp17 hard tasks. H17 부분 (전반 ✅ e4b+router 가
 | **H16b** | **[Orchestrator 외부화 — mandatory-tool 프롬프트]** 라우터 task prompt 에 mandatory-tool 지시(반드시 grep 먼저 / 조기 단정 금지 / 매치 라인 3요소 그대로 전사)를 주면 e4b router 의 per-attempt 성공률이 오른다 | **✅ 채택** — 2026-06-30 Exp16b (e4b router, size{12K,25K,50K} × baseline vs mandatory × n=10, 1시도). per-attempt **27%→83% (+57pp)**, 전 size +50~70pp 일관. **핵심: mandatory 에서 tool_rounds 가 오히려 감소**(5.9→3.3 등) → baseline 실패는 tool-neglect 아닌 **전사/결론 누락**(grep 반복하며 final_answer 미전사). 규칙4("그대로 전사")가 레버. per-attempt 83% + Exp16 retry(K=2) 결합 시 기대 ~99%. (n=10 서술적, 대효과 일관.) 상세: `docs/reference/exp15-v2-context-router-analysis-2026-06-29.md` §10 | Exp16b |
 | **H16c** | **[Orchestrator 외부화 — mandatory + retry 결합]** mandatory 프롬프트(per-attempt↑) + retry-on-None(K=2) 결합이 e4b router 의 큰 로그 실효 정답률을 ~99%+ 로 만든다 | **✅ 채택** — 2026-06-30 Exp16c (e4b router, size{12K,25K,50K} × mandatory+retry × n=10). **전 size 100% (30/30)**, 평균 시도 1.0~1.7. progression: retry-only ~60%(Exp16) → mandatory-only 83%(Exp16b) → **결합 100%**. (n=10 합성·단일 needle, 참값 ~95~100% 로 읽는 게 안전; 50k 의 1.0시도/100% 는 표본 쏠림 있음.) **H15 Context Router = e4b 에서 실용 완성** (큰 로그·컨텍스트 초과 디버깅 ~안정). 상세: §12 | Exp16c |
 | **H17** | **[복잡도 상한 + mandatory 일반성]** e4b + router 가 trivial 1-needle 을 넘어 multi-hop/집계/distractor 까지 스케일하고, mandatory+retry 스택이 거기서도 일반적으로 이득을 준다 | **부분 — 전반 ✅ / 후반 ❌** — 2026-06-30 Exp17 (e4b router, 4 hard task × {baseline, stack} × n=8, ~23K tok). **전반(스케일) ✅**: baseline 만으로 multihop2 75% / multihop3 92% / multineedle 100% / distractor 100% (평균 92%) — 진짜 복잡 디버깅 처리. **후반(mandatory 일반성) ❌**: stack 평균 89% (−3pp, neutral~약간 음수). mandatory 는 **특정 실패 모드(큰 로그 전사 누락, Exp16b) 전용 처방**이지 범용 부스터 아님 — baseline 이 이미 높으면 noise. → "router 기본값 승격" 은 무조건이 아니라 **적응적 적용**. (n=8 합성·부분점수.) 상세: §14 | Exp17 |
+| **H18** | **[Context 외부화 — size invariance]** Context Router 는 모델 인지 부하를 로그 크기와 분리(O(1)) — repo-규모(컨텍스트 초과) 로그에서도 multi-hop/집계 추론이 무저하 | **✅ 채택** — 2026-06-30 Exp18 (e4b router+retry, multihop3/multineedle × {50K,100K,200K tok} × n=8). **size↑ 저하 전무**: multihop3 75→92→**100%**, multineedle 100/100/100%. **~245K tok(32K 컨텍스트의 7.5배)에서도 92~100%**. 메커니즘: 모델은 거대 로그가 아닌 grep 결과(작은 매치 라인)만 봄 → 인지 부하 O(1). retry 분화: multihop3 att~3(깊은 추론 None↑ 회복), multineedle att~1.2. 소형(~4B) + router 로 repo-규모 디버깅 입증. (n=8 합성·grep-findable·부분점수.) 상세: §16 | Exp18 |
 
 #### 축 ↔ 실험 매트릭스
 
@@ -90,6 +91,7 @@ note: 2026-06-30 v10 — Exp17 hard tasks. H17 부분 (전반 ✅ e4b+router 가
 | Exp16b (Mandatory-tool Prompt) | — | ▶ (grep/read 도구) | — | ✅ (mandatory 프롬프트 — H16b 채택) |
 | Exp16c (Mandatory + Retry) | — | ▶ (grep/read 도구) | — | ✅ (결합 ~100% — H16c 채택) |
 | Exp17 (Hard Tasks) | — | ▶ (grep/read 도구) | — | ✅ 스케일 / mandatory 일반성 ❌ (H17 부분) |
+| Exp18 (Repo-scale) | ✅ (Context size-invariance — H18 채택) | ▶ (grep/read 도구) | — | ▶ (retry) |
 
 > 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조. Context 외부화(H15)는 4축을 넘는 5번째 축 후보 — [conceptFramework.md § 8](./conceptFramework.md) 참조.
 
@@ -1181,6 +1183,29 @@ mandatory 프롬프트(원인 fix, per-attempt↑) + retry-on-None(K=2) 결합. 
 **caveat:** n=8(−3pp 노이즈 범위), 합성·단일 크기(~23k), 부분점수.
 
 **데이터:** `experiments/exp15_context_router/results/exp17_hardtasks_gemma4_e4b.json` | **코드:** `run_v17_hardtasks.py`
+
+---
+
+### Exp18: repo-규모 추론 상한 (size invariance, H18)
+
+| 항목 | 내용 |
+|------|------|
+| **누가/언제/어디서** | gemma4:e4b, 2026-06-30, 지인 서버 RTX 5060 Ti (SSH 터널) |
+| **무엇을** | 컨텍스트(32K) 초과 repo-규모(50K~200K tok)에서 e4b+router 추론이 유지되나. multihop3/multineedle × {50K,100K,200K} × n=8, router + retry-on-None(K=2), mandatory off, needle 을 로그 전체 20/55/85% 분산 |
+| **왜** | Exp17(~23K)에서 92%. router 가 필수인 repo-규모에서 추론 천장이 내려가는지 / router 가 size-invariant 인지 검증 |
+| **어떻게** | `run_v18_reposcale.py`. 로그 Redis 보관·grep 필터(모델은 매치 라인만 봄). 공유 코드 불변. 터널 불안정으로 3회 분할 resume |
+
+**결과:** multihop3 50K **75%** / 100K 92% / 200K **100%**. multineedle 50K/100K/200K 모두 **100%**.
+
+**핵심 발견:**
+1. **H18 ✅ 채택 — size↑ 저하 전무** (오히려 multihop3 75→92→100% 상승). ~245K tok(32K 컨텍스트의 **7.5배**)에서도 3-hop 인과 추적·3-way 집계 92~100%.
+2. **메커니즘 = 인지 부하 O(1)** — 모델은 거대 로그가 아닌 grep 결과(작은 매치 라인)만 봄. needle 이 13,000줄에 흩어져도 추론 부하 일정 → router 가 **로그 크기를 모델 인지 부하에서 분리**.
+3. **retry 분화** — multihop3 att~3(깊은 추론 None-fragility↑, retry 회복), multineedle att~1.2(첫 시도 집계 성공). 50K multihop3 75%(최저)는 size 아닌 None 변동(200K=100%).
+4. **함의** — "똑똑한 소형(~4B) 모델 + router 로 repo-규모 디버깅"의 강한 입증. Stage 7 Context Router 라인 완결(Exp15 조건부 → 16b/c ~100% → 17 추론 → 18 repo-규모 무저하).
+
+**caveat:** 합성 로그·grep-findable needle·부분점수·n=8. 추론은 인출 라인 대상(전체 245K 아님) — 그게 router 의 요점.
+
+**데이터:** `experiments/exp15_context_router/results/exp18_reposcale_gemma4_e4b.json` | **코드:** `run_v18_reposcale.py`
 
 ---
 

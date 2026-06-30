@@ -219,6 +219,7 @@ Exp11에서는 Gemini 2.5 Flash를 Judge로 넣었지만, 모두 Gemma로 구성
 | H15 | Context Router | 조건부 | 큰 로그에서 유효, 작은 로그에서는 overhead |
 | H16b/c | mandatory prompt + retry | 채택 | 큰 로그 router 조건에서 출력 안정화 |
 | H17 | 복잡도 상한 | 부분 | e4b+router가 multi-hop/집계/판별까지 스케일(baseline ~92%); 단 mandatory 스택은 특정 실패 모드 전용이라 hard task에선 −3pp |
+| H18 | size invariance | 채택 | router가 추론 부하를 로그 크기와 분리(O(1)) — multi-hop/집계가 ~245K tok(컨텍스트 7.5배)까지 92~100% 무저하; 모델은 거대 로그가 아닌 grep 결과만 봄 |
 
 상세 수치와 분석은 `docs/reference/` 아래의 각 실험 보고서에 있습니다.
 
