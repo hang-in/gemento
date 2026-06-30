@@ -4,7 +4,7 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge.
+- [exp21-facet-aggregate-tool.md](exp21-facet-aggregate-tool.md) — **Stage 9 (Exp21)**: facet 집계 도구 A/B (grep-only vs grep+facet). Exp20 진단(megalog 0.0=high-volume+16KB캡→finalization 실패, router 정상) 후속. 단일 `aggregate_context` opt-in(글로벌 도구 불변) + caller 주입. megalog 2-task n=5 max_cycles=8. 1차 지표=non-null ans rate. **more structure ≠ monotonically better** — A/B 입증 후 채택. 4 subtask(A→B병렬→C). 사용자 결정: facet A/B 직행. Architect 위임(파라미터 default). 실행=에이전트 직접(boxie 원격). Sonnet 진행 프롬프트: `docs/prompts/2026-06-30/exp21FacetStart.md`
 
 ## Recently Done — Stage 8 (2026-06-30)
 
