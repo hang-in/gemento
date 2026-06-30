@@ -146,6 +146,60 @@ def grep_context(handle: str, pattern: str) -> dict:
         return {"error": f"Redis connection or grep error: {e}"}
 
 
+def aggregate_context(handle: str, pattern: str, group_by: str | None = None,
+                      top_n: int = 10) -> dict:
+    """Redis 로그에서 pattern 매치 라인을 전수 집계한다 (16KB 라인덤프 대신 카운트).
+
+    group_by 가 capture group 을 가진 regex 면 그 그룹값별 카운트를 top_n 으로 반환.
+    group_by 가 None 이면 매치 총수 + 소수 sample 라인만 반환.
+    절단 없음 — top_n 행만 반환하므로 출력이 항상 작다.
+
+    Args:
+        handle: Redis key
+        pattern: 매치 대상 문자열/정규식 (grep_context 와 동일 의미, IGNORECASE)
+        group_by: (선택) capture group 1 개를 가진 정규식.
+                  예: r"from (\\d+\\.\\d+\\.\\d+\\.\\d+)"  → IP 별 카운트.
+                  예: r"(\\S+\\.service)"  → systemd unit 별 카운트.
+        top_n: 반환할 상위 그룹 수 (기본 10)
+    """
+    try:
+        r = get_redis_client()
+        content = r.get(handle)
+        if content is None:
+            return {"error": f"Context handle '{handle}' not found in Redis."}
+        lines = content.splitlines()
+        try:
+            regex = re.compile(pattern, re.IGNORECASE)
+        except re.error as e:
+            return {"error": f"invalid pattern regex: {e}"}
+        matched = [ln for ln in lines if regex.search(ln)]
+        total = len(matched)
+
+        if group_by:
+            try:
+                grp = re.compile(group_by, re.IGNORECASE)
+            except re.error as e:
+                return {"error": f"invalid group_by regex: {e}"}
+            from collections import Counter
+            counts: "Counter[str]" = Counter()
+            for ln in matched:
+                m = grp.search(ln)
+                if m and m.groups():
+                    counts[m.group(1)] += 1
+            top = [{"value": v, "count": c} for v, c in counts.most_common(top_n)]
+            return {"handle": handle, "pattern": pattern, "group_by": group_by,
+                    "total_matches": total, "unique_groups": len(counts),
+                    "top": top, "truncated": False}
+        # group_by 없음 → 총수 + sample (절단 아님: sample 개수만 의도적으로 제한)
+        sample = matched[:5]
+        return {"handle": handle, "pattern": pattern, "group_by": None,
+                "total_matches": total, "sample": sample,
+                "note": "Use group_by (regex with one capture group) to aggregate by field.",
+                "truncated": False}
+    except Exception as e:
+        return {"error": f"Redis connection or aggregate error: {e}"}
+
+
 CONTEXT_TOOL_SCHEMAS = [
     {
         "type": "function",
@@ -198,5 +252,39 @@ CONTEXT_TOOL_SCHEMAS = [
 CONTEXT_TOOL_FUNCTIONS = {
     "read_context": read_context,
     "grep_context": grep_context,
+}
+
+FACET_TOOL_SCHEMAS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "aggregate_context",
+            "description": (
+                "Aggregate ALL matching lines in a cached log by count, with NO 16KB "
+                "truncation. Use this instead of grep_context when a pattern has many "
+                "matches and you need totals or the top contributors. If you give "
+                "'group_by' (a regex with ONE capture group), it returns the top values "
+                "by frequency. Examples: to find the IP with the most failed SSH logins, "
+                "pattern='Failed password', group_by='from (\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+)'. "
+                "To find which systemd unit fails most, pattern='Failed with result', "
+                "group_by='(\\\\S+\\\\.service)'. Without group_by it returns the total "
+                "match count plus a few sample lines."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "handle": {"type": "string", "description": "The Redis key handle"},
+                    "pattern": {"type": "string", "description": "Text/regex to match lines (IGNORECASE)"},
+                    "group_by": {"type": "string", "description": "Optional regex with ONE capture group to aggregate by"},
+                    "top_n": {"type": "integer", "description": "How many top groups to return (default 10)"},
+                },
+                "required": ["handle", "pattern"],
+            },
+        },
+    },
+]
+
+FACET_TOOL_FUNCTIONS = {
+    "aggregate_context": aggregate_context,
 }
 

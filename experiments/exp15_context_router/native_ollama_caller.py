@@ -24,7 +24,8 @@ MAX_TOOL_ITERS = 8
 
 def make_ollama_native_caller(base_url: str, model: str, num_ctx: int,
                               stats: dict | None = None,
-                              max_tokens: int = 4096, temperature: float = 0.1):
+                              max_tokens: int = 4096, temperature: float = 0.1,
+                              extra_tool_schemas=None, extra_tool_fns=None):
     """model_caller signature: (messages, tools=None, **kwargs) -> (content_str, meta).
 
     base_url: 예 'http://127.0.0.1:11435' (터널). /api/chat 가 붙는다.
@@ -32,6 +33,7 @@ def make_ollama_native_caller(base_url: str, model: str, num_ctx: int,
     stats: 주어지면 caller 가 calls/tool_rounds/in_tok/out_tok 를 누적 (driver 가 trial 별 측정).
     """
     url = base_url.rstrip("/") + "/api/chat"
+    _exec = {**CONTEXT_TOOL_FUNCTIONS, **(extra_tool_fns or {})}
 
     def _post(messages, tools):
         payload = {
@@ -49,6 +51,9 @@ def make_ollama_native_caller(base_url: str, model: str, num_ctx: int,
             return resp.json()
 
     def _caller(messages, tools=None, **kwargs):
+        eff_tools = list(tools or [])
+        if extra_tool_schemas:
+            eff_tools = eff_tools + list(extra_tool_schemas)
         start = time.time()
         convo = list(messages)
         in_tok = out_tok = tool_rounds = 0
@@ -57,7 +62,7 @@ def make_ollama_native_caller(base_url: str, model: str, num_ctx: int,
 
         for _ in range(MAX_TOOL_ITERS + 1):
             try:
-                data = _post(convo, tools)
+                data = _post(convo, eff_tools or None)
             except Exception as e:
                 last_err = str(e)
                 break
@@ -84,7 +89,7 @@ def make_ollama_native_caller(base_url: str, model: str, num_ctx: int,
                         args = {}
                 else:
                     args = raw_args or {}
-                func = CONTEXT_TOOL_FUNCTIONS.get(name)
+                func = _exec.get(name)
                 if func is None:
                     result = {"error": f"unknown tool: {name}"}
                 else:
