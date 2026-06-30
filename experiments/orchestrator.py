@@ -686,6 +686,7 @@ def run_abc_chain(
     context_router: bool = False,
     context_handles: list[str] | None = None,
     error_blocks: bool = False,
+    mandatory_tool_prompt: bool = False,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -713,6 +714,14 @@ def run_abc_chain(
                 "You can still use grep_context or read_context to inspect other regions:\n\n"
                 f"```text\n{merged_eb}\n```"
             )
+
+    # ── Mandatory tool-use rules (opt-in, Stage 8) ──
+    # H16b/c: 큰 로그 1-needle retrieval 의 "전사 누락" 실패 모드를 잡아 per-attempt 를 끌어올림.
+    # failure-mode-specific (Exp17 hard task 에선 무효) — caller 가 입력 성격으로 판단해 켠다.
+    # 기본 False 시 이 블록을 건너뛰어 prompt 가 변경 전과 동일 (불변식).
+    if mandatory_tool_prompt:
+        from system_prompt import MANDATORY_TOOL_RULES
+        prompt = f"{prompt}{MANDATORY_TOOL_RULES}"
 
     # ── Extractor pre-stage (trial 시작 시 1회) ──
     # cross-model 시 model_caller 가 외부 모델 라우팅. None 시 기존 internal call_model.

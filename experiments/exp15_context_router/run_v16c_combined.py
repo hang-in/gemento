@@ -39,13 +39,8 @@ OUT_PATH = RESULTS_DIR / "exp16c_combined_gemma4_e4b.json"
 
 OBJECTIVE = "Find the exact file name, line number, and unresolved import module that caused the Rust compilation failure."
 KEYWORDS = [["src/main.rs"], ["342"], ["SemanticRouter"]]
-MANDATORY_BLOCK = (
-    "\n\n## MANDATORY TOOL-USE RULES (must follow):\n"
-    "1. You MUST call `grep_context` on the given handle BEFORE answering. Do NOT answer from memory or assumption.\n"
-    "2. Start by grepping for error markers, e.g. pattern \"error\" or \"E0432\". The raw log is NOT in your prompt — you can only see it via the tools.\n"
-    "3. Do NOT conclude \"the log does not contain ...\" after a single query. If a grep returns no useful match, try another pattern (\"unresolved\", \"import\", a filename) before giving up.\n"
-    "4. Once you find the matching line, transcribe the EXACT file path, line number, and module identifier verbatim from that line into your final_answer. Do not paraphrase or omit any of the three.\n"
-)
+# Stage 8: source-of-truth 를 system_prompt.MANDATORY_TOOL_RULES 로 통일 (byte-identical, Task 01 검증).
+from system_prompt import MANDATORY_TOOL_RULES as MANDATORY_BLOCK
 
 
 def _build_log(n_lines: int) -> str:

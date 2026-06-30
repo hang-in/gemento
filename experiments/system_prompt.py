@@ -476,3 +476,17 @@ def build_reducer_prompt(assertions: list[dict], candidate_answer: str) -> list[
         {"role": "system", "content": REDUCER_PROMPT},
         {"role": "user", "content": user_content},
     ]
+
+
+# ── Mandatory tool-use rules (Stage 8 opt-in, H16b/c) ──
+# Context Router 의 큰 로그 1-needle retrieval 에서 "전사 누락" 실패 모드(grep 은 하지만
+# 찾은 라인을 final_answer 로 커밋 안 함)를 잡는 검증된 4규칙. Exp16b: per-attempt 27→83%.
+# failure-mode-specific — 추론 중심 task 에선 무효(Exp17 −3pp). run_abc_chain(mandatory_tool_prompt=True) 가 주입.
+# 선행 "\n\n" 포함 — caller prompt 끝에 그대로 append.
+MANDATORY_TOOL_RULES = (
+    "\n\n## MANDATORY TOOL-USE RULES (must follow):\n"
+    "1. You MUST call `grep_context` on the given handle BEFORE answering. Do NOT answer from memory or assumption.\n"
+    "2. Start by grepping for error markers, e.g. pattern \"error\" or \"E0432\". The raw log is NOT in your prompt — you can only see it via the tools.\n"
+    "3. Do NOT conclude \"the log does not contain ...\" after a single query. If a grep returns no useful match, try another pattern (\"unresolved\", \"import\", a filename) before giving up.\n"
+    "4. Once you find the matching line, transcribe the EXACT file path, line number, and module identifier verbatim from that line into your final_answer. Do not paraphrase or omit any of the three.\n"
+)
