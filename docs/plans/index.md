@@ -4,8 +4,11 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- [retrieval-discipline-opt-in.md](retrieval-discipline-opt-in.md) — **Stage 10 (오케스트레이터 신뢰성)**: under-query 조기포기(empty tattoo→`final_answer=None`) 실패를 잡는 narrow-query nudge 를 `run_abc_chain(retrieval_discipline_prompt=False)` opt-in 으로 편입 (안 A — MANDATORY 와 독립 플래그, 기본 byte-identical). 근거: 레버 A/B(task A, n=6) **finalized 17%→67% (+50pp)**, empty_tattoo 83%→33%. 4 subtask (code / 회귀게이트 / 재검증 드라이버(사용자 실행 n≥10+task B) / verdict). 결정 1~4 Architect default. Sonnet 진행 프롬프트: `docs/prompts/2026-07-01/retrieval-discipline-opt-inStart.md`
 - (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge + facet 도메인 다종화(`list_failed_units` 등, 집계 task 한정 — H21 후속).
+
+## Recently Done — Stage 10 (2026-07-01)
+
+- [retrieval-discipline-opt-in.md](retrieval-discipline-opt-in.md) — **Stage 10 (오케스트레이터 신뢰성)**: under-query 조기포기(empty tattoo→`final_answer=None`) 실패를 잡는 narrow-query nudge 를 `run_abc_chain(retrieval_discipline_prompt=False)` opt-in 편입 (안 A — MANDATORY 와 독립 플래그, 기본 byte-identical). **H22 ⚠ 미결 (실효적 기각)** — 레버 A/B(n=6, task A, 수동 constraint) finalized 17%→67%(+50pp)가 정식 플래그 경로 재검증(Exp22, n=10, task A+B)에서 **미재현/부호 역전**: task A control finalized **70%**/correct **60%** vs discipline **40%**/**40%** (Δ−30/−20pp), task B correct 양 arm 0%. 레버 +50pp = control baseline 17%→70% run-to-run 변동 소표본 착시. discipline = neutral~harmful(조기 오답 커밋). 진짜 문제 = finalization 자체 분산. opt-in 플래그 유지(기본 False byte-identical, 회귀게이트 62 OK, 롤백 X, 켜기 비추천). 4 subtask 완료. 커밋 편입 `f466d40`/게이트 `47db68e`/드라이버 `3d64823`/결과 `3a5a480`. 노트북 §19. 2026-07-01.
 
 ## Recently Done — Stage 9 (2026-06-30)
 

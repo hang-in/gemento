@@ -166,6 +166,7 @@ Evidence Tool은 `raw_key="cycle_3.tool_calls[0]"`을 resolve하여 원본 tool_
 - Python 안전장치는 **남겨야 한다** — 모델이 무한 루프·malformed output에 빠질 때 개입.
 - 의미론적 진행 결정은 **Judge Role에 완전 위임 가능** — Exp04가 입증.
 - **출력 안정화도 Python Orchestrator 영역** (Stage 8): `run_abc_chain(mandatory_tool_prompt=True)` opt-in 이 검증된 mandatory-tool 규칙(grep 먼저 / 조기 단정 금지 / 매치 라인 그대로 전사)을 prompt 에 주입해 "찾고도 답으로 커밋 못 함" 실패를 잡는다 (H16b: per-attempt 27→83%). 단 **failure-mode-specific** — 큰 로그 1-needle retrieval 에서만 유효, 추론 중심 task 엔 무효(Exp17 −3pp)라 자동 적용이 아닌 caller-decides opt-in (기본 off). 자동 게이트는 증거 부족으로 보류.
+- **⚠ retrieval-discipline 는 형제 opt-in 이나 검증 실패** (Stage 10): `run_abc_chain(retrieval_discipline_prompt=True)` 는 under-query 조기포기(넓은 grep→노이즈→assertion 없이 종료→`final_answer=None`)를 겨냥한 narrow-query nudge 를 주입한다. 레버 A/B(n=6)는 finalized +50pp 로 유망했으나 **정식 플래그 경로 재검증(Exp22, n=10)에서 미재현·부호 역전** (H22 ⚠ 미결/실효적 기각) — control baseline 이 run 마다 17%~70%로 요동쳐 "고칠 문제"가 안정적이지 않았고, "cycle 종료 전 assertion 강제"는 오히려 조기 오답 커밋을 유발. **플래그는 인프라로 남기되(기본 off, byte-identical) 켜기 비추천.** 교훈: 신뢰성 레버는 소표본 단발 A/B 로 판정 불가 — finalization 자체의 run-to-run 분산이 진짜 대상.
 
 ---
 

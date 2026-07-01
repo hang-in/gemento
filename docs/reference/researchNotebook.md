@@ -1,9 +1,9 @@
 ---
 type: reference
 status: in_progress
-updated_at: 2026-06-30
+updated_at: 2026-07-01
 parts: [closed, active]
-note: 2026-06-30 v13 — Exp21 facet 도구 A/B (Stage 9). H21 ⚠ 조건부 채택 (aggregation-specific): aggregate_context(untruncated 전수 집계)가 집계 task 에서 결정적 (score 0.0→0.8 — grep_only 는 16KB 캡으로 confidently-wrong 174.138.8.10 5/5, grep_facet 정답 45.144.212.75 4/5), 단일-needle 엔 무효 (0.3→0.2, facet 거의 미사용). non-null rate 는 무력(양 arm 1.0) → 진짜 신호 accuracy. more structure ≠ monotonically better (failure-mode-specific). H19/H20 공백 = Exp19(실데이터)/Exp20(megalog finalization 진단)은 검증. v12 — Exp19 실데이터 검증 (n100 journald 1.15M tok → boxie e4b router, certbot 장애 5/5 정확 진단, mock caddy 대체; 5060Ti tps gen~95/prefill~1620). v11 — Exp18 repo-규모 (size invariance). H18 ✅ 채택 (multihop3 75→92→100%, multineedle 100% @ ~245K tok; router 인지 부하 O(1) = 로그 크기 무관). Stage 7 Context Router 라인 완결. v10 — Exp17 hard tasks. H17 부분 (전반 ✅ e4b+router 가 multi-hop/집계/distractor 까지 스케일 baseline 92%; 후반 ❌ mandatory 는 failure-mode-specific 처방, hard task 선 −3pp). v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size 100% 30/30; H15 Context Router e4b 실용 완성). v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat. (n100 journald 1.15M tok → boxie e4b router, certbot 장애 5/5 정확 진단, mock caddy 대체; 5060Ti tps gen~95/prefill~1620). v11 — Exp18 repo-규모 (size invariance). H18 ✅ 채택 (multihop3 75→92→100%, multineedle 100% @ ~245K tok; router 인지 부하 O(1) = 로그 크기 무관). Stage 7 Context Router 라인 완결. v10 — Exp17 hard tasks. H17 부분 (전반 ✅ e4b+router 가 multi-hop/집계/distractor 까지 스케일 baseline 92%; 후반 ❌ mandatory 는 failure-mode-specific 처방, hard task 선 −3pp). v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size 100% 30/30; H15 Context Router e4b 실용 완성). v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
+note: 2026-07-01 v14 — Exp22 retrieval-discipline opt-in 재검증 (Stage 10, 오케스트레이터 신뢰성). H22 ⚠ 미결 (실효적 기각): anti-give-up/narrow-query nudge 를 run_abc_chain(retrieval_discipline_prompt) opt-in 편입. 레버 A/B(n=6, task A, 수동 constraint)는 finalized 17%→67%(+50pp) 유망했으나 정식 플래그 경로 재검증(n=10, task A+B)에서 미재현 — task A control finalized 70%/correct 60% vs discipline 40%/40%(Δ−30/−20pp), task B correct 양 arm 0%. 레버 +50pp = control baseline 17%→70% run-to-run 변동 소표본 착시. discipline = neutral~harmful(cycle 종료 전 assertion 강제 → 조기 오답 커밋). 진짜 문제는 nudge 부재 아닌 finalization 자체 분산. opt-in 플래그 유지(기본 False byte-identical, 회귀게이트 62 OK) — 롤백 X, 켜기 비추천. 2026-06-30 v13 — Exp21 facet 도구 A/B (Stage 9). H21 ⚠ 조건부 채택 (aggregation-specific): aggregate_context(untruncated 전수 집계)가 집계 task 에서 결정적 (score 0.0→0.8 — grep_only 는 16KB 캡으로 confidently-wrong 174.138.8.10 5/5, grep_facet 정답 45.144.212.75 4/5), 단일-needle 엔 무효 (0.3→0.2, facet 거의 미사용). non-null rate 는 무력(양 arm 1.0) → 진짜 신호 accuracy. more structure ≠ monotonically better (failure-mode-specific). H19/H20 공백 = Exp19(실데이터)/Exp20(megalog finalization 진단)은 검증. v12 — Exp19 실데이터 검증 (n100 journald 1.15M tok → boxie e4b router, certbot 장애 5/5 정확 진단, mock caddy 대체; 5060Ti tps gen~95/prefill~1620). v11 — Exp18 repo-규모 (size invariance). H18 ✅ 채택 (multihop3 75→92→100%, multineedle 100% @ ~245K tok; router 인지 부하 O(1) = 로그 크기 무관). Stage 7 Context Router 라인 완결. v10 — Exp17 hard tasks. H17 부분 (전반 ✅ e4b+router 가 multi-hop/집계/distractor 까지 스케일 baseline 92%; 후반 ❌ mandatory 는 failure-mode-specific 처방, hard task 선 −3pp). v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size 100% 30/30; H15 Context Router e4b 실용 완성). v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat. (n100 journald 1.15M tok → boxie e4b router, certbot 장애 5/5 정확 진단, mock caddy 대체; 5060Ti tps gen~95/prefill~1620). v11 — Exp18 repo-규모 (size invariance). H18 ✅ 채택 (multihop3 75→92→100%, multineedle 100% @ ~245K tok; router 인지 부하 O(1) = 로그 크기 무관). Stage 7 Context Router 라인 완결. v10 — Exp17 hard tasks. H17 부분 (전반 ✅ e4b+router 가 multi-hop/집계/distractor 까지 스케일 baseline 92%; 후반 ❌ mandatory 는 failure-mode-specific 처방, hard task 선 −3pp). v9 — Exp16c mandatory+retry 결합. H16c ✅ 채택 (전 size 100% 30/30; H15 Context Router e4b 실용 완성). v8 — Exp16b mandatory-tool 프롬프트. H16b ✅ 채택 (per-attempt 27→83% +57pp; 실패는 tool-neglect 아닌 전사 누락, tool_rounds 오히려↓). 2026-06-29 v7 — Exp16 출력 안정화 (retry-on-None). H16 ⚠ 부분 채택 (retry +30~60pp 나 ~90% 미달, per-attempt 신뢰도가 병목). v6 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx 통제). H15 ⚠ 조건부 채택 (입력 크기 의존; router 큰 로그·overflow 우위, 작은 로그 손해; num_ctx artifact 부분적; ErrorBlocks brittle). Context = 4축 넘는 5번째 축 후보. 2026-05-09 v5 — Stage 6 v3 (gemma4:31b H13 추가). M2 4 sub-variants 분화. H13 measurable = Gemma 4 E4B 한정. A-agent JSON-schema contract = measurement-tool fit caveat.
 ---
 
 > **개념 프레임 canonical 문서**: [conceptFramework.md](./conceptFramework.md) — 4축 외부화 원리, 용어 정의, 축 ↔ 실험 매핑.
@@ -64,6 +64,7 @@ note: 2026-06-30 v13 — Exp21 facet 도구 A/B (Stage 9). H21 ⚠ 조건부 채
 | **H17** | **[복잡도 상한 + mandatory 일반성]** e4b + router 가 trivial 1-needle 을 넘어 multi-hop/집계/distractor 까지 스케일하고, mandatory+retry 스택이 거기서도 일반적으로 이득을 준다 | **부분 — 전반 ✅ / 후반 ❌** — 2026-06-30 Exp17 (e4b router, 4 hard task × {baseline, stack} × n=8, ~23K tok). **전반(스케일) ✅**: baseline 만으로 multihop2 75% / multihop3 92% / multineedle 100% / distractor 100% (평균 92%) — 진짜 복잡 디버깅 처리. **후반(mandatory 일반성) ❌**: stack 평균 89% (−3pp, neutral~약간 음수). mandatory 는 **특정 실패 모드(큰 로그 전사 누락, Exp16b) 전용 처방**이지 범용 부스터 아님 — baseline 이 이미 높으면 noise. → "router 기본값 승격" 은 무조건이 아니라 **적응적 적용**. (n=8 합성·부분점수.) 상세: §14 | Exp17 |
 | **H18** | **[Context 외부화 — size invariance]** Context Router 는 모델 인지 부하를 로그 크기와 분리(O(1)) — repo-규모(컨텍스트 초과) 로그에서도 multi-hop/집계 추론이 무저하 | **✅ 채택** — 2026-06-30 Exp18 (e4b router+retry, multihop3/multineedle × {50K,100K,200K tok} × n=8). **size↑ 저하 전무**: multihop3 75→92→**100%**, multineedle 100/100/100%. **~245K tok(32K 컨텍스트의 7.5배)에서도 92~100%**. 메커니즘: 모델은 거대 로그가 아닌 grep 결과(작은 매치 라인)만 봄 → 인지 부하 O(1). retry 분화: multihop3 att~3(깊은 추론 None↑ 회복), multineedle att~1.2. 소형(~4B) + router 로 repo-규모 디버깅 입증. (n=8 합성·grep-findable·부분점수.) 상세: §16 | Exp18 |
 | **H21** | **[Tool 외부화 — facet 집계]** 결정론적 전수 집계 도구(`aggregate_context`, 16KB 라인덤프 대신 untruncated 그룹별 top-N 카운트)가 소형 모델의 진단 정확도를 끌어올린다 | **⚠ 조건부 채택 (aggregation-specific)** — 2026-06-30 Exp21 (megalog ~29.3M tok, e4b, grep-only vs grep+facet, 2-task × n=5, max_cycles=8). **집계 task 에서 결정적**: task B(최다 brute-force IP) score **0.0→0.8** — grep_only 5/5 confidently-wrong(`174.138.8.10`, 16KB 캡이 시간순 앞부분만 노출 → 일찍 보인 IP 오인) vs grep_facet 4/5 정답(`45.144.212.75`, facet 16 calls untruncated 전수 카운트). **단일-needle task(A gohttpserver)엔 무효** (0.3→0.2, facet 거의 미사용 3 calls, 수렴 확률적). **non-null rate 무력**(양 arm task B 1.0) → 진짜 신호 accuracy. "more structure ≠ monotonically better" — facet 은 failure-mode-specific(Exp17 mandatory 와 동형). H19/H20 공백 = Exp19/Exp20 은 검증. (n=5 소표본·단일 모델·단일 도구.) 상세: §18 | Exp21 |
+| **H22** | **[Orchestrator 신뢰성 — retrieval-discipline]** anti-give-up + narrow-query nudge(넓은 grep→노이즈→포기 대신 `Failed with result`/`.service` 로 좁히고 cycle 종료 전 후보 assertion 1개 강제)를 opt-in 편입하면 under-query 조기포기(empty tattoo→`final_answer=None`) finalization 실패가 완화된다 | **⚠ 미결 (실효적 기각)** — 2026-07-01 Exp22 (megalog ~29.3M tok, e4b, control vs discipline, 2-task × n=10, max_cycles=8, 실제 `retrieval_discipline_prompt` 플래그 경로). **레버 A/B(n=6, task A, nudge 를 constraints 에 수동 주입)의 finalized 17%→67%(+50pp)가 재현 안 됨**: task A control finalized **70%**/correct **60%** vs discipline **40%**/**40%** (Δ **−30pp**/−20pp), task B correct 양 arm **0%**(집계 실패=16KB 캡, facet 영역이라 discipline 무효). 레버의 +50pp = control baseline 17%→**70%** run-to-run 변동에 기인한 **소표본 착시**. discipline = **neutral~harmful** (cycle 종료 전 assertion 강제가 조기 오답 커밋 유발 — task A correct 60→40, task B empty 0%나 correct 0% 유지). **진짜 문제 = 특정 nudge 부재가 아니라 finalization 자체의 높은 분산.** opt-in 플래그는 유지(기본 False byte-identical, 회귀게이트 62 OK) — 롤백 X, 켜기 비추천. (n=10 소표본, rate-기반 A/B, 유의성 미검정.) 상세: §19 | Exp22 |
 
 #### 축 ↔ 실험 매트릭스
 
@@ -94,6 +95,7 @@ note: 2026-06-30 v13 — Exp21 facet 도구 A/B (Stage 9). H21 ⚠ 조건부 채
 | Exp17 (Hard Tasks) | — | ▶ (grep/read 도구) | — | ✅ 스케일 / mandatory 일반성 ❌ (H17 부분) |
 | Exp18 (Repo-scale) | ✅ (Context size-invariance — H18 채택) | ▶ (grep/read 도구) | — | ▶ (retry) |
 | Exp21 (Facet A/B) | — | ✅ (facet 집계 도구 — H21 조건부, aggregation-specific) | — | ▶ (router+retry) |
+| Exp22 (Retrieval-discipline A/B) | — | ▶ (grep/read 도구) | — | ✅ (finalization 신뢰성 nudge — H22 미결/실효적 기각, 레버 미재현) |
 
 > 자세한 정의는 [conceptFramework.md § 2](./conceptFramework.md)의 4축 정의 참조. Context 외부화(H15)는 4축을 넘는 5번째 축 후보 — [conceptFramework.md § 8](./conceptFramework.md) 참조.
 
@@ -1271,6 +1273,44 @@ mandatory 프롬프트(원인 fix, per-attempt↑) + retry-on-None(K=2) 결합. 
 5. **Exp20 진단 재평가**: 진단은 task A finalization=None 에 집착했으나, 전체 n=5 에서 task A finalization 은 확률적이고 facet 도 못 고친다. facet 의 진짜 가치는 task B 정확도(핵심 실패모드 = "16KB 캡 → confidently-wrong 집계").
 
 **Stage 9 함의**: Tool 축 sub-distinction 추가 — deterministic computation(H7/H8 +) / agent-iterative retrieval(H13 −) / **facet aggregation(H21 집계 task 한정 +)**. 후속 = 도메인 facet 다종화(`list_failed_units` 등)는 집계 벤치에 한해 재고. 상세: `docs/reference/exp21-facet-ab-analysis-2026-06-30.md`. 결과: `experiments/exp15_context_router/results/exp21_facet_ab_gemma4_e4b.json`. 드라이버: `run_v21_facet_ab.py`. 커밋 task-01 `5202991`/task-02 `63d6c51`/task-03 `cdbcb6b`/결과 `6905ca5`.
+
+### Exp22: Retrieval-discipline nudge opt-in 재검증 A/B (§19, H22)
+
+| 항목 | 내용 |
+|------|------|
+| **누가 (Who)** | A/B/C 전부 gemma4:e4b (boxie RTX 5060Ti, SSH 터널 11435), native ollama caller(num_ctx 32768, 내부 tool-loop) |
+| **언제 (When)** | 2026-07-01 (~122분, 40 chain) |
+| **어디서 (Where)** | Windows 드라이버 → boxie ollama(터널), Redis 메가로그 키 `ctx:test9ng_journal_30d:stdout`(111MB/1.1M줄/~29.3M tok) |
+| **무엇을 (What)** | H22 후보 — "anti-give-up/narrow-query nudge 를 `run_abc_chain(retrieval_discipline_prompt)` opt-in 편입하면 under-query 조기포기 finalization 실패가 완화된다". 2 arm(control/discipline) × 2 task(A crashloop / B bruteforce) × n=10 = **40 chain** |
+| **왜 (Why)** | Phase 0/micro 진단: `final_answer=None` 근본원인은 judge 아닌 상류 A 의 empty-tattoo(~50% chain assertion 0개), 메커니즘은 under-query+조기포기(Exp14 H13 재출현). 레버 A/B(n=6, task A, nudge 를 constraints 에 수동 주입)가 finalized 17%→67%(+50pp)로 유망 → **정식 opt-in 플래그 경로 + n↑ + task B 로 일반화 재검증** |
+| **어떻게 (How)** | Stage 10 편입: `system_prompt.RETRIEVAL_DISCIPLINE_RULES`(레버 nudge 정형화) + `orchestrator.run_abc_chain(retrieval_discipline_prompt=False)` 독립 가드(mandatory 주입 직후, mandatory→discipline 순서). 기본 False → prompt byte-identical. 드라이버 `run_v22_retrieval_discipline.py`: 양 arm `mandatory_tool_prompt=True` 공통, discipline 플래그만 토글(수동 constraint 주입 아님). Stage 2A/2B/2C 인프라 보존 |
+
+**결과 (finalization-rate A/B, 40 chain):**
+
+| task | arm | n | finalized | empty_tattoo | correct |
+|------|-----|--:|----------:|-------------:|--------:|
+| A crashloop | control | 10 | **70%** | 30% | **60%** |
+| A crashloop | discipline | 10 | 40% | 40% | 40% |
+| B bruteforce | control | 10 | 70% | 20% | 0% |
+| B bruteforce | discipline | 10 | 50% | 0% | 0% |
+
+**Δ(discipline − control)**: task A finalized **−30pp** / correct **−20pp**, task B finalized −20pp / correct **+0pp**. (rate-기반 A/B, n=10 소표본, 통계 유의성 미검정.)
+
+**레버 A/B(n=6, task A) 대비**: control finalized 17→**70%**, nudge/discipline 67→**40%**. 레버의 +50pp 는 재현되지 않고 **부호 역전**.
+
+**핵심 발견:**
+1. **H22 ⚠ 미결 (실효적 기각)** — 레버의 finalized +50pp 가 정식 플래그 경로 n=10 에서 미재현, 오히려 discipline 이 control 보다 낮음.
+2. **control baseline 변동이 지배적** — 레버 control 17% → Exp22 control 70%. finalization 은 run-to-run 분산이 극심하고, 레버의 catastrophic control 은 소표본(n=6) 나쁜 draw 였을 개연성. → "고칠 문제"가 이번 run 엔 거의 없었음.
+3. **discipline = neutral~harmful** — "cycle 종료 전 후보 assertion 1개 강제"가 **조기 오답 커밋**을 유발(task A correct 60→40). task B 는 empty_tattoo 를 20→0%로 없앴으나 correct 는 0% 유지 = 강제된 assertion 이 confidently-wrong IP(16KB 캡 아티팩트).
+4. **task B 는 예측대로 discipline 영역 밖** — 집계 실패(16KB 캡→confidently-wrong)는 facet(H21) 영역이지 under-query nudge 영역이 아님. 양 arm correct 0%.
+5. **경로 confound** — 레버는 nudge 를 `constraints` 리스트에 주입, 편입은 `prompt` 끝 append(위치·정형화 상이). 단 control 변동(17 vs 70)이 지배적이라 confound 만으로 설명 안 됨.
+
+**Stage 10 함의:**
+- ❌ retrieval-discipline nudge 채택 안 함 — 레버 미재현, 조기 오답 위험. opt-in 플래그는 인프라로 유지(기본 False, byte-identical, 회귀게이트 62 OK)하되 **켜기 비추천**, 롤백 X.
+- 🎯 다음 = **finalization 자체의 run-to-run 분산** 을 새 진단 대상으로. 진짜 레버는 "특정 nudge"가 아니라 분산 축소(예: retry-on-None 재조명, per-attempt 신뢰도, a2a planner-executor)일 가능성.
+- ⚠ 방법론 교훈: 단발 소표본 A/B(n=6)는 finalization 분산을 잡기엔 검정력 부족 — 신뢰성 레버는 n↑ + 정식 경로 재검증 필수. (Exp21 "non-null≠correct" 교훈의 신뢰성 렌즈 재확인.)
+
+**상세 결과:** `experiments/exp15_context_router/diagnostics/v22_retrieval_discipline_result.json`. 드라이버: `run_v22_retrieval_discipline.py`. 커밋 편입 `f466d40`/게이트 `47db68e`/드라이버 `3d64823`/결과 `3a5a480`.
 
 ---
 

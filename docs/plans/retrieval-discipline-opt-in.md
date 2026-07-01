@@ -1,6 +1,6 @@
 ---
 type: plan
-status: draft
+status: done
 updated_at: 2026-07-01
 slug: retrieval-discipline-opt-in
 version: 1
