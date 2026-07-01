@@ -1,0 +1,239 @@
+{
+  "experiment": "phase0_finalization_diag",
+  "model": "gemma4:e4b",
+  "max_cycles": 8,
+  "stack": "grep_only+router+mandatory, single-attempt",
+  "by_task": {
+    "exp21a_crashloop": {
+      "n": 8,
+      "finalized_rate": 0.375,
+      "none_count": 5,
+      "none_with_answer_in_tattoo": 1,
+      "none_without_answer": 4,
+      "judge_ever_converged_rate": 0.5,
+      "death_phase_dist": {
+        "SYNTHESIZE": 4,
+        "CONVERGED": 4
+      },
+      "samples": [
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0,
+          "phases": [
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "SYNTHESIZE",
+            "SYNTHESIZE"
+          ],
+          "ans": null,
+          "assert_snip": ""
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 4,
+          "n_assertions": 2,
+          "phases": [
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "INVESTIGATE"
+          ],
+          "ans": "The service unit that is repeatedly crash-looping is `gohttpserver.service`. The recent failure evidence is the repeated systemd journal entry: `systemd[1]: goh",
+          "assert_snip": "the service unit repeatedly failing and crash-looping is `gohttpserver.service`. \n the failure evidence for `gohttpserver.service` is the repeated message: `failed with result 'exit-code'`."
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 4,
+          "n_assertions": 2,
+          "phases": [
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "INVESTIGATE"
+          ],
+          "ans": "The crash-looping service unit is **gohttpserver.service**. The recent failure evidence is the repeated systemd message: `systemd[1]: gohttpserver.service: Fail",
+          "assert_snip": "the service unit repeatedly failing and crash-looping is 'gohttpserver.service'. \n the consistent failure evidence is 'failed with result 'exit-code''."
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0,
+          "phases": [
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "SYNTHESIZE",
+            "SYNTHESIZE"
+          ],
+          "ans": null,
+          "assert_snip": ""
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0,
+          "phases": [
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "SYNTHESIZE",
+            "SYNTHESIZE"
+          ],
+          "ans": null,
+          "assert_snip": ""
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 4,
+          "n_assertions": 2,
+          "phases": [
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "INVESTIGATE"
+          ],
+          "ans": "The service unit that is crash-looping is **gohttpserver.service**. The recent failure evidence is the repeated systemd journal entry: `gohttpserver.service: Fa",
+          "assert_snip": "the service unit repeatedly failing and crash-looping is 'gohttpserver.service'. \n the consistent failure evidence is the message 'failed with result 'exit-code'' logged by systemd[1] for the service."
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0,
+          "phases": [
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "SYNTHESIZE",
+            "SYNTHESIZE"
+          ],
+          "ans": null,
+          "assert_snip": ""
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 6,
+          "n_assertions": 1,
+          "phases": [
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "INVESTIGATE"
+          ],
+          "ans": null,
+          "assert_snip": "the service unit `gohttpserver.service` is repeatedly failing and is the primary candidate for the crash-looping unit."
+        }
+      ]
+    },
+    "exp21b_bruteforce": {
+      "n": 3,
+      "finalized_rate": 0.667,
+      "none_count": 1,
+      "none_with_answer_in_tattoo": 0,
+      "none_without_answer": 1,
+      "judge_ever_converged_rate": 0.667,
+      "death_phase_dist": {
+        "SYNTHESIZE": 1,
+        "CONVERGED": 2
+      },
+      "samples": [
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0,
+          "phases": [
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "SYNTHESIZE",
+            "SYNTHESIZE"
+          ],
+          "ans": null,
+          "assert_snip": ""
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": false,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 3,
+          "phases": [
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "INVESTIGATE",
+            "SYNTHESIZE"
+          ],
+          "ans": "The single source IP address responsible for the most failed attempts is 174.138.8.10, with a total of 10 attempts visible in the provided log sample.",
+          "assert_snip": "the pattern \"failed password\" reliably captures the source ip address in the systemd journal logs, appearing after the keyword \"from\". \n based on the analysis of the log structure, the ip address 174."
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": false,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 5,
+          "n_assertions": 3,
+          "phases": [
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "DECOMPOSE",
+            "INVESTIGATE",
+            "INVESTIGATE"
+          ],
+          "ans": "Source IP: 174.138.8.10, Attempts: 10 (Note: This count is based on the visible log sample, but represents the highest frequency found.)",
+          "assert_snip": "the relevant log entries for failed ssh attempts contain the pattern: `failed password for .* from (ip_address) port \\d+ ssh2`. \n the source ip address can be reliably extracted using a regex pattern "
+        }
+      ]
+    }
+  },
+  "elapsed_sec": 2161.6
+}

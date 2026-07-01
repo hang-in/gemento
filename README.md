@@ -400,8 +400,8 @@ Note: for math tasks, first verify that `expected_answer` itself satisfies the c
 | Stage 7 | done | Context Router, mandatory prompt, retry combination |
 | Stage 8 | done | mandatory-tool prompt opt-in integration (caller-decides) |
 | Stage 9 | done | Facet aggregate tool A/B (H21 conditional, aggregation-only) |
-| Stage 10 | done | orchestrator reliability — retrieval-discipline opt-in (H22 inconclusive/effectively rejected, lever did not replicate) |
-| Mid-term | planned | finalization-variance diagnosis, Graph/Evidence Tool |
+| Stage 10 | done | orchestrator reliability — retrieval-discipline opt-in (H22 inconclusive/effectively rejected) + finalization-variance diagnosis & retry K-sweep track close (per-attempt ≈49% high-variance, retry K=5→95%) |
+| Mid-term | planned | per-attempt reliability (Exp16b-style) & a2a, Graph/Evidence Tool |
 | Long-term | planned | more systematic cross-model ablation and a technical report |
 
 ---

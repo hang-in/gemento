@@ -1,0 +1,333 @@
+{
+  "experiment": "finalization_variance_diag",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "arm": "control (grep_only+router+mandatory, discipline off)",
+  "n_batches": 3,
+  "batch_n": 10,
+  "max_cycles": 8,
+  "batches": [
+    {
+      "batch": 1,
+      "n": 10,
+      "finalized_rate": 0.7,
+      "samples": [
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 1
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 1
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 1
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 1
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 2
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 2
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 3
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": true,
+          "correct": false,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 4,
+          "n_assertions": 2
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0
+        }
+      ]
+    },
+    {
+      "batch": 2,
+      "n": 10,
+      "finalized_rate": 0.6,
+      "samples": [
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 1
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 1
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 6,
+          "n_assertions": 2
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 1
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 1
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 5,
+          "n_assertions": 2
+        }
+      ]
+    },
+    {
+      "batch": 3,
+      "n": 10,
+      "finalized_rate": 0.4,
+      "samples": [
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 3,
+          "n_assertions": 2
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 4,
+          "n_assertions": 2
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 1
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0
+        },
+        {
+          "finalized": true,
+          "answer_in_tattoo": true,
+          "correct": true,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 7,
+          "n_assertions": 1
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": true,
+          "correct": false,
+          "death_phase": "CONVERGED",
+          "judge_ever_converged": true,
+          "n_cycles": 6,
+          "n_assertions": 1
+        },
+        {
+          "finalized": false,
+          "answer_in_tattoo": false,
+          "correct": false,
+          "death_phase": "SYNTHESIZE",
+          "judge_ever_converged": false,
+          "n_cycles": 8,
+          "n_assertions": 0
+        }
+      ]
+    }
+  ],
+  "pooled": {
+    "n": 30,
+    "finalized_rate": 0.567,
+    "wilson95": [
+      0.392,
+      0.726
+    ],
+    "correct_rate": 0.5,
+    "empty_tattoo_rate": 0.367,
+    "judge_conv_rate": 0.6,
+    "death_phase_dist": {
+      "CONVERGED": 19,
+      "SYNTHESIZE": 11
+    }
+  },
+  "variance_analysis": {
+    "batch_finalized_rates": [
+      0.7,
+      0.6,
+      0.4
+    ],
+    "pooled_p": 0.567,
+    "wilson95": [
+      0.392,
+      0.726
+    ],
+    "expected_batch_var_binomial": 0.0246,
+    "observed_batch_var": 0.0156,
+    "dispersion_ratio_obs_over_exp": 0.63,
+    "note": "dispersion ~1 → per-chain 노이즈(단일 분포); ≫1 → batch/시간 over-dispersion. (3 batch 는 coarse.)"
+  }
+}

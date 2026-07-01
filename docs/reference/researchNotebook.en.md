@@ -1,7 +1,7 @@
 ---
 type: reference
 status: in_progress
-updated_at: 2026-07-01
+updated_at: 2026-07-02
 mirror_of: docs/reference/researchNotebook.md (Part 1 — Closed Findings)
 language: en
 note: 2026-06-30 v14 — Exp21 facet aggregate tool A/B (Stage 9). H21 CONDITIONALLY SUPPORTED (aggregation-specific): aggregate_context (untruncated full aggregation) is decisive on aggregation tasks (score 0.0→0.8 — grep_only is confidently-wrong 174.138.8.10 5/5 due to the 16KB cap; grep_facet correct 45.144.212.75 4/5), but no benefit on single-needle tasks (0.3→0.2, facet barely used). non-null rate is uninformative (both arms 1.0) → the real signal is accuracy. more structure != monotonically better (failure-mode-specific). H19/H20 absent = Exp19/Exp20 were validations, not new hypotheses. v13 — Exp19 real-data validation (n100 journald 1.15M tok → boxie e4b router; correctly diagnosed real certbot failure 5/5; replaces the mock caddy; RTX 5060Ti tps gen~95/prefill~1620). v12 — Exp18 repo-scale (size invariance). H18 SUPPORTED (multihop3 75→92→100%, multineedle 100% at ~245K tok; router makes the model's reasoning load O(1) in log size). Stage 7 Context Router line complete. v11 — Exp17 hard tasks. H17 partial (scaling ✅ e4b+router reaches multi-hop/aggregation/distractor, baseline 92%; mandatory generality ❌ — it's a failure-mode-specific fix, −3pp on hard tasks). v10 — Exp16c mandatory+retry combined. H16c SUPPORTED (all sizes 100%, 30/30; H15 Context Router practical-complete on e4b). v9 — Exp16b mandatory-tool prompting. H16b SUPPORTED (per-attempt 27->83%, +57pp; failure was transcription-omission not tool-neglect — tool_rounds DROPPED). mandatory + retry ~= 99% path. v8 — Exp16 output-stabilization (retry-on-None). H16 partially supported (retry lifts +30~60pp but plateaus ~50-70%; per-attempt reliability is the bottleneck). v7 — Exp15 v2 Context Router Stress Test (canonical gemma4:e4b, n=5, num_ctx-controlled). H15 conditionally supported (input-size dependent). 2026-05-09 v6 — Stage 6 v3 (gemma4:31b H13 added). M2 split into 4 sub-variants (M2-a/b/c/d). H13 (M1) measurable = Gemma 4 E4B only — *specific-model identification*, not size threshold. A-agent JSON-schema contract = measurement-tool fit caveat. Paper §1.3 narrowing.
@@ -1327,6 +1327,22 @@ Limitations: n=10 small sample, single model (e4b), rate-based metric (no Cohen'
 Detail: `experiments/exp15_context_router/diagnostics/v22_retrieval_discipline_result.json`. Driver: `run_v22_retrieval_discipline.py`. Commits: integration `f466d40` / gate `47db68e` / driver `3d64823` / result `3a5a480`.
 
 The hypothesis table above (H1~H21) remains unchanged (Closed-append-only policy). H22's entry is a new addition only.
+
+---
+
+## Orchestrator-reliability track close: finalization variance + retry K-sweep (2026-07-02)
+
+Following Exp22 (H22 inconclusive), one open question remained: why did the control finalized rate swing from 17% (lever, n=6) to 70% (Exp22, n=10)? Two diagnostics close it. This is **not a new hypothesis** — it is a re-validation/characterization of H16 (retry-on-None). Shared code unchanged; `diagnostics/` scripts.
+
+Diagnostic 1 — variance characterization (`variance_diag.py`, control task A, 3 batches × n=10 = 30). Pooled finalized = **57%** (Wilson95 [39%, 73%]); batch rates [70%, 60%, 40%]; dispersion (observed/expected batch variance) = **0.63 < 1** (under-dispersed) → no systematic batch/temporal/server effect; a single distribution with per-chain independence. So the lever's 17% (n=6) and Exp22's 70% (n=10) are both tail draws of this distribution — the "17% problem" was a small-sample illusion. judge_conv 60% ≈ finalized, reconfirming Phase 0 (the judge converges when there is signal).
+
+Diagnostic 2 — retry K-sweep (`retry_capstone.py`, control task A, n=20, retry-on-None). K=3: first-attempt 35%, finalized-after-retry **70%** (Wilson [48%, 86%]), vs binomial prediction 72.5% at p=.35. K=5: first-attempt 50%, finalized-after-retry **95%** (Wilson [76%, 99%]), vs prediction 96% at p=.50. Pooling first-attempts across all three diagnostics (n=70) gives per-attempt ≈ **49%**; the binomial prediction 1−(1−p)^K then reads K=1 49% / K=3 86% / K=5 96%, and the observed K=5 = 95% ≈ 96% — retry-on-None scales exactly as the binomial math predicts.
+
+Track-close conclusions: (1) the "reliability problem" is per-attempt finalization ≈49% with high run-to-run variance (35–57%) — not a systematic defect (dispersion 0.63), not a missing nudge (H22 refuted narrow-query). (2) retry-on-None (H16) is the confirmed, predictable lever; to clear ≥90% robustly use K≈5 (observed 95%). Exp16's earlier "retry falls short of ~90%" was the specific combination of low K and a low per-attempt base; raising K resolves it (at a linear cost in attempts). (3) The lever's phantom +50pp (H22) and Exp22's failure are both explained by the 35–57% per-attempt swing, so reliability levers must not be judged from a single small-sample A/B. (4) Two durable levers remain: retry-K (immediate, tuning-only, linear cost) and per-attempt reliability (Exp16b-style, deeper but harder; a2a planner-executor is the upper candidate here).
+
+Detail: `variance_diag_result.json` / `retry_capstone_result.json` (K=3) / `retry_capstone_k5_result.json` (K=5), all under `experiments/exp15_context_router/diagnostics/`. Scripts: `variance_diag.py`, `retry_capstone.py`.
+
+This section documents a characterization of H16 (retry-on-None); it introduces no new hypothesis ID, and the hypothesis table above remains unchanged (Closed-append-only policy).
 
 ---
 

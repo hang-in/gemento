@@ -1,0 +1,1012 @@
+{
+  "experiment": "micro_diag_a_stage",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "n": 6,
+  "samples": [
+    {
+      "i": 1,
+      "finalized": false,
+      "n_assertions": 0,
+      "any_tool": false,
+      "any_raw_gohttp": false,
+      "any_parse_fail": false,
+      "classification": "A:investigation-fail (no grep)",
+      "cycles": [
+        {
+          "cycle": 1,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 1495,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "This task requires me to first decompose the problem into sub-questions, while simultaneously adhering to the mandatory tool-use rules specified in the goal. The primary focus must be on investigating"
+        },
+        {
+          "cycle": 2,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 1932,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the general pattern \\\"error\\\" returned many common, non-critical errors (e.g., SSH connection resets, networkd warnings, container runtime info message"
+        },
+        {
+          "cycle": 3,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 1911,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the general pattern \\\"error\\\" returned a large volume of noise, including common network errors (sshd, apt-helper), container runtime warnings (dockerd"
+        },
+        {
+          "cycle": 4,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2087,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the pattern \\\"error\\\" returned a large volume of general system errors (network failures, SSH connection resets, container runtime warnings, etc.). The"
+        },
+        {
+          "cycle": 5,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2085,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the pattern \\\"error\\\" returned a large volume of general errors (network, SSH, container runtime, etc.), but did not pinpoint a specific service unit t"
+        },
+        {
+          "cycle": 6,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2082,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the pattern \\\"error\\\" returned many general errors related to networkd, sshd, docker, and apparmor, but did not pinpoint a single service unit that is "
+        },
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2195,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The previous search for the general pattern \\\"error\\\" returned a large volume of non-specific errors related to network services (networkd-wait-online), SSH connections, and "
+        },
+        {
+          "cycle": 8,
+          "phase": "SYNTHESIZE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2475,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "We have reached a point where the `next_directive` instructs us to finalize the answer. However, the `goal.objective` contains mandatory rules that supersede this directive: we *must* call `grep_conte"
+        }
+      ],
+      "final_ans": null
+    },
+    {
+      "i": 2,
+      "finalized": true,
+      "n_assertions": 1,
+      "any_tool": false,
+      "any_raw_gohttp": true,
+      "any_parse_fail": false,
+      "classification": "OK(populated)",
+      "cycles": [
+        {
+          "cycle": 1,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 1714,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial `grep_context` search for 'error|E0432' returned many general system errors (apt-helper, sshd, containerd, apparmor) but did not clearly identify a service unit t"
+        },
+        {
+          "cycle": 2,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2392,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the pattern \\\"error\\\" returned a large volume of general system errors (network failures, SSH connection resets, container runtime warnings, etc.). The"
+        },
+        {
+          "cycle": 3,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2222,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "We must adhere strictly to the mandatory tool-use rules provided in the goal. Before breaking down the problem or formulating a detailed plan, the first step is to investigate the raw log data using t"
+        },
+        {
+          "cycle": 4,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": true,
+          "raw_len": 2476,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial grep for 'failed|crashed' was highly successful. The results overwhelmingly point to a single service unit: `gohttpserver.service`. This service is repeatedly fai"
+        },
+        {
+          "cycle": 5,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": true,
+          "raw_len": 2047,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The previous search for 'error' returned many generic errors (network, SSH, container runtime) but did not provide specific evidence of a service unit crash-looping, nor did "
+        },
+        {
+          "cycle": 6,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": true,
+          "raw_len": 2289,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the general pattern \\\"error\\\" returned a large volume of noise, primarily related to network setup (apt-helper), SSH connections (sshd), and container "
+        },
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": true,
+          "raw_len": 2206,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The next_directive mandates combining all confirmed facts into a final answer. The confirmed fact (Assertion 3ff2e1a4) identifies the crash-looping service unit as `gohttpser"
+        }
+      ],
+      "final_ans": "The service unit that is repeatedly crash-looping on server test9ng is `gohttpserver.service`. The failure evidence is d"
+    },
+    {
+      "i": 3,
+      "finalized": false,
+      "n_assertions": 1,
+      "any_tool": false,
+      "any_raw_gohttp": false,
+      "any_parse_fail": false,
+      "classification": "OK(populated)",
+      "cycles": [
+        {
+          "cycle": 1,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 1907,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for 'error' returned many general errors (networking, SSH, container runtime, AppArmor) but did not pinpoint a single, repeatedly crash-looping service uni"
+        },
+        {
+          "cycle": 2,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 1483,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the general pattern \\\"error\\\" returned many unrelated errors (SSH connection resets, networkd failures, container runtime warnings) but did not pinpoin"
+        },
+        {
+          "cycle": 3,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2090,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the pattern \\\"error\\\" returned 223 matches, which covered general system errors (networkd, sshd, containerd, etc.) but did not pinpoint a specific serv"
+        },
+        {
+          "cycle": 4,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2223,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The previous `grep_context` call using `restarting|exit status|error` returned many general errors related to network services (apt-helper, sshd), container runtimes (dockerd"
+        },
+        {
+          "cycle": 5,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2378,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The previous step successfully addressed the first open question by searching for the keyword 'restarting'. The results indicate that 'apparmor.systemd' is restarting, which "
+        },
+        {
+          "cycle": 6,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2003,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the general pattern \\\"error\\\" returned many unrelated errors (SSH connection resets, networkd failures, containerd plugin issues, etc.). These do not p"
+        },
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2129,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The current `next_directive` is to combine all confirmed facts into a final answer. However, the previous `grep_context` search for 'error' returned a large volume of general"
+        }
+      ],
+      "final_ans": null
+    },
+    {
+      "i": 4,
+      "finalized": false,
+      "n_assertions": 0,
+      "any_tool": false,
+      "any_raw_gohttp": false,
+      "any_parse_fail": false,
+      "classification": "A:investigation-fail (no grep)",
+      "cycles": [
+        {
+          "cycle": 1,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2429,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the general pattern \\\"error\\\" returned a large volume of unrelated errors (network, SSH, container runtime, AppArmor). This noise makes it impossible t"
+        },
+        {
+          "cycle": 2,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2132,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the pattern \\\"error\\\" returned a large volume of general errors related to networking (apt-helper), SSH connections (sshd), and container runtime setup"
+        },
+        {
+          "cycle": 3,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2045,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the pattern \\\"error\\\" returned a large volume of errors, but these errors are primarily related to network services (apt-helper, sshd), container runti"
+        },
+        {
+          "cycle": 4,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2195,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for 'error' returned many general errors (network, SSH, container runtime, AppArmor) but did not pinpoint a single, repeatedly crash-looping service unit, "
+        },
+        {
+          "cycle": 5,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 1851,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The next directive requires me to answer the open questions and add new facts. However, the goal objective mandates that I MUST call `grep_context` on the provided handle bef"
+        },
+        {
+          "cycle": 6,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2673,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for 'error' provided many generic errors (networking, SSH, container runtime) but did not pinpoint a single, repeatedly crash-looping service unit. The ope"
+        },
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2105,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The current `next_directive` is to synthesize the final answer. However, the previous search for 'error' yielded numerous general system errors (apt-helper, sshd, containerd,"
+        },
+        {
+          "cycle": 8,
+          "phase": "SYNTHESIZE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2233,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The current `next_directive` is to synthesize the final answer. However, the `goal.objective` contains mandatory tool-use rules that must be followed before any conclusion ca"
+        }
+      ],
+      "final_ans": null
+    },
+    {
+      "i": 5,
+      "finalized": false,
+      "n_assertions": 1,
+      "any_tool": false,
+      "any_raw_gohttp": false,
+      "any_parse_fail": false,
+      "classification": "OK(populated)",
+      "cycles": [
+        {
+          "cycle": 1,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2786,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The current directive is to break the problem into sub-questions. The overall goal is to identify a crash-looping systemd service unit and provide failure evidence from a lar"
+        },
+        {
+          "cycle": 2,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 1864,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the general pattern \\\"error\\\" returned many unrelated errors (network failures, SSH connection resets, container runtime warnings, etc.). These errors "
+        },
+        {
+          "cycle": 3,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2234,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the general pattern \\\"error\\\" returned a large volume of unrelated errors from various services (sshd, apt-helper, dockerd, kernel, etc.). These errors"
+        },
+        {
+          "cycle": 4,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2029,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for 'error' returned many generic errors (network, SSH, container runtime, AppArmor) but did not pinpoint a service unit that is actively crash-looping, wh"
+        },
+        {
+          "cycle": 5,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2485,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for 'error' returned 223 matches, which are highly generic and relate to various system components (apt-helper, sshd, dockerd, containerd, etc.). These err"
+        },
+        {
+          "cycle": 6,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2226,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the generic pattern \\\"error\\\" returned a large volume of noise, primarily consisting of network errors (apt-helper, systemd-networkd-wait-online), SSH "
+        },
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2250,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "We have reached a point where the `next_directive` instructs us to finalize the answer. However, the mandatory rules established in the `goal.objective` state that we *must* call `grep_context` on the"
+        },
+        {
+          "cycle": 8,
+          "phase": "SYNTHESIZE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2056,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "We must adhere to the mandatory tool-use rules specified in the `goal.objective`, which state that I MUST call `grep_context` on the given handle BEFORE answering. Although the `next_directive` is to "
+        }
+      ],
+      "final_ans": null
+    },
+    {
+      "i": 6,
+      "finalized": false,
+      "n_assertions": 0,
+      "any_tool": false,
+      "any_raw_gohttp": false,
+      "any_parse_fail": false,
+      "classification": "A:investigation-fail (no grep)",
+      "cycles": [
+        {
+          "cycle": 1,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2029,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the general pattern \\\"error\\\" returned many common system errors (networking, SSH, container runtime, AppArmor) but did not pinpoint a service unit in "
+        },
+        {
+          "cycle": 2,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 1902,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the general pattern \\\"error\\\" returned a large volume of transient errors from multiple services (apt-helper, sshd, containerd, apparmor). These errors"
+        },
+        {
+          "cycle": 3,
+          "phase": "DECOMPOSE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 1916,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the pattern \\\"error\\\" returned a large volume of general errors (network, SSH, container runtime, AppArmor) but did not clearly isolate a service unit "
+        },
+        {
+          "cycle": 4,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 1786,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the general pattern \\\"error\\\" yielded many common, non-critical errors (network failures, SSH connection resets, container runtime warnings) but did no"
+        },
+        {
+          "cycle": 5,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2364,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the pattern \\\"error\\\" yielded many generic errors related to networking (apt-helper), SSH connections (sshd), and container runtime (dockerd/containerd"
+        },
+        {
+          "cycle": 6,
+          "phase": "INVESTIGATE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2036,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The initial search for the pattern \\\"error\\\" returned a large volume of general errors (network failures, SSH connection resets, container runtime warnings, etc.). None of th"
+        },
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2109,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "```json {   \"reasoning\": \"The previous step used `grep_context` with the pattern \\\"error\\\", which returned a large volume of general system errors (apt-helper, sshd, containerd, dockerd, kernel messag"
+        },
+        {
+          "cycle": 8,
+          "phase": "SYNTHESIZE",
+          "n_tool_calls": 0,
+          "raw_has_gohttp": false,
+          "raw_len": 2528,
+          "parsed_ok": true,
+          "parsed_keys": [
+            "reasoning",
+            "handoff_a2b",
+            "new_assertions",
+            "invalidated_assertions",
+            "resolved_questions",
+            "new_questions",
+            "overall_confidence",
+            "final_answer",
+            "tool_calls"
+          ],
+          "a_error": null,
+          "raw_snip": "This is a critical conflict. The `next_directive` instructs me to finalize the answer, but the `goal.objective` contains mandatory rules that state I *must* perform log investigation (`grep_context`) "
+        }
+      ],
+      "final_ans": null
+    }
+  ],
+  "elapsed_sec": 1358.1
+}

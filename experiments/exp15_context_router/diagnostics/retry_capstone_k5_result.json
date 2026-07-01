@@ -1,0 +1,150 @@
+{
+  "experiment": "retry_capstone",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "arm": "control (grep_only+router+mandatory) + retry-on-None",
+  "n": 20,
+  "K": 5,
+  "max_cycles": 8,
+  "samples": [
+    {
+      "finalized": true,
+      "attempts": 3,
+      "correct": true,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 2,
+      "correct": true,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 3,
+      "correct": true,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 3,
+      "correct": true,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": true,
+      "attempts": 5,
+      "correct": true,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": true,
+      "attempts": 2,
+      "correct": true,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 2,
+      "correct": true,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": true,
+      "attempts": 4,
+      "correct": true,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": false,
+      "attempts": 5,
+      "correct": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": true,
+      "attempts": 2,
+      "correct": true,
+      "first_attempt_finalized": false
+    }
+  ],
+  "agg": {
+    "n": 20,
+    "finalized_rate_after_retry": 0.95,
+    "finalized_wilson95": [
+      0.764,
+      0.991
+    ],
+    "first_attempt_finalized_rate": 0.5,
+    "correct_rate": 0.95,
+    "avg_attempts": 2.05,
+    "attempts_dist": {
+      "3": 3,
+      "2": 4,
+      "1": 10,
+      "5": 2,
+      "4": 1
+    }
+  },
+  "elapsed_sec": 8328.3
+}

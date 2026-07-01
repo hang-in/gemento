@@ -420,8 +420,8 @@ Exp07/Exp08에서 정답 데이터 결함이 실험 결론을 바꾼 사례가 �
 | Stage 7 | 완료 | Context Router, mandatory prompt, retry 조합 |
 | Stage 8 | 완료 | mandatory-tool 프롬프트 opt-in 편입 (caller-decides) |
 | Stage 9 | 완료 | Facet 집계 도구 A/B (H21 조건부, 집계 task 한정) |
-| Stage 10 | 완료 | 오케스트레이터 신뢰성 — retrieval-discipline opt-in (H22 미결/실효 기각, 레버 미재현) |
-| 중기 | 예정 | finalization 분산 진단, Graph/Evidence Tool |
+| Stage 10 | 완료 | 오케스트레이터 신뢰성 — retrieval-discipline opt-in (H22 미결/실효 기각) + finalization 분산 진단·retry K-sweep 트랙 종결 (per-attempt ≈49% 고분산, retry K=5→95%) |
+| 중기 | 예정 | per-attempt 신뢰도(Exp16b류)·a2a, Graph/Evidence Tool |
 | 장기 | 예정 | 더 체계적인 cross-model ablation과 technical report |
 
 ---

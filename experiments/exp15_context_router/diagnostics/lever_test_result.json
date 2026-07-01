@@ -1,0 +1,133 @@
+{
+  "experiment": "lever_test_narrow_query",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "n_per_arm": 6,
+  "arms": {
+    "control": {
+      "n": 6,
+      "finalized_rate": 0.167,
+      "empty_tattoo_rate": 0.833,
+      "correct_rate": 0.167,
+      "samples": [
+        {
+          "finalized": false,
+          "n_assertions": 0,
+          "answer_in_tattoo": false,
+          "n_cycles": 8,
+          "death_phase": "SYNTHESIZE",
+          "correct": false,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "n_assertions": 2,
+          "answer_in_tattoo": true,
+          "n_cycles": 5,
+          "death_phase": "CONVERGED",
+          "correct": true,
+          "ans": "The service unit that is crash-looping is `gohttpserver.service`. The recent failure evidence is the repeated systemd jo"
+        },
+        {
+          "finalized": false,
+          "n_assertions": 0,
+          "answer_in_tattoo": false,
+          "n_cycles": 8,
+          "death_phase": "SYNTHESIZE",
+          "correct": false,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "n_assertions": 0,
+          "answer_in_tattoo": false,
+          "n_cycles": 8,
+          "death_phase": "SYNTHESIZE",
+          "correct": false,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "n_assertions": 0,
+          "answer_in_tattoo": false,
+          "n_cycles": 8,
+          "death_phase": "SYNTHESIZE",
+          "correct": false,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "n_assertions": 0,
+          "answer_in_tattoo": false,
+          "n_cycles": 8,
+          "death_phase": "SYNTHESIZE",
+          "correct": false,
+          "ans": null
+        }
+      ]
+    },
+    "nudge": {
+      "n": 6,
+      "finalized_rate": 0.667,
+      "empty_tattoo_rate": 0.333,
+      "correct_rate": 0.5,
+      "samples": [
+        {
+          "finalized": false,
+          "n_assertions": 0,
+          "answer_in_tattoo": false,
+          "n_cycles": 8,
+          "death_phase": "SYNTHESIZE",
+          "correct": false,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "n_assertions": 2,
+          "answer_in_tattoo": true,
+          "n_cycles": 7,
+          "death_phase": "CONVERGED",
+          "correct": true,
+          "ans": "The service unit that is crash-looping is `gohttpserver.service`. The recent failure evidence is the repeated systemd jo"
+        },
+        {
+          "finalized": true,
+          "n_assertions": 2,
+          "answer_in_tattoo": true,
+          "n_cycles": 7,
+          "death_phase": "CONVERGED",
+          "correct": true,
+          "ans": "The service unit that is repeatedly crash-looping is `gohttpserver.service`. The recent failure evidence observed in the"
+        },
+        {
+          "finalized": true,
+          "n_assertions": 1,
+          "answer_in_tattoo": true,
+          "n_cycles": 8,
+          "death_phase": "CONVERGED",
+          "correct": true,
+          "ans": "The service unit that is crash-looping is **gohttpserver.service**. \n\n**Recent Failure Evidence:**\nThe service repeatedl"
+        },
+        {
+          "finalized": false,
+          "n_assertions": 0,
+          "answer_in_tattoo": false,
+          "n_cycles": 8,
+          "death_phase": "SYNTHESIZE",
+          "correct": false,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "n_assertions": 5,
+          "answer_in_tattoo": false,
+          "n_cycles": 7,
+          "death_phase": "CONVERGED",
+          "correct": false,
+          "ans": "Based on the analysis of the systemd journal, the service unit most likely experiencing repeated failure or instability "
+        }
+      ]
+    }
+  },
+  "elapsed_sec": 2537.4
+}
