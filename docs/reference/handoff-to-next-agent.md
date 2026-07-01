@@ -1,81 +1,137 @@
-# Handoff to Next Agent — Stage 7/8 마감, 다음: test9ng 초대형 실로그 + facet 도구
+# Handoff to Next Agent — Stage 9(Exp21 facet) 마감 + 오케스트레이터 신뢰성 트랙 착수
 
-- **인계 시점**: 2026-06-30
-- **현재 단계**: Stage 7 Context Router 라인(Exp15~19) 완결 + Stage 8(mandatory opt-in) 완료 + test 위생 정리 완료. 모두 `origin/main` 푸시됨 (HEAD `ee604f9` 근처).
-- **다음 세션 순서 (사용자 확정)**: ① **test9ng 초대형 실로그 router 검증(Exp20)** 먼저 → ② **facet 도구 프로토타입 + A/B**.
+- **인계 시점**: 2026-07-01
+- **⚠ 다음 세션 = 완전 재부팅(`/exit` 후 재시작, 새 파일 세션)** — 이 대화 컨텍스트 전무. 이 문서 + 메모리(`MEMORY.md`)로만 이어감.
+- **⚠ scratchpad 소실**: 재부팅으로 이번 세션 scratchpad(세션 스코프)가 통째 사라짐 — 메가로그 파일(117MB), 레버 결과, 원본 진단 스크립트 포함. **durable 보존한 것은 §6 참조.**
+
+---
+
+## 0. 지금 진행 중 (재부팅 전 확인)
+
+**레버 A/B가 백그라운드 실행 중이었음** (control vs nudge, task A, n=6씩). 이 세션에서 완료 후 결과를 아래 §4.3에 채우고 durable 보존 예정. **재부팅은 레버 완료 + 결과 보존 후.** (마지막 관측: control n=5 finalized 20%/empty 80%, nudge 미시작.)
+
+✅ **LEVER 최종 결과** (task A, n=6/arm, 2026-07-01 완료):
+```
+             finalized   empty_tattoo   correct
+  control      17%          83%          17%
+  nudge        67%          33%          50%
+  Δ           +50pp        -50pp        +33pp
+```
+**판정: narrow-query nudge 작동 확인 (채택 방향).** 포기(empty-tattoo)를 정확히 절반으로 감소 → finalized +50pp, correct +33pp. 겨냥한 메커니즘대로. 단 n=6 소표본 + nudge도 2/6 여전히 포기(sample 1,5) + sample6 assertion 5개 과잉생성으로 오답 → 완전 해결 아님, ~절반 개선.
+→ **다음 세션 액션**: nudge 문구(§4.3)를 `system_prompt`(`MANDATORY_TOOL_RULES` 인근)에 **plan-first(gemento-plan-create) + 회귀 게이트(off byte-identical)**로 편입. 편입 후 재검증(n↑, task B도). 결과 durable: `diagnostics/lever_test_result.json`.
 
 ---
 
 ## 1. 이번 세션 달성 (요약)
 
-이전 핸드오프(2026-06-28)의 과장(n=1, mock, H14 충돌)을 **검증·정정**하고, Context Router를 합성→실데이터로 끝까지 밀어붙였다.
+### (A) Stage 9 — Exp21 Facet Aggregate Tool A/B **완료** (H21 ⚠ 조건부 채택)
+핸드오프 이전 우선순위(① Exp20 megalog ② facet A/B)를 모두 소화:
+- **Exp20 megalog 검증 → 진단**: test9ng 30일 저널(117MB/1.1M줄/~29.3M tok)을 boxie e4b router로 실행. task A(gohttpserver) 0.0의 원인이 스케일 아니라 **high-volume+16KB캡→finalization 실패**임을 단일 trial 정밀 진단으로 규명. (당시 결론은 §4에서 재정정됨.) 드라이버 `run_v20_megalog.py`.
+- **Exp21 facet A/B** (Sonnet 위임 구현 task-01~03 + Architect task-04):
+  - 단일 `aggregate_context(handle, pattern, group_by, top_n)` — 16KB 라인덤프 대신 untruncated 그룹별 top-N 카운트. **opt-in**(글로벌 `CONTEXT_TOOL_*` 불변, 별도 `FACET_TOOL_*` + caller `extra_tool_schemas/fns` default None=byte-identical). `orchestrator.py` 무변경.
+  - 결과: **task B(집계)에서 facet이 score 0.0→0.8** (grep_only 5/5 confidently-wrong `174.138.8.10` — 16KB 캡이 시간순 앞부분만 노출; grep_facet 4/5 정답 `45.144.212.75`, facet 16 calls). **단일-needle task A엔 무효**(0.3→0.2). non-null rate는 task B에서 무력(양 arm 1.0) → 진짜 신호는 accuracy. **"more structure ≠ monotonically better" 실증**, failure-mode-specific.
+  - **커밋**: `3c253b6`(plan+Exp20 드라이버) `5202991`(task-01) `9205b47`/`63d6c51`(task-02) `38f00c8`(테스트 repo-root 정정) `cdbcb6b`(task-03) `6905ca5`(결과) `b763f81`(task-04 verdict+분석). 전부 로컬 main, **push 안 함**.
+  - verdict 기록: researchNotebook.md/.en.md(append-only) + index.md(Recently Done Stage 9) + `docs/reference/exp21-facet-ab-analysis-2026-06-30.md`(§18).
 
-- **(a) 과장 정정**: Stage 7 v1의 "35% latency"(n=1+num_ctx artifact) 철회, H14 충돌(cross-model vs context) → **Context 가설 H15로 재부호화**, n100 caddy는 mock(`is_fallback`)이었음을 명시. 영문 노트북은 append-only errata.
-- **(b) Exp15 v2 (H15 ⚠ 조건부 채택)**: canonical gemma4:e4b, 5 task × 4 arm × num_ctx{4096,32768} × n=5. router 큰 로그 우위(0.908 vs 0.125), overflow서 유일 생존, 작은 로그엔 손해(입력 크기 의존).
-- **(c) Exp15 v3 (push/pull capacity 분기)**: gemma4:**e2b**는 agent tool-use 미달(router 0.097) → push(ErrorBlocks)만 됨; **e4b**는 pull(agent 도구). **e2b archived**, 주력=e4b. (사용자: e2b·tps·ripgrep 교체는 의미 없다고 판단 — 추구 안 함.)
-- **(d) Exp16/16b/16c**: retry 단독 50~70%(H16 부분) → **mandatory 프롬프트가 per-attempt 27→83%(H16b, 원인=전사 누락)** → mandatory+retry **100%(H16c)**.
-- **(e) Exp17 (H17 부분)**: e4b+router가 multi-hop/집계/distractor 스케일(baseline 92%); 단 mandatory는 **failure-mode-specific**(hard task −3pp).
-- **(f) Exp18 (H18 ✅ size invariance)**: 합성 ~245K tok(컨텍스트 7.5배)서도 92~100% 무저하. **router가 인지부하를 로그 크기와 분리(O(1))**.
-- **(g) Exp19 (실데이터 검증)**: **n100 실 journald 1.15M tok → boxie e4b router가 실제 certbot 장애 5/5 정확 진단**. mock caddy 정직한 대체. mean 0.7은 keyword artifact("failing to renew"≠"failed to start"), 실정확도 5/5.
-- **(h) Stage 8**: mandatory를 `run_abc_chain(mandatory_tool_prompt=False)` opt-in으로 정식 편입(`system_prompt.MANDATORY_TOOL_RULES`). 기본 False=거동 byte-identical(회귀 게이트 `tests/test_mandatory_optin.py` 5/5). 자동 게이트는 증거 부족으로 보류(plan: `docs/plans/mandatory-tool-opt-in.md`).
-- **(i) test 위생**: Stage 7이 top-level `experiments/results/`에 쓴 tuna/caddy를 exp15 하위로 이동 + `TestResultFilesByExperiment` 카운트 갱신 → `test_static` 43 OK.
+### (B) 오케스트레이터 신뢰성 트랙 착수 (§4에 상세)
+사용자가 "다음 방향"으로 **오케스트레이터 신뢰성**(확률적 finalization) 선택 → 진단 진행.
 
-**인프라 사실**: RTX 5060Ti, gemma4:e4b Q4_K_M = 생성 ~95 tok/s, prefill ~1,620 tok/s. router가 prefill을 로그 크기서 분리(stuffing 1.15M tok ≈ ~12분 vs grep 결과 ~3초).
+### (C) tunaRound a2a 교차프로젝트 문서 전달 (별 트랙, §7)
 
 ---
 
 ## 2. 핵심 인프라 / 접속 (다음 세션 필수)
 
-- **boxie** (외부 GPU 서버, gemma4:e4b 실행기): SSH `ssh -p 2232 -i C:/Users/사자/.ssh/id_ed25519 d9ng@14.58.110.187`. Ollama OpenAI/native API.
-  - **터널** (boxie ollama → 로컬 11435): `ssh -p 2232 -N -L 11435:127.0.0.1:11434 -o ServerAliveInterval=30 -o ExitOnForwardFailure=yes -i C:/Users/사자/.ssh/id_ed25519 d9ng@14.58.110.187` (백그라운드). **터널/서버 불안정 — 끊기면 재수립 후 resume.**
-  - gemma4:e4b + gemma4:e2b 둘 다 pull 됨.
-- **n100** (내부 장기운영 서버, 진단 대상): `~/.ssh/config` alias **`n100`** (192.168.1.121:9207). journald 9.8M줄. Exp19에서 검증 완료.
-- **test9ng** (≡ `test-server`, host `d9ng-i3-laptop`): `~/.ssh/config` alias **`test9ng.ddns.net`** (9207). **원격 셸이 fish** → bash 명령은 `ssh test9ng.ddns.net bash -s <<'EOF' ... EOF` 로 stdin 파이프. fish init이 stdout에 에러 찍을 수 있으니 `source:`/`openclaw.fish` 라인 필터.
-- 실험 실행: cloud/SSH는 에이전트 직접 가능(로컬 VRAM 무관). 로컬 LLM 로딩은 사용자만(VRAM 경합). 메모리 [[reference-remote-gemma-ssh-tunnel]] 참조.
+- **boxie** (외부 GPU 서버, gemma4:e4b 실행기): SSH `ssh -p 2232 -i C:/Users/사자/.ssh/id_ed25519 d9ng@14.58.110.187`.
+  - **터널** (boxie ollama → 로컬 11435): `ssh -p 2232 -N -L 11435:127.0.0.1:11434 -o ServerAliveInterval=30 -o ExitOnForwardFailure=yes -i C:/Users/사자/.ssh/id_ed25519 d9ng@14.58.110.187` (백그라운드). **불안정 — 끊기면 재수립.** healthcheck: `curl -s http://127.0.0.1:11435/api/tags`.
+- **test9ng** (≡ `test-server`): `~/.ssh/config` alias **`test9ng.ddns.net`** (9207). 원격 셸 fish — `source:`/`openclaw.fish` 라인 필터.
+- **메가로그 재pull 필수** (재부팅으로 소실): `ssh test9ng.ddns.net "journalctl --since '30 days ago' --no-pager" > <scratch>/test9ng_journal_30d.raw` (117MB/1.1M줄/~29.3M tok, ~2분). 드라이버는 `EXP20_LOG_PATH` env로 경로 오버라이드 가능.
+- **Redis**: 로컬 6379. 메가로그 키 `ctx:test9ng_journal_30d:stdout` (드라이버 `_load_megalog_to_redis`가 파일에서 재적재). Docker Desktop 또는 WSL redis-server. 재부팅 후 키 없음 → 드라이버가 재적재.
+- 실험 실행: cloud/원격(boxie)은 에이전트 직접 가능. 메모리 [[reference-remote-gemma-ssh-tunnel]].
 
 ---
 
-## 3. 다음 세션 작업 ① — Exp20: test9ng 초대형 실로그 router 검증
+## 3. 테스트 실행 규약 (중요 — 이번 세션 교훈)
 
-**이미 준비됨**: test9ng 30일 저널을 로컬 스크래치패드에 복사 완료 (단, 스크래치패드는 세션별이라 **다음 세션엔 재pull 필요**):
-```
-ssh test9ng.ddns.net "journalctl --since '30 days ago' --no-pager" > <scratch>/test9ng_journal_30d.log 2>/dev/null
-```
-- **크기**: 112MB / 1,105,195줄 / **~29.3M tok** (n100의 25배, 컨텍스트의 ~900배). stuffing 절대 불가.
-- **실 needle 2종**:
-  1. **gohttpserver.service 크래시루프** ("Failed with result 'exit-code'" 반복). → 단일 needle, 16KB 캡 robust. 채점 `[["gohttpserver"],["failed"]]`.
-  2. **SSH brute-force 5,093건**, 최다 IP **45.144.212.75(×286)**, 77.83.39.x 클러스터. → 집계 needle, **grep_context 16KB 캡 스트레스**. 채점 `[["45.144.212.75"]]`(+"failed password").
-
-**설계 (Exp20, `run_v20_megalog.py` 신규)**: 로컬 파일 → Redis 스풀 → boxie e4b **router+mandatory+retry**, 두 task × n=5. `run_v19_n100_journald.py` 패턴 복제(SSH-pull 대신 로컬 파일 로드 + Redis SET).
-- **확인 사항**: 112MB Redis SET(<512MB OK) + `grep_context`가 매 호출 112MB를 `splitlines()`+regex → **grep당 ~5-10초**(느리지만 가능). 너무 느리면 7d 윈도우로 축소.
-- **판별**: (a) 29M tok서도 size-invariance 재확인(certbot류). (b) 5093 매치가 16KB 캡에 막히면 **그 자체가 facet 도구 필요성의 실증 데이터** → ②로 연결.
+- **pytest 미설치**. repo 표준 = `unittest`.
+- **반드시 repo root에서 실행**: `python -m unittest discover -s experiments/tests -t .` (56 OK 기대). `experiments/`를 cwd로 두면 `test_static`이 `experiments` 패키지 import 실패 = **경로 아티팩트, 회귀 아님**.
+- `test_static`의 결과-인벤토리 exact-count(36/56)는 exp00~09만 검사 — exp15_context_router 신규 파일은 무영향.
+- `python` = `C:\Python\Python314\python.exe`.
 
 ---
 
-## 4. 다음 세션 작업 ② — facet 도구 프로토타입 + A/B
+## 4. 오케스트레이터 신뢰성 트랙 — 진단 상세 (다음 세션 핵심)
 
-**동기**: gemento 약점=시간, 강점=긴 로그 완전탐색(단 **exhaustiveness는 grep(도구)의 것**, "질의한 패턴에 한해서만"). 약점은 **모델의 패턴 선택/recall**(Exp14 under-query) + **grep_context 16KB 출력 캡**(고매치-볼륨서 누락). ripgrep 교체는 **무의미**(속도 병목 아님, grep는 이미 Python regex).
+**동기**: Exp21에서 task A finalization이 확률적(0.2~0.4)이라는 게 드러남 — judge가 정답을 tattoo에 갖고도 수렴 못 하는 것처럼 보였음. 이걸 정면 공략. **단 orchestrator.py = 심장부 → 반드시 "진단 → plan-first + 회귀 게이트(off byte-identical)".**
 
-**진짜 레버 = 구조화 facet 도구** (텍스트 패턴 추측 대신 결정론적 이상치 요약):
-- 후보: `summarize_log_anomalies(handle)` / `list_failed_units(handle)` / `error_type_histogram(handle)` / `count_by_pattern(handle, pattern)` (캡 대신 카운트+샘플 반환).
-- **A/B**: grep-only vs grep+facet, test9ng/n100 실 저널(특히 brute-force 집계 task)에서. under-query·16KB-캡 두 약점을 동시에 치는지 측정.
-- **경고 (반드시 반영)**: 도구 추가 = 소형 모델 오용 여지 증가(e2b는 grep도 못 몰았고 Exp17은 mandatory가 추론 task에 −). **"more structure ≠ monotonically better"** — A/B 검증 후에만 채택. 공유 코드(`tools/context_tools.py`, `orchestrator.py`) 변경이면 **plan-first(gemento-plan-create) + 회귀 게이트**.
+### 4.1 Phase 0 특성화 진단 (완료) — 메모리 [[phase0-finalization-rootcause]]
+`run_abc_chain` 반환값(tattoo/logs/final_answer) 계측, 공유코드 무변경. megalog task A n=8 + task B n=3, single-attempt.
+- **결과 (이진적)**: 수렴 chain = assertions 2~3, cycle 4~7, judge converged → finalize. 실패 chain = **assertions=0(empty tattoo)**, cycle 8 소진, judge 한 번도 converged 안 함.
+- `judge_ever_converged`가 `n_assertions>0`과 **1:1 상관**. → **judge는 멀쩡**(신호 있으면 cycle4 수렴). 원래 "judge가 수렴 거부"는 **n=1 착시**.
+- 근본 원인 = **상류 A(제안자)가 ~50% chain에서 assertion 0개 emit(empty tattoo)** → B 비판대상 없음 → judge 굶음 → None.
+
+### 4.2 마이크로 진단 (완료) — ⚠ 계측 보정 포함
+A raw_response/parsed_response 검사로 empty-tattoo 원인 세분화 시도. **중요 보정**:
+- **내 grep 카운터는 무효였음**: `orchestrator.py:526` — `model_caller`(native caller) 경로에선 `tool_call_log=[]` 하드코딩. native caller는 도구를 *내부*에서 실행하므로 `a_tool_calls`는 항상 0. → "no-grep" 분류 폐기. (native 도구 관측하려면 pilot처럼 도구 wrap 또는 caller stats dict 사용.)
+- **유효 증거(raw 추론)**: 실패 chain의 A가 `"initial search for 'error' returned large volume of unrelated errors... impossible to pinpoint"`라며 **넓게 grep→노이즈→좁히지 않고 포기**. parsed는 매번 성공(스키마 실패 아님).
+- **최종 근본 원인**: **under-query + 조기 포기** — 넓은 패턴('error', gohttpserver 로그엔 없음)으로 검색→노이즈→구체 패턴(`Failed with result`/`.service`)으로 안 좁히고 assertion 없이 종료. **= Exp14(H13 insufficient retrieval iterations) + under-query 약점의 finalization 렌즈 재출현.** judge/tool-channel/schema 문제 아님.
+- **재프레이밍**: "오케스트레이터 신뢰성" = **검색 견고성(retrieval robustness)** 문제. gemento가 이미 다뤄온 약점.
+
+### 4.3 레버 A/B (이 세션에서 완료 예정) — narrow-query nudge
+가장 싼 레버 falsify: constraints에 anti-give-up+narrow-query 지시 주입(프롬프트 only, 공유코드 무변경). control vs nudge, task A, n=6씩. 스크립트 `diagnostics/lever_test.py`.
+- **NUDGE 문구**: "넓은 검색은 노이즈. 포기 말고 `Failed with result`/`Main process exited`/`.service`로 좁혀라. finalize 전 후보 unit을 new_assertion으로 최소 1개 기록. 빈손 cycle 종료 금지."
+- 측정: finalized_rate(1차), empty_tattoo_rate(메커니즘), correct_rate.
+- **결과는 위 §0 ⏳블록에 기입.** 판정: nudge가 empty↓/finalized↑ 유의미 → **싼 레버 확보** → system_prompt(`MANDATORY_TOOL_RULES` 인근)에 plan-first+회귀게이트로 편입. 미미 → 레버 조정/facet-강제/다른 레버.
+
+### 4.4 후보 레버들 (같은 뿌리=retrieval robustness)
+1. **narrow-query nudge** (레버 A/B 중) — 프롬프트만.
+2. **강제 iteration** — no-assertion 시 "좁혀라" 재프롬프트.
+3. **facet 강제** (Exp21 aggregate_context 이미 있음) — `list_failed_units`류가 노이즈 grep을 깨끗한 히스토그램으로. 단 Exp21서 task A엔 모델이 facet 거의 안 씀 → "사용 강제"가 관건.
+- **a2a(planner→executor 분리)는 가장 비싼 옵션** — 싼 레버 부족할 때의 다음 카드. 지금 X.
 
 ---
 
 ## 5. 워크플로 / 규약 메모
 
-- **plan 문서 셋**: `gemento-plan-create` 스킬 (공유 코드/인프라 변경 시). **verdict 기록**: `gemento-verdict-record` (영문 노트북 **append-only** 강제 — 기존 entry 수정 금지, Change History 위 append). 둘 다 이번 세션에 사용함.
-- **명명 규약 (2026-06-30 §5 개정)**: 신규 변종/간이 실험은 **letter suffix**(Exp20b), `0X5` half-notation 폐기. `Exp035`/`Exp045`는 historical alias(rename 안 함).
-- **실험 드라이버 위치**: `experiments/exp15_context_router/run_v1x.py`. native caller `native_ollama_caller.py`(num_ctx 제어 + tool-loop 내장 — orchestrator의 model_caller 경로는 tool_calls 미실행이라 필요). 결과 JSON은 같은 dir `results/`. **stdout 로그는 `exp*_run*.log`로 .gitignore됨.**
-- **scorer caveat**: keyword 채점이 의미 정답을 과소평가(Exp19 0.7 vs 실 5/5; H12/H13/Exp19). 보조 후보: LLM-as-judge(paper-review P1-3, 보류 중).
-- **side 워크트리** `D:/privateProject/gemento-side-exp15`(브랜치 `side/exp15-crossmodel-ministral`)에 일부 구버전 드라이버 존재 — main이 canonical. 정리하려면 `git worktree remove`(단 .env 사본 있음).
+- **plan-first**: 공유코드(`orchestrator.py`/`context_tools.py`/`system_prompt.py`) 변경은 `gemento-plan-create` 스킬 + 회귀 게이트. **verdict**: `gemento-verdict-record`(영문 노트북 append-only 강제).
+- **Sonnet 위임 잘 작동**: 이번 세션 task-01~03을 `Agent(subagent_type=general-purpose, model=sonnet)`로 위임, 각 단계 코드리뷰로 승인. 위임 시 (a) 금지파일 명시 (b) pytest 미설치→unittest (c) git stash 금지 (d) 실행은 Architect가(긴 실험).
+- **명명 규약**: 신규 변종 = letter suffix(Exp21b). Stage 9까지 진행됨.
+- **드라이버 위치**: `experiments/exp15_context_router/run_v1x~v21.py`. native caller `native_ollama_caller.py`(num_ctx + 내부 tool-loop). 결과 JSON은 `results/`. stdout은 block-buffered → `python -u` 또는 결과 JSON polling.
+- **scorer caveat**: keyword 채점이 finalization과 accuracy를 혼동시킴(Exp21 교훈: non-null rate ≠ correct). LLM-judge 보조는 보류.
 
 ---
 
-## 6. 미해결 / 보류
+## 6. Durable 보존물 (재부팅 생존 — scratchpad 아님)
 
-- **자동 게이트(mandatory)**: 증거 부족(로그 크기≠신호) — facet/데이터 더 모은 뒤 재고.
-- **LLM-as-judge 보조 채점**: keyword artifact 해소용, 보류.
-- **e2b push-기반 외재화**: 사용자 판단 "의미 없음"(tool-use 불량) — 보류.
-- **paper(draft.md/.ko.md)**: H15~H18·Exp19 실데이터·size-invariance(O(1)) 반영 미완 — 라인 정리되면 paper 갱신 후보.
+`experiments/exp15_context_router/diagnostics/` (git untracked, 디스크에 존재):
+- `phase0_diag.py` + `phase0_diag_result.json` — Phase 0 특성화(§4.1).
+- `micro_diag.py` + `micro_diag_result.json` — A-stage 세분(§4.2, grep 카운터 무효 주의).
+- `lever_test.py` — 레버 A/B 하네스(§4.3). **결과 JSON은 scratchpad라 소실 → §0에 수치 보존.**
+- ⚠ 스크립트들이 scratchpad OUT 경로 + 메가로그 `_DEFAULT_LOG`(구 session UUID) 하드코딩 → 다음 세션 재사용 시 OUT 경로 수정 + `EXP20_LOG_PATH` env로 메가로그 지정.
+- 커밋 여부는 사용자 판단(현재 untracked). 진단 툴이라 미폴리시.
+
+---
+
+## 7. tunaRound a2a 교차프로젝트 (별 트랙, gemento와 무관)
+
+사용자 요청으로 gemento 세션 논의를 tunaRound(`D:/privateProject/tunaRound`, a2a 지향 멀티에이전트 토론 앱)에 전달. **신규 2파일, tunaRound 정본 무수정, 미커밋**:
+- `docs/design/a2a-comm-layer-crossproject-note_2026-07-01.md` — 참고 노트(정본 아님 표시).
+- `docs/prompts/a2a-comm-layer-architect-review_2026-07-01.md` — tunaRound 아키텍트용 검토 프롬프트.
+- 핵심: ① "a2a=통신레이어" 직관은 tunaRound 정본 §6에 이미 분해됨(SSH터널=boxie 무인증-localhost artifact / outbound 무터널 / inbound=tailscale). ② gemento verifiable-diagnosis = tunaRound (B) full-a2a 경제조건 #2 실물 후보(방향 수렴). ③ 잔여 리스크=codex MCP read_transcript 실호출(Stage 1).
+- **다음 세션 액션 아님** — 사용자가 tunaRound 세션에서 아키텍트에게 프롬프트 전달 예정.
+
+---
+
+## 8. 다음 세션 시작 순서 (권장)
+
+1. `git pull --ff-only`(불필요, 로컬 main) + `git log --oneline -5`로 `b763f81` 확인. 이 문서 + `MEMORY.md` recall.
+2. **§0 레버 결과** 확인 → nudge 효과 판정.
+3. 효과 있으면: narrow-query nudge를 `system_prompt`에 **plan-first(gemento-plan-create) + 회귀 게이트**로 편입. 효과 없으면: §4.4 다른 레버.
+4. (인프라) boxie 터널 재수립 + 메가로그 재pull(§2).
+5. **미해결/보류**: push(로컬만), README/conceptFramework에 Stage9/H21 반영(사용자 결정), LLM-judge 채점, e2b push-외재화.
+
+---
+
+## 9. 재부팅 타이밍 (사용자 질문 답)
+
+**레버 완료 → 내가 결과를 §0에 기입 + durable 보존 + "재부팅 안전" 신호 → 그때 재부팅.** 레버 실행 중 재부팅하면 (a) 백그라운드 프로세스 kill (b) scratchpad 레버결과 소실. **레버 완료 신호 대기 후 재부팅.**
