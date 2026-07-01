@@ -3,6 +3,7 @@ from .chunker import chunk_document, Chunk
 from .bm25_tool import bm25_retrieve, SEARCH_TOOL_SCHEMA, make_search_chunks_tool
 from .context_tools import CONTEXT_TOOL_SCHEMAS, CONTEXT_TOOL_FUNCTIONS, read_context, grep_context
 from .context_tools import FACET_TOOL_SCHEMAS, FACET_TOOL_FUNCTIONS, aggregate_context
+from .context_tools import FAILED_UNITS_TOOL_SCHEMAS, FAILED_UNITS_TOOL_FUNCTIONS, list_failed_units
 
 __all__ = [
     "TOOL_FUNCTIONS", "TOOL_SCHEMAS",
@@ -11,5 +12,6 @@ __all__ = [
     "bm25_retrieve", "SEARCH_TOOL_SCHEMA", "make_search_chunks_tool",
     "CONTEXT_TOOL_SCHEMAS", "CONTEXT_TOOL_FUNCTIONS", "read_context", "grep_context",
     "FACET_TOOL_SCHEMAS", "FACET_TOOL_FUNCTIONS", "aggregate_context",
+    "FAILED_UNITS_TOOL_SCHEMAS", "FAILED_UNITS_TOOL_FUNCTIONS", "list_failed_units",
 ]
 

@@ -200,6 +200,43 @@ def aggregate_context(handle: str, pattern: str, group_by: str | None = None,
         return {"error": f"Redis connection or aggregate error: {e}"}
 
 
+def list_failed_units(handle: str, top_n: int = 10) -> dict:
+    """실패/재시작 중인 systemd unit 을 전수 집계해 top-N 반환 (인자 없는 preset).
+
+    grep_context 로 검색어를 formulate 할 필요 없이, 표준 systemd 실패 신호
+    ('Failed with result' / 'Main process exited' / 'start-limit' / '.service' churn)
+    를 내부에서 스캔해 unit 별 실패-신호 카운트를 untruncated 로 돌려준다.
+    per-attempt retrieval_gap(모델이 넓은 grep 후 포기) 우회용.
+
+    Args:
+        handle: Redis key
+        top_n: 반환할 상위 unit 수 (기본 10)
+    """
+    try:
+        r = get_redis_client()
+        content = r.get(handle)
+        if content is None:
+            return {"error": f"Context handle '{handle}' not found in Redis."}
+        lines = content.splitlines()
+        signal = re.compile(
+            r"Failed with result|Main process exited|start-limit|entered failed state|Failed to start",
+            re.IGNORECASE,
+        )
+        unit = re.compile(r"(\S+\.service)", re.IGNORECASE)
+        from collections import Counter
+        counts: "Counter[str]" = Counter()
+        for ln in lines:
+            if signal.search(ln):
+                m = unit.search(ln)
+                if m:
+                    counts[m.group(1)] += 1
+        top = [{"unit": u, "failure_signals": c} for u, c in counts.most_common(top_n)]
+        return {"handle": handle, "signal_lines": sum(counts.values()),
+                "unique_units": len(counts), "top": top, "truncated": False}
+    except Exception as e:
+        return {"error": f"Redis connection or scan error: {e}"}
+
+
 CONTEXT_TOOL_SCHEMAS = [
     {
         "type": "function",
@@ -286,5 +323,34 @@ FACET_TOOL_SCHEMAS = [
 
 FACET_TOOL_FUNCTIONS = {
     "aggregate_context": aggregate_context,
+}
+
+FAILED_UNITS_TOOL_SCHEMAS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "list_failed_units",
+            "description": (
+                "List the systemd units that are FAILING or crash-looping in a cached log, "
+                "as an untruncated top-N count — NO search pattern needed. Call this FIRST "
+                "when diagnosing a service crash/failure: it scans standard systemd failure "
+                "signals ('Failed with result', 'Main process exited', start-limit, entered "
+                "failed state) and returns the units with the most failure signals. Use it "
+                "instead of guessing grep patterns. Returns {top:[{unit,failure_signals}], ...}."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "handle": {"type": "string", "description": "The Redis key handle"},
+                    "top_n": {"type": "integer", "description": "How many top units to return (default 10)"},
+                },
+                "required": ["handle"],
+            },
+        },
+    },
+]
+
+FAILED_UNITS_TOOL_FUNCTIONS = {
+    "list_failed_units": list_failed_units,
 }
 
