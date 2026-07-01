@@ -4,6 +4,7 @@ Plan document index. Register new plans here.
 
 ## Active
 
+- [exp23-failed-units-facet.md](exp23-failed-units-facet.md) — **Stage 11 (Exp23)**: per-attempt retrieval_gap(모델이 'error'만 반복 grep, per_attempt_diag pooled n=9 실패 7/7) 우회용 `list_failed_units(handle, top_n)` 인자없는 preset 도구 — 프롬프트(H22 반증) 대신 결정론적으로 실패 unit 직접 건넴. FACET(H21) opt-in 패턴 복제(글로벌 불변), orchestrator 무변경. 3 arm A/B(control/fu_offered/fu_mandatory, task A, n=15) — H21 저사용 경고로 mandatory arm 필수. 4 subtask. 결정 1~4 Architect default. Sonnet 진행 프롬프트: `docs/prompts/2026-07-02/exp23-failed-units-facetStart.md`
 - (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge + facet 도메인 다종화(`list_failed_units` 등, 집계 task 한정 — H21 후속).
 
 ## Recently Done — Stage 10 (2026-07-01)
