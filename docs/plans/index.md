@@ -4,6 +4,7 @@ Plan document index. Register new plans here.
 
 ## Active
 
+- [retrieval-discipline-opt-in.md](retrieval-discipline-opt-in.md) — **Stage 10 (오케스트레이터 신뢰성)**: under-query 조기포기(empty tattoo→`final_answer=None`) 실패를 잡는 narrow-query nudge 를 `run_abc_chain(retrieval_discipline_prompt=False)` opt-in 으로 편입 (안 A — MANDATORY 와 독립 플래그, 기본 byte-identical). 근거: 레버 A/B(task A, n=6) **finalized 17%→67% (+50pp)**, empty_tattoo 83%→33%. 4 subtask (code / 회귀게이트 / 재검증 드라이버(사용자 실행 n≥10+task B) / verdict). 결정 1~4 Architect default. Sonnet 진행 프롬프트: `docs/prompts/2026-07-01/retrieval-discipline-opt-inStart.md`
 - (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge + facet 도메인 다종화(`list_failed_units` 등, 집계 task 한정 — H21 후속).
 
 ## Recently Done — Stage 9 (2026-06-30)
