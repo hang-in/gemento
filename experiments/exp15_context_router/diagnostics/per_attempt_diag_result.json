@@ -1,0 +1,74 @@
+{
+  "experiment": "per_attempt_submode_diag",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "n": 20,
+  "max_cycles": 8,
+  "samples": [
+    {
+      "finalized": false,
+      "correct": false,
+      "answer_retrieved_by_tool": false,
+      "answer_in_tattoo": false,
+      "n_assertions": 0,
+      "n_tool_calls": 6,
+      "n_grep_hit_kw": 0,
+      "patterns": [
+        "error",
+        "error",
+        "error",
+        "error",
+        "error",
+        "error"
+      ],
+      "bucket": "retrieval_gap"
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "answer_retrieved_by_tool": true,
+      "answer_in_tattoo": true,
+      "n_assertions": 2,
+      "n_tool_calls": 6,
+      "n_grep_hit_kw": 1,
+      "patterns": [
+        "error",
+        "error",
+        "error",
+        "error",
+        "error",
+        "failed"
+      ],
+      "bucket": "success"
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "answer_retrieved_by_tool": false,
+      "answer_in_tattoo": false,
+      "n_assertions": 0,
+      "n_tool_calls": 5,
+      "n_grep_hit_kw": 0,
+      "patterns": [
+        "error",
+        "error",
+        "error",
+        "error",
+        "error"
+      ],
+      "bucket": "retrieval_gap"
+    }
+  ],
+  "buckets": {
+    "retrieval_gap": 2,
+    "success": 1
+  },
+  "agg": {
+    "n": 3,
+    "finalized_rate": 0.333,
+    "retrieved_rate": 0.333,
+    "emission_gap": 0,
+    "retrieval_gap": 2
+  },
+  "elapsed_sec": 590.7
+}
