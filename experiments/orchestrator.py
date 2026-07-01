@@ -687,6 +687,7 @@ def run_abc_chain(
     context_handles: list[str] | None = None,
     error_blocks: bool = False,
     mandatory_tool_prompt: bool = False,
+    retrieval_discipline_prompt: bool = False,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -722,6 +723,13 @@ def run_abc_chain(
     if mandatory_tool_prompt:
         from system_prompt import MANDATORY_TOOL_RULES
         prompt = f"{prompt}{MANDATORY_TOOL_RULES}"
+
+    # ── Retrieval-discipline rules (opt-in, Stage 10) ──
+    # under-query 조기포기(empty tattoo→None) 실패 모드를 잡는다. 레버 A/B finalized +50pp.
+    # 기본 False 시 이 블록을 건너뛰어 prompt 가 변경 전과 byte-identical (불변식).
+    if retrieval_discipline_prompt:
+        from system_prompt import RETRIEVAL_DISCIPLINE_RULES
+        prompt = f"{prompt}{RETRIEVAL_DISCIPLINE_RULES}"
 
     # ── Extractor pre-stage (trial 시작 시 1회) ──
     # cross-model 시 model_caller 가 외부 모델 라우팅. None 시 기존 internal call_model.

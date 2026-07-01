@@ -490,3 +490,21 @@ MANDATORY_TOOL_RULES = (
     "3. Do NOT conclude \"the log does not contain ...\" after a single query. If a grep returns no useful match, try another pattern (\"unresolved\", \"import\", a filename) before giving up.\n"
     "4. Once you find the matching line, transcribe the EXACT file path, line number, and module identifier verbatim from that line into your final_answer. Do not paraphrase or omit any of the three.\n"
 )
+
+
+# ── Retrieval-discipline rules (Stage 10 opt-in, 레버 A/B 검증) ──
+# 진단(phase0/micro): A 가 넓은 패턴('error')으로 grep→노이즈→"pinpoint 불가"라며
+# 좁히지 않고 assertion 없이 종료(empty tattoo)→judge 굶음→final_answer=None.
+# 레버 A/B(task A, n=6): finalized 17%→67%(+50pp), empty_tattoo 83%→33%. under-query
+# 조기포기 실패 특화 — MANDATORY_TOOL_RULES(단일-needle 전사누락)와 독립.
+# run_abc_chain(retrieval_discipline_prompt=True) 가 주입. 선행 "\n\n" 포함.
+RETRIEVAL_DISCIPLINE_RULES = (
+    "\n\n## RETRIEVAL DISCIPLINE (must follow while the failing item is still unknown):\n"
+    "1. A broad search term (e.g. \"error\") returns mostly noise. Do NOT conclude that you "
+    "\"cannot pinpoint the cause\" after a broad query returns unrelated volume.\n"
+    "2. NARROW the search instead: try exact failure phrases such as \"Failed with result\", "
+    "\"Main process exited\", or unit-name patterns like \".service\". Iterate with more specific "
+    "patterns until you identify the failing unit.\n"
+    "3. You MUST record at least one candidate service unit as a new_assertion before ending a "
+    "cycle; never finish a cycle empty-handed while the failing unit is still unknown.\n"
+)
