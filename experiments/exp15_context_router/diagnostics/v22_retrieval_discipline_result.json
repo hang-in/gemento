@@ -1,0 +1,387 @@
+{
+  "experiment": "v22_retrieval_discipline",
+  "model": "gemma4:e4b",
+  "n_per_arm": 10,
+  "max_cycles": 8,
+  "task_ids": [
+    "exp21a_crashloop",
+    "exp21b_bruteforce"
+  ],
+  "tasks": {
+    "exp21a_crashloop": {
+      "control": {
+        "n": 10,
+        "finalized_rate": 0.7,
+        "empty_tattoo_rate": 0.3,
+        "correct_rate": 0.6,
+        "samples": [
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 5,
+            "death_phase": "CONVERGED",
+            "correct": true,
+            "ans": "The service unit that is crash-looping is **gohttpserver.service**. The recent failure evidence is the repeated systemd "
+          },
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 7,
+            "death_phase": "CONVERGED",
+            "correct": true,
+            "ans": "Crash-looping Service Unit:\n1. Unit Name: `gohttpserver.service`\n2. Failure Evidence: The service repeatedly fails with "
+          },
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 5,
+            "death_phase": "CONVERGED",
+            "correct": true,
+            "ans": "The service unit that is crash-looping is **gohttpserver.service**. The recent failure evidence is the repeated systemd "
+          },
+          {
+            "finalized": false,
+            "n_assertions": 0,
+            "n_cycles": 8,
+            "death_phase": "SYNTHESIZE",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 7,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": "Based on the analysis of the systemd journal, there are instances of multiple services failing to start, suggesting pote"
+          },
+          {
+            "finalized": true,
+            "n_assertions": 1,
+            "n_cycles": 8,
+            "death_phase": "CONVERGED",
+            "correct": true,
+            "ans": "The service unit repeatedly crash-looping is `gohttpserver.service`. The failure evidence confirms repeated startup fail"
+          },
+          {
+            "finalized": false,
+            "n_assertions": 0,
+            "n_cycles": 8,
+            "death_phase": "SYNTHESIZE",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 4,
+            "death_phase": "CONVERGED",
+            "correct": true,
+            "ans": "The service unit that is crash-looping is **gohttpserver.service**. The recent failure evidence is the repeated systemd "
+          },
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 4,
+            "death_phase": "CONVERGED",
+            "correct": true,
+            "ans": "Crash-looping Service Unit: gohttpserver.service\n\nFailure Evidence:\nThe service repeatedly fails with the message: 'goht"
+          },
+          {
+            "finalized": false,
+            "n_assertions": 0,
+            "n_cycles": 8,
+            "death_phase": "SYNTHESIZE",
+            "correct": false,
+            "ans": null
+          }
+        ]
+      },
+      "discipline": {
+        "n": 10,
+        "finalized_rate": 0.4,
+        "empty_tattoo_rate": 0.4,
+        "correct_rate": 0.4,
+        "samples": [
+          {
+            "finalized": true,
+            "n_assertions": 3,
+            "n_cycles": 5,
+            "death_phase": "CONVERGED",
+            "correct": true,
+            "ans": "The crash-looping service unit is **gohttpserver.service**. The recent failure evidence is the repeated status code **20"
+          },
+          {
+            "finalized": false,
+            "n_assertions": 0,
+            "n_cycles": 8,
+            "death_phase": "SYNTHESIZE",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 3,
+            "death_phase": "CONVERGED",
+            "correct": true,
+            "ans": "The crash-looping service unit is **gohttpserver.service**. The recent failure evidence is the repeated status code **20"
+          },
+          {
+            "finalized": false,
+            "n_assertions": 1,
+            "n_cycles": 6,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": false,
+            "n_assertions": 4,
+            "n_cycles": 6,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": false,
+            "n_assertions": 0,
+            "n_cycles": 8,
+            "death_phase": "SYNTHESIZE",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": true,
+            "n_assertions": 1,
+            "n_cycles": 7,
+            "death_phase": "CONVERGED",
+            "correct": true,
+            "ans": "Based on the analysis of the systemd journal, the service unit repeatedly failing and causing the crash loop is `gohttps"
+          },
+          {
+            "finalized": false,
+            "n_assertions": 0,
+            "n_cycles": 8,
+            "death_phase": "SYNTHESIZE",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": false,
+            "n_assertions": 0,
+            "n_cycles": 8,
+            "death_phase": "SYNTHESIZE",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": true,
+            "n_assertions": 1,
+            "n_cycles": 7,
+            "death_phase": "CONVERGED",
+            "correct": true,
+            "ans": "The service unit that is crash-looping is `gohttpserver.service`. The recent failure evidence is the repeated message: `"
+          }
+        ]
+      }
+    },
+    "exp21b_bruteforce": {
+      "control": {
+        "n": 10,
+        "finalized_rate": 0.7,
+        "empty_tattoo_rate": 0.2,
+        "correct_rate": 0.0,
+        "samples": [
+          {
+            "finalized": true,
+            "n_assertions": 4,
+            "n_cycles": 7,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": "The single source IP address responsible for the most failed login attempts is 174.138.8.10, with a total count of 16 at"
+          },
+          {
+            "finalized": true,
+            "n_assertions": 1,
+            "n_cycles": 5,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": {
+              "source_ip": "174.138.8.10",
+              "attempt_count": 9
+            }
+          },
+          {
+            "finalized": true,
+            "n_assertions": 4,
+            "n_cycles": 7,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": "The single source IP address responsible for the most failed SSH login attempts is 174.138.8.10, with 9 attempts."
+          },
+          {
+            "finalized": false,
+            "n_assertions": 1,
+            "n_cycles": 8,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": false,
+            "n_assertions": 2,
+            "n_cycles": 5,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": true,
+            "n_assertions": 0,
+            "n_cycles": 7,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": "The single source IP address responsible for the most failed attempts is 174.138.8.10, with a total of 10 attempts visib"
+          },
+          {
+            "finalized": false,
+            "n_assertions": 0,
+            "n_cycles": 8,
+            "death_phase": "SYNTHESIZE",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": true,
+            "n_assertions": 1,
+            "n_cycles": 6,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": "The single source IP address responsible for the most failed attempts is 174.138.8.10, with a total of 20 attempts."
+          },
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 5,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": {
+              "source_ip": "174.138.8.10",
+              "attempt_count": "Approximately 10+ (Based on visible sample)"
+            }
+          },
+          {
+            "finalized": true,
+            "n_assertions": 1,
+            "n_cycles": 5,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": {
+              "source_ip": "174.138.8.10",
+              "attempt_count": 10
+            }
+          }
+        ]
+      },
+      "discipline": {
+        "n": 10,
+        "finalized_rate": 0.5,
+        "empty_tattoo_rate": 0.0,
+        "correct_rate": 0.0,
+        "samples": [
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 4,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": "Source IP: 174.138.8.10, Attempts: >15 (Based on visible sample count)"
+          },
+          {
+            "finalized": false,
+            "n_assertions": 2,
+            "n_cycles": 3,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": false,
+            "n_assertions": 2,
+            "n_cycles": 3,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": false,
+            "n_assertions": 1,
+            "n_cycles": 6,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 2,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": {
+              "source_ip": "174.138.8.10",
+              "attempt_count": 9
+            }
+          },
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 4,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": {
+              "source_ip": "174.138.8.10",
+              "failed_attempt_count": "Highest count (estimated > 16, based on log analysis)"
+            }
+          },
+          {
+            "finalized": true,
+            "n_assertions": 2,
+            "n_cycles": 4,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": {
+              "source_ip": "174.138.8.10",
+              "failed_attempts_count": 10
+            }
+          },
+          {
+            "finalized": true,
+            "n_assertions": 1,
+            "n_cycles": 2,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": "The single source IP address responsible for the MOST failed attempts is 174.138.8.10, with approximately 15 failed atte"
+          },
+          {
+            "finalized": false,
+            "n_assertions": 2,
+            "n_cycles": 3,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": null
+          },
+          {
+            "finalized": false,
+            "n_assertions": 1,
+            "n_cycles": 1,
+            "death_phase": "CONVERGED",
+            "correct": false,
+            "ans": null
+          }
+        ]
+      }
+    }
+  },
+  "elapsed_sec": 7312.3
+}
