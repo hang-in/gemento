@@ -221,6 +221,8 @@ Exp11에서는 Gemini 2.5 Flash를 Judge로 넣었지만, 모두 Gemma로 구성
 | H16b/c | mandatory prompt + retry | 채택 | 큰 로그 router 조건에서 출력 안정화 |
 | H17 | 복잡도 상한 | 부분 | e4b+router가 multi-hop/집계/판별까지 스케일(baseline ~92%); 단 mandatory 스택은 특정 실패 모드 전용이라 hard task에선 −3pp |
 | H18 | size invariance | 채택 | router가 추론 부하를 로그 크기와 분리(O(1)) — multi-hop/집계가 ~245K tok(컨텍스트 7.5배)까지 92~100% 무저하; 모델은 거대 로그가 아닌 grep 결과만 봄 |
+| H21 | Facet 집계 도구 | 조건부(집계 한정) | untruncated 전수 집계(`aggregate_context`)가 집계 task에서 결정적(score 0.0→0.8) — 16KB 캡의 confidently-wrong을 정정; 단일-needle엔 무효. "more structure ≠ monotonically better" |
+| H22 | retrieval-discipline nudge | 미결/실효 기각 | narrow-query nudge opt-in 편입 후 재검증(n=10)에서 레버(+50pp) 미재현·부호 역전 — control baseline이 run마다 17%↔70%로 요동. 진짜 문제는 nudge 부재가 아닌 finalization 자체의 분산 |
 
 상세 수치와 분석은 `docs/reference/` 아래의 각 실험 보고서에 있습니다.
 
@@ -416,7 +418,10 @@ Exp07/Exp08에서 정답 데이터 결함이 실험 결론을 바꾼 사례가 �
 | Stage 5 | 완료 | Extractor, Reducer, Search Tool ablation |
 | Stage 6 | 완료 | cross-model replication, LLM-as-judge 보조 검증 |
 | Stage 7 | 완료 | Context Router, mandatory prompt, retry 조합 |
-| 중기 | 예정 | Graph Tool, Evidence Tool |
+| Stage 8 | 완료 | mandatory-tool 프롬프트 opt-in 편입 (caller-decides) |
+| Stage 9 | 완료 | Facet 집계 도구 A/B (H21 조건부, 집계 task 한정) |
+| Stage 10 | 완료 | 오케스트레이터 신뢰성 — retrieval-discipline opt-in (H22 미결/실효 기각, 레버 미재현) |
+| 중기 | 예정 | finalization 분산 진단, Graph/Evidence Tool |
 | 장기 | 예정 | 더 체계적인 cross-model ablation과 technical report |
 
 ---

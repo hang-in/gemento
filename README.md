@@ -206,6 +206,8 @@ So gemento's current direction is **less "stack a stronger model on top," more "
 | H16b/c | mandatory prompt + retry | Supported | output stabilization for the large-log router (e4b per-attempt 27%→83%; +retry ~100%) |
 | H17 | complexity ceiling | Partial | e4b+router scales to multi-hop/aggregation/distractor (baseline ~92%); but the mandatory stack is a failure-mode-specific fix, not a general booster (−3pp on hard tasks) |
 | H18 | size invariance | Supported | router makes the model's reasoning load O(1) in log size — multi-hop/aggregation hold at 92–100% up to ~245K tok (7.5× the context window); the model only sees grep results, not the giant log |
+| H21 | Facet aggregate tool | Conditional (aggregation-only) | untruncated exhaustive aggregation (`aggregate_context`) is decisive on aggregation tasks (score 0.0→0.8) — corrects the 16KB-cap confidently-wrong answer; no benefit on single-needle. "more structure ≠ monotonically better" |
+| H22 | retrieval-discipline nudge | Inconclusive (effectively rejected) | after integrating the narrow-query nudge as an opt-in flag, re-validation (n=10) failed to replicate the lever (+50pp) and the sign reversed — the control baseline swings 17%↔70% run-to-run. The real problem is not a missing nudge but the variance of finalization itself |
 
 Detailed numbers and analysis live in the per-experiment reports under `docs/reference/`.
 
@@ -396,7 +398,10 @@ Note: for math tasks, first verify that `expected_answer` itself satisfies the c
 | Stage 5 | done | Extractor, Reducer, Search Tool ablation |
 | Stage 6 | done | cross-model replication, LLM-as-judge auxiliary check |
 | Stage 7 | done | Context Router, mandatory prompt, retry combination |
-| Mid-term | planned | Graph Tool, Evidence Tool |
+| Stage 8 | done | mandatory-tool prompt opt-in integration (caller-decides) |
+| Stage 9 | done | Facet aggregate tool A/B (H21 conditional, aggregation-only) |
+| Stage 10 | done | orchestrator reliability — retrieval-discipline opt-in (H22 inconclusive/effectively rejected, lever did not replicate) |
+| Mid-term | planned | finalization-variance diagnosis, Graph/Evidence Tool |
 | Long-term | planned | more systematic cross-model ablation and a technical report |
 
 ---
