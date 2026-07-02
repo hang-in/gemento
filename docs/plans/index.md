@@ -4,8 +4,11 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- [exp24-a2a-planner-executor.md](exp24-a2a-planner-executor.md) — **Stage 12 (Exp24)**: a2a Planner→Executor proposer 분할 (per-attempt broad-context overload 우회). 근거: `scoped_emit_probe`(n=20) 답을 clean scoped 입력으로 handed 시 A-stage emit **100%**(vs broad ~49%) → 실패는 structural 아닌 overload. `run_abc_chain(a2a_proposer=False)` opt-in — True 시 단일 A 를 Planner(도구→finding 텍스트)+Executor(clean scoped emit, probe 조건) 로 대체. B/C 무변경, 기본 False byte-identical. orchestrator+system_prompt shared code(plan-first+게이트). 2 arm A/B(control/a2a, task A, n=15). 4 subtask. 결정 Architect default. ⚠ gemento 이력상 구조 추가 종종 무효(H12/H13) — falsify. Sonnet 진행 프롬프트: `docs/prompts/2026-07-03/exp24-a2a-planner-executorStart.md`
-- (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge + facet 도메인 다종화(`list_failed_units` 등, 집계 task 한정 — H21 후속).
+- (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge + facet 도메인 다종화(`list_failed_units` 등, 집계 task 한정 — H21 후속) + a2a 심화(구조화 planner + verifiable-diagnosis oracle, tunaRound 교차문서 — H24 caveat).
+
+## Recently Done — Stage 12 (2026-07-03)
+
+- [exp24-a2a-planner-executor.md](exp24-a2a-planner-executor.md) — **Stage 12 (Exp24)**: a2a Planner→Executor proposer 분할 (per-attempt overload 우회). `scoped_emit_probe`(scoped emit 100% vs broad 49%)가 green-light. `run_abc_chain(a2a_proposer=False)` opt-in, B/C 무변경, 기본 byte-identical(게이트 71 OK). **H24 ⚠ 미결(실효적 기각)** — A/B(task A, n=15)서 control finalized **47%**/correct **47%**(asrt {0:9,2:6}) vs a2a **27%**/**13%**(asrt {1:5,2:4,…}, empty-tattoo 9→0). Δcorrect −33pp. a2a 가 **emit 은 해결**(Executor 안정 emit, empty-tattoo 소멸)하나 **실패를 Planner 로 이동**(틀린 finding → confidently-wrong 수렴, Risk 3 실현). 안전한 None 을 finalized-but-wrong 으로 전환 = 무진단보다 해로움. **per-attempt 트랙 3중 음성(H22/H23/H24) → retry(§20 K=5→95%) 수용 최종 확정.** opt-in 유지·켜기 비추천. 4 subtask 완료. 커밋 코드 `e28cc03`/게이트 `dae21b1`/드라이버 `c90026d`/결과 `b073ed8`. 노트북 §22. caveat: MVP(텍스트 planner) 한정, 구조화 planner future. 2026-07-03.
 
 ## Recently Done — Stage 11 (2026-07-02)
 
