@@ -1346,6 +1346,26 @@ This section documents a characterization of H16 (retry-on-None); it introduces 
 
 ---
 
+## Exp23 — list_failed_units facet lever: bypassing the per-attempt retrieval_gap (H23, 2026-07-02)
+
+A follow-up experiment (`exp23-failed-units-facet`, Stage 11) tested **H23** — whether an argument-free preset tool `list_failed_units(handle)` raises per-attempt finalization by bypassing the retrieval_gap. Motivation: a per-attempt diagnosis (`per_attempt_diag.py`, pooled n=9) found per-attempt failures are retrieval_gap (the model repeatedly greps the broad term `error`, never surfaces `gohttpserver`) with zero emission_gap; since prompting the model to narrow (H22 narrow-query nudge) was refuted, the lever hands the failing units to the model deterministically instead. The tool scans standard systemd failure signals (`Failed with result` / `Main process exited` / `start-limit`) and returns an untruncated unit-count top-N, so no pattern formulation is needed. It mirrors the H21 FACET opt-in pattern (`FAILED_UNITS_TOOL_*` separate, global `CONTEXT_TOOL_*` byte-identical, orchestrator unchanged).
+
+Tool validation: `list_failed_units('ctx:test9ng_journal_30d:stdout')` returns `gohttpserver.service` as the #1 failing unit with **505,848 failure signals** (99.99% of all signal lines), truncated:false. The retrieval bypass itself works perfectly.
+
+Conditions: control (grep only) / fu_offered (tool available) / fu_mandatory (tool + a driver-injected "call list_failed_units FIRST" constraint) × task A (gohttpserver crash-loop) × single-attempt, pooled over 2 runs (GPU intermittent load preempted the sequentially-run last arm, so fu_mandatory was completed by a standalone runner). Results: control finalized **47%** (n=30, used_fu 0%); fu_offered **46%** (n=26, **used_fu ~85%**); fu_mandatory **53%** (n=17, **used_fu ~94%**). Rate-based A/B, significance not tested.
+
+**H23 verdict (Architect): ⚠ Inconclusive (effectively rejected).** All three arms finalize at 46–53%, indistinguishable and all inside the §20 per-attempt variance band (35–57%). The tool is used 85–94% of the time in the fu arms, yet finalization does not improve over control. The binding constraint is therefore NOT retrieval but the downstream stochastic ceiling (emit/converge): even handed `gohttpserver`, roughly half the chains fail to finalize. The fu_mandatory samples show this directly — cases with `used_fu=True, n_assertions=0, cycles=8` (the tool returned the answer, but the chain emitted zero assertions and never converged). This re-interprets per_attempt_diag's "emission_gap 0": that was a small-sample artifact (2/2 successes); at larger n, retrieved→finalized holds only ~half the time. The retrieval_gap is real but is only part of the per-attempt failure; the rest is emit/converge stochasticity. Note H21's under-use warning did NOT reproduce — the model used list_failed_units 85% even when merely offered ("Call this FIRST" is salient) — so no-gain is a downstream problem, not a usage problem.
+
+This closes the per-attempt-reliability track: neither prompting (H22) nor a retrieval tool (H23) raises per-attempt finalization, because the constraint is downstream stochasticity. The remaining levers are retry-on-None (H16/§20, validated: K=5→95%) and an architectural change (a2a planner-executor). The tool stays as opt-in infrastructure (globals byte-identical, regression gate 66 OK) but is not recommended to enable; no rollback.
+
+Limitations: pooled n (control 30, offered 26, mandatory 17), single model (e4b), single task, rate-based metric (no Cohen's d / significance test); GPU-contention kills forced a standalone mandatory run.
+
+Detail: `experiments/exp15_context_router/diagnostics/v23_failed_units_result.json` (control+offered) + `v23_mandatory_only_result.json` (mandatory). Drivers: `run_v23_failed_units_ab.py`, `run_v23_mandatory_only.py`. Commits: tool `e20b48a` / gate `c7c41c0` / driver `5673e0c` / results `d29f862`.
+
+The hypothesis table above (H1~H22) remains unchanged (Closed-append-only policy). H23's entry is a new addition only.
+
+---
+
 ## Change History
 
 - 2026-04-26: `config.py:SAMPLING_PARAMS` centralization — `lmstudio_client.py` now explicitly sends sampling params. Pre-centralization LM Studio default may have differed from `temperature=0.1`/`max_tokens=4096`, so Exp10 results may show micro-variance vs Exp00~09. Treat the introduction date as a baseline boundary.

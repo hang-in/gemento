@@ -4,8 +4,11 @@ Plan document index. Register new plans here.
 
 ## Active
 
-- [exp23-failed-units-facet.md](exp23-failed-units-facet.md) — **Stage 11 (Exp23)**: per-attempt retrieval_gap(모델이 'error'만 반복 grep, per_attempt_diag pooled n=9 실패 7/7) 우회용 `list_failed_units(handle, top_n)` 인자없는 preset 도구 — 프롬프트(H22 반증) 대신 결정론적으로 실패 unit 직접 건넴. FACET(H21) opt-in 패턴 복제(글로벌 불변), orchestrator 무변경. 3 arm A/B(control/fu_offered/fu_mandatory, task A, n=15) — H21 저사용 경고로 mandatory arm 필수. 4 subtask. 결정 1~4 Architect default. Sonnet 진행 프롬프트: `docs/prompts/2026-07-02/exp23-failed-units-facetStart.md`
 - (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge + facet 도메인 다종화(`list_failed_units` 등, 집계 task 한정 — H21 후속).
+
+## Recently Done — Stage 11 (2026-07-02)
+
+- [exp23-failed-units-facet.md](exp23-failed-units-facet.md) — **Stage 11 (Exp23)**: per-attempt retrieval_gap 우회용 `list_failed_units(handle)` 인자없는 preset 도구(프롬프트 H22 반증 대신 결정론적으로 실패 unit 직접 건넴). FACET(H21) opt-in 복제(글로벌 불변, 게이트 66 OK), orchestrator 무변경. **H23 ⚠ 미결(실효적 기각)** — 도구는 실제 저널서 gohttpserver.service 505,848 신호 #1 반환(우회 성공)하나 3-arm finalized 구별불가: control **47%**(n=30)/fu_offered **46%**(n=26, used_fu ~85%)/fu_mandatory **53%**(n=17, used_fu ~94%) — 전부 §20 분산대(35~57%) 안. **도구 85~94% 쓰는데도 무개선** → binding constraint = retrieval 아닌 다운스트림 emit/converge ceiling(fu_mandatory `used_fu=True asrt=0 cyc=8`). per_attempt_diag emission_gap 0 은 소표본 착시. H21 저사용 경고 미재현. per-attempt 트랙 닫힘(H22·H23 둘 다 무개선, retry/§20·a2a 만 남음). 도구 opt-in 유지·켜기 비추천. 4 subtask 완료. 커밋 도구 `e20b48a`/게이트 `c7c41c0`/드라이버 `5673e0c`/결과 `d29f862`. 노트북 §21. 2026-07-02.
 
 ## Recently Done — Stage 10 (2026-07-01)
 
