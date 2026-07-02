@@ -1,0 +1,199 @@
+{
+  "experiment": "scoped_emit_probe",
+  "model": "gemma4:e4b",
+  "n": 20,
+  "samples": [
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    },
+    {
+      "parseable": true,
+      "emitted": true,
+      "emitted_correct": true,
+      "applied_nonempty": true,
+      "applied_correct": true,
+      "n_new_assertions": 1,
+      "error": null
+    }
+  ],
+  "agg": {
+    "n": 20,
+    "parseable_rate": 1.0,
+    "emit_rate": 1.0,
+    "emit_wilson95": [
+      0.839,
+      1.0
+    ],
+    "emit_correct_rate": 1.0,
+    "applied_nonempty_rate": 1.0
+  },
+  "elapsed_sec": 254.1
+}
