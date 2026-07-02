@@ -1,0 +1,124 @@
+{
+  "experiment": "det_planner_probe",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "n": 15,
+  "finding": "gohttpserver.service (top failing systemd unit, 505848 failure signals)",
+  "samples": [
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 1,
+      "n_cycles": 3,
+      "ans": null
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 2,
+      "n_cycles": 1,
+      "ans": null
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "n_assertions": 4,
+      "n_cycles": 4,
+      "ans": "The crash-looping service unit is **gohttpserver.service**. \n\n**Failure Evidence:** This unit was identified as the top failing systemd unit, accumulating 505,8"
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "n_assertions": 1,
+      "n_cycles": 7,
+      "ans": "## Crash-Looping Service Diagnosis Report\n\n**1. Crash-Looping Service Unit (Unit Name):**\n`gohttpserver.service`\n\n**2. Failure Evidence Summary:**\n*   **Observa"
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 1,
+      "n_cycles": 2,
+      "ans": null
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 1,
+      "n_cycles": 2,
+      "ans": null
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 1,
+      "n_cycles": 3,
+      "ans": null
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "n_assertions": 2,
+      "n_cycles": 7,
+      "ans": "The service unit that is crash-looping is **gohttpserver.service**. This unit is confirmed as the top failing systemd unit, having accumulated 505,848 failure s"
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "n_assertions": 1,
+      "n_cycles": 7,
+      "ans": "Based on the deterministic evidence scan of the systemd journal, the service unit that is repeatedly crash-looping on server test9ng is **gohttpserver.service**"
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 1,
+      "n_cycles": 1,
+      "ans": null
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 1,
+      "n_cycles": 5,
+      "ans": null
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 1,
+      "n_cycles": 3,
+      "ans": null
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "n_assertions": 2,
+      "n_cycles": 7,
+      "ans": "Based on the available diagnostic evidence, the service unit suspected of crash-looping is **gohttpserver.service**. This unit was identified as the top failing"
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 1,
+      "n_cycles": 2,
+      "ans": null
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 3,
+      "n_cycles": 3,
+      "ans": null
+    }
+  ],
+  "agg": {
+    "n": 15,
+    "finalized_rate": 0.333,
+    "correct_rate": 0.333,
+    "correct_wilson95": [
+      0.152,
+      0.583
+    ]
+  },
+  "elapsed_sec": 1635.4
+}
