@@ -508,3 +508,44 @@ RETRIEVAL_DISCIPLINE_RULES = (
     "3. You MUST record at least one candidate service unit as a new_assertion before ending a "
     "cycle; never finish a cycle empty-handed while the failing unit is still unknown.\n"
 )
+
+
+# ── A2A Planner/Executor (Stage 12 opt-in, Exp24) ──
+# scoped_emit_probe.py 가 검증한 경로 정식 편입: broad A-stage 의 emit 불안정(Phase0/§21
+# 진단: A 가 ~50% chain 에서 assertion 0개 emit)을 Planner(도구로 finding 텍스트 산출)/
+# Executor(finding 을 clean scoped 입력으로 도구 없이 emit) 두 단계로 분리해 완화한다.
+# run_abc_chain(a2a_proposer=True) 가 opt-in. 기본 False 시 A-stage 완전 무변경(불변식).
+A2A_PLANNER_SYSTEM = (
+    "You are the PLANNER in a two-stage diagnostic pipeline. Your job is ONLY to find the "
+    "single most important fact needed to answer the objective — e.g. which systemd service "
+    "unit is crash-looping. Use the provided tools (grep_context / list_failed_units) to "
+    "locate it in the cached log. Output ONE short plain-text sentence stating the finding "
+    "(e.g. 'The crash-looping unit is gohttpserver.service.'). Do NOT output JSON, do NOT "
+    "emit assertions — another agent will record it. If you cannot find it, say so plainly."
+)
+
+
+def build_a2a_planner_prompt(tattoo_json: str) -> list[dict]:
+    """A2A Planner(Stage 12) 프롬프트: 도구로 finding 텍스트를 산출한다."""
+    return [
+        {"role": "system", "content": A2A_PLANNER_SYSTEM},
+        {"role": "user", "content": f"Current tattoo (state):\n{tattoo_json}\n\n"
+                                    "Find the single key fact and state it in one sentence."},
+    ]
+
+
+def build_a2a_executor_prompt(finding: str, tattoo_json: str) -> list[dict]:
+    """A2A Executor(Stage 12) 프롬프트: probe(scoped_emit_probe) 조건 재현 —
+    finding 을 clean scoped 입력으로, 도구 없이 emit."""
+    scoped = (
+        f"FACT (already established by the planner): {finding}\n\n"
+        "Your ONLY task: record this established fact as a new_assertion (content: the fact, "
+        "e.g. which unit is crash-looping and that it is failing), confidence >= 0.8. "
+        "Do NOT call tools; the fact is already known. Emit at least one new_assertion."
+    )
+    # 기존 proposer schema/파서(extract_json_from_response, apply_llm_response) 재사용을
+    # 위해 build_prompt 계열과 동일 형식 사용 — SYSTEM_PROMPT 기반 proposer 메시지에
+    # scoped user 를 덧붙인다.
+    msgs = build_prompt(tattoo_json)
+    msgs.append({"role": "user", "content": scoped})
+    return msgs

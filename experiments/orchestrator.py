@@ -667,6 +667,36 @@ MAX_CYCLES_PER_PHASE = 3
 MAX_TOTAL_CYCLES = 12
 
 
+# ── A2A Planner/Executor (Stage 12 opt-in, Exp24) ──
+# scoped_emit_probe.py 가 검증한 경로: Planner(도구로 finding 텍스트 산출) → Executor
+# (finding 을 clean scoped 입력으로 도구 없이 emit). 기존 파서(extract_json_from_response)·
+# 적용(apply_llm_response)·LoopLog 재사용 — 신규 파서 금지. run_abc_chain(a2a_proposer=True)
+# 시에만 A-stage 를 이 경로로 대체한다(기본 False 시 무영향).
+def _a2a_propose(tattoo, loop_index, model_caller, planner_tools=None):
+    from system_prompt import build_a2a_planner_prompt, build_a2a_executor_prompt
+    # 1. Planner: 도구로 finding 텍스트 산출 (native caller 가 도구 내부 실행)
+    p_msgs = build_a2a_planner_prompt(tattoo.to_json())
+    finding, _ = model_caller(p_msgs, tools=planner_tools) if planner_tools else model_caller(p_msgs)
+    finding = (finding or "").strip()
+    # 2. Executor: clean scoped emit (도구 없음)
+    e_msgs = build_a2a_executor_prompt(finding, tattoo.to_json())
+    raw, _ = model_caller(e_msgs)
+    parsed = extract_json_from_response(raw)
+    if parsed:
+        new_tattoo, answer = apply_llm_response(tattoo, parsed, loop_index)
+    else:
+        new_tattoo = copy.deepcopy(tattoo)
+        new_tattoo.loop_index = loop_index
+        new_tattoo.parent_id = tattoo.tattoo_id
+        new_tattoo.finalize_integrity(parent_chain_hash=tattoo.chain_hash)
+        answer = None
+    a_log = LoopLog(loop_index=loop_index, tattoo_in=tattoo.to_dict(),
+                    raw_response=f"[planner] {finding}\n[executor] {raw}",
+                    parsed_response=parsed, tattoo_out=new_tattoo.to_dict(),
+                    duration_ms=0, error=None if parsed else "a2a executor parse failed")
+    return new_tattoo, a_log, answer, []
+
+
 def run_abc_chain(
     task_id: str,
     objective: str,
@@ -688,6 +718,7 @@ def run_abc_chain(
     error_blocks: bool = False,
     mandatory_tool_prompt: bool = False,
     retrieval_discipline_prompt: bool = False,
+    a2a_proposer: bool = False,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -820,13 +851,19 @@ def run_abc_chain(
         combined_extra_tools = (_search_extra_tools or []) + (_context_extra_tools or [])
         combined_extra_fns = {**(_search_extra_fns or {}), **(_context_extra_fns or {})}
 
-        tattoo, a_log, answer, a_tool_calls = run_loop(
-            tattoo, cycle, phase_prompt_args=phase_args,
-            use_tools=use_tools, tool_functions=_tool_fns,
-            extra_tools=combined_extra_tools or None,
-            extra_tool_fns=combined_extra_fns or None,
-            model_caller=model_caller,
-        )
+        if a2a_proposer:
+            tattoo, a_log, answer, a_tool_calls = _a2a_propose(
+                tattoo, cycle, model_caller=model_caller,
+                planner_tools=combined_extra_tools or None,
+            )
+        else:
+            tattoo, a_log, answer, a_tool_calls = run_loop(
+                tattoo, cycle, phase_prompt_args=phase_args,
+                use_tools=use_tools, tool_functions=_tool_fns,
+                extra_tools=combined_extra_tools or None,
+                extra_tool_fns=combined_extra_fns or None,
+                model_caller=model_caller,
+            )
 
         if answer:
             final_answer = answer
