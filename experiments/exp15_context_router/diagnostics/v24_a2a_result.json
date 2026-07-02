@@ -1,0 +1,237 @@
+{
+  "experiment": "exp24_a2a_ab",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "n_trials": 15,
+  "max_cycles": 8,
+  "arms": {
+    "control": {
+      "n": 15,
+      "finalized_rate": 0.467,
+      "correct_rate": 0.467,
+      "samples": [
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 2,
+          "n_cycles": 4,
+          "ans": "The service unit that is crash-looping is `gohttpserver.service`. The recent failure evidence is the repeated systemd journal message: `gohttpserver.service: Failed with result 'exit-code'`."
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 2,
+          "n_cycles": 5,
+          "ans": "The crash-looping service unit is `gohttpserver.service`. The recent failure evidence is the repeated log entry: `systemd[1]: gohttpserver.service: Failed with result 'exit-code'.`"
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 2,
+          "n_cycles": 6,
+          "ans": {
+            "crash_looping_unit": "gohttpserver.service",
+            "failure_evidence": "The service repeatedly fails with the systemd result 'exit-code', indicating a crash-looping state."
+          }
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 2,
+          "n_cycles": 7,
+          "ans": "The service unit that is consistently crash-looping is `gohttpserver.service`. The primary evidence of this failure is the repeated systemd status message: `systemd[1]: gohttpserver.service: Failed wi"
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 2,
+          "n_cycles": 8,
+          "ans": "The service unit that is crash-looping is **gohttpserver.service**. The recent failure evidence is the repeated message: `systemd[1]: gohttpserver.service: Failed with result 'exit-code'.` This indica"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 0,
+          "n_cycles": 7,
+          "ans": "Crash-looping Service Unit: gohttpserver.service\n\nFailure Evidence: The service repeatedly fails with the result 'exit-code', as evidenced by numerous log entries such as: 'gohttpserver.service: Faile"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 2,
+          "n_cycles": 8,
+          "ans": "The service unit that is crash-looping is `gohttpserver.service`. The recent failure evidence is the repeated log message: `systemd[1]: gohttpserver.service: Failed with result 'exit-code'.`"
+        }
+      ]
+    },
+    "a2a": {
+      "n": 15,
+      "finalized_rate": 0.267,
+      "correct_rate": 0.133,
+      "samples": [
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 2,
+          "n_cycles": 2,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 2,
+          "n_cycles": 2,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 2,
+          "n_cycles": 3,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 1,
+          "n_cycles": 1,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 1,
+          "n_cycles": 1,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 2,
+          "n_cycles": 2,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": false,
+          "n_assertions": 5,
+          "n_cycles": 5,
+          "ans": "The crash-looping service unit is apparmor.service. The recent failure evidence is: AppArmor parser error for /etc/apparmor.d in profile /etc/apparmor.d/usr.lib.snapd.snap-confine.real at line 13: Cou"
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 3,
+          "n_cycles": 3,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 1,
+          "n_cycles": 5,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 1,
+          "n_cycles": 1,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 8,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": false,
+          "n_assertions": 3,
+          "n_cycles": 4,
+          "ans": "The crash-looping service unit is **apparmor.systemd**. The recent failure evidence is: AppArmor parser error for /etc/apparmor.d in profile /etc/apparmor.d/usr.lib.snapd.snap-confine.real at line 13:"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 8,
+          "n_cycles": 8,
+          "ans": "The service unit that is crash-looping is 'gohttpserver.service'. The failure evidence is that the service repeatedly fails with the result 'exit-code', indicating a runtime failure during startup or "
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 5,
+          "n_cycles": 6,
+          "ans": "The service unit that is repeatedly crash-looping and failing is gohttpserver.service. However, while the unit has been identified, the systemd journal context does not contain the specific, verbatim "
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 1,
+          "n_cycles": 1,
+          "ans": null
+        }
+      ]
+    }
+  },
+  "elapsed_sec": 5388.5
+}
