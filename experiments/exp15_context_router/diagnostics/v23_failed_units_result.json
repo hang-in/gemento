@@ -1,0 +1,234 @@
+{
+  "experiment": "exp23_failed_units_ab",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "n_trials": 15,
+  "max_cycles": 8,
+  "arms": {
+    "control": {
+      "n": 15,
+      "finalized_rate": 0.4,
+      "correct_rate": 0.333,
+      "used_fu_rate": 0.0,
+      "samples": [
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": false,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": false,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": false,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": false,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 2,
+          "used_fu": false,
+          "n_cycles": 6,
+          "ans": "The service unit that is crash-looping is **gohttpserver.service**. The recent failure evidence is the repeated systemd journal entry: `gohttpserver.service: Failed with result 'exit-code'`, indicatin"
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": false,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": false,
+          "n_assertions": 2,
+          "used_fu": false,
+          "n_cycles": 7,
+          "ans": "Based on the analysis of the systemd journal, two services are confirmed to be in a crash-looping state:\n\n1. **`dufs.service`**: This service is repeatedly failing to start. Evidence of failure was fo"
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": false,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 1,
+          "used_fu": false,
+          "n_cycles": 7,
+          "ans": "The service unit that is repeatedly crash-looping is `gohttpserver.service`. The failure evidence indicates that the service is repeatedly failing with an 'exit-code', causing systemd to restart it co"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 2,
+          "used_fu": false,
+          "n_cycles": 7,
+          "ans": "The service unit that is repeatedly crash-looping is **gohttpserver.service**. The recent failure evidence is the consistent log message: `systemd[1]: gohttpserver.service: Failed with result 'exit-co"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 2,
+          "used_fu": false,
+          "n_cycles": 4,
+          "ans": "The service unit that is crash-looping is **gohttpserver.service**. The recent failure evidence is the repeated systemd journal entry: `gohttpserver.service: Failed with result 'exit-code'`. This indi"
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 2,
+          "used_fu": false,
+          "n_cycles": 5,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": false,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 2,
+          "used_fu": false,
+          "n_cycles": 7,
+          "ans": "The crash-looping service unit is **gohttpserver.service**. The recent failure evidence is the repeated systemd journal entry: `systemd[1]: gohttpserver.service: Failed with result 'exit-code'.` This "
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": false,
+          "n_cycles": 8,
+          "ans": null
+        }
+      ]
+    },
+    "fu_offered": {
+      "n": 11,
+      "finalized_rate": 0.455,
+      "correct_rate": 0.364,
+      "used_fu_rate": 0.909,
+      "samples": [
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 1,
+          "used_fu": true,
+          "n_cycles": 8,
+          "ans": "The systemd unit that is repeatedly failing or crash-looping is `gohttpserver.service`. The evidence for this is the extremely high number of failure signals (505,848), indicating a persistent crash-l"
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 1,
+          "used_fu": true,
+          "n_cycles": 3,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": true,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": true,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 0,
+          "used_fu": true,
+          "n_cycles": 7,
+          "ans": "The service unit experiencing crash-looping is 'gohttpserver.service'. The recent failure evidence confirming this is the repeated status message: 'Failed with result exit-code'."
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 1,
+          "used_fu": true,
+          "n_cycles": 7,
+          "ans": "The service unit that is crash-looping is 'gohttpserver.service'. The evidence supporting this is the extremely high number of failure signals (505,848) recorded in the systemd journal."
+        },
+        {
+          "finalized": true,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": true,
+          "n_cycles": 7,
+          "ans": "Crash-looping Service Unit: apparmor.service\n\nFailure Evidence:\nThe service unit `apparmor.service` is repeatedly failing to start, indicating a crash-looping state. The failure is consistently report"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "n_assertions": 0,
+          "used_fu": true,
+          "n_cycles": 8,
+          "ans": "The crash-looping service unit is `gohttpserver.service`. The recent failure evidence is the repeated message: `systemd[1]: gohttpserver.service: Failed with result 'exit-code'.`"
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": true,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": false,
+          "n_cycles": 8,
+          "ans": null
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "n_assertions": 0,
+          "used_fu": true,
+          "n_cycles": 8,
+          "ans": null
+        }
+      ]
+    }
+  },
+  "elapsed_sec": 5926.8
+}

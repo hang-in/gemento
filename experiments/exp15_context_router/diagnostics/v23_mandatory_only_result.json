@@ -1,0 +1,105 @@
+{
+  "experiment": "exp23_fu_mandatory_only",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "n_trials": 15,
+  "max_cycles": 8,
+  "arm": "fu_mandatory",
+  "samples": [
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 0,
+      "used_fu": false,
+      "n_cycles": 8,
+      "ans": null
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "n_assertions": 0,
+      "used_fu": true,
+      "n_cycles": 7,
+      "ans": "Based on the analysis of the systemd journal, the service unit that is repeatedly crash-looping is `gohttpserver.service`. The failure evidence indicates that the service fails upon startup, suggestin"
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "n_assertions": 2,
+      "used_fu": true,
+      "n_cycles": 7,
+      "ans": "The service unit that is repeatedly crash-looping is `gohttpserver.service`. This unit has accumulated 505,848 failure signals, confirming it as the primary source of instability. While the specific f"
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 0,
+      "used_fu": true,
+      "n_cycles": 8,
+      "ans": null
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 4,
+      "used_fu": true,
+      "n_cycles": 6,
+      "ans": null
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "n_assertions": 2,
+      "used_fu": true,
+      "n_cycles": 5,
+      "ans": "The service unit that is crash-looping is **gohttpserver.service**. The recent failure evidence is the repeated systemd journal message: 'gohttpserver.service: Failed with result 'exit-code'.' This in"
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 0,
+      "used_fu": true,
+      "n_cycles": 8,
+      "ans": null
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 1,
+      "used_fu": true,
+      "n_cycles": 3,
+      "ans": null
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "n_assertions": 0,
+      "used_fu": true,
+      "n_cycles": 7,
+      "ans": "The service unit that is repeatedly crash-looping is `gohttpserver.service`. This unit showed 505,848 failure signals, making it the primary suspect. However, despite multiple attempts to search the s"
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "n_assertions": 1,
+      "used_fu": true,
+      "n_cycles": 7,
+      "ans": "The systemd unit that is crash-looping is `gohttpserver.service`. The evidence of this failure is derived from the systemd journal, which shows that this unit has accumulated 505,848 failure signals, "
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "n_assertions": 2,
+      "used_fu": true,
+      "n_cycles": 5,
+      "ans": null
+    }
+  ],
+  "agg": {
+    "n": 11,
+    "finalized_rate": 0.455,
+    "correct_rate": 0.455,
+    "used_fu_rate": 0.909
+  },
+  "elapsed_sec": 2955.1
+}
