@@ -4,6 +4,7 @@ Plan document index. Register new plans here.
 
 ## Active
 
+- [exp24-a2a-planner-executor.md](exp24-a2a-planner-executor.md) — **Stage 12 (Exp24)**: a2a Planner→Executor proposer 분할 (per-attempt broad-context overload 우회). 근거: `scoped_emit_probe`(n=20) 답을 clean scoped 입력으로 handed 시 A-stage emit **100%**(vs broad ~49%) → 실패는 structural 아닌 overload. `run_abc_chain(a2a_proposer=False)` opt-in — True 시 단일 A 를 Planner(도구→finding 텍스트)+Executor(clean scoped emit, probe 조건) 로 대체. B/C 무변경, 기본 False byte-identical. orchestrator+system_prompt shared code(plan-first+게이트). 2 arm A/B(control/a2a, task A, n=15). 4 subtask. 결정 Architect default. ⚠ gemento 이력상 구조 추가 종종 무효(H12/H13) — falsify. Sonnet 진행 프롬프트: `docs/prompts/2026-07-03/exp24-a2a-planner-executorStart.md`
 - (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge + facet 도메인 다종화(`list_failed_units` 등, 집계 task 한정 — H21 후속).
 
 ## Recently Done — Stage 11 (2026-07-02)
