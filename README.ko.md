@@ -224,6 +224,7 @@ Exp11에서는 Gemini 2.5 Flash를 Judge로 넣었지만, 모두 Gemma로 구성
 | H21 | Facet 집계 도구 | 조건부(집계 한정) | untruncated 전수 집계(`aggregate_context`)가 집계 task에서 결정적(score 0.0→0.8) — 16KB 캡의 confidently-wrong을 정정; 단일-needle엔 무효. "more structure ≠ monotonically better" |
 | H22 | retrieval-discipline nudge | 미결/실효 기각 | narrow-query nudge opt-in 편입 후 재검증(n=10)에서 레버(+50pp) 미재현·부호 역전 — control baseline이 run마다 17%↔70%로 요동. 진짜 문제는 nudge 부재가 아닌 finalization 자체의 분산 |
 | H23 | failed-unit preset 도구 | 미결/실효 기각 | `list_failed_units`가 실패 unit(gohttpserver 505K신호 #1)을 직접 건네 retrieval을 우회하고 85~94% 사용되는데도 per-attempt 무개선(3 arm 46~53% 구별불가) — 병목은 retrieval이 아닌 다운스트림 emit/converge. 프롬프트(H22)·도구(H23) 둘 다 per-attempt 못 올림 |
+| H24 | a2a Planner→Executor 분할 | 미결/실효 기각 | proposer 분할이 emit은 고쳤으나(empty-tattoo 9→0) 실패를 Planner로 이동 — 틀린 finding을 confidently-wrong으로 수렴, correct 47→13% 악화. 안전한 None을 finalized-but-wrong으로 전환(무진단보다 해로움). **per-attempt 3중 음성(H22/H23/H24)→retry(K=5→95%) 수용** |
 
 상세 수치와 분석은 `docs/reference/` 아래의 각 실험 보고서에 있습니다.
 
@@ -422,8 +423,9 @@ Exp07/Exp08에서 정답 데이터 결함이 실험 결론을 바꾼 사례가 �
 | Stage 8 | 완료 | mandatory-tool 프롬프트 opt-in 편입 (caller-decides) |
 | Stage 9 | 완료 | Facet 집계 도구 A/B (H21 조건부, 집계 task 한정) |
 | Stage 10 | 완료 | 오케스트레이터 신뢰성 — retrieval-discipline opt-in (H22 미결/실효 기각) + finalization 분산 진단·retry K-sweep 트랙 종결 (per-attempt ≈49% 고분산, retry K=5→95%) |
-| Stage 11 | 완료 | Exp23 failed-unit preset 도구 (H23 미결/실효 기각 — retrieval 우회해도 per-attempt 무개선). per-attempt 트랙 종결: 프롬프트·도구 둘 다 무효, 병목은 다운스트림 |
-| 중기 | 예정 | a2a(planner-executor) 또는 retry 수용, Graph/Evidence Tool |
+| Stage 11 | 완료 | Exp23 failed-unit preset 도구 (H23 미결/실효 기각 — retrieval 우회해도 per-attempt 무개선). 병목은 다운스트림 |
+| Stage 12 | 완료 | Exp24 a2a Planner→Executor (H24 미결/실효 기각 — emit은 고쳤으나 실패 Planner 이동, correct 악화). **per-attempt 트랙 3중 음성 최종 종결 → retry 수용** |
+| 중기 | 예정 | 다른 축(도메인 facet/크로스모델) 또는 a2a 심화(구조화 planner+verification), Graph/Evidence Tool |
 | 장기 | 예정 | 더 체계적인 cross-model ablation과 technical report |
 
 ---

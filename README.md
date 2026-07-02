@@ -209,6 +209,7 @@ So gemento's current direction is **less "stack a stronger model on top," more "
 | H21 | Facet aggregate tool | Conditional (aggregation-only) | untruncated exhaustive aggregation (`aggregate_context`) is decisive on aggregation tasks (score 0.0→0.8) — corrects the 16KB-cap confidently-wrong answer; no benefit on single-needle. "more structure ≠ monotonically better" |
 | H22 | retrieval-discipline nudge | Inconclusive (effectively rejected) | after integrating the narrow-query nudge as an opt-in flag, re-validation (n=10) failed to replicate the lever (+50pp) and the sign reversed — the control baseline swings 17%↔70% run-to-run. The real problem is not a missing nudge but the variance of finalization itself |
 | H23 | failed-unit preset tool | Inconclusive (effectively rejected) | `list_failed_units` hands the failing unit (gohttpserver, 505K signals, #1) to the model, bypassing retrieval, and is used 85–94% of the time — yet per-attempt finalization does not improve (3 arms indistinguishable at 46–53%). The bottleneck is downstream emit/converge, not retrieval. Neither prompting (H22) nor a tool (H23) raises per-attempt |
+| H24 | a2a Planner→Executor split | Inconclusive (effectively rejected) | Splitting the proposer fixes emit (empty-tattoo 9→0) but relocates the failure to the Planner — it extracts a wrong finding that the Executor faithfully commits, so correct drops 47→13% and safe Nones become finalized-but-wrong (worse than no diagnosis). **Triple negative on per-attempt (H22/H23/H24) → accept retry (K=5→95%)** |
 
 Detailed numbers and analysis live in the per-experiment reports under `docs/reference/`.
 
@@ -402,8 +403,9 @@ Note: for math tasks, first verify that `expected_answer` itself satisfies the c
 | Stage 8 | done | mandatory-tool prompt opt-in integration (caller-decides) |
 | Stage 9 | done | Facet aggregate tool A/B (H21 conditional, aggregation-only) |
 | Stage 10 | done | orchestrator reliability — retrieval-discipline opt-in (H22 inconclusive/effectively rejected) + finalization-variance diagnosis & retry K-sweep track close (per-attempt ≈49% high-variance, retry K=5→95%) |
-| Stage 11 | done | Exp23 failed-unit preset tool (H23 inconclusive/effectively rejected — bypasses retrieval but per-attempt unchanged). per-attempt track closed: neither prompting nor tools help; the bottleneck is downstream |
-| Mid-term | planned | a2a (planner-executor) or accept retry, Graph/Evidence Tool |
+| Stage 11 | done | Exp23 failed-unit preset tool (H23 inconclusive/effectively rejected — bypasses retrieval but per-attempt unchanged). Bottleneck is downstream |
+| Stage 12 | done | Exp24 a2a Planner→Executor (H24 inconclusive/effectively rejected — fixes emit but relocates failure to the Planner, correct drops). **Triple negative on per-attempt → accept retry** |
+| Mid-term | planned | other axes (domain facets / cross-model) or deeper a2a (structured planner + verification), Graph/Evidence Tool |
 | Long-term | planned | more systematic cross-model ablation and a technical report |
 
 ---
