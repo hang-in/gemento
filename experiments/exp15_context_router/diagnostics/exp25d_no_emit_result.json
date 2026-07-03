@@ -1,0 +1,577 @@
+{
+  "experiment": "exp25d_no_emit",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "n": 25,
+  "gate": "converged_requires_answer=True",
+  "finding": "gohttpserver.service (top failing systemd unit, 505848 failure signals)",
+  "samples": [
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": false,
+      "no_emit": false,
+      "n_cycles": 4,
+      "n_prod_cycles": 0,
+      "prod_cycle_modes": [],
+      "prod_cycles": []
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": false,
+      "no_emit": false,
+      "n_cycles": 4,
+      "n_prod_cycles": 0,
+      "prod_cycle_modes": [],
+      "prod_cycles": []
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 4,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 4,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "Crash-looping Service Unit:\n1. Unit Name: gohttpserver.service\n\nFailure Evidence:\nThe systemd journal confirms that `goh",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next directive explicitly instructs me to combine all confirmed facts into a final answer and set the `final_answer` field. The confirmed fact is that the crash-looping service"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 7,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "The service unit identified as crash-looping is **gohttpserver.service**. This unit was confirmed as the top failing uni",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive mandates setting the final_answer. Based on the current state, the only confirmed fact is the unit name: `gohttpserver.service`. However, the critical evidence ("
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 4,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 4,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "Based on the diagnostic scan of the systemd journal from server test9ng, the service unit that is repeatedly crash-loopi",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive explicitly states that I must combine all confirmed facts into a final answer and set the `final_answer` field. The confirmed fact (assertion e17e799c) is that t"
+        }
+      ]
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "reached_productive": true,
+      "no_emit": true,
+      "n_cycles": 8,
+      "n_prod_cycles": 2,
+      "prod_cycle_modes": [
+        "empty_final",
+        "empty_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "a_mode": "empty_final",
+          "final_val": "",
+          "n_new_assertions": 0,
+          "a_reasoning": "The current state confirms that the crash-looping service unit is 'gohttpserver.service'. The goal requires identifying the unit AND reporting recent failure evidence. While the un"
+        },
+        {
+          "cycle": 8,
+          "phase": "SYNTHESIZE",
+          "a_mode": "empty_final",
+          "final_val": "",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive instructs me to combine all confirmed facts into a final answer. I have successfully identified the crash-looping unit: `gohttpserver.service` (Assertion ID: b25"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 3,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 3,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "The service unit that is crash-looping on server test9ng is **gohttpserver.service**. \n\n**Failure Evidence:**\nThis concl",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next directive explicitly states to combine all confirmed facts into a final answer and set the `final_answer` field. The confirmed fact is that `gohttpserver.service` is the t"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 5,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 5,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "The service unit that is crash-looping is **gohttpserver.service**. \n\n**Failure Evidence:** This unit was identified as ",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next directive explicitly states that I must combine all confirmed facts into a final answer and set the `final_answer` field. The state assertions provide two critical, high-c"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 5,
+      "n_prod_cycles": 3,
+      "prod_cycle_modes": [
+        "empty_final",
+        "correct_final",
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 3,
+          "phase": "SYNTHESIZE",
+          "a_mode": "empty_final",
+          "final_val": "",
+          "n_new_assertions": 0,
+          "a_reasoning": "The current `next_directive` instructs me to combine all confirmed facts into a final answer. However, reviewing the `state.open_questions` reveals that the critical evidence—the s"
+        },
+        {
+          "cycle": 4,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "Crash-looping Service Unit:\ngohttpserver.service\n\nFailure Evidence:\n[Evidence Pending]\n\n*   **Status:** The unit `gohttp",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive requires me to combine all confirmed facts into the final answer. I have successfully identified the crash-looping unit: `gohttpserver.service` (Assertion 18e1c5"
+        },
+        {
+          "cycle": 5,
+          "phase": "VERIFY",
+          "a_mode": "correct_final",
+          "final_val": "The crash-looping service unit is gohttpserver.service. The evidence for this identification is its status as the top fa",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive mandates setting the final_answer, requiring me to synthesize the complete answer based on the current state. The primary assertion (gohttpserver.service is the "
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 3,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 3,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "The service unit that is crash-looping is **gohttpserver.service**. The evidence confirming this is the extremely high n",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive requires combining all confirmed facts into a final answer. The confirmed fact (b7337add) definitively identifies the crash-looping unit as `gohttpserver.service"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 4,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 4,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "Based on the automated systemd failure-signal scan, the service unit repeatedly crash-looping on server test9ng is defin",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive mandates combining all confirmed facts into the final answer. I have successfully identified the crash-looping unit as `gohttpserver.service` (Assertion id: ec9a"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 7,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "Based on the available evidence, the service unit that is crash-looping is definitively identified as `gohttpserver.serv",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive explicitly instructs me to combine all confirmed facts into a final answer and set the `final_answer` field. \n\n1. **Confirmed Facts:** The unit name is definitiv"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 4,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 4,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "The service unit that is crash-looping on server test9ng is **gohttpserver.service**. \n\n**Failure Evidence:**\nThis unit ",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next directive explicitly requires combining all confirmed facts into the final answer. The confirmed facts are that the top failing unit is 'gohttpserver.service' and that thi"
+        }
+      ]
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "reached_productive": true,
+      "no_emit": true,
+      "n_cycles": 8,
+      "n_prod_cycles": 2,
+      "prod_cycle_modes": [
+        "empty_final",
+        "empty_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "a_mode": "empty_final",
+          "final_val": "",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive instructs me to combine all confirmed facts into a final answer. However, a critical piece of evidence—the detailed systemd journal logs (e.g., 'journalctl -u go"
+        },
+        {
+          "cycle": 8,
+          "phase": "SYNTHESIZE",
+          "a_mode": "empty_final",
+          "final_val": "",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next directive is to combine all confirmed facts into a final answer. While we have successfully identified the primary suspect unit, `gohttpserver.service`, as the top failing"
+        }
+      ]
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "reached_productive": true,
+      "no_emit": true,
+      "n_cycles": 8,
+      "n_prod_cycles": 2,
+      "prod_cycle_modes": [
+        "empty_final",
+        "empty_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "a_mode": "empty_final",
+          "final_val": "",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive instructs me to combine all confirmed facts into a final answer. However, reviewing the 'state' section, the 'open_questions' clearly state that the systemd jour"
+        },
+        {
+          "cycle": 8,
+          "phase": "SYNTHESIZE",
+          "a_mode": "empty_final",
+          "final_val": "",
+          "n_new_assertions": 0,
+          "a_reasoning": "The current `next_directive` instructs me to combine all confirmed facts into a final answer. However, a critical piece of evidence—the systemd journal logs for `gohttpserver.servi"
+        }
+      ]
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "reached_productive": true,
+      "no_emit": true,
+      "n_cycles": 8,
+      "n_prod_cycles": 2,
+      "prod_cycle_modes": [
+        "empty_final",
+        "empty_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "a_mode": "empty_final",
+          "final_val": "",
+          "n_new_assertions": 0,
+          "a_reasoning": "The current state confirms that the crash-looping unit is `gohttpserver.service`. However, the primary goal and constraints require not only the unit name but also 'recent failure "
+        },
+        {
+          "cycle": 8,
+          "phase": "SYNTHESIZE",
+          "a_mode": "empty_final",
+          "final_val": "",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next directive is to combine all confirmed facts into a final answer. I have successfully identified the crash-looping unit: `gohttpserver.service` (Assertion ID: 31dc802f). Ho"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 4,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 4,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "크래시루프 중인 서비스의 정확한 unit 이름은 gohttpserver.service입니다. 실패 근거는 시스템d 저널 분석 결과, 해당 서비스가 505,848건의 실패 신호(failure signals)를 기록하며",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive explicitly instructs me to combine all confirmed facts into a final answer and set the `final_answer` field. The confirmed fact is that `gohttpserver.service` is"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 3,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 3,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "Crash-looping Unit: gohttpserver.service\n\n[Failure Evidence Summary]: The service unit identified as crash-looping is `g",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive explicitly instructs me to combine all confirmed facts into a final answer and set the `final_answer` field. \n\n1. **Confirmed Fact:** The crash-looping service u"
+        }
+      ]
+    },
+    {
+      "finalized": false,
+      "correct": false,
+      "reached_productive": true,
+      "no_emit": true,
+      "n_cycles": 8,
+      "n_prod_cycles": 2,
+      "prod_cycle_modes": [
+        "empty_final",
+        "empty_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "a_mode": "empty_final",
+          "final_val": "",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive instructs me to combine all confirmed facts into a final answer. While the unit name, `gohttpserver.service`, is confirmed as the crash-looping unit (Assertion 1"
+        },
+        {
+          "cycle": 8,
+          "phase": "SYNTHESIZE",
+          "a_mode": "empty_final",
+          "final_val": "",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive instructs me to combine all confirmed facts into a final answer. While the unit name (`gohttpserver.service`) is confirmed as the crash-looping unit, the critica"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 2,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 2,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "The service unit that is crash-looping is **gohttpserver.service**. This conclusion is based on the definitive evidence ",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next directive explicitly instructs me to combine all confirmed facts into a final answer. The confirmed fact (Assertion ID: 2e2b0481) is that 'The top failing systemd unit, an"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 7,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "Crash-looping 서비스 유닛은 `gohttpserver.service`로 확인되었습니다. 그러나, 완전한 진단을 위해서는 해당 서비스의 실패 원인(root cause)을 담고 있는 구체적인 시스템d 저널 로",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next_directive is to combine all confirmed facts into a final answer and set the `final_answer`. I have successfully identified the crash-looping unit as `gohttpserver.service`"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 7,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 7,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "크래시루프 중인 서비스 유닛은 gohttpserver.service입니다. 이 서비스는 반복적으로 실패하며 재시작되는(crash-looping) 현상을 보이고 있습니다. 다만, 현재 제공된 컨텍스트에는 이 크래시루프",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next directive is to combine all confirmed facts into a final answer. I have successfully identified the crash-looping unit as `gohttpserver.service` (assertions a536e097 and f"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 6,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 6,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "The crash-looping service unit is gohttpserver.service. However, the specific recent failure evidence (error messages or",
+          "n_new_assertions": 0,
+          "a_reasoning": "The objective requires identifying the crash-looping service unit and reporting recent failure evidence. The confirmed fact (Assertion 86a318ce) is that `gohttpserver.service` is t"
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": true,
+      "no_emit": false,
+      "n_cycles": 2,
+      "n_prod_cycles": 1,
+      "prod_cycle_modes": [
+        "correct_final"
+      ],
+      "prod_cycles": [
+        {
+          "cycle": 2,
+          "phase": "SYNTHESIZE",
+          "a_mode": "correct_final",
+          "final_val": "The service unit that is crash-looping on server test9ng is **gohttpserver.service**. \n\n**Failure Evidence:**\nThe system",
+          "n_new_assertions": 0,
+          "a_reasoning": "The next directive explicitly instructs me to combine all confirmed facts into a final answer. The confirmed fact (a196943a) is that 'gohttpserver.service' is the top failing unit."
+        }
+      ]
+    },
+    {
+      "finalized": true,
+      "correct": true,
+      "reached_productive": false,
+      "no_emit": false,
+      "n_cycles": 4,
+      "n_prod_cycles": 0,
+      "prod_cycle_modes": [],
+      "prod_cycles": []
+    }
+  ],
+  "agg": {
+    "n": 25,
+    "finalized_rate": 0.8,
+    "reached_productive_rate": 0.88,
+    "no_emit_count": 5,
+    "no_emit_rate": 0.2,
+    "no_emit_prod_mode_dist": {
+      "empty_final": 10
+    },
+    "wrong_content_count": 0
+  },
+  "elapsed_sec": 3852.4
+}

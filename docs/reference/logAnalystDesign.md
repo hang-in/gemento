@@ -76,7 +76,7 @@ updated_at: 2026-07-03
 ## 5. 확신 수준 (정직)
 
 - **높음**: Context Router O(1)(H15/H18 다회), scoped emit 100%, confident-wrong 근원=LLM judgment. **fail-safe(결정론 finding→정답 아니면 침묵, wrong 0%) — Exp25/25b/25c 반복 확증(누적 n≫30).** **처리량 레버 확증: premature CONVERGED(Exp25b, 원인) → CONVERGED 게이팅(Exp25c, A/B 13→87% & wrong 0 & prod 20→100%).**
-- **중간**: first-attempt 기저는 게이트 ON 시 ~87%. **새 잔여 천장 = productive-no-emit**(SYNTHESIZE 도달 후 A emit 실패, on 실패 전부) — A-stage 이슈, retry 또는 SYNTHESIZE emit-nudge 로 매입 후보(미검증).
+- **중간→높음**: first-attempt 기저는 게이트 ON 시 ~80-87%. **잔여 천장 = productive-no-emit 진단 완료(Exp25d, n=25)**: SYNTHESIZE 도달 후 A 실패 chain 의 productive A 응답이 **100% `empty_final`**(final_answer 필드는 넣되 값이 빔 — 파싱실패·필드누락·오답 전무), **wrong_content 0**. = 순수 emit 노이즈(일부 GPU 경합 truncation) → **retry 가 값싸게 커버**(87%+K=3→~99.8%). "단발 A-stage 레버" 불필요(per-attempt 트랙 교훈 재확인). 결과 `exp25d_no_emit_result.json`.
 - **미검증(설계 가정)**: 추출기 배터리 커버리지(단일 task/추출기), 기권 층, GB 백엔드, 크로스모델.
 
 ## 6. 비-목표 / 경계
