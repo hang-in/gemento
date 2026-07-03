@@ -6,6 +6,10 @@ Plan document index. Register new plans here.
 
 - (보류) e2b 전용 push-기반 외재화 + paper-review P1-3 LLM-as-judge + facet 도메인 다종화(`list_failed_units` 등, 집계 task 한정 — H21 후속) + a2a 심화(구조화 planner + verifiable-diagnosis oracle, tunaRound 교차문서 — H24 caveat).
 
+## Recently Done — Stage 13 (2026-07-03)
+
+- (plan 문서 없음 — 진단+surgical 변경으로 직접 진행) — **Stage 13 (Exp25/25b/25c, 로그분석가 track)**: 결정론 finding 척추(Exp25 fail-safe wrong 0) → **C-수렴 병목 진단(Exp25b)**: 처리량 병목=**premature CONVERGED**(C 가 답 없이 DECOMPOSE/INVESTIGATE→CONVERGED 조기월반→답 쓰는 SYNTHESIZE 스킵→null, 비-finalized 89%; 핸드오프 3가설 confidence게이트·termination과엄격 전부 반증 — confidence 게이트는 코드에 없음, termination under-gated) → **CONVERGED 게이팅(Exp25c)**: orchestrator opt-in `converged_requires_answer`(off byte-identical, redirect to SYNTHESIZE). **H25 채택** — A/B(n=15/arm) finalized **13→87%**, reached_productive **20→100%**, **wrong 0%(양 arm)**, Wilson95 0.62~0.96 = 처리량 레버 확증+fail-safe 보존. 잔여 천장=productive-no-emit(A-stage). 회귀게이트 **75 OK**. opt-in 4개째(효과 입증, 로그분석가 경로 ON 권장). 커밋 Exp25b `6a795e8`/Exp25c `bb3abaa`. 노트북 §23. 2026-07-03.
+
 ## Recently Done — Stage 12 (2026-07-03)
 
 - [exp24-a2a-planner-executor.md](exp24-a2a-planner-executor.md) — **Stage 12 (Exp24)**: a2a Planner→Executor proposer 분할 (per-attempt overload 우회). `scoped_emit_probe`(scoped emit 100% vs broad 49%)가 green-light. `run_abc_chain(a2a_proposer=False)` opt-in, B/C 무변경, 기본 byte-identical(게이트 71 OK). **H24 ⚠ 미결(실효적 기각)** — A/B(task A, n=15)서 control finalized **47%**/correct **47%**(asrt {0:9,2:6}) vs a2a **27%**/**13%**(asrt {1:5,2:4,…}, empty-tattoo 9→0). Δcorrect −33pp. a2a 가 **emit 은 해결**(Executor 안정 emit, empty-tattoo 소멸)하나 **실패를 Planner 로 이동**(틀린 finding → confidently-wrong 수렴, Risk 3 실현). 안전한 None 을 finalized-but-wrong 으로 전환 = 무진단보다 해로움. **per-attempt 트랙 3중 음성(H22/H23/H24) → retry(§20 K=5→95%) 수용 최종 확정.** opt-in 유지·켜기 비추천. 4 subtask 완료. 커밋 코드 `e28cc03`/게이트 `dae21b1`/드라이버 `c90026d`/결과 `b073ed8`. 노트북 §22. caveat: MVP(텍스트 planner) 한정, 구조화 planner future. 2026-07-03.
