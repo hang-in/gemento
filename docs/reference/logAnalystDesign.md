@@ -24,7 +24,8 @@ updated_at: 2026-07-03
 | 실 저널 진단 | Exp19 | certbot 5/5 |
 | scoped emit 신뢰성 | scoped_emit_probe | 답 clean 주입 시 emit 100% |
 | **결정론 finding → fail-safe** | **det_planner_probe** | **correct==finalized (33%), confident-wrong 0** |
-| retry binomial 스케일 | §20 | K=5 → 95% |
+| **fail-safe + retry 확증** | **Exp25 (det_planner_retry)** | **wrong 0% (n=30 누적), correct 67%@K=5, C-수렴이 처리량 병목** |
+| retry binomial 스케일 | §20 | K=5 → 95% (단 per-attempt 기저에 의존) |
 | **judgment(LLM planner)는 노이즈서 틀림** | Exp24 | a2a planner correct 13%, confident-wrong 14% |
 | 모델 단독 집계는 confidently-wrong | H21 | grep_only 16KB캡 오답 5/5 |
 
@@ -63,17 +64,18 @@ updated_at: 2026-07-03
 
 ## 4. 실험 로드맵 (다음 Stage 후보)
 
-1. **Exp25 — 척추 확인**: 결정론 finding + retry(K=5). det_planner_probe 단발 33%/fail-safe 를 retry 로 확장 → correct ~87%+/wrong 0 실측 (fail-safe 성질 n↑ 재확인). *가장 값싼 첫 확인.*
-2. **Exp26 — 추출기 다종화 + 다실패모드**: list_failed_units 외 top_error_classes/freq_anomaly 등 + crashloop 아닌 task(brute-force, OOM, cert-expiry). fail-safe·커버리지 일반화.
-3. **Exp27 — 기권 층**: 추출기 근거 없을 때 "모른다" 반환 정확도. confident-wrong 최종 차단.
-4. **Exp28 — GB 백엔드**: ripgrep/인덱스 도구로 교체, 크기 O(1) 실증.
-5. **(논문/제품)** 크로스모델 O(1) 재현(Qwen/Llama) → reach 명제 일반화.
+1. ~~**Exp25 — 척추 확인**~~ — **완료(2026-07-03)**. 결정론 finding + retry K=5, n=15: **wrong 0%(fail-safe 확증, 누적 n=30)**, correct 67%@K=5. 예측 ~87% 미달 — first-attempt C-수렴 20% draw 라 K=5→67%(retry 산식 성립). **새 병목 = C(판정자) 수렴**: 정답 assertion 줘도 ~20-33%만 수렴 → 처리량은 K↑ 로 매입(K≈7-10 이면 ~90%). 결과 `det_planner_retry_result.json`.
+2. **Exp25b — C-수렴 병목 진단/완화** (신규 최우선): 정답 assertion 을 줘도 C 가 2/3 수렴 거부하는 원인. C(판정자)가 도구 없이 "검증 못 해서" confidence<0.8 로 남는지, termination 조건이 과엄격한지. C-stage 프롬프트/수렴조건이 처리량 레버. (per-attempt 트랙은 A-stage 였고, 이제 C-stage 로 이동.)
+3. **Exp26 — 추출기 다종화 + 다실패모드**: list_failed_units 외 top_error_classes/freq_anomaly 등 + crashloop 아닌 task(brute-force, OOM, cert-expiry). fail-safe·커버리지 일반화.
+4. **Exp27 — 기권 층**: 추출기 근거 없을 때 "모른다" 반환 정확도. confident-wrong 최종 차단.
+5. **Exp28 — GB 백엔드**: ripgrep/인덱스 도구로 교체, 크기 O(1) 실증.
+6. **(논문/제품)** 크로스모델 O(1) 재현(Qwen/Llama) → reach 명제 일반화.
 
 ## 5. 확신 수준 (정직)
 
-- **높음**: Context Router O(1)(H15/H18 다회), scoped emit 100%, confident-wrong 근원=LLM judgment.
-- **중간(n=15 소표본)**: det_planner_probe 의 fail-safe(correct==finalized, 5/5) — Exp25 로 확인 필요.
-- **미검증(설계 가정)**: 추출기 배터리 커버리지, 기권 층, GB 백엔드, 크로스모델.
+- **높음**: Context Router O(1)(H15/H18 다회), scoped emit 100%, confident-wrong 근원=LLM judgment. **fail-safe(결정론 finding→정답 아니면 침묵, wrong 0% @ n=30 누적) — Exp25 확증.**
+- **중간**: 처리량 = retry K 로 매입(K=5→67%, K↑→↑). 단 **C-수렴 per-attempt 기저(~20-33%)가 낮고 변동** → Exp25b(C 병목 완화)가 처리량 레버.
+- **미검증(설계 가정)**: 추출기 배터리 커버리지(단일 task/추출기), 기권 층, GB 백엔드, 크로스모델.
 
 ## 6. 비-목표 / 경계
 
@@ -83,3 +85,4 @@ updated_at: 2026-07-03
 
 ## 변경 이력
 - 2026-07-03 draft: per-attempt 트랙(3중 음성) 종결 + det_planner_probe(fail-safe 발견) 후 방향을 로그 분석 어시스턴트로 재정의. 4-구성요소 아키텍처 + 실험 로드맵 초안.
+- 2026-07-03 Exp25 반영: fail-safe 확증(wrong 0% @ n=30), 처리량 67%@K=5, 병목이 A-stage→**C-수렴**으로 이동. 로드맵에 Exp25b(C 병목 완화) 최우선 추가, 확신수준 갱신.
