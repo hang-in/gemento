@@ -65,16 +65,18 @@ updated_at: 2026-07-03
 ## 4. 실험 로드맵 (다음 Stage 후보)
 
 1. ~~**Exp25 — 척추 확인**~~ — **완료(2026-07-03)**. 결정론 finding + retry K=5, n=15: **wrong 0%(fail-safe 확증, 누적 n=30)**, correct 67%@K=5. 예측 ~87% 미달 — first-attempt C-수렴 20% draw 라 K=5→67%(retry 산식 성립). **새 병목 = C(판정자) 수렴**: 정답 assertion 줘도 ~20-33%만 수렴 → 처리량은 K↑ 로 매입(K≈7-10 이면 ~90%). 결과 `det_planner_retry_result.json`.
-2. **Exp25b — C-수렴 병목 진단/완화** (신규 최우선): 정답 assertion 을 줘도 C 가 2/3 수렴 거부하는 원인. C(판정자)가 도구 없이 "검증 못 해서" confidence<0.8 로 남는지, termination 조건이 과엄격한지. C-stage 프롬프트/수렴조건이 처리량 레버. (per-attempt 트랙은 A-stage 였고, 이제 C-stage 로 이동.)
-3. **Exp26 — 추출기 다종화 + 다실패모드**: list_failed_units 외 top_error_classes/freq_anomaly 등 + crashloop 아닌 task(brute-force, OOM, cert-expiry). fail-safe·커버리지 일반화.
-4. **Exp27 — 기권 층**: 추출기 근거 없을 때 "모른다" 반환 정확도. confident-wrong 최종 차단.
-5. **Exp28 — GB 백엔드**: ripgrep/인덱스 도구로 교체, 크기 O(1) 실증.
-6. **(논문/제품)** 크로스모델 O(1) 재현(Qwen/Llama) → reach 명제 일반화.
+2. ~~**Exp25b — C-수렴 병목 진단**~~ — **완료(2026-07-03)**. n=15 계측(공유코드 무변경).
+   **핸드오프의 3개 가설 전부 반증**: (A) confidence 게이트는 코드에 **없음**(C 출력=converged/next_phase/reasoning). (B) termination 과엄격 아니라 정반대 — **under-gated**(답 없이 CONVERGED 허용). **진짜 원인 = premature CONVERGED**: C 가 DECOMPOSE/INVESTIGATE 에서 `next_phase="CONVERGED"` 로 **조기 월반**(orchestrator.py:1021 이 어느 phase서든 CONVERGED 직행 허용). B handoff 에 (주입한) 정답이 보이니 "수렴"으로 판정하지만 `final_answer` 는 A 가 SYNTHESIZE/VERIFY 에서만 emit → **답 쓰는 phase 스킵 → null 종료**. 비-finalized 9개 중 **8개(89%)** 가 이것, 1개만 productive-emit 실패. finalize된 6개는 전부 C 가 조기수렴 *안 한* chain(safety-limit 가 SYNTHESIZE까지 crawl→emit). **C 조기수렴이 처리량 원흉, fail-safe(wrong 0%)는 스킵 chain 이 None 반환이라 유지.** 결과 `exp25b_c_convergence_result.json`.
+3. **Exp25c — CONVERGED 게이팅 (신규 최우선, orchestrator 공유코드 → plan-first)**: CONVERGED 전이를 `final_answer is not None` 으로 게이팅(opt-in flag, off byte-identical). 답 없이 converged→CONVERGED면 거부/SYNTHESIZE 유도 → premature-null 8개를 crawl-to-SYNTHESIZE 정답으로 전환. 예측 처리량 40%→~85-90%, fail-safe 보존. A/B 로 검증.
+4. **Exp26 — 추출기 다종화 + 다실패모드**: list_failed_units 외 top_error_classes/freq_anomaly 등 + crashloop 아닌 task(brute-force, OOM, cert-expiry). fail-safe·커버리지 일반화.
+5. **Exp27 — 기권 층**: 추출기 근거 없을 때 "모른다" 반환 정확도. confident-wrong 최종 차단.
+6. **Exp28 — GB 백엔드**: ripgrep/인덱스 도구로 교체, 크기 O(1) 실증.
+7. **(논문/제품)** 크로스모델 O(1) 재현(Qwen/Llama) → reach 명제 일반화.
 
 ## 5. 확신 수준 (정직)
 
 - **높음**: Context Router O(1)(H15/H18 다회), scoped emit 100%, confident-wrong 근원=LLM judgment. **fail-safe(결정론 finding→정답 아니면 침묵, wrong 0% @ n=30 누적) — Exp25 확증.**
-- **중간**: 처리량 = retry K 로 매입(K=5→67%, K↑→↑). 단 **C-수렴 per-attempt 기저(~20-33%)가 낮고 변동** → Exp25b(C 병목 완화)가 처리량 레버.
+- **중간**: 처리량 = retry K 로 매입(K=5→67%, K↑→↑). 단 first-attempt 기저(~40%)가 낮음 — **Exp25b 로 원인 확정: premature CONVERGED(C 가 답 쓰기 전 조기 월반, 비-finalized 의 89%)**. 레버 = Exp25c(CONVERGED 를 final_answer 존재로 게이팅). 이 게이트가 처리량 레버(예측 40%→~85-90%).
 - **미검증(설계 가정)**: 추출기 배터리 커버리지(단일 task/추출기), 기권 층, GB 백엔드, 크로스모델.
 
 ## 6. 비-목표 / 경계
