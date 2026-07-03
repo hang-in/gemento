@@ -165,9 +165,9 @@ Orchestrator도 마찬가지입니다.
 "도구를 붙이면 좋아진다"가 아닙니다. 도구의 성격, 호출 횟수, 모델의 도구 사용 능력, 입력 크기에 따라 결과가 갈립니다.
 
 - **Exp14:** 검색 도구를 줬지만 multi-hop task에서 충분히 반복 검색하지 못해 성능이 떨어졌습니다.
-- **Exp15~16:** 큰 로그를 통째로 넣는 방식이 무너지는 구간에서 context router가 유효했습니다.
-- **Exp18:** 이를 합성 repo 규모(~245K tok, 컨텍스트 7.5배)까지 밀어도 성능 저하가 없었습니다.
-- **Exp19 (실데이터 검증):** RTX 5060Ti의 gemma4:e4b가 다른 서버의 살아있는 1.15M-token `journald`에서 실제 `certbot` 장애를 매 trial 정확히 진단했습니다(로그 전체 stuffing은 불가능). router는 prefill 비용을 로그 크기에서 분리합니다.
+- **Exp15 ~ 16:** 큰 로그를 통째로 넣는 방식이 무너지는 구간에서 context router가 유효했습니다.
+- **Exp18:** 이를 합성 repo 규모(~ 245K tok, 컨텍스트 7.5배)까지 밀어도 성능 저하가 없었습니다.
+- **Exp19 (실데이터 검증):** RTX 5060Ti의 gemma4:e4b가 다른 서버의 살아있는 1.15M - token `journald`에서 실제 `certbot` 장애를 매 trial 정확히 진단했습니다(로그 전체 stuffing은 불가능). router는 prefill 비용을 로그 크기에서 분리합니다.
 
 **Exp19 성능 대비 (5060Ti, gemma4:e4b 기준)**
 
@@ -176,7 +176,7 @@ Orchestrator도 마찬가지입니다.
 | stuffing | 1.15M tok 전체 | 약 12분 / 호출 |
 | router | grep 결과만 | 약 3초 |
 
-참고 처리량: 생성 ~95 tok/s, prefill ~1,620 tok/s.
+참고 처리량: 생성 ~95 tok/s, prefill ~ 1,620 tok/s.
 
 ### 4. 강한 Judge가 항상 좋은 것은 아니었다
 
@@ -204,7 +204,7 @@ Exp11에서는 Gemini 2.5 Flash를 Judge로 넣었지만, 모두 Gemma로 구성
 | 부분 | 일부 구간에서만 성립 |
 | 미결/실효 기각 | 유의미한 개선을 못 보였거나 분산이 커서 결론 유보 |
 
-### 초기 가설 (H1~H16)
+### 초기 가설 (H1 ~ H16)
 
 | ID | 주제 | 판정 | 요약 |
 | --- | --- | --- | --- |
@@ -221,7 +221,7 @@ Exp11에서는 Gemini 2.5 Flash를 Judge로 넣었지만, 모두 Gemma로 구성
 | H15 | Context Router | 조건부 | 큰 로그에서 유효, 작은 로그에서는 overhead |
 | H16b/c | mandatory prompt + retry | 채택 | 큰 로그 router 조건에서 출력 안정화 |
 
-### 후기 가설 (H17~H25)
+### 후기 가설 (H17 ~ H25)
 
 이 구간은 셀에 담기엔 맥락이 길어, 표에는 판정만 두고 상세를 아래에 풉니다.
 
@@ -236,10 +236,10 @@ Exp11에서는 Gemini 2.5 Flash를 Judge로 넣었지만, 모두 Gemma로 구성
 | H25 | CONVERGED 게이팅 | **채택** |
 
 **H17 - 복잡도 상한 (부분)**
-e4b+router가 multi-hop/집계/판별까지 스케일했습니다(baseline ~92%). 단 mandatory 스택은 특정 실패 모드 전용이라 hard task에서는 −3pp.
+e4b+router가 multi-hop/집계/판별까지 스케일했습니다(baseline ~ 92%). 단 mandatory 스택은 특정 실패 모드 전용이라 hard task에서는 −3pp.
 
 **H18 - size invariance (채택)**
-router가 추론 부하를 로그 크기와 분리합니다(O(1)). multi-hop/집계가 ~245K tok(컨텍스트 7.5배)까지 92~100%로 저하 없었습니다. 모델은 거대 로그가 아니라 grep 결과만 봅니다.
+router가 추론 부하를 로그 크기와 분리합니다(O(1)). multi-hop/집계가 ~ 245K tok(컨텍스트 7.5배)까지 92 ~ 100%로 저하 없었습니다. 모델은 거대 로그가 아니라 grep 결과만 봅니다.
 
 **H21 - Facet 집계 도구 (조건부, 집계 한정)**
 untruncated 전수 집계(`aggregate_context`)가 집계 task에서 결정적이었습니다(score 0.0 → 0.8). 16KB 캡에서 나오던 confidently-wrong을 정정합니다. 단 단일-needle에는 무효입니다. "more structure ≠ monotonically better".
@@ -248,7 +248,7 @@ untruncated 전수 집계(`aggregate_context`)가 집계 task에서 결정적이
 narrow-query nudge를 opt-in 편입한 뒤 재검증(n=10)에서 레버(+50pp)가 재현되지 않고 부호가 역전됐습니다. control baseline이 run마다 17% ↔ 70%로 요동쳤습니다. 진짜 문제는 nudge 부재가 아니라 finalization 자체의 분산입니다.
 
 **H23 - failed-unit preset 도구 (미결/실효 기각)**
-`list_failed_units`가 실패 unit(gohttpserver 505K 신호 #1)을 직접 건네 retrieval을 우회하고 85~94% 사용됐는데도 per-attempt 개선이 없었습니다(3 arm 46~53%로 구별 불가). 병목은 retrieval이 아니라 다운스트림 emit/converge입니다. 프롬프트(H22)·도구(H23) 둘 다 per-attempt를 못 올렸습니다.
+`list_failed_units`가 실패 unit(gohttpserver 505K 신호 #1)을 직접 건네 retrieval을 우회하고 85 ~ 94% 사용됐는데도 per-attempt 개선이 없었습니다(3 arm 46 ~ 53%로 구별 불가). 병목은 retrieval이 아니라 다운스트림 emit/converge입니다. 프롬프트(H22)·도구(H23) 둘 다 per-attempt를 못 올렸습니다.
 
 **H24 - a2a Planner→Executor 분할 (미결/실효 기각)**
 proposer 분할이 emit은 고쳤으나(empty-tattoo 9 → 0) 실패를 Planner로 옮겼습니다. 틀린 finding을 confidently-wrong으로 수렴시켜 correct가 47% → 13%로 악화됐습니다. 안전한 None을 finalized-but-wrong으로 전환한 셈이라 무진단보다 해롭습니다. per-attempt 3중 음성(H22/H23/H24)을 최종 확인하고 retry(K=5 → 95%)를 수용했습니다.
@@ -433,7 +433,7 @@ def search_tool(query: str, limit: int = 10) -> list[dict]:
 
 | 단계 | 상태 | 내용 |
 | --- | --- | --- |
-| Phase 1 | 완료 | Exp00~Exp10, 4축 baseline |
+| Phase 1 | 완료 | Exp00 ~ Exp10, 4축 baseline |
 | Stage 2 | 완료 | 인프라 안정화, scorer/failure label 정리 |
 | Stage 5 | 완료 | Extractor, Reducer, Search Tool ablation |
 | Stage 6 | 완료 | cross-model replication, LLM-as-judge 보조 검증 |
@@ -447,7 +447,7 @@ def search_tool(query: str, limit: int = 10) -> list[dict]:
 | 중기 | 예정 | 다른 축(도메인 facet/크로스모델) 또는 a2a 심화, Graph/Evidence Tool |
 | 장기 | 예정 | 더 체계적인 cross-model ablation과 technical report |
 
-> Stage 10~13의 상세 판정과 수치는 위 [가설 요약](#후기-가설-h17h25)을 참조하세요.
+> Stage 10 ~ 13의 상세 판정과 수치는 위 [가설 요약](#후기-가설-h17h25)을 참조하세요.
 
 ---
 
