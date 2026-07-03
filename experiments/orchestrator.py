@@ -719,6 +719,7 @@ def run_abc_chain(
     mandatory_tool_prompt: bool = False,
     retrieval_discipline_prompt: bool = False,
     a2a_proposer: bool = False,
+    converged_requires_answer: bool = False,
 ) -> tuple[Tattoo, list[ABCCycleLog], str | None]:
     """A-B-C 직렬 파이프라인을 실행한다.
 
@@ -1016,9 +1017,19 @@ def run_abc_chain(
             c_directive = c_parsed.get("next_directive", "")
 
             if converged and next_phase_str:
+                # ── Exp25c: premature-CONVERGED 게이팅 (opt-in, Stage 13) ──
+                # Exp25b 진단: C 가 답(final_answer) 없이 DECOMPOSE/INVESTIGATE 에서 CONVERGED 로
+                # 조기 월반 → 답 쓰는 phase(SYNTHESIZE) 스킵 → null 종료(비-finalized 의 89%).
+                # 게이트 ON 시 그 월반을 SYNTHESIZE 로 유도해 A 가 emit 하게 한다.
+                # 기본 False 시 아래 두 줄이 no-op(_gated_to_synth=False) → 동작 불변.
+                _gated_to_synth = False
+                if (converged_requires_answer and next_phase_str == "CONVERGED"
+                        and final_answer is None and phase_str in ("DECOMPOSE", "INVESTIGATE")):
+                    next_phase_str = "SYNTHESIZE"
+                    _gated_to_synth = True
                 # next_phase 유효성 검증 (expected 단계 혹은 CONVERGED 조기 월반 허용)
                 expected = VALID_NEXT_PHASE.get(phase_str)
-                if next_phase_str == expected or next_phase_str == "CONVERGED":
+                if next_phase_str == expected or next_phase_str == "CONVERGED" or _gated_to_synth:
                     old_phase = phase_str
                     tattoo.phase = Phase(next_phase_str)
                     cycles_in_current_phase = 0

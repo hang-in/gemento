@@ -1,0 +1,253 @@
+{
+  "experiment": "exp25c_converged_gate_ab",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "n_per_arm": 15,
+  "max_cycles": 8,
+  "finding": "gohttpserver.service (top failing systemd unit, 505848 failure signals)",
+  "arms": {
+    "off": {
+      "samples": [
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 1,
+          "reached_productive": false
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 5,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 7,
+          "reached_productive": true
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 2,
+          "reached_productive": false
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 2,
+          "reached_productive": false
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 1,
+          "reached_productive": false
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 2,
+          "reached_productive": false
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 2,
+          "reached_productive": false
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 4,
+          "reached_productive": false
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 2,
+          "reached_productive": false
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 2,
+          "reached_productive": false
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 5,
+          "reached_productive": false
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 7,
+          "reached_productive": true
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 2,
+          "reached_productive": false
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 3,
+          "reached_productive": false
+        }
+      ],
+      "agg": {
+        "n": 15,
+        "finalized_rate": 0.133,
+        "correct_rate": 0.133,
+        "correct_wilson95": [
+          0.037,
+          0.379
+        ],
+        "wrong_rate": 0.0,
+        "reached_productive_rate": 0.2,
+        "avg_cycles": 3.13
+      }
+    },
+    "on": {
+      "samples": [
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 4,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 4,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 4,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 8,
+          "reached_productive": true
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "CONVERGED",
+          "n_cycles": 5,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 4,
+          "reached_productive": true
+        },
+        {
+          "finalized": false,
+          "correct": false,
+          "final_phase": "SYNTHESIZE",
+          "n_cycles": 8,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 3,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 4,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 3,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 8,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 5,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 3,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 3,
+          "reached_productive": true
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "final_phase": "CONVERGED",
+          "n_cycles": 4,
+          "reached_productive": true
+        }
+      ],
+      "agg": {
+        "n": 15,
+        "finalized_rate": 0.867,
+        "correct_rate": 0.867,
+        "correct_wilson95": [
+          0.621,
+          0.963
+        ],
+        "wrong_rate": 0.0,
+        "reached_productive_rate": 1.0,
+        "avg_cycles": 4.67
+      }
+    }
+  },
+  "elapsed_sec": 3572.2
+}
