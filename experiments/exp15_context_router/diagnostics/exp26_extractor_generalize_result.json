@@ -1,0 +1,240 @@
+{
+  "experiment": "exp26_extractor_generalize",
+  "model": "gemma4:e4b",
+  "n_per_cell": 12,
+  "max_cycles": 8,
+  "gate": "converged_requires_answer=True",
+  "cells": {
+    "crashloop_list_failed_units": {
+      "extractor": "list_failed_units",
+      "task": "exp21a_crashloop",
+      "correct_kw": "gohttpserver",
+      "finding": "gohttpserver.service (top failing systemd unit, 505848 failure signals)",
+      "samples": [
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": false,
+          "n_cycles": 4,
+          "ans": "The crash-looping service unit is **gohttpserver.service**. This unit is confirmed as the top failing systemd unit, accumulating 505,848 failure signals, which "
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 7,
+          "ans": "The crash-looping service unit is gohttpserver.service. To complete the diagnostic report, specific failure evidence (logs/error messages) for this service are "
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 2,
+          "ans": "The service unit that is crash-looping is **gohttpserver.service**. \n\n**Failure Evidence:**\nBased on an automated exhaustive scan of the systemd journal, the ev"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 3,
+          "ans": "The service unit that is crash-looping on server test9ng is **gohttpserver.service**. The evidence supporting this is that it was identified as the top failing "
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 4,
+          "ans": "The service unit that is crash-looping is **gohttpserver.service**. This unit was identified as the top failing systemd unit, accumulating a significant number "
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 3,
+          "ans": "The service unit that is crash-looping on server test9ng is **gohttpserver.service**.\n\n**Failure Evidence:**\nAutomated exhaustive journal scans confirmed that `"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 3,
+          "ans": "The crash-looping service unit is identified as **gohttpserver.service**. \n\n**Failure Evidence Summary:**\nBased on the exhaustive scan of the systemd journal, `"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 3,
+          "ans": "The crash-looping service unit is **gohttpserver.service**. This conclusion is based on deterministic evidence gathered from the systemd journal, which identifi"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 3,
+          "ans": "The systemd service that is repeatedly crash-looping on server test9ng is **gohttpserver.service**. \n\n**Failure Evidence:**\nThis unit was identified through an "
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 4,
+          "ans": "The service unit that is crash-looping on server test9ng is **gohttpserver.service**. The evidence for this is deterministic and reliable, showing a total of 50"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 5,
+          "ans": "The service unit that is crash-looping is **gohttpserver.service**. \n\n**Failure Evidence:** The service is exhibiting repeated crash-looping behavior, which is "
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 3,
+          "ans": "The service unit that is crash-looping is `gohttpserver.service`. This conclusion is based on deterministic evidence gathered from the systemd journal, which re"
+        }
+      ],
+      "agg": {
+        "n": 12,
+        "finalized_rate": 1.0,
+        "correct_rate": 1.0,
+        "correct_wilson95": [
+          0.757,
+          1.0
+        ],
+        "wrong_rate": 0.0,
+        "reached_productive_rate": 0.917
+      }
+    },
+    "bruteforce_aggregate_context": {
+      "extractor": "aggregate_context",
+      "task": "exp21b_bruteforce",
+      "correct_kw": "45.144.212.75",
+      "finding": "45.144.212.75 (source IP with the most failed SSH logins, 286 attempts)",
+      "samples": [
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 2,
+          "ans": "The single source IP address responsible for the most failed SSH logins is 45.144.212.75, with 286 attempts."
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 3,
+          "ans": "The single source IP address responsible for the most failed SSH logins is 45.144.212.75, with a total of 286 failed attempts."
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": false,
+          "n_cycles": 1,
+          "ans": "The single source IP address responsible for the most failed SSH logins is 45.144.212.75, with 286 attempts."
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": false,
+          "n_cycles": 1,
+          "ans": "The single source IP address responsible for the most failed SSH logins is 45.144.212.75, with 286 attempts."
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": false,
+          "n_cycles": 1,
+          "ans": "The single source IP address responsible for the most failed SSH logins is 45.144.212.75, with 286 attempts."
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": false,
+          "n_cycles": 1,
+          "ans": "The single source IP address responsible for the most failed SSH logins is 45.144.212.75, with 286 attempts."
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": false,
+          "n_cycles": 1,
+          "ans": "{'source_ip': '45.144.212.75', 'attempt_count': 286}"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 2,
+          "ans": "The single source IP address responsible for the most failed SSH login attempts is 45.144.212.75, with a total of 286 attempts."
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": false,
+          "n_cycles": 1,
+          "ans": "45.144.212.75 (286)"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": false,
+          "n_cycles": 1,
+          "ans": "{'source_ip': '45.144.212.75', 'attempt_count': 286}"
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": true,
+          "n_cycles": 2,
+          "ans": "The single source IP address responsible for the most failed SSH logins is 45.144.212.75, with a total of 286 failed attempts."
+        },
+        {
+          "finalized": true,
+          "correct": true,
+          "wrong": false,
+          "reached_productive": false,
+          "n_cycles": 1,
+          "ans": "The single source IP address responsible for the most failed SSH logins is 45.144.212.75, with 286 attempts."
+        }
+      ],
+      "agg": {
+        "n": 12,
+        "finalized_rate": 1.0,
+        "correct_rate": 1.0,
+        "correct_wilson95": [
+          0.757,
+          1.0
+        ],
+        "wrong_rate": 0.0,
+        "reached_productive_rate": 0.333
+      }
+    }
+  },
+  "elapsed_sec": 1708.5
+}

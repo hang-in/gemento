@@ -8,7 +8,7 @@
 
 ## 0. 한 줄 요약
 
-per-attempt 3중 음성(H22/H23/H24) 후 **"로그 분석 어시스턴트"로 전환**. Exp25=fail-safe 확증(wrong 0). **Exp25b=처리량 병목 원인 규명(premature CONVERGED: C 가 답 없이 조기 CONVERGED 월반→답 phase 스킵, 핸드오프 3가설 반증)**. **Exp25c=게이트 검증(orchestrator opt-in `converged_requires_answer`, A/B finalized 13→87%, reached_productive 20→100%, wrong 0% 양 arm)**. 다음 = **productive-no-emit 천장(A-stage)** 또는 Exp26.
+per-attempt 3중 음성(H22/H23/H24) 후 **"로그 분석 어시스턴트"로 전환**. Exp25=fail-safe 확증(wrong 0). **Exp25b=처리량 병목 원인 규명(premature CONVERGED, 핸드오프 3가설 반증)**. **Exp25c=게이트 검증(opt-in `converged_requires_answer`, A/B 13→87%, wrong 0)**. **Exp25d=productive-no-emit 진단(empty_final 노이즈=retry 커버, wrong 0 → A-stage 레버 불필요)**. **Exp26 v1=일반화(2추출기×2실패모드, 양 cell finalized/correct 100%/wrong 0)**. 다음 = **Exp26 v2(추출기 폭 확장, plan-first)** 또는 Exp27(기권 층).
 
 ## 1. 이번 세션 달성
 
@@ -17,9 +17,11 @@ per-attempt 3중 음성(H22/H23/H24) 후 **"로그 분석 어시스턴트"로 �
 | Exp25 det_planner_retry | 척추 확증 | wrong 0%(n=30 누적), correct 67%@K=5, 병목=C-수렴 |
 | **Exp25b C-수렴 진단** (`6a795e8`) | **원인 규명** | 순수계측 n=15. **핸드오프 3가설 전부 반증**(confidence 게이트 코드에 없음·termination under-gated). 진짜 원인=**premature CONVERGED**(C 가 답 없이 DECOMPOSE/INVESTIGATE→CONVERGED 조기월반, orchestrator.py:1021 이 어느 phase서든 CONVERGED 직행 허용→답 쓰는 SYNTHESIZE 스킵→null). 비-finalized 89%. finalize된 소수는 C 조기수렴 *안 한* chain(safety-crawl→SYNTHESIZE→emit). |
 | **Exp25c CONVERGED 게이팅** (`bb3abaa`) | **레버 확증** | orchestrator opt-in `converged_requires_answer`(off byte-identical): 답 없는 CONVERGED 월반을 SYNTHESIZE 로 redirect. **A/B n=15/arm: finalized 13→87%, reached_productive 20→100%, wrong 0%(양 arm)**, Wilson95=(0.62,0.96). fail-safe 완전 보존. 회귀게이트 **75 OK**. |
+| **Exp25d productive-no-emit 진단** (`767719c`) | **천장 특성화** | 게이트 ON n=25 계측. no-emit 실패(5/25)의 productive A 유형 = **empty_final 100%**(final_answer 필드는 넣되 값이 빔), wrong_content 0. = 순수 emit 노이즈(일부 GPU 경합 truncation) → **retry 커버**(87%+K=3→~99.8%). "단발 A-stage 레버" 불필요 확인. |
+| **Exp26 v1 추출기·모드 일반화** (이 세션) | **커버리지 첫 교차 증거** | 기존 추출기 2개 × 태스크 2개, 게이트 ON, n=12/cell: list_failed_units×crashloop + **aggregate_context×brute-force(신규)** 모두 **finalized/correct 100%, wrong 0%**. fail-safe·처리량이 2추출기×2실패모드 일반화. |
 
-- 노트북 §20/§21/§22 + H22/H23/H24 기록(한/영 append-only). README ko/en Stage 10~12. index Recently Done.
-- 회귀게이트 **71 OK**. opt-in 플래그 3개(`retrieval_discipline_prompt`/`list_failed_units`(FAILED_UNITS_TOOL)/`a2a_proposer`) 전부 기본 False byte-identical, 켜기 비추천.
+- 노트북 §20~23 + H22~H25 기록(한/영 append-only). README ko/en Stage 10~13(단 README 는 collaborator d9ng 가 rewrite — H25 보존됨). index Recently Done Stage 13.
+- 회귀게이트 **75 OK**. opt-in 플래그 **4개**(`retrieval_discipline_prompt`/`list_failed_units`/`a2a_proposer` 앞 3개 off 비추천, **`converged_requires_answer` 는 Exp25c 효과 입증 — 로그분석가 경로 ON 권장**).
 
 ## 2. 핵심 결론 (방향 전환의 논리)
 
@@ -28,14 +30,14 @@ per-attempt 3중 음성(H22/H23/H24) 후 **"로그 분석 어시스턴트"로 �
 - **로그 분석가 아키텍처** = 결정론 추출기 배터리 + clean executor(e4b 언어화) + retry(throughput) + 기권(안전). "틀린 진단이 절대 안 나오는" 트리아지. 상세 `logAnalystDesign.md`.
 - **병목 이동 (확정)**: A-stage(emit) → Exp25 C-수렴 → **Exp25b premature CONVERGED 로 국소화 → Exp25c 게이트로 매입(13→87%)**. C 조기수렴이 답 쓰는 phase 를 스킵한 것이 원흉이었고, 게이트가 그것을 막아 reached_productive 20→100%. 이제 남은 병목은 **productive-no-emit**(게이트 ON 에서 SYNTHESIZE 도달 후 A 가 emit 실패, 잔여 13%) = C 아닌 A-stage.
 
-## 3. 다음 세션 최우선 — productive-no-emit 천장 (A-stage) 또는 Exp26
+## 3. 다음 세션 최우선 — Exp26 v2 (추출기 폭 확장, plan-first) 또는 Exp27 (기권 층)
 
-**질문**: 게이트 ON 으로 모든 chain 이 SYNTHESIZE 도달(100%)인데 왜 13%는 거기서 final_answer 를 emit 안 하나?
-- **접근 A (레버)**: `converged_requires_answer=True` 켠 상태의 실패 chain(final=False, prod=True)의 SYNTHESIZE cycle A 응답(final_answer 필드 유무·reasoning) 로깅 → emit 실패 원인(파싱? 지시 미준수? confidence 부족?). SYNTHESIZE emit-nudge 또는 A-stage retry 가 레버 후보. exp25b_c_convergence_probe.py 계열에 게이트 켜고 진단.
-- **접근 B (로드맵 진행)**: Exp26 추출기 다종화 + 다실패모드(crashloop 아닌 task) — fail-safe·커버리지 일반화. 게이트가 이미 확증됐으니 다음 축으로 진행 가능.
-- 주의: 접근 A 의 레버가 orchestrator/system_prompt 면 **plan-first + 회귀게이트**. 진단(로깅)은 diagnostics 스크립트로 먼저. 로그분석가 경로에선 `converged_requires_answer=True` 를 기본 ON 으로 쓰는 게 맞음(Exp25c 입증).
+productive-no-emit(Exp25d)·일반화 v1(Exp26 v1) 둘 다 종결. 남은 로드맵:
+- **접근 A — Exp26 v2 (커버리지 폭)**: 신규 결정론 추출기(`top_error_classes`/`freq_anomaly`/`timeline_gap`) 를 `context_tools.py` 에 구현 + 신규 실패모드 태스크(OOM/cert-expiry/disk-full). v1 은 2종만 확인 → 3종+·다양 모드로 fail-safe·커버리지 일반화 폭 확장. **공유코드(context_tools) 변경 → gemento-plan-create + 회귀게이트.** 추출기는 순수 함수라 Sonnet 위임 적합.
+- **접근 B — Exp27 (기권 층)**: 결정론 추출기 근거 없을 때 "모른다" 반환 정확도 — confident-wrong 최종 차단. 아키텍처 4번째 구성요소.
+- 이후: Exp28(GB 백엔드 ripgrep/인덱스, O(1) 실증) → 크로스모델 O(1)(논문 핵). `logAnalystDesign §4`.
 
-이후 로드맵: Exp26(추출기 다종화+다실패모드) → Exp27(기권 층) → Exp28(GB 백엔드 ripgrep/인덱스) → 크로스모델 O(1)(논문 핵). `logAnalystDesign §4`.
+권장: **Exp26 v2**(커버리지가 아키텍처 핵심 미검증 폭이고, v1 이 방법론·인프라 다 깔아둠). 추출기 finding 을 clean 주입 + 게이트 ON + n≥12/cell 패턴 그대로 재사용(`exp26_extractor_generalize.py`).
 
 ## 4. 인프라 / 접속 (필수)
 
@@ -55,7 +57,7 @@ per-attempt 3중 음성(H22/H23/H24) 후 **"로그 분석 어시스턴트"로 �
 
 ## 6. 미해결 / 보류
 
-- **productive-no-emit 천장 미착수**(게이트 ON 잔여 13%, A-stage). 로그분석가 로드맵 Exp26~28 미착수.
+- **Exp26 v2(추출기 폭)·Exp27(기권 층)·Exp28(GB 백엔드) 미착수.** productive-no-emit(Exp25d)·일반화 v1(Exp26 v1) 종결.
 - a2a 심화(구조화 planner+verification), 도메인 facet 다종화(H21 후속), 크로스모델, Stage 8~12 arc 논문화 — 전부 보류(로그분석가 우선).
 - **opt-in 플래그 4개**: retrieval_discipline/list_failed_units/a2a_proposer(앞 3개 off 유지·비추천), **converged_requires_answer(Exp25c 로 효과 입증 — 로그분석가 경로에선 ON 권장)**. 롤백 X.
 
