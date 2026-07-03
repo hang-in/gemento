@@ -1,0 +1,135 @@
+{
+  "experiment": "det_planner_retry",
+  "model": "gemma4:e4b",
+  "task": "exp21a_crashloop",
+  "n": 15,
+  "K": 5,
+  "finding": "gohttpserver.service (top failing systemd unit, 505848 failure signals)",
+  "samples": [
+    {
+      "finalized": true,
+      "attempts": 5,
+      "correct": true,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": true,
+      "attempts": 2,
+      "correct": true,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 5,
+      "correct": true,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 4,
+      "correct": true,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": false,
+      "attempts": 5,
+      "correct": false,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 1,
+      "correct": true,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": true
+    },
+    {
+      "finalized": true,
+      "attempts": 2,
+      "correct": true,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": false,
+      "attempts": 5,
+      "correct": false,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": false,
+      "attempts": 5,
+      "correct": false,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": false,
+      "attempts": 5,
+      "correct": false,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": false,
+      "attempts": 5,
+      "correct": false,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 2,
+      "correct": true,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    },
+    {
+      "finalized": true,
+      "attempts": 3,
+      "correct": true,
+      "any_wrong_before_final": false,
+      "first_attempt_finalized": false
+    }
+  ],
+  "agg": {
+    "n": 15,
+    "finalized_after_retry": 0.667,
+    "correct_after_retry": 0.667,
+    "correct_wilson95": [
+      0.417,
+      0.848
+    ],
+    "wrong_rate": 0.0,
+    "first_attempt_finalized": 0.2,
+    "avg_attempts": 3.4,
+    "attempts_dist": {
+      "5": 7,
+      "1": 3,
+      "2": 3,
+      "4": 1,
+      "3": 1
+    }
+  },
+  "elapsed_sec": 6232.6
+}
